@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de refuerzo del Capítulo 1 · Clasificación de Variables · UMG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-0: #06141f;
+            --bg-1: #0b2133;
+            --bg-2: #12324a;
+            --panel: rgba(255, 255, 255, 0.06);
+            --panel-solid: #102a3d;
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #eef6ff;
+            --muted: #9db4c7;
+            --accent: #2dd4bf;
+            --accent-2: #fbbf24;
+            --accent-3: #38bdf8;
+            --danger: #fb7185;
+            --success: #34d399;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            --radius: 22px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Sora", system-ui, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 600px at 10% -10%, rgba(45, 212, 191, 0.22), transparent 55%),
+                radial-gradient(900px 500px at 90% 0%, rgba(251, 191, 36, 0.16), transparent 50%),
+                radial-gradient(800px 500px at 70% 100%, rgba(56, 189, 248, 0.14), transparent 55%),
+                linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.35;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+        }
+
+        h1, h2, h3, .display {
+            font-family: "Outfit", "Sora", sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .shell {
+            width: min(920px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 1.25rem 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 0.85rem 1.1rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(8, 24, 38, 0.72);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: rise 0.6s ease both;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-family: "Outfit", sans-serif;
+            color: #062016;
+            background: linear-gradient(135deg, var(--accent), #67e8f9);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .brand p {
+            margin: 0.1rem 0 0;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .pill {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #083344;
+            background: linear-gradient(135deg, var(--accent-2), #fde68a);
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .topbar-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.35rem;
+        }
+
+        .umg-chip {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            border: 1px solid rgba(45, 212, 191, 0.35);
+            background: rgba(45, 212, 191, 0.12);
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            white-space: nowrap;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+        }
+
+        .btn-home:hover {
+            background: rgba(45, 212, 191, 0.12);
+            border-color: rgba(45, 212, 191, 0.45);
+            transform: translateY(-1px);
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #083344;
+            background: linear-gradient(135deg, var(--accent), #67e8f9);
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            margin-bottom: 0.9rem;
+        }
+
+        .credits-card {
+            margin: 1.5rem auto 0;
+            max-width: 34rem;
+            padding: 1rem 1.15rem;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.22);
+            text-align: left;
+        }
+
+        .credits-card . cred-label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.45rem;
+        }
+
+        .credits-card .cred-name {
+            margin: 0;
+            font-family: "Outfit", "Sora", sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .credits-card .cred-role,
+        .credits-card .cred-uni {
+            margin: 0.25rem 0 0;
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .credits-card .cred-uni strong {
+            color: #d7e7f5;
+            font-weight: 600;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: rise 0.55s ease both;
+        }
+
+        .panel-inner { padding: 1.75rem; }
+
+        .hero-icon {
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 1.25rem;
+            border-radius: 28px;
+            display: grid;
+            place-items: center;
+            font-size: 2.2rem;
+            background: linear-gradient(145deg, rgba(45,212,191,0.25), rgba(56,189,248,0.15));
+            border: 1px solid rgba(45,212,191,0.35);
+            animation: floaty 4s ease-in-out infinite;
+        }
+
+        .center { text-align: center; }
+
+        .title {
+            margin: 0 0 0.75rem;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 800;
+        }
+
+        .lead {
+            margin: 0 auto 1.75rem;
+            max-width: 40rem;
+            color: var(--muted);
+            line-height: 1.65;
+            font-size: 1.02rem;
+        }
+
+        .lead strong { color: var(--text); font-weight: 600; }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.85rem;
+            margin-bottom: 1.75rem;
+            text-align: left;
+        }
+
+        .step {
+            padding: 1rem;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: rgba(0,0,0,0.18);
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-3px);
+            border-color: rgba(45, 212, 191, 0.45);
+        }
+
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.55rem;
+            color: #062016;
+            background: var(--accent);
+        }
+
+        .step h3 {
+            margin: 0 0 0.35rem;
+            font-size: 0.98rem;
+        }
+
+        .step p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .step:nth-child(2) .step-num { background: var(--accent-3); color: #082f49; }
+        .step:nth-child(3) .step-num { background: var(--accent-2); color: #422006; }
+
+        .btn {
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 700;
+            border-radius: 16px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+        }
+
+        .btn:active { transform: translateY(1px) scale(0.99); }
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            color: #042f2e;
+            background: linear-gradient(135deg, var(--accent), #5eead4);
+            padding: 0.95rem 1.6rem;
+            font-size: 1.05rem;
+            box-shadow: 0 12px 28px rgba(45, 212, 191, 0.28);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(45, 212, 191, 0.38);
+        }
+
+        .btn-next {
+            color: #052e16;
+            background: linear-gradient(135deg, var(--success), #6ee7b7);
+            padding: 0.9rem 1.4rem;
+            box-shadow: 0 12px 28px rgba(52, 211, 153, 0.25);
+        }
+
+        .btn-ghost {
+            color: var(--text);
+            background: transparent;
+            border: 1px solid var(--line);
+            padding: 0.9rem 1.4rem;
+        }
+
+        .btn-ghost:hover { background: rgba(255,255,255,0.06); }
+
+        .progress-wrap { margin-bottom: 1rem; }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.55rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .score-chip {
+            color: #083344;
+            background: linear-gradient(135deg, var(--accent-2), #fde68a);
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .progress-track {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-3), var(--accent-2));
+            background-size: 200% 100%;
+            transition: width 0.45s ease;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .q-head {
+            padding: 1.15rem 1.5rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(0,0,0,0.18);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #042f2e;
+            background: var(--accent);
+            padding: 0.28rem 0.65rem;
+            border-radius: 999px;
+            margin-bottom: 0.55rem;
+        }
+
+        .q-head h3 {
+            margin: 0;
+            font-size: 1.15rem;
+        }
+
+        .q-head p {
+            margin: 0.35rem 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .label-eyebrow {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.45rem;
+        }
+
+        .variable {
+            margin: 0 0 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.55rem);
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .section-label {
+            display: block;
+            margin: 0 0 0.7rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #d7e7f5;
+        }
+
+        .section { margin-bottom: 1.35rem; }
+
+        .options {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .options-2 { grid-template-columns: repeat(2, 1fr); }
+        .options-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .option {
+            text-align: left;
+            color: var(--text);
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid var(--line);
+            border-radius: 16px;
+            padding: 0.95rem 1rem;
+            cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .option:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: rgba(45, 212, 191, 0.55);
+            background: rgba(45, 212, 191, 0.08);
+        }
+
+        .option .name {
+            display: block;
+            font-weight: 700;
+            font-size: 0.98rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .option .hint {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        .option.selected {
+            border-color: var(--accent);
+            background: rgba(45, 212, 191, 0.14);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
+        }
+
+        .option.is-correct {
+            border-color: var(--success) !important;
+            background: rgba(52, 211, 153, 0.16) !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.18);
+        }
+
+        .option.is-wrong {
+            border-color: var(--danger) !important;
+            background: rgba(251, 113, 133, 0.14) !important;
+            box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.16);
+        }
+
+        .option:disabled {
+            cursor: default;
+            opacity: 1;
+        }
+
+        .option.scale-opt {
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.92rem;
+            padding: 0.85rem 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .feedback {
+            margin-top: 1.35rem;
+            padding: 1.15rem 1.2rem;
+            border-radius: 16px;
+            border: 1px solid;
+            animation: rise 0.35s ease both;
+        }
+
+        .feedback.ok {
+            background: rgba(52, 211, 153, 0.12);
+            border-color: rgba(52, 211, 153, 0.45);
+        }
+
+        .feedback.bad {
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.4);
+        }
+
+        .feedback h4 {
+            margin: 0 0 0.45rem;
+            font-size: 1.1rem;
+        }
+
+        .feedback > .feedback-lead {
+            margin: 0 0 0.9rem;
+            color: #dceaf6;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .compare-box {
+            background: rgba(0,0,0,0.22);
+            border-radius: 12px;
+            padding: 0.75rem 0.85rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            border: 1px solid transparent;
+        }
+
+        .compare-box .label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+            color: var(--muted);
+        }
+
+        .compare-box.yours { border-color: rgba(251, 113, 133, 0.35); }
+        .compare-box.correct-box { border-color: rgba(52, 211, 153, 0.4); }
+        .feedback.ok .compare-box.yours { border-color: rgba(52, 211, 153, 0.35); }
+
+        .tutor-block {
+            margin-top: 0.75rem;
+            padding: 0.9rem 1rem;
+            border-radius: 14px;
+            background: rgba(8, 24, 38, 0.55);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+        }
+
+        .tutor-block h5 {
+            margin: 0 0 0.5rem;
+            font-size: 0.88rem;
+            font-family: "Outfit", "Sora", sans-serif;
+            color: var(--accent-3);
+            font-weight: 700;
+        }
+
+        .tutor-block p {
+            margin: 0 0 0.55rem;
+            color: #dceaf6;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .tutor-block p:last-child { margin-bottom: 0; }
+
+        .concept-list {
+            display: grid;
+            gap: 0.55rem;
+            margin: 0.75rem 0 0;
+        }
+
+        .concept-card {
+            padding: 0.75rem 0.85rem;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            border-left: 3px solid var(--accent);
+        }
+
+        .concept-card .concept-title {
+            display: block;
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-bottom: 0.3rem;
+            color: var(--accent);
+        }
+
+        .concept-card p {
+            margin: 0;
+            font-size: 0.84rem;
+            color: #d7e7f5;
+            line-height: 1.5;
+        }
+
+        .examples-box {
+            margin-top: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 12px;
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.28);
+        }
+
+        .examples-box .ex-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--accent-2);
+            margin-bottom: 0.4rem;
+        }
+
+        .examples-box ul {
+            margin: 0;
+            padding-left: 1.1rem;
+            color: #e8f0f7;
+            font-size: 0.84rem;
+            line-height: 1.5;
+        }
+
+        .examples-box li { margin-bottom: 0.25rem; }
+        .examples-box li:last-child { margin-bottom: 0; }
+
+        .tip-box {
+            margin-top: 0.75rem;
+            font-size: 0.84rem;
+            color: var(--muted);
+            line-height: 1.5;
+            padding-top: 0.65rem;
+            border-top: 1px solid var(--line);
+        }
+
+        .tip-box strong {
+            color: #d7e7f5;
+            font-weight: 600;
+        }
+
+        @media (max-width: 720px) {
+            .compare-grid { grid-template-columns: 1fr; }
+        }
+
+        .score-big {
+            margin: 0 auto 1.5rem;
+            width: min(100%, 320px);
+            padding: 1.35rem;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            background: rgba(0,0,0,0.22);
+        }
+
+        .score-big .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .score-big .value {
+            font-family: "Outfit", sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0.2rem 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .score-big .pct {
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .result-msg {
+            margin: 0 0 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .hidden { display: none !important; }
+
+        footer {
+            text-align: center;
+            color: #7f98ad;
+            font-size: 0.82rem;
+            margin-top: 2rem;
+            line-height: 1.55;
+            padding: 1.1rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(8, 24, 38, 0.45);
+        }
+
+        footer .footer-title {
+            display: block;
+            color: #d7e7f5;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        footer .footer-credits {
+            margin: 0.15rem 0;
+        }
+
+        footer strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @media (max-width: 720px) {
+            .steps { grid-template-columns: 1fr; }
+            .options-4 { grid-template-columns: repeat(2, 1fr); }
+            .topbar {
+                border-radius: 20px;
+                align-items: flex-start;
+            }
+            .topbar-meta { align-items: flex-start; }
+            .panel-inner { padding: 1.25rem; }
+            .actions { justify-content: stretch; }
+            .actions .btn { width: 100%; }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .topbar, #intro-screen, #quiz-container, .btn-row { display: none !important; }
+            #results-screen, footer { display: block !important; }
+            footer {
+                color: #333;
+                background: #f5f5f5;
+                border-color: #ccc;
+            }
+            .panel {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">Σ</div>
+                <div>
+                    <h1>Estadística 1 · UMG</h1>
+                    <p>Tutor · Clasificación de variables</p>
+                </div>
+            </div>
+            <div class="topbar-meta">
+                <a href="index.html" class="btn-home" title="Regresar al menú principal">← Menú principal</a>
+                <span class="umg-chip">UMG</span>
+                <span class="pill">Herramienta educativa</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Intro -->
+            <section id="intro-screen" class="panel">
+                <div class="panel-inner center">
+                    <div class="hero-icon" aria-hidden="true">📊</div>
+                    <span class="tool-badge">Tutor · Clasificación de variables</span>
+                    <h2 class="title display">Hoja de refuerzo del Capítulo 1</h2>
+                    <p class="lead">
+                        Practica y refuerza la clasificación de variables con casos reales de empresas
+                        guatemaltecas como
+                        <strong>Anfora, Cervecería Centro Americana, La Torre, MICOOPE y Pollo Campero</strong>.
+                        Esta herramienta te acompaña para aprender tipos, subtipos y escalas de medición
+                        a tu ritmo, con retroalimentación inmediata.
+                    </p>
+
+                    <div class="steps">
+                        <article class="step">
+                            <span class="step-num">1</span>
+                            <h3>Identifica</h3>
+                            <p>¿Es cualitativa o cuantitativa?</p>
+                        </article>
+                        <article class="step">
+                            <span class="step-num">2</span>
+                            <h3>Clasifica</h3>
+                            <p>Si es cuantitativa: ¿discreta o continua?</p>
+                        </article>
+                        <article class="step">
+                            <span class="step-num">3</span>
+                            <h3>Escala</h3>
+                            <p>Nominal, ordinal, intervalo o razón.</p>
+                        </article>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="start-btn">Comenzar a aprender</button>
+
+                    <aside class="credits-card" aria-label="Créditos académicos">
+                        <span class="cred-label">Créditos</span>
+                        <p class="cred-name">Ruldin Ayala</p>
+                        <p class="cred-role">Catedrático · Curso de Estadística 1</p>
+                        <p class="cred-uni">
+                            <strong>Universidad Mariano Gálvez de Guatemala</strong> (UMG)
+                        </p>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- Quiz -->
+            <section id="quiz-container" class="hidden">
+                <div class="progress-wrap">
+                    <div class="progress-meta">
+                        <span id="progress-text">Ejercicio 1 de 20</span>
+                        <span class="score-chip" id="score-display">0 pts</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+
+                <article class="panel" id="question-card">
+                    <div class="q-head">
+                        <span class="tag" id="exercise-tag">Ejercicio 1</span>
+                        <h3 id="context-title">La Expansión de "Anfora"</h3>
+                        <p id="context-desc">Pastelería analizando comportamiento en Cayalá...</p>
+                    </div>
+
+                    <div class="panel-inner">
+                        <span class="label-eyebrow">Variable a clasificar</span>
+                        <h2 class="variable" id="variable-text">El sabor de pastel preferido por los clientes.</h2>
+
+                        <div class="section">
+                            <span class="section-label">1. Tipo de variable</span>
+                            <div class="options options-2" role="group" aria-label="Tipo de variable">
+                                <button type="button" class="option" data-group="type" data-value="Cualitativa" id="btn-type-cual">
+                                    <span class="name">Cualitativa</span>
+                                    <span class="hint">Atributos o categorías</span>
+                                </button>
+                                <button type="button" class="option" data-group="type" data-value="Cuantitativa" id="btn-type-cuan">
+                                    <span class="name">Cuantitativa</span>
+                                    <span class="hint">Valores numéricos</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="section hidden" id="subtype-section">
+                            <span class="section-label">2. Subtipo (cuantitativa)</span>
+                            <div class="options options-2" role="group" aria-label="Subtipo">
+                                <button type="button" class="option" data-group="subtype" data-value="Discreta" id="btn-subtype-dis">
+                                    <span class="name">Discreta</span>
+                                    <span class="hint">Conteos enteros</span>
+                                </button>
+                                <button type="button" class="option" data-group="subtype" data-value="Continua" id="btn-subtype-con">
+                                    <span class="name">Continua</span>
+                                    <span class="hint">Mediciones con decimales</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <span class="section-label" id="scale-label">2. Escala de medición</span>
+                            <div class="options options-4" role="group" aria-label="Escala de medición">
+                                <button type="button" class="option scale-opt" data-group="scale" data-value="Nominal" id="btn-scale-nom">Nominal</button>
+                                <button type="button" class="option scale-opt" data-group="scale" data-value="Ordinal" id="btn-scale-ord">Ordinal</button>
+                                <button type="button" class="option scale-opt" data-group="scale" data-value="Intervalo" id="btn-scale-int">Intervalo</button>
+                                <button type="button" class="option scale-opt" data-group="scale" data-value="Razón" id="btn-scale-raz">Razón</button>
+                            </div>
+                        </div>
+
+                        <div id="feedback-area" class="feedback hidden" aria-live="polite">
+                            <h4 id="feedback-title"></h4>
+                            <p class="feedback-lead" id="feedback-message"></p>
+                            <div class="compare-grid" id="compare-grid">
+                                <div class="compare-box yours">
+                                    <span class="label">Tu respuesta</span>
+                                    <span id="your-answer-text"></span>
+                                </div>
+                                <div class="compare-box correct-box">
+                                    <span class="label">Respuesta correcta</span>
+                                    <span id="correct-answer-text"></span>
+                                </div>
+                            </div>
+                            <div id="tutor-lesson"></div>
+                        </div>
+
+                        <div class="actions">
+                            <button type="button" class="btn btn-primary" id="check-btn" disabled>Verificar respuesta</button>
+                            <button type="button" class="btn btn-next hidden" id="next-btn">Siguiente →</button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Results -->
+            <section id="results-screen" class="panel hidden">
+                <div class="panel-inner center">
+                    <div class="hero-icon" id="result-emoji" aria-hidden="true">🎉</div>
+                    <h2 class="title display">¡Práctica completada!</h2>
+                    <p class="lead">
+                        Resumen de tu avance en esta herramienta de aprendizaje de
+                        clasificación de variables.
+                    </p>
+
+                    <div class="score-big">
+                        <div class="label">Puntuación final</div>
+                        <div class="value" id="final-score">0/20</div>
+                        <div class="pct" id="final-percent">0% de aciertos</div>
+                    </div>
+
+                    <p class="result-msg" id="performance-message"></p>
+
+                    <div class="btn-row">
+                        <button type="button" class="btn btn-primary" id="restart-btn">Intentar de nuevo</button>
+                        <button type="button" class="btn btn-ghost" id="print-btn">Imprimir resultados</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <span class="footer-title">Hoja de refuerzo del Capítulo 1 · Estadística 1</span>
+            <p class="footer-credits">
+                Diseñada por <strong>Ruldin Ayala</strong>, catedrático
+            </p>
+            <p class="footer-credits">
+                <strong>Universidad Mariano Gálvez de Guatemala</strong> (UMG) · 2026
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const CONCEPTS = {
+            Cualitativa: {
+                title: "Variable cualitativa",
+                text: "Describe una cualidad, atributo o categoría. No mide “cuánto”, sino “de qué tipo” o “en qué grupo”. Sus valores son etiquetas (palabras o códigos)."
+            },
+            Cuantitativa: {
+                title: "Variable cuantitativa",
+                text: "Mide o cuenta una magnitud numérica con sentido aritmético. Puedes comparar “más/menos” y, según la escala, sumar o calcular promedios con interpretación real."
+            },
+            Discreta: {
+                title: "Cuantitativa discreta",
+                text: "Toma valores enteros o aislados, normalmente por conteo. Entre dos valores no siempre hay otro posible (no vendes 2.5 pasteles ni detectas 3.7 tapas)."
+            },
+            Continua: {
+                title: "Cuantitativa continua",
+                text: "Puede tomar, al menos en teoría, infinitos valores en un intervalo. Suele surgir de mediciones (ml, °C, tiempo, quetzales) y admite decimales."
+            },
+            Nominal: {
+                title: "Escala nominal",
+                text: "Solo clasifica. Las categorías son distintas, pero no hay orden natural. No tiene sentido decir que una es “mayor” que otra."
+            },
+            Ordinal: {
+                title: "Escala ordinal",
+                text: "Clasifica y ordena. Sabes que un nivel es mejor/mayor que otro, pero la distancia entre niveles no es necesariamente igual ni medible con precisión."
+            },
+            Intervalo: {
+                title: "Escala de intervalo",
+                text: "Es numérica, con orden y diferencias significativas. El cero es convencional (no significa “ausencia total”), por eso no interpretamos razones como “el doble”."
+            },
+            Razón: {
+                title: "Escala de razón",
+                text: "Es numérica, con orden, diferencias y cero absoluto. Cero sí significa ausencia, y sí tiene sentido decir “el doble” o “la mitad”."
+            }
+        };
+
+        const exercises = [
+            {
+                id: 1,
+                exerciseTag: "Caso Anfora · 1/4",
+                contextTitle: 'La Expansión de "Anfora"',
+                contextDesc: "Pastelería analizando comportamiento en Paseo Cayalá.",
+                variable: "El sabor de pastel preferido por los clientes (ej. Selva Negra, Tres Leches).",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "El sabor es una categoría de preferencia. “Selva Negra” y “Tres Leches” son etiquetas distintas, pero ninguna es estadísticamente “mayor” o “mejor” solo por su nombre. Por eso es cualitativa nominal: clasificamos, no medimos cantidad ni jerarquía.",
+                examples: [
+                    "Color favorito del empaque (rojo, azul, verde)",
+                    "Sucursal preferida (Cayalá, Zona 10, Mixco)",
+                    "Tipo de harina usada (integral, blanca, de almendra)"
+                ],
+                tip: "Pregúntate: ¿puedo ordenar estas categorías de menor a mayor de forma objetiva? Si no, casi seguro es nominal."
+            },
+            {
+                id: 2,
+                exerciseTag: "Caso Anfora · 2/4",
+                contextTitle: 'La Expansión de "Anfora"',
+                contextDesc: "Pastelería analizando comportamiento en Paseo Cayalá.",
+                variable: "La temperatura exacta (en °C) de las cámaras de refrigeración.",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Intervalo" },
+                tutor: "La temperatura en °C es una medición numérica que admite decimales (4.2 °C, 4.25 °C…), por eso es cuantitativa continua. Sin embargo, 0 °C no significa “ausencia de temperatura”: es un punto de referencia. Por eso la escala es de intervalo, no de razón.",
+                examples: [
+                    "Temperatura ambiente en un local (22.5 °C)",
+                    "Temperatura de un horno en °C",
+                    "Calendario o año (el año 0 no implica “ausencia de tiempo”)"
+                ],
+                tip: "Si el cero no representa “nada de la variable”, piensa en escala de intervalo. Temperatura en °C es el ejemplo clásico."
+            },
+            {
+                id: 3,
+                exerciseTag: "Caso Anfora · 3/4",
+                contextTitle: 'La Expansión de "Anfora"',
+                contextDesc: "Pastelería analizando comportamiento en Paseo Cayalá.",
+                variable: "La cantidad de pasteles familiares vendidos durante el \"Día de la Madre\".",
+                correct: { type: "Cuantitativa", subtype: "Discreta", scale: "Razón" },
+                tutor: "Estamos contando unidades enteras de pasteles: 0, 1, 2, 3… No tiene sentido físico vender 7.3 pasteles familiares. Eso la hace cuantitativa discreta. Además, cero ventas sí significa ausencia total, y 20 pasteles son el doble que 10: escala de razón.",
+                examples: [
+                    "Número de clientes atendidos en una hora",
+                    "Cantidad de cajas vendidas en una promoción",
+                    "Número de quejas recibidas en la semana"
+                ],
+                tip: "Si la variable nace de un conteo de unidades indivisibles, empieza pensando en discreta + razón."
+            },
+            {
+                id: 4,
+                exerciseTag: "Caso Anfora · 4/4",
+                contextTitle: 'La Expansión de "Anfora"',
+                contextDesc: "Pastelería analizando comportamiento en Paseo Cayalá.",
+                variable: "El nivel de satisfacción del cliente (Pésimo, Regular, Bueno, Excelente).",
+                correct: { type: "Cualitativa", subtype: null, scale: "Ordinal" },
+                tutor: "La satisfacción se expresa con categorías (no con una medición continua), pero sí hay orden: Excelente > Bueno > Regular > Pésimo. No sabemos si la “distancia” entre Regular y Bueno es igual a la de Bueno y Excelente; por eso es cualitativa ordinal, no intervalo.",
+                examples: [
+                    "Nivel educativo (primaria, básico, diversificado, universidad)",
+                    "Talla de camisa (S, M, L, XL)",
+                    "Prioridad de un pedido (baja, media, alta)"
+                ],
+                tip: "Si hay ranking claro entre categorías, pero no una unidad de medida exacta entre ellas, usa ordinal."
+            },
+            {
+                id: 5,
+                exerciseTag: "Caso CCA · 1/4",
+                contextTitle: "Control de Calidad en CCA",
+                contextDesc: "Planta de producción El Zapote, asegurando calidad de Gallo.",
+                variable: "El contenido neto real de líquido en una botella (medido en mililitros).",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Razón" },
+                tutor: "El volumen se mide y puede tomar valores intermedios (355.1 ml, 355.18 ml…). Es cuantitativa continua. Cero ml sí significa “sin líquido”, y 710 ml es el doble de 355 ml. Por eso corresponde escala de razón.",
+                examples: [
+                    "Peso de una botella en gramos",
+                    "Altura de espuma en centímetros",
+                    "Cantidad de azúcar disuelta en gramos"
+                ],
+                tip: "Medición física con unidad (ml, g, cm) y cero absoluto → casi siempre continua de razón."
+            },
+            {
+                id: 6,
+                exerciseTag: "Caso CCA · 2/4",
+                contextTitle: "Control de Calidad en CCA",
+                contextDesc: "Planta de producción El Zapote, asegurando calidad de Gallo.",
+                variable: "El número de lote de producción impreso en el cuello de la botella.",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "Aunque el lote “se vea numérico” (por ejemplo L-45821), esos dígitos funcionan como etiqueta de identificación, no como cantidad. No sumas lotes ni calculas el “lote promedio” con sentido. Es cualitativa nominal: clasifica la procedencia del producto.",
+                examples: [
+                    "Número de factura o de pedido",
+                    "Código de empleado",
+                    "Placa de un camión de distribución"
+                ],
+                tip: "Truco del tutor: si los números son solo un “carnet” o código, no son cuantitativos. Pregunta: ¿tiene sentido el promedio?"
+            },
+            {
+                id: 7,
+                exerciseTag: "Caso CCA · 3/4",
+                contextTitle: "Control de Calidad en CCA",
+                contextDesc: "Planta de producción El Zapote, asegurando calidad de Gallo.",
+                variable: "El número de tapas con defectos detectadas por hora.",
+                correct: { type: "Cuantitativa", subtype: "Discreta", scale: "Razón" },
+                tutor: "Aquí sí contamos eventos: tapas defectuosas. Los valores son enteros (0, 1, 2…) y cero defectos sí significa ausencia. 10 defectos son el doble que 5. Por tanto: cuantitativa discreta de razón.",
+                examples: [
+                    "Botellas rechazadas en un turno",
+                    "Accidentes reportados en un mes",
+                    "Errores de etiquetado por día"
+                ],
+                tip: "“Número de…” casi siempre sugiere conteo → discreta. Luego verifica si el cero es absoluto (casi siempre sí)."
+            },
+            {
+                id: 8,
+                exerciseTag: "Caso CCA · 4/4",
+                contextTitle: "Control de Calidad en CCA",
+                contextDesc: "Planta de producción El Zapote, asegurando calidad de Gallo.",
+                variable: "El estado de la etiqueta (Alineada, Desalineada o Rota).",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "Son categorías de condición física. Aunque “Rota” suene “peor” en la planta, estadísticamente las tratamos como clases distintas sin una escala numérica estandarizada entre ellas. Clasificación cualitativa nominal.",
+                examples: [
+                    "Estado del sello (íntegro / roto)",
+                    "Tipo de falla (mecánica, eléctrica, humana)",
+                    "Turno de producción (A, B, C) como etiqueta"
+                ],
+                tip: "Si solo nombras la categoría del defecto o estado, sin ranking formal definido, usa nominal."
+            },
+            {
+                id: 9,
+                exerciseTag: "Caso La Torre · 1/4",
+                contextTitle: "Logística en La Torre",
+                contextDesc: "Distribución desde Villa Nueva hacia tiendas departamentales.",
+                variable: "El tiempo de viaje (horas y minutos) a la sucursal de Quetzaltenango.",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Razón" },
+                tutor: "La duración del viaje es una medición de tiempo que puede fraccionarse (2 h 15 min, 2.37 h…). Es continua. Cero horas significa “sin duración”, y 4 horas son el doble de 2. Por eso es escala de razón. Ojo: la “hora del día” (las 14:00) suele ser intervalo; aquí hablamos de duración.",
+                examples: [
+                    "Tiempo de entrega de un pedido",
+                    "Duración de una reunión de equipo",
+                    "Minutos de retraso de un camión"
+                ],
+                tip: "Distingue duración (razón) vs hora del reloj (intervalo). Esta pregunta habla de duración del viaje."
+            },
+            {
+                id: 10,
+                exerciseTag: "Caso La Torre · 2/4",
+                contextTitle: "Logística en La Torre",
+                contextDesc: "Distribución desde Villa Nueva hacia tiendas departamentales.",
+                variable: "El tipo de transporte utilizado (camión refrigerado, cerrado, panel).",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "El tipo de transporte es una clasificación de la flota. Las opciones son categorías sin orden natural obligatorio: un panel no es “mayor” que un refrigerado en escala estadística. Cualitativa nominal.",
+                examples: [
+                    "Marca del vehículo",
+                    "Canal de venta (tienda, app, call center)",
+                    "Departamento de destino (Guatemala, Quetzaltenango, Petén)"
+                ],
+                tip: "Si la respuesta es un “tipo de…”, normalmente estás ante cualitativa nominal."
+            },
+            {
+                id: 11,
+                exerciseTag: "Caso La Torre · 3/4",
+                contextTitle: "Logística en La Torre",
+                contextDesc: "Distribución desde Villa Nueva hacia tiendas departamentales.",
+                variable: "La cantidad de cajas de aguacates Hass que ingresan al inventario.",
+                correct: { type: "Cuantitativa", subtype: "Discreta", scale: "Razón" },
+                tutor: "Contamos cajas enteras que entran al inventario. No registramos 12.4 cajas como unidad de ingreso típica. Es cuantitativa discreta, con cero absoluto y razones válidas (40 cajas = el doble de 20).",
+                examples: [
+                    "Pallets recibidos en bodega",
+                    "Unidades de SKU ingresadas",
+                    "Pedidos completados en el día"
+                ],
+                tip: "Inventario por unidades/conteo → discreta de razón. Si midieras peso en kg, ahí sí sería continua."
+            },
+            {
+                id: 12,
+                exerciseTag: "Caso La Torre · 4/4",
+                contextTitle: "Logística en La Torre",
+                contextDesc: "Distribución desde Villa Nueva hacia tiendas departamentales.",
+                variable: "El código postal de la sucursal de destino.",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "El código postal usa dígitos, pero representa una zona geográfica, no una magnitud. No sumas códigos postales ni dices que uno es el “doble” de otro. Es una etiqueta: cualitativa nominal.",
+                examples: [
+                    "DPI o NIT (como identificador)",
+                    "Código de sucursal",
+                    "Número de pasaporte"
+                ],
+                tip: "Regla de oro: número ≠ cuantitativa. Primero pregunta qué representa ese número."
+            },
+            {
+                id: 13,
+                exerciseTag: "Caso MICOOPE · 1/4",
+                contextTitle: "Finanzas en MICOOPE",
+                contextDesc: "Cooperativa en Chiquimula evaluando créditos agrícolas.",
+                variable: "La tasa de interés anual otorgada al asociado (ej. 8.5%).",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Razón" },
+                tutor: "La tasa es una magnitud numérica con decimales (8.5%, 8.75%). Es continua. Conceptualmente admite cero (0% de interés) como ausencia de cargo por interés, y comparar proporciones tiene sentido. Se trata como cuantitativa continua de razón.",
+                examples: [
+                    "Porcentaje de mora de una cartera",
+                    "Rendimiento porcentual de un ahorro",
+                    "Comisión porcentual de un servicio"
+                ],
+                tip: "Porcentajes y tasas suelen ser continuas; verifica siempre si el cero tiene interpretación de ausencia."
+            },
+            {
+                id: 14,
+                exerciseTag: "Caso MICOOPE · 2/4",
+                contextTitle: "Finanzas en MICOOPE",
+                contextDesc: "Cooperativa en Chiquimula evaluando créditos agrícolas.",
+                variable: "El tipo de cultivo para el cual se solicita el crédito (Café, Maíz, etc).",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "Café, maíz o cardamomo son categorías del destino del crédito. No hay un orden estadístico obligatorio entre cultivos. Es cualitativa nominal: sirve para clasificar solicitudes.",
+                examples: [
+                    "Actividad económica del asociado",
+                    "Tipo de garantía presentada",
+                    "Producto financiero solicitado (ahorro, crédito, seguro)"
+                ],
+                tip: "Nombres de grupos o rubros sin ranking → nominal."
+            },
+            {
+                id: 15,
+                exerciseTag: "Caso MICOOPE · 3/4",
+                contextTitle: "Finanzas en MICOOPE",
+                contextDesc: "Cooperativa en Chiquimula evaluando créditos agrícolas.",
+                variable: "El saldo actual en la cuenta de aportaciones (en Quetzales).",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Razón" },
+                tutor: "El dinero se mide en Q con centavos (1250.75). Es una medición continua. Q 0.00 indica saldo nulo, y Q 2000 es el doble de Q 1000. Por eso: cuantitativa continua de razón.",
+                examples: [
+                    "Monto del crédito aprobado",
+                    "Ingresos mensuales del asociado",
+                    "Cuota mensual en quetzales"
+                ],
+                tip: "Variables monetarias casi siempre son continuas de razón (aunque a veces se redondeen a enteros)."
+            },
+            {
+                id: 16,
+                exerciseTag: "Caso MICOOPE · 4/4",
+                contextTitle: "Finanzas en MICOOPE",
+                contextDesc: "Cooperativa en Chiquimula evaluando créditos agrícolas.",
+                variable: "El número de miembros de la familia que dependen económicamente del solicitante.",
+                correct: { type: "Cuantitativa", subtype: "Discreta", scale: "Razón" },
+                tutor: "Contamos personas dependientes: valores enteros. No hay “2.5 dependientes” en el registro habitual. Cero es posible (sin dependientes) y las razones tienen sentido. Cuantitativa discreta de razón.",
+                examples: [
+                    "Número de fiadores del crédito",
+                    "Cantidad de hijos en edad escolar",
+                    "Número de parcelas reportadas"
+                ],
+                tip: "Personas, unidades y eventos contables → piensa primero en discreta."
+            },
+            {
+                id: 17,
+                exerciseTag: "Caso Campero · 1/4",
+                contextTitle: "Mercadeo en Pollo Campero",
+                contextDesc: "Campaña digital para promover Menús Súper Campero.",
+                variable: "La hora exacta del día del primer pedido mediante la App.",
+                correct: { type: "Cuantitativa", subtype: "Continua", scale: "Intervalo" },
+                tutor: "La hora del día es una medición temporal continua (12:30:15, etc.). Pero las 00:00 no significan “ausencia de tiempo”: es un origen convencional del reloj. Por eso es cuantitativa continua en escala de intervalo (no de razón).",
+                examples: [
+                    "Hora de apertura de una sucursal",
+                    "Hora de llegada del delivery",
+                    "Temperatura en °C (otro caso clásico de intervalo)"
+                ],
+                tip: "Hora del reloj ≠ duración. Reloj → intervalo; duración del pedido → razón."
+            },
+            {
+                id: 18,
+                exerciseTag: "Caso Campero · 2/4",
+                contextTitle: "Mercadeo en Pollo Campero",
+                contextDesc: "Campaña digital para promover Menús Súper Campero.",
+                variable: "El método de pago preferido por el usuario.",
+                correct: { type: "Cualitativa", subtype: null, scale: "Nominal" },
+                tutor: "Efectivo, tarjeta o billetera electrónica son formas de pago: categorías. No existe un orden natural único (la tarjeta no es “mayor” que el efectivo en escala estadística). Cualitativa nominal.",
+                examples: [
+                    "Sistema operativo del celular (iOS / Android)",
+                    "Canal de pedido (app, kiosko, mostrador)",
+                    "Tipo de cupón usado"
+                ],
+                tip: "Método, canal o medio → casi siempre nominal."
+            },
+            {
+                id: 19,
+                exerciseTag: "Caso Campero · 3/4",
+                contextTitle: "Mercadeo en Pollo Campero",
+                contextDesc: "Campaña digital para promover Menús Súper Campero.",
+                variable: "La cantidad de piezas de pollo que consume una mesa promedio.",
+                correct: { type: "Cuantitativa", subtype: "Discreta", scale: "Razón" },
+                tutor: "Aunque diga “promedio”, la variable de fondo es un conteo de piezas. Las piezas se sirven enteras (1, 2, 3…). Es cuantitativa discreta, con cero absoluto y razones interpretables.",
+                examples: [
+                    "Bebidas pedidas por mesa",
+                    "Combos vendidos en un turno",
+                    "Salsas adicionales solicitadas"
+                ],
+                tip: "Si la unidad natural es una pieza/unidad entera, prioriza discreta aunque luego calcules promedios."
+            },
+            {
+                id: 20,
+                exerciseTag: "Caso Campero · 4/4",
+                contextTitle: "Mercadeo en Pollo Campero",
+                contextDesc: "Campaña digital para promover Menús Súper Campero.",
+                variable: "La calificación del menú (de 1 a 5 estrellas) en la App Store.",
+                correct: { type: "Cualitativa", subtype: null, scale: "Ordinal" },
+                tutor: "Las estrellas usan números, pero miden percepción ordenada de calidad (1 = peor, 5 = mejor). La diferencia entre 2 y 3 no necesariamente equivale a la de 4 y 5 en sensación real. Por eso, en este curso, la tratamos como cualitativa ordinal (ranking), no como medición de intervalo/razón.",
+                examples: [
+                    "Encuesta Likert (1 = muy en desacuerdo … 5 = muy de acuerdo)",
+                    "Nivel de recomendación (nada, poco, mucho)",
+                    "Posición en un ranking de preferencia"
+                ],
+                tip: "Si el número solo codifica un puesto o nivel de opinión, piensa ordinal. No te dejes llevar solo porque “aparecen dígitos”."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userSelections = createEmptySelections();
+        let isAnswered = false;
+
+        const introScreen = document.getElementById("intro-screen");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultsScreen = document.getElementById("results-screen");
+        const questionCard = document.getElementById("question-card");
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+        const scoreDisplay = document.getElementById("score-display");
+        const exerciseTag = document.getElementById("exercise-tag");
+        const contextTitle = document.getElementById("context-title");
+        const contextDesc = document.getElementById("context-desc");
+        const variableText = document.getElementById("variable-text");
+        const checkBtn = document.getElementById("check-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const feedbackArea = document.getElementById("feedback-area");
+        const feedbackTitle = document.getElementById("feedback-title");
+        const feedbackMessage = document.getElementById("feedback-message");
+        const yourAnswerText = document.getElementById("your-answer-text");
+        const correctAnswerText = document.getElementById("correct-answer-text");
+        const tutorLesson = document.getElementById("tutor-lesson");
+        const subtypeSection = document.getElementById("subtype-section");
+        const scaleLabel = document.getElementById("scale-label");
+        const optionButtons = Array.from(document.querySelectorAll(".option"));
+
+        function createEmptySelections() {
+            return { type: null, subtype: null, scale: null };
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            introScreen.classList.add("hidden");
+            resultsScreen.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswered = false;
+            userSelections = createEmptySelections();
+
+            resetAllOptions();
+            clearFeedback();
+            setOptionsEnabled(true);
+
+            checkBtn.classList.remove("hidden");
+            checkBtn.disabled = true;
+            nextBtn.classList.add("hidden");
+            nextBtn.textContent = currentQuestionIndex === exercises.length - 1
+                ? "Ver resultados →"
+                : "Siguiente →";
+
+            subtypeSection.classList.add("hidden");
+            scaleLabel.textContent = "2. Escala de medición";
+
+            const q = exercises[currentQuestionIndex];
+            exerciseTag.textContent = q.exerciseTag;
+            contextTitle.textContent = q.contextTitle;
+            contextDesc.textContent = q.contextDesc;
+            variableText.textContent = q.variable;
+
+            const progress = (currentQuestionIndex / exercises.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `Ejercicio ${currentQuestionIndex + 1} de ${exercises.length}`;
+            scoreDisplay.textContent = `${score} pts`;
+
+            questionCard.style.animation = "none";
+            void questionCard.offsetWidth;
+            questionCard.style.animation = "rise 0.45s ease both";
+        }
+
+        function resetAllOptions() {
+            optionButtons.forEach((btn) => {
+                btn.classList.remove("selected", "is-correct", "is-wrong");
+            });
+        }
+
+        function clearFeedback() {
+            feedbackArea.classList.add("hidden");
+            feedbackArea.classList.remove("ok", "bad");
+            feedbackTitle.textContent = "";
+            feedbackMessage.textContent = "";
+            yourAnswerText.textContent = "";
+            correctAnswerText.textContent = "";
+            tutorLesson.innerHTML = "";
+        }
+
+        function formatClassification(answer) {
+            if (!answer || !answer.type) return "Sin respuesta";
+            let text = answer.type;
+            if (answer.type === "Cuantitativa" && answer.subtype) {
+                text += ` · ${answer.subtype}`;
+            }
+            if (answer.scale) text += ` · Escala ${answer.scale}`;
+            return text;
+        }
+
+        function setOptionsEnabled(enabled) {
+            optionButtons.forEach((btn) => {
+                btn.disabled = !enabled;
+            });
+        }
+
+        function clearGroupSelection(group) {
+            document.querySelectorAll(`.option[data-group="${group}"]`).forEach((btn) => {
+                btn.classList.remove("selected");
+            });
+        }
+
+        function selectOption(group, value) {
+            if (isAnswered) return;
+
+            userSelections[group] = value;
+            clearGroupSelection(group);
+
+            const selectedBtn = document.querySelector(
+                `.option[data-group="${group}"][data-value="${value}"]`
+            );
+            if (selectedBtn) selectedBtn.classList.add("selected");
+
+            if (group === "type") {
+                userSelections.subtype = null;
+                clearGroupSelection("subtype");
+
+                if (value === "Cuantitativa") {
+                    subtypeSection.classList.remove("hidden");
+                    scaleLabel.textContent = "3. Escala de medición";
+                } else {
+                    subtypeSection.classList.add("hidden");
+                    scaleLabel.textContent = "2. Escala de medición";
+                }
+            }
+
+            validateForm();
+        }
+
+        function validateForm() {
+            const needsSubtype = userSelections.type === "Cuantitativa";
+            const isValid =
+                Boolean(userSelections.type) &&
+                Boolean(userSelections.scale) &&
+                (!needsSubtype || Boolean(userSelections.subtype));
+
+            checkBtn.disabled = !isValid;
+        }
+
+        function checkAnswer() {
+            if (isAnswered || checkBtn.disabled) return;
+
+            isAnswered = true;
+            setOptionsEnabled(false);
+
+            const currentQ = exercises[currentQuestionIndex];
+            const correct = currentQ.correct;
+
+            const typeOk = userSelections.type === correct.type;
+            const subtypeOk =
+                correct.type !== "Cuantitativa" ||
+                userSelections.subtype === correct.subtype;
+            const scaleOk = userSelections.scale === correct.scale;
+            const isCorrect = typeOk && subtypeOk && scaleOk;
+
+            yourAnswerText.textContent = formatClassification(userSelections);
+            correctAnswerText.textContent = formatClassification(correct);
+
+            if (isCorrect) {
+                score += 1;
+                feedbackArea.classList.add("ok");
+                feedbackArea.classList.remove("bad");
+                feedbackTitle.textContent = "¡Correcto!";
+                feedbackMessage.textContent =
+                    "Muy bien: clasificaste con precisión. Lee el refuerzo del tutor para consolidar la idea.";
+                tutorLesson.innerHTML = buildTutorLesson(currentQ, {
+                    typeOk, subtypeOk, scaleOk, isCorrect: true
+                });
+            } else {
+                feedbackArea.classList.add("bad");
+                feedbackArea.classList.remove("ok");
+                feedbackTitle.textContent = "Aprendamos de este error";
+                feedbackMessage.textContent = buildErrorLead(typeOk, subtypeOk, scaleOk);
+                tutorLesson.innerHTML = buildTutorLesson(currentQ, {
+                    typeOk, subtypeOk, scaleOk, isCorrect: false
+                });
+            }
+
+            feedbackArea.classList.remove("hidden");
+            markAnswerVisuals(correct);
+            scoreDisplay.textContent = `${score} pts`;
+
+            checkBtn.classList.add("hidden");
+            nextBtn.classList.remove("hidden");
+            feedbackArea.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+
+        function buildErrorLead(typeOk, subtypeOk, scaleOk) {
+            const misses = [];
+            if (!typeOk) misses.push("el tipo");
+            if (!subtypeOk) misses.push("el subtipo");
+            if (!scaleOk) misses.push("la escala");
+
+            if (misses.length === 1) {
+                return `Tu respuesta no coincidió en ${misses[0]}. Abajo te explico el concepto y cómo pensarlo como tutor.`;
+            }
+            if (misses.length === 2) {
+                return `Hay que ajustar ${misses[0]} y ${misses[1]}. Revisa la comparación y la mini-lección.`;
+            }
+            return "La clasificación completa necesita ajuste. Vamos paso a paso con conceptos y ejemplos.";
+        }
+
+        function buildTutorLesson(exercise, status) {
+            const { typeOk, subtypeOk, scaleOk, isCorrect } = status;
+            const correct = exercise.correct;
+            const parts = [];
+
+            parts.push(`
+                <div class="tutor-block">
+                    <h5>${isCorrect ? "Refuerzo del tutor" : "Explicación del tutor"}</h5>
+                    <p>${escapeHtml(exercise.tutor)}</p>
+                </div>
+            `);
+
+            if (!isCorrect) {
+                const conceptKeys = [];
+                if (!typeOk) conceptKeys.push(correct.type);
+                if (!subtypeOk && correct.subtype) conceptKeys.push(correct.subtype);
+                if (!scaleOk) conceptKeys.push(correct.scale);
+
+                if (!scaleOk && userSelections.scale && userSelections.scale !== correct.scale) {
+                    conceptKeys.push(userSelections.scale);
+                }
+                if (!subtypeOk && userSelections.subtype && userSelections.subtype !== correct.subtype) {
+                    conceptKeys.push(userSelections.subtype);
+                }
+
+                const uniqueConcepts = [...new Set(conceptKeys)].filter((k) => CONCEPTS[k]);
+                if (uniqueConcepts.length) {
+                    parts.push(`<div class="concept-list">`);
+                    uniqueConcepts.forEach((key) => {
+                        const c = CONCEPTS[key];
+                        const isTarget =
+                            key === correct.type ||
+                            key === correct.subtype ||
+                            key === correct.scale;
+                        parts.push(`
+                            <div class="concept-card">
+                                <span class="concept-title">${isTarget ? "Concepto clave: " : "Lo que elegiste: "}${escapeHtml(c.title)}</span>
+                                <p>${escapeHtml(c.text)}</p>
+                            </div>
+                        `);
+                    });
+                    parts.push(`</div>`);
+                }
+
+                parts.push(buildMistakeGuide(exercise, typeOk, subtypeOk, scaleOk));
+            }
+
+            if (exercise.examples && exercise.examples.length) {
+                const items = exercise.examples
+                    .map((ex) => `<li>${escapeHtml(ex)}</li>`)
+                    .join("");
+                parts.push(`
+                    <div class="examples-box">
+                        <span class="ex-label">Ejemplos parecidos para practicar la idea</span>
+                        <ul>${items}</ul>
+                    </div>
+                `);
+            }
+
+            if (exercise.tip) {
+                parts.push(`
+                    <div class="tip-box">
+                        <strong>Tip del catedrático:</strong> ${escapeHtml(exercise.tip)}
+                    </div>
+                `);
+            }
+
+            return parts.join("");
+        }
+
+        function buildMistakeGuide(exercise, typeOk, subtypeOk, scaleOk) {
+            const correct = exercise.correct;
+            const lines = [];
+
+            if (!typeOk) {
+                lines.push(
+                    `Marcaste <strong>${escapeHtml(userSelections.type)}</strong>, pero esta variable es <strong>${escapeHtml(correct.type)}</strong>. ` +
+                    (correct.type === "Cualitativa"
+                        ? "Aquí importa la categoría o atributo, no una cantidad medible."
+                        : "Aquí sí hay una magnitud numérica con sentido (conteo o medición).")
+                );
+            }
+
+            if (!subtypeOk && correct.subtype) {
+                const studentSub = userSelections.subtype
+                    ? escapeHtml(userSelections.subtype)
+                    : "ninguno (o no correspondía)";
+                lines.push(
+                    `En el subtipo, indicaste <strong>${studentSub}</strong>; lo correcto es <strong>${escapeHtml(correct.subtype)}</strong>. ` +
+                    (correct.subtype === "Discreta"
+                        ? "Piensa en unidades enteras que se cuentan."
+                        : "Piensa en una medición que puede tomar valores intermedios (decimales).")
+                );
+            }
+
+            if (!scaleOk) {
+                lines.push(
+                    `En la escala elegiste <strong>${escapeHtml(userSelections.scale)}</strong>, y la adecuada es <strong>${escapeHtml(correct.scale)}</strong>. ` +
+                    scaleContrast(userSelections.scale, correct.scale)
+                );
+            }
+
+            if (!lines.length) return "";
+
+            return `
+                <div class="tutor-block" style="margin-top:0.75rem; border-color: rgba(251,113,133,0.28);">
+                    <h5>Dónde se desvió tu razonamiento</h5>
+                    ${lines.map((l) => `<p>${l}</p>`).join("")}
+                </div>
+            `;
+        }
+
+        function scaleContrast(chosen, correct) {
+            const map = {
+                "Nominal|Ordinal": "Nominal solo nombra categorías; Ordinal además las ordena.",
+                "Ordinal|Nominal": "Si no hay un orden objetivo entre categorías, no uses Ordinal: quédate en Nominal.",
+                "Intervalo|Razón": "En Razón el cero es absoluto y sí puedes hablar de “el doble”. En Intervalo el cero es convencional.",
+                "Razón|Intervalo": "Si el cero no significa ausencia real (como °C o hora del reloj), no uses Razón: usa Intervalo.",
+                "Nominal|Razón": "Razón exige una magnitud numérica con cero absoluto; Nominal solo clasifica etiquetas.",
+                "Razón|Nominal": "Si el “número” es solo un código o etiqueta, no es Razón: es Nominal.",
+                "Ordinal|Razón": "Ordinal ordena niveles; Razón mide cantidades con unidad y cero absoluto.",
+                "Razón|Ordinal": "Si solo hay ranking de percepción o niveles, usa Ordinal aunque veas números.",
+                "Nominal|Intervalo": "Intervalo es numérica con diferencias significativas; Nominal no mide distancias.",
+                "Intervalo|Nominal": "Si no hay unidad de medida numérica real, no es Intervalo.",
+                "Ordinal|Intervalo": "Intervalo asume diferencias iguales/medibles; Ordinal solo garantiza orden.",
+                "Intervalo|Ordinal": "Si no puedes asegurar distancias iguales entre niveles, quédate en Ordinal."
+            };
+            return map[`${chosen}|${correct}`] ||
+                "Compara si hay solo clasificación, orden, diferencias medibles o cero absoluto.";
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function markAnswerVisuals(correct) {
+            optionButtons.forEach((btn) => {
+                const group = btn.dataset.group;
+                const value = btn.dataset.value;
+                const userValue = userSelections[group];
+                const correctValue = correct[group];
+
+                if (group === "subtype" && correct.type !== "Cuantitativa") return;
+
+                if (correctValue && value === correctValue) {
+                    btn.classList.add("is-correct");
+                } else if (userValue && value === userValue && value !== correctValue) {
+                    btn.classList.add("is-wrong");
+                }
+            });
+
+            if (correct.type === "Cuantitativa") {
+                subtypeSection.classList.remove("hidden");
+                scaleLabel.textContent = "3. Escala de medición";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex += 1;
+            if (currentQuestionIndex < exercises.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.classList.add("hidden");
+            resultsScreen.classList.remove("hidden");
+            progressBar.style.width = "100%";
+
+            const total = exercises.length;
+            const percent = Math.round((score / total) * 100);
+
+            document.getElementById("final-score").textContent = `${score}/${total}`;
+            document.getElementById("final-percent").textContent = `${percent}% de aciertos`;
+
+            const msgElement = document.getElementById("performance-message");
+            const emojiElement = document.getElementById("result-emoji");
+
+            if (percent === 100) {
+                msgElement.textContent = "¡Excelente! Dominas la clasificación de variables.";
+                emojiElement.textContent = "🏆";
+            } else if (percent >= 80) {
+                msgElement.textContent = "¡Muy bien! Los conceptos están claros.";
+                emojiElement.textContent = "🌟";
+            } else if (percent >= 60) {
+                msgElement.textContent = "Buen avance. Repasa escalas y subtipos.";
+                emojiElement.textContent = "📚";
+            } else {
+                msgElement.textContent = "Sigue practicando: cada intento suma.";
+                emojiElement.textContent = "💪";
+            }
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add("hidden");
+            introScreen.classList.remove("hidden");
+            currentQuestionIndex = 0;
+            score = 0;
+            userSelections = createEmptySelections();
+            isAnswered = false;
+        }
+
+        optionButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                selectOption(btn.dataset.group, btn.dataset.value);
+            });
+        });
+
+        document.getElementById("start-btn").addEventListener("click", startQuiz);
+        checkBtn.addEventListener("click", checkAnswer);
+        nextBtn.addEventListener("click", nextQuestion);
+        document.getElementById("restart-btn").addEventListener("click", restartQuiz);
+        document.getElementById("print-btn").addEventListener("click", () => window.print());
+    </script>
+</body>
+</html>

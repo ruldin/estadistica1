@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 3: Tablas de Frecuencia y Análisis Xela - UMG</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter & Space Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .neon-border-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+        }
+        .neon-border-amber {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-gradient-to-tr from-amber-500 to-emerald-500 p-2.5 rounded-xl shadow-lg shadow-amber-500/10">
+                        <i class="fa-solid fa-table text-slate-950 text-xl font-black"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold tracking-widest text-amber-400 uppercase block heading-font">Módulo I • Semana 3</span>
+                        <h1 class="text-base sm:text-lg font-bold text-white leading-none heading-font">Tablas de Frecuencia & Caso Xela <span class="text-xs text-slate-500 font-normal">| UMG</span></h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex space-x-2">
+                    <button onclick="switchSection('likert')" id="nav-likert" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                        <i class="fa-solid fa-poll mr-1.5"></i>1. Escalas Likert
+                    </button>
+                    <button onclick="switchSection('xela')" id="nav-xela" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-mug-hot mr-1.5"></i>2. Caso Café Xela
+                    </button>
+                    <button onclick="switchSection('tabulator')" id="nav-tabulator" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-calculator mr-1.5"></i>3. Tabulador Universal
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE TABS BAR -->
+    <div class="md:hidden bg-slate-950 border-b border-slate-800 p-2 flex overflow-x-auto gap-2 custom-scrollbar">
+        <button onclick="switchSection('likert')" id="mob-nav-likert" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <i class="fa-solid fa-poll mr-1"></i>Likert
+        </button>
+        <button onclick="switchSection('xela')" id="mob-nav-xela" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            <i class="fa-solid fa-mug-hot mr-1"></i>Caso Xela
+        </button>
+        <button onclick="switchSection('tabulator')" id="mob-nav-tabulator" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            <i class="fa-solid fa-calculator mr-1"></i>Tabulador
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+        <!-- ==================== SECCIÓN 1: ESCALAS DE LIKERT Y DISEÑO DE ENCUESTAS ==================== -->
+        <section id="sec-likert" class="space-y-6 block">
+            <!-- Hero Banner -->
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-amber-950/30 p-6 sm:p-8 border border-slate-800 shadow-2xl relative overflow-hidden">
+                <div class="max-w-3xl space-y-3 relative z-10">
+                    <span class="px-3 py-1 text-[10px] font-extrabold bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 uppercase tracking-widest heading-font">
+                        Herramientas de Medición
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight heading-font">
+                        Escalas de Likert & Captura de Percepciones
+                    </h2>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        Para cuantificar percepciones cualitativas y convertirlas en datos accionables, la gestión moderna utiliza escalas de medición. La **Escala de Likert** es el estándar de oro para capturar los matices de la opinión pública y las actitudes del consumidor.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tabla Interactiva de Aplicación Estratégica -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 neon-border-amber space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-white heading-font flex items-center">
+                        <i class="fa-solid fa-list-check text-amber-400 mr-2.5"></i>
+                        Desglose de Aplicaciones Tácticas según el Objetivo
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Selecciona o explora el objetivo táctico para tu estudio de mercado:
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Escala 1: Acuerdo -->
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-amber-500/50 transition duration-300 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded-lg uppercase">Acuerdo</span>
+                                <i class="fa-solid fa-handshake text-blue-400/60 text-lg"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mt-3">Posturas y Políticas</h4>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                Evaluación de aceptación ante nuevas políticas, productos o reformas organizacionales.
+                            </p>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                            <span class="text-[9px] font-bold text-slate-500 block uppercase">Opciones Típicas:</span>
+                            <p class="text-blue-300 font-medium">• Totalmente de acuerdo<br>• Indeciso / Neutro<br>• En desacuerdo</p>
+                        </div>
+                    </div>
+
+                    <!-- Escala 2: Frecuencia -->
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-amber-500/50 transition duration-300 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold rounded-lg uppercase">Frecuencia</span>
+                                <i class="fa-solid fa-clock-rotate-left text-emerald-400/60 text-lg"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mt-3">Hábitos de Consumo</h4>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                Análisis de repetición de compra, comportamiento social y uso de servicios digitales.
+                            </p>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                            <span class="text-[9px] font-bold text-slate-500 block uppercase">Opciones Típicas:</span>
+                            <p class="text-emerald-300 font-medium">• Siempre<br>• Frecuentemente<br>• Ocasionalmente<br>• Nunca</p>
+                        </div>
+                    </div>
+
+                    <!-- Escala 3: Importancia -->
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-amber-500/50 transition duration-300 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 bg-purple-500/10 text-purple-400 text-[10px] font-bold rounded-lg uppercase">Importancia</span>
+                                <i class="fa-solid fa-star text-purple-400/60 text-lg"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mt-3">Priorización de Oferta</h4>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                Priorización de atributos de valor en la propuesta comercial (ej. parqueo, rapidez, empaque).
+                            </p>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                            <span class="text-[9px] font-bold text-slate-500 block uppercase">Opciones Típicas:</span>
+                            <p class="text-purple-300 font-medium">• Muy importante<br>• Moderadamente importante<br>• Sin importancia</p>
+                        </div>
+                    </div>
+
+                    <!-- Escala 4: Opinión -->
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 hover:border-amber-500/50 transition duration-300 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-bold rounded-lg uppercase">Opinión / Calidad</span>
+                                <i class="fa-solid fa-face-smile text-amber-400/60 text-lg"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white mt-3">Diagnóstico de Servicio</h4>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                Diagnóstico de satisfacción del cliente, calidad percibida de atención e instalaciones.
+                            </p>
+                        </div>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                            <span class="text-[9px] font-bold text-slate-500 block uppercase">Opciones Típicas:</span>
+                            <p class="text-amber-300 font-medium">• Excelente<br>• Muy buena / Buena<br>• Regular / Mala</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerta Metodológica Crítica -->
+                <div class="p-5 bg-red-950/30 border border-red-500/30 rounded-2xl flex items-start space-x-4">
+                    <div class="p-2.5 bg-red-500/10 text-red-400 rounded-xl flex-none mt-0.5">
+                        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div class="space-y-1 text-xs">
+                        <h5 class="font-bold text-red-400 text-sm">¡Error Crítico Metodológico de Diseño!</h5>
+                        <p class="text-slate-300 leading-relaxed">
+                            La elección incorrecta de una escala es un error crítico de diseño que **invalida la estrategia de fidelización**. Por ejemplo, utilizar una escala de <em>"Acuerdo"</em> para medir la <em>"Frecuencia"</em> de uso de un servicio bancario genera confusión en el cliente y datos que no representan la realidad operativa. Esta desconexión metodológica anula cualquier posibilidad de calcular el valor del ciclo de vida del cliente.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== SECCIÓN 2: CASO APLICADO CAFÉ EN XELA ==================== -->
+        <section id="sec-xela" class="space-y-6 hidden">
+            <!-- Header Sección -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-2">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest heading-font">Caso de Estudio Quetzaltenango</span>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font flex items-center mt-0.5">
+                        <i class="fa-solid fa-mug-hot text-amber-500 mr-2.5"></i>
+                        Preferencias de Consumo de Café en Xela
+                    </h3>
+                </div>
+                <span class="text-xs bg-slate-900 border border-slate-800 text-slate-400 px-3 py-1.5 rounded-full font-medium">
+                    Muestra Total: <strong class="text-amber-400" id="xela-total-n">n = 100</strong>
+                </span>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Para un administrador en la región de Quetzaltenango, la tabulación de datos es el mapa que permite navegar la competencia local. Modifica los datos de la frecuencia absoluta ($f$) a continuación para observar cómo cambian la frecuencia relativa, porcentual, proporción y la interpretación gerencial automática:
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Columna Izquierda: Tabla Interactiva -->
+                <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-slate-850 pb-3">
+                        <h4 class="text-sm font-bold text-white heading-font">Estructura de la Tabla de Frecuencias</h4>
+                        <button onclick="resetXelaData()" class="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Restaurar Valores
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                                    <th class="py-3 px-2">Categoría (Marca de Café)</th>
+                                    <th class="py-3 px-2 text-center">Frecuencia Absoluta ($f$)</th>
+                                    <th class="py-3 px-2 text-center">Frecuencia Relativa ($f_r$)</th>
+                                    <th class="py-3 px-2 text-center">Frecuencia Porcentual ($\%$)</th>
+                                    <th class="py-3 px-2 text-center">Proporción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="xela-table-body" class="divide-y divide-slate-850 text-slate-200">
+                                <!-- Generado Dinámicamente por JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-t-2 border-slate-700 font-extrabold text-white text-xs bg-slate-950/60">
+                                    <td class="py-3 px-2">Total</td>
+                                    <td class="py-3 px-2 text-center text-amber-400" id="xela-sum-f">100</td>
+                                    <td class="py-3 px-2 text-center" id="xela-sum-fr">1.00</td>
+                                    <td class="py-3 px-2 text-center" id="xela-sum-pct">100%</td>
+                                    <td class="py-3 px-2 text-center" id="xela-sum-prop">1.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Visualización Gráfica en Barras -->
+                    <div class="pt-4 space-y-3">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Participación de Mercado Visual</h5>
+                        <div id="xela-bars-container" class="space-y-2.5">
+                            <!-- Generado dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Interpretación Estratégica Gerencial Automática -->
+                <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-6 shadow-xl">
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl">
+                                <i class="fa-solid fa-lightbulb text-lg"></i>
+                            </span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white heading-font">Interpretación Estratégica Automática</h4>
+                                <span class="text-[10px] text-slate-500">Transformando números en decisiones comerciales</span>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Interpretación Dinámica -->
+                        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3 text-xs text-slate-300 leading-relaxed" id="xela-narrative-box">
+                            <!-- Texto inyectado por JS -->
+                        </div>
+
+                        <!-- Cuadro de Fórmulas y Conceptos Clave -->
+                        <div class="p-4 bg-amber-950/20 border border-amber-500/20 rounded-2xl space-y-2 text-[11px]">
+                            <span class="font-bold text-amber-400 uppercase block tracking-wider text-[10px]">
+                                <i class="fa-solid fa-book-open mr-1"></i> Formulario de Cátedra:
+                            </span>
+                            <ul class="space-y-1.5 text-slate-300">
+                                <li>• <strong>Frecuencia Relativa ($f_r$):</strong> $f_r = \frac{f}{n}$ (Sirve para contextualizar la categoría respecto al total).</li>
+                                <li>• <strong>Frecuencia Porcentual ($\%$):</strong> $\% = f_r \times 100$.</li>
+                                <li>• <strong>Proporción:</strong> Representa la fracción decimal bruta de la participación ($0.00 \text{ a } 1.00$).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 text-[10px] text-slate-500 flex items-center justify-between">
+                        <span>Fuente: Guía Didáctica UMG • Semana 3</span>
+                        <i class="fa-solid fa-check-double text-emerald-400"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== SECCIÓN 3: TABULADOR UNIVERSAL PARA ALUMNOS ==================== -->
+        <section id="sec-tabulator" class="space-y-6 hidden">
+            <!-- Header -->
+            <div class="border-b border-slate-800 pb-4">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest heading-font">Herramienta de Trabajo para el Estudiante</span>
+                <h3 class="text-xl sm:text-2xl font-black text-white heading-font flex items-center mt-0.5">
+                    <i class="fa-solid fa-calculator text-emerald-400 mr-2.5"></i>
+                    Tabulador de Frecuencias Universal & Reporte de Taller
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">
+                    Herramienta de apoyo para tus clases de estadísticas, elaborado por Ruldin Ayala
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Columna Izquierda: Ingreso de Datos -->
+                <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-5">
+                    <h4 class="text-sm font-bold text-white heading-font flex items-center justify-between">
+                        <span><i class="fa-solid fa-pen-to-square text-emerald-400 mr-2"></i>Entrada de Datos</span>
+                        <span class="text-[10px] text-slate-500">2 Modalidades</span>
+                    </h4>
+
+                    <!-- Switcher de modo -->
+                    <div class="grid grid-cols-2 gap-2 p-1 bg-slate-950 rounded-xl border border-slate-850 text-xs">
+                        <button onclick="setTabulatorMode('raw')" id="mode-btn-raw" class="py-2 rounded-lg font-bold transition bg-emerald-500 text-slate-950">
+                            Datos Brutos
+                        </button>
+                        <button onclick="setTabulatorMode('direct')" id="mode-btn-direct" class="py-2 rounded-lg font-bold text-slate-400 transition hover:text-white">
+                            Conteo Directo ($f$)
+                        </button>
+                    </div>
+
+                    <!-- Formulario Datos Brutos -->
+                    <div id="form-raw" class="space-y-3">
+                        <label class="block text-xs font-semibold text-slate-300">
+                            Ingresa respuestas separadas por comas (,):
+                        </label>
+                        <textarea id="raw-input-text" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 custom-scrollbar" placeholder="Ejemplo: Marca A, Marca B, Marca A, Marca C, Marca A, Marca B, Otras, Marca A, Marca B..."></textarea>
+                        <div class="flex gap-2">
+                            <button onclick="processRawData()" class="flex-grow bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/10">
+                                <i class="fa-solid fa-bolt mr-1.5"></i> Tabular Datos Brutos
+                            </button>
+                            <button onclick="loadSampleRawData()" class="px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs transition border border-slate-700" title="Cargar Datos de Ejemplo">
+                                Ejemplo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Formulario Conteo Directo -->
+                    <div id="form-direct" class="space-y-3 hidden">
+                        <label class="block text-xs font-semibold text-slate-300">
+                            Escribe una categoría y su frecuencia absoluta ($f$) por línea:
+                        </label>
+                        <textarea id="direct-input-text" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-emerald-500 custom-scrollbar" placeholder="Marca A: 45&#10;Marca B: 30&#10;Marca C: 15&#10;Otras: 10"></textarea>
+                        <button onclick="processDirectData()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/10">
+                            <i class="fa-solid fa-table-list mr-1.5"></i> Generar Tabla
+                        </button>
+                    </div>
+
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-850 text-[11px] text-slate-400 space-y-1">
+                        <i class="fa-solid fa-circle-info text-emerald-400 mr-1"></i>
+                        <span>Sombra automática: El algoritmo calcula frecuencias acumuladas ($F_a$), frecuencias relativas ($f_r$), porcentajes ($\%$) y la proporción ($p$).</span>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Resultado Tabulado y Reporte Copiable -->
+                <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-850 pb-3">
+                        <h4 class="text-sm font-bold text-white heading-font">Tabla de Frecuencia Procesada</h4>
+                        <button onclick="copyTableReport()" class="bg-slate-800 hover:bg-slate-700 text-xs text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center">
+                            <i class="fa-solid fa-copy mr-1.5"></i> Copiar Reporte
+                        </button>
+                    </div>
+
+                    <!-- Tabla Resultado -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                                    <th class="py-2.5 px-2">Categoría</th>
+                                    <th class="py-2.5 px-2 text-center">$f$</th>
+                                    <th class="py-2.5 px-2 text-center">$F_a$</th>
+                                    <th class="py-2.5 px-2 text-center">$f_r$</th>
+                                    <th class="py-2.5 px-2 text-center">$\%$</th>
+                                    <th class="py-2.5 px-2 text-center">Prop.</th>
+                                </tr>
+                            </thead>
+                            <tbody id="custom-table-body" class="divide-y divide-slate-850 text-slate-200">
+                                <tr>
+                                    <td colspan="6" class="py-8 text-center text-slate-500 italic">
+                                        Ingresa datos a la izquierda y presiona "Tabular" para visualizar tus resultados.
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="custom-table-foot" class="hidden">
+                                <tr class="border-t-2 border-slate-700 font-extrabold text-white text-xs bg-slate-950/60">
+                                    <td class="py-2.5 px-2">Total ($N$)</td>
+                                    <td class="py-2.5 px-2 text-center text-emerald-400" id="custom-sum-f">0</td>
+                                    <td class="py-2.5 px-2 text-center text-slate-500">-</td>
+                                    <td class="py-2.5 px-2 text-center" id="custom-sum-fr">1.00</td>
+                                    <td class="py-2.5 px-2 text-center" id="custom-sum-pct">100%</td>
+                                    <td class="py-2.5 px-2 text-center" id="custom-sum-prop">1.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Visualización Gráfica en Barras -->
+                    <div id="custom-bars-box" class="hidden pt-4 border-t border-slate-850 space-y-3">
+                        <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                            <span><i class="fa-solid fa-chart-bar text-emerald-400 mr-2"></i>Participación de Mercado Visual</span>
+                            <span class="text-[10px] text-slate-500 font-normal">Barras Proporcionales (%)</span>
+                        </h5>
+                        <div id="custom-bars-container" class="space-y-2.5">
+                            <!-- Generado dinámicamente por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Indicadores para la Toma de Decisiones Gerenciales -->
+                    <div id="custom-kpi-box" class="hidden pt-4 border-t border-slate-850 space-y-4">
+                        <h5 class="text-xs font-bold text-white heading-font uppercase tracking-wider flex items-center">
+                            <i class="fa-solid fa-chart-line text-blue-400 mr-2"></i>
+                            Indicadores para la Toma de Decisiones Gerenciales
+                        </h5>
+                        
+                        <!-- Grid de Tarjetas KPI Gerenciales -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <!-- KPI 1: Líder de Mercado -->
+                            <div class="p-3 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] text-emerald-400 font-bold uppercase block"><i class="fa-solid fa-trophy mr-1"></i> Categoría Dominante</span>
+                                <h6 class="font-bold text-white text-sm truncate" id="kpi-leader-name">-</h6>
+                                <p class="text-[11px] text-slate-400" id="kpi-leader-pct">Cuota: -</p>
+                            </div>
+                            
+                            <!-- KPI 2: Nivel de Concentración -->
+                            <div class="p-3 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] text-blue-400 font-bold uppercase block"><i class="fa-solid fa-layer-group mr-1"></i> Concentración</span>
+                                <h6 class="font-bold text-white text-sm truncate" id="kpi-concentration-status">-</h6>
+                                <p class="text-[11px] text-slate-400" id="kpi-concentration-desc">-</p>
+                            </div>
+                            
+                            <!-- KPI 3: Brecha Liderazgo -->
+                            <div class="p-3 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-1">
+                                <span class="text-[10px] text-purple-400 font-bold uppercase block"><i class="fa-solid fa-arrows-left-right mr-1"></i> Ventaja s/ 2do Lugar</span>
+                                <h6 class="font-bold text-white text-sm truncate" id="kpi-gap-val">-</h6>
+                                <p class="text-[11px] text-slate-400" id="kpi-gap-desc">Margen de ventaja</p>
+                            </div>
+                        </div>
+
+                        <!-- Cuadro de Interpretación Gerencial Automática -->
+                        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2 text-xs text-slate-300 leading-relaxed" id="custom-decision-narrative">
+                            <!-- Texto inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Reporte de Texto Gerencial para Taller -->
+                    <div id="custom-report-box" class="hidden pt-4 border-t border-slate-850 space-y-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Resumen Ejecutivo de la Tabulación:</span>
+                        <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-slate-300 font-mono leading-relaxed" id="custom-report-text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-xs text-slate-300">
+                Plataforma educativa desarrollada por <strong class="text-amber-400 font-bold">Ruldin Ayala</strong>, catedrático • Estadística I
+            </p>
+            <p class="text-[10px] text-slate-500">
+                Licenciatura en Administración de Empresas • Universidad Mariano Gálvez de Guatemala (UMG)
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==================== NAVIGATION BETWEEN SECTIONS ====================
+        function switchSection(secId) {
+            // Ocultar secciones
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('block');
+            });
+            // Mostrar seleccionada
+            const target = document.getElementById(`sec-${secId}`);
+            target.classList.remove('hidden');
+            target.classList.add('block');
+
+            // Resetear estilos de botones desktop
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white";
+            });
+            // Activar actual
+            const activeBtn = document.getElementById(`nav-${secId}`);
+            if (activeBtn) {
+                if (secId === 'likert') activeBtn.className = "nav-btn px-4 py-2 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                if (secId === 'xela') activeBtn.className = "nav-btn px-4 py-2 rounded-xl text-xs font-bold transition bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                if (secId === 'tabulator') activeBtn.className = "nav-btn px-4 py-2 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+            }
+
+            // Mobile buttons
+            document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+                btn.className = "mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400";
+            });
+            const mobActive = document.getElementById(`mob-nav-${secId}`);
+            if (mobActive) {
+                mobActive.className = "mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            }
+        }
+
+
+        // ==================== CASO CAFÉ EN XELA LOGIC ====================
+        let xelaData = [
+            { category: "Marca Local A", f: 45, color: "bg-emerald-500", border: "border-emerald-500" },
+            { category: "Marca Nacional B", f: 30, color: "bg-blue-500", border: "border-blue-500" },
+            { category: "Marca Importada C", f: 15, color: "bg-purple-500", border: "border-purple-500" },
+            { category: "Otras Marcas", f: 10, color: "bg-amber-500", border: "border-amber-500" }
+        ];
+
+        function renderXelaTable() {
+            const tbody = document.getElementById('xela-table-body');
+            const barsContainer = document.getElementById('xela-bars-container');
+            tbody.innerHTML = '';
+            barsContainer.innerHTML = '';
+
+            const totalN = xelaData.reduce((acc, curr) => acc + curr.f, 0);
+            document.getElementById('xela-total-n').textContent = `n = ${totalN}`;
+            document.getElementById('xela-sum-f').textContent = totalN;
+
+            let sumFr = 0;
+            let sumPct = 0;
+            let sumProp = 0;
+
+            xelaData.forEach((item, index) => {
+                const fr = totalN > 0 ? (item.f / totalN) : 0;
+                const pct = (fr * 100);
+                const prop = fr;
+
+                sumFr += fr;
+                sumPct += pct;
+                sumProp += prop;
+
+                // Fila de Tabla
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-850/50 transition";
+                tr.innerHTML = `
+                    <td class="py-3 px-2 font-medium text-white flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full ${item.color} inline-block"></span>
+                        <span>${item.category}</span>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <input type="number" min="0" value="${item.f}" onchange="updateXelaF(${index}, this.value)" 
+                            class="w-16 bg-slate-950 border border-slate-700 rounded-lg p-1 text-center font-bold text-amber-400 focus:outline-none focus:border-amber-500">
+                    </td>
+                    <td class="py-3 px-2 text-center font-mono text-slate-300">${fr.toFixed(2)}</td>
+                    <td class="py-3 px-2 text-center font-bold text-emerald-400">${pct.toFixed(1)}%</td>
+                    <td class="py-3 px-2 text-center font-mono text-slate-300">${prop.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+
+                // Bar Visual
+                const barRow = document.createElement('div');
+                barRow.className = "space-y-1";
+                barRow.innerHTML = `
+                    <div class="flex justify-between text-[11px] font-medium">
+                        <span class="text-slate-300">${item.category}</span>
+                        <span class="text-amber-400 font-bold">${pct.toFixed(1)}% (${item.f})</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                        <div class="${item.color} h-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                barsContainer.appendChild(barRow);
+            });
+
+            document.getElementById('xela-sum-fr').textContent = sumFr.toFixed(2);
+            document.getElementById('xela-sum-pct').textContent = `${sumPct.toFixed(0)}%`;
+            document.getElementById('xela-sum-prop').textContent = sumProp.toFixed(2);
+
+            generateXelaNarrative(totalN);
+        }
+
+        function updateXelaF(index, val) {
+            const num = parseInt(val) || 0;
+            xelaData[index].f = Math.max(0, num);
+            renderXelaTable();
+        }
+
+        function resetXelaData() {
+            xelaData = [
+                { category: "Marca Local A", f: 45, color: "bg-emerald-500", border: "border-emerald-500" },
+                { category: "Marca Nacional B", f: 30, color: "bg-blue-500", border: "border-blue-500" },
+                { category: "Marca Importada C", f: 15, color: "bg-purple-500", border: "border-purple-500" },
+                { category: "Otras Marcas", f: 10, color: "bg-amber-500", border: "border-amber-500" }
+            ];
+            renderXelaTable();
+        }
+
+        function generateXelaNarrative(totalN) {
+            const narrativeBox = document.getElementById('xela-narrative-box');
+            if (totalN === 0) {
+                narrativeBox.innerHTML = "<p class='text-slate-500 italic'>Ingresa frecuencias mayores a cero para generar el análisis.</p>";
+                return;
+            }
+
+            // Ordenar para hallar líder
+            const sorted = [...xelaData].sort((a, b) => b.f - a.f);
+            const leader = sorted[0];
+            const leaderPct = ((leader.f / totalN) * 100).toFixed(1);
+
+            const brandB = xelaData.find(d => d.category === "Marca Nacional B") || sorted[1];
+            const brandBPct = ((brandB.f / totalN) * 100).toFixed(1);
+
+            const otros = xelaData.find(d => d.category === "Otras Marcas") || sorted[sorted.length - 1];
+            const otrosPct = ((otros.f / totalN) * 100).toFixed(1);
+
+            narrativeBox.innerHTML = `
+                <p>
+                    <strong class="text-emerald-400 font-bold">Liderazgo de Mercado:</strong> 
+                    La <strong class="text-white">${leader.category}</strong> lidera la preferencia regional en Quetzaltenango con un contundente <span class="text-amber-400 font-bold">${leaderPct}%</span> de la cuota (proporción $p = ${(leader.f/totalN).toFixed(2)}$).
+                </p>
+                <p>
+                    <strong class="text-blue-400 font-bold">Oportunidad Estratégica de Nicho:</strong> 
+                    Para la <strong class="text-white">${brandB.category}</strong> (${brandBPct}%), el dato más revelador radica en el segmento de <strong class="text-white">${otros.category}</strong> (${otrosPct}%).
+                </p>
+                <p class="text-slate-400">
+                    Este segmento de <strong class="text-amber-400">${otrosPct}%</strong> no representa solo una minoría dispersa, sino un <em>mercado fragmentado</em> donde la Marca B podría implementar una estrategia de absorción comercial o adquisiciones para aumentar su cuota global y amenazar al líder local.
+                </p>
+                <div class="pt-2 border-t border-slate-850 text-[11px] text-slate-400 italic">
+                    💡 La tabulación permite pasar de la observación pasiva a una planificación basada en evidencia numérica, reduciendo la incertidumbre en la inversión publicitaria.
+                </div>
+            `;
+        }
+
+
+        // ==================== UNIVERSAL TABULATOR LOGIC ====================
+        let currentTabMode = 'raw';
+        let processedCustomData = [];
+
+        function setTabulatorMode(mode) {
+            currentTabMode = mode;
+            const btnRaw = document.getElementById('mode-btn-raw');
+            const btnDirect = document.getElementById('mode-btn-direct');
+            const formRaw = document.getElementById('form-raw');
+            const formDirect = document.getElementById('form-direct');
+
+            if (mode === 'raw') {
+                btnRaw.className = "py-2 rounded-lg font-bold transition bg-emerald-500 text-slate-950";
+                btnDirect.className = "py-2 rounded-lg font-bold text-slate-400 transition hover:text-white";
+                formRaw.classList.remove('hidden');
+                formDirect.classList.add('hidden');
+            } else {
+                btnDirect.className = "py-2 rounded-lg font-bold transition bg-emerald-500 text-slate-950";
+                btnRaw.className = "py-2 rounded-lg font-bold text-slate-400 transition hover:text-white";
+                formDirect.classList.remove('hidden');
+                formRaw.classList.add('hidden');
+            }
+        }
+
+        function loadSampleRawData() {
+            document.getElementById('raw-input-text').value = "Marca Local A, Marca Nacional B, Marca Local A, Marca Importada C, Marca Local A, Marca Nacional B, Otras Marcas, Marca Local A, Marca Nacional B, Marca Local A, Marca Importada C, Marca Local A";
+        }
+
+        function processRawData() {
+            const input = document.getElementById('raw-input-text').value;
+            if (!input.trim()) return;
+
+            const items = input.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            if (items.length === 0) return;
+
+            const counts = {};
+            items.forEach(item => {
+                counts[item] = (counts[item] || 0) + 1;
+            });
+
+            processedCustomData = Object.keys(counts).map(cat => ({
+                category: cat,
+                f: counts[cat]
+            }));
+
+            renderCustomTable();
+        }
+
+        function processDirectData() {
+            const input = document.getElementById('direct-input-text').value;
+            if (!input.trim()) return;
+
+            const lines = input.split('\n');
+            const list = [];
+
+            lines.forEach(line => {
+                if (line.includes(':')) {
+                    const parts = line.split(':');
+                    const cat = parts[0].trim();
+                    const num = parseInt(parts[1].trim()) || 0;
+                    if (cat) list.push({ category: cat, f: num });
+                } else if (line.includes(',')) {
+                    const parts = line.split(',');
+                    const cat = parts[0].trim();
+                    const num = parseInt(parts[1].trim()) || 0;
+                    if (cat) list.push({ category: cat, f: num });
+                }
+            });
+
+            if (list.length > 0) {
+                processedCustomData = list;
+                renderCustomTable();
+            }
+        }
+
+        function renderCustomTable() {
+            const tbody = document.getElementById('custom-table-body');
+            const tfoot = document.getElementById('custom-table-foot');
+            const barsBox = document.getElementById('custom-bars-box');
+            const barsContainer = document.getElementById('custom-bars-container');
+            const kpiBox = document.getElementById('custom-kpi-box');
+            const reportBox = document.getElementById('custom-report-box');
+            const reportText = document.getElementById('custom-report-text');
+
+            tbody.innerHTML = '';
+            barsContainer.innerHTML = '';
+            
+            if (processedCustomData.length === 0) return;
+
+            const totalN = processedCustomData.reduce((acc, c) => acc + c.f, 0);
+            document.getElementById('custom-sum-f').textContent = totalN;
+
+            const palette = ['bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-amber-500', 'bg-cyan-500', 'bg-indigo-500', 'bg-rose-500', 'bg-teal-500'];
+
+            let accumulatedF = 0;
+            let reportLines = [`TABLA DE DISTRIBUCIÓN DE FRECUENCIAS (n = ${totalN})`, `--------------------------------------------------`];
+
+            processedCustomData.forEach((item, index) => {
+                accumulatedF += item.f;
+                const fr = totalN > 0 ? (item.f / totalN) : 0;
+                const pct = fr * 100;
+                const prop = fr;
+                const barColor = palette[index % palette.length];
+
+                // Fila de Tabla
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-850/50 transition";
+                tr.innerHTML = `
+                    <td class="py-2.5 px-2 font-medium text-white flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full ${barColor} inline-block"></span>
+                        <span>${item.category}</span>
+                    </td>
+                    <td class="py-2.5 px-2 text-center font-bold text-amber-400">${item.f}</td>
+                    <td class="py-2.5 px-2 text-center text-slate-400">${accumulatedF}</td>
+                    <td class="py-2.5 px-2 text-center font-mono text-slate-300">${fr.toFixed(2)}</td>
+                    <td class="py-2.5 px-2 text-center font-bold text-emerald-400">${pct.toFixed(1)}%</td>
+                    <td class="py-2.5 px-2 text-center font-mono text-slate-300">${prop.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+
+                // Elemento Gráfico de Barras Proporcionales
+                const barRow = document.createElement('div');
+                barRow.className = "space-y-1";
+                barRow.innerHTML = `
+                    <div class="flex justify-between text-[11px] font-medium">
+                        <span class="text-slate-300">${item.category}</span>
+                        <span class="text-amber-400 font-bold">${pct.toFixed(1)}% <span class="text-slate-500 font-normal">(${item.f} obs.)</span></span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-850">
+                        <div class="${barColor} h-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                barsContainer.appendChild(barRow);
+
+                reportLines.push(`• ${item.category}: f = ${item.f} | Fa = ${accumulatedF} | fr = ${fr.toFixed(2)} | % = ${pct.toFixed(1)}% | Prop = ${prop.toFixed(2)}`);
+            });
+
+            tfoot.classList.remove('hidden');
+            barsBox.classList.remove('hidden');
+            kpiBox.classList.remove('hidden');
+            reportBox.classList.remove('hidden');
+
+            // Cálculo de Indicadores Gerenciales (KPIs)
+            const sorted = [...processedCustomData].sort((a, b) => b.f - a.f);
+            const top = sorted[0];
+            const topPct = totalN > 0 ? ((top.f / totalN) * 100) : 0;
+            const second = sorted.length > 1 ? sorted[1] : null;
+            const secondPct = (second && totalN > 0) ? ((second.f / totalN) * 100) : 0;
+            const gapPct = topPct - secondPct;
+
+            // Actualización de Tarjetas KPI
+            document.getElementById('kpi-leader-name').textContent = top.category;
+            document.getElementById('kpi-leader-pct').textContent = `Cuota: ${topPct.toFixed(1)}% (f = ${top.f})`;
+
+            const concentrationEl = document.getElementById('kpi-concentration-status');
+            const concentrationDesc = document.getElementById('kpi-concentration-desc');
+            if (topPct >= 50) {
+                concentrationEl.textContent = "Alta Concentración";
+                concentrationEl.className = "font-bold text-amber-400 text-sm truncate";
+                concentrationDesc.textContent = "1 categoría domina >50%";
+            } else if (topPct >= 30) {
+                concentrationEl.textContent = "Concentración Moderada";
+                concentrationEl.className = "font-bold text-blue-400 text-sm truncate";
+                concentrationDesc.textContent = "Líder fuerte pero no absoluto";
+            } else {
+                concentrationEl.textContent = "Fragmentado / Competitivo";
+                concentrationEl.className = "font-bold text-emerald-400 text-sm truncate";
+                concentrationDesc.textContent = "Cuotas muy distribuidas";
+            }
+
+            document.getElementById('kpi-gap-val').textContent = second ? `+${gapPct.toFixed(1)}%` : "N/A";
+            document.getElementById('kpi-gap-desc').textContent = second ? `vs. "${second.category}" (${secondPct.toFixed(1)}%)` : "Sin competidor secundario";
+
+            // Narrativa de Interpretación Gerencial Automática
+            const narrativeBox = document.getElementById('custom-decision-narrative');
+            let decisionText = `
+                <div class="space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="p-1 bg-emerald-500/10 text-emerald-400 rounded-md"><i class="fa-solid fa-lightbulb"></i></span>
+                        <strong class="text-emerald-400 font-bold">Diagnóstico Ejecutivo de Toma de Decisiones:</strong>
+                    </div>
+                    <p class="text-slate-300">
+                        La categoría con mayor volumen es <strong class="text-white">${top.category}</strong> capturando el <span class="text-amber-400 font-bold">${topPct.toFixed(1)}%</span> de la muestra total ($f = ${top.f}$, $p = ${(top.f/totalN).toFixed(2)}$). 
+            `;
+
+            if (topPct >= 50) {
+                decisionText += `Existe una <strong>hegemonía de mercado</strong> bien definida. La recomendación gerencial es concentrar presupuestos en <em>retención de clientes y control de calidad operativa</em> para consolidar el liderazgo.`;
+            } else if (second) {
+                decisionText += `Seguida por <strong class="text-white">${second.category}</strong> (${secondPct.toFixed(1)}%), lo que genera un margen de ventaja de <strong class="text-purple-400">+${gapPct.toFixed(1)}%</strong>. Al tratarse de una brecha moderada, se sugiere implementar <em>estrategias de diferenciación competitiva</em> para evitar la fuga de consumidores.`;
+            } else {
+                decisionText += `Se observa una única categoría activa en la muestra analizada.`;
+            }
+
+            decisionText += `
+                    </p>
+                    <div class="pt-2 border-t border-slate-850 text-[11px] text-slate-400 italic flex items-center justify-between">
+                        <span>💡 Tip UMG: Utiliza estos indicadores para justificar las conclusiones de tus talleres.</span>
+                        <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Datos validados</span>
+                    </div>
+                </div>
+            `;
+            narrativeBox.innerHTML = decisionText;
+
+            reportLines.push(`--------------------------------------------------`);
+            reportLines.push(`CONCLUSIÓN GERENCIAL: La categoría dominante es "${top.category}" representando el ${topPct.toFixed(1)}% de las observaciones totales.`);
+            if (second) {
+                reportLines.push(`BRECHA DE LIDERAZGO: Ventaja de +${gapPct.toFixed(1)}% sobre "${second.category}" (${secondPct.toFixed(1)}%).`);
+            }
+
+            reportText.textContent = reportLines.join('\n');
+        }
+
+        function copyTableReport() {
+            const text = document.getElementById('custom-report-text').textContent;
+            if (!text) return;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            alert('¡Reporte copiado al portapapeles! Puedes pegarlo directamente en tu trabajo de la UMG.');
+        }
+
+
+        // Inicializar Caso Xela
+        window.onload = function() {
+            renderXelaTable();
+        };
+    </script>
+</body>
+</html>

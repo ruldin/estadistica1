@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramienta de Aprendizaje · Estadística Business Lab · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lab: {
+                            0: '#06141f',
+                            1: '#0b2133',
+                            2: '#12324a',
+                            panel: '#102a3d',
+                            line: 'rgba(255,255,255,0.12)',
+                            muted: '#9db4c7',
+                            accent: '#2dd4bf',
+                            amber: '#fbbf24',
+                            sky: '#38bdf8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Sora', 'system-ui', 'sans-serif'],
+                        display: ['Outfit', 'Sora', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-0: #06141f;
+            --bg-1: #0b2133;
+            --bg-2: #12324a;
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #eef6ff;
+            --muted: #9db4c7;
+            --accent: #2dd4bf;
+            --accent-2: #fbbf24;
+            --accent-3: #38bdf8;
+        }
+
+        body {
+            font-family: "Sora", system-ui, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 600px at 10% -10%, rgba(45, 212, 191, 0.22), transparent 55%),
+                radial-gradient(900px 500px at 90% 0%, rgba(251, 191, 36, 0.16), transparent 50%),
+                radial-gradient(800px 500px at 70% 100%, rgba(56, 189, 248, 0.14), transparent 55%),
+                linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: "Outfit", "Sora", sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .app-shell > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.04);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(45, 212, 191, 0.35);
+            border-radius: 4px;
+        }
+
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(90deg, #2dd4bf, #38bdf8);
+            padding: 1px;
+            border-radius: 0.75rem;
+        }
+        .gradient-border-content {
+            background: rgba(16, 42, 61, 0.95);
+            border-radius: 11px;
+        }
+
+        .topbar {
+            border: 1px solid var(--line);
+            background: rgba(8, 24, 38, 0.78);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-family: "Outfit", sans-serif;
+            color: #062016;
+            background: linear-gradient(135deg, var(--accent), #67e8f9);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+        }
+
+        .credits-strip {
+            border: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.22);
+            border-radius: 16px;
+        }
+
+        .site-footer {
+            border: 1px solid var(--line);
+            background: rgba(8, 24, 38, 0.55);
+            border-radius: 18px;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            white-space: nowrap;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+        }
+
+        .btn-home:hover {
+            background: rgba(45, 212, 191, 0.12);
+            border-color: rgba(45, 212, 191, 0.45);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar app-shell">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="topbar sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="brand-mark" aria-hidden="true">Σ</div>
+                        <div>
+                            <h1 class="text-base sm:text-lg font-extrabold text-white leading-tight">Estadística Business Lab · UMG</h1>
+                            <p class="text-xs text-lab-muted mt-0.5">Herramienta de aprendizaje · Facultad de Administración de Empresas</p>
+                        </div>
+                    </div>
+                    <a href="index.html" class="btn-home lg:hidden" title="Regresar al menú principal">
+                        <i class="fa-solid fa-arrow-left"></i> Menú
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="btn-home hidden lg:inline-flex" title="Regresar al menú principal">
+                        <i class="fa-solid fa-arrow-left"></i> Menú principal
+                    </a>
+                    <nav class="hidden md:flex space-x-2">
+                        <button onclick="switchTab('learning')" id="tab-learning" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-white bg-white/10 border border-white/15 transition">
+                            <i class="fa-solid fa-book-open mr-2"></i>Biblioteca
+                        </button>
+                        <button onclick="switchTab('sampling')" id="tab-sampling" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-lab-muted hover:text-white hover:bg-white/5 transition">
+                            <i class="fa-solid fa-dice mr-2"></i>Lab de Muestreo
+                        </button>
+                        <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-lab-muted hover:text-white hover:bg-white/5 transition">
+                            <i class="fa-solid fa-gamepad mr-2"></i>Desafío Chapín
+                        </button>
+                        <button onclick="switchTab('survey')" id="tab-survey" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-lab-muted hover:text-white hover:bg-white/5 transition">
+                            <i class="fa-solid fa-poll-h mr-2"></i>Diseñador Likert
+                        </button>
+                    </nav>
+                </div>
+            </div>
+            <div class="credits-strip mt-3 px-3 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs">
+                <p class="text-lab-muted m-0">
+                    Catedrático: <strong class="text-white font-semibold">Ruldin Ayala</strong>
+                    · Estadística 1
+                </p>
+                <p class="text-lab-muted m-0">
+                    <strong class="text-white font-semibold">Universidad Mariano Gálvez de Guatemala</strong>
+                    · Facultad de Administración de Empresas
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE TABS -->
+    <div class="md:hidden border-b border-white/10 bg-[rgba(8,24,38,0.65)] p-2 flex overflow-x-auto gap-2 custom-scrollbar">
+        <button onclick="switchTab('learning')" id="mob-tab-learning" class="mob-nav-tab flex-none px-4 py-2 rounded-lg text-xs font-semibold text-white bg-white/10">
+            <i class="fa-solid fa-book-open mr-1"></i>Biblioteca
+        </button>
+        <button onclick="switchTab('sampling')" id="mob-tab-sampling" class="mob-nav-tab flex-none px-4 py-2 rounded-lg text-xs font-semibold text-lab-muted">
+            <i class="fa-solid fa-dice mr-1"></i>Muestreo
+        </button>
+        <button onclick="switchTab('quiz')" id="mob-tab-quiz" class="mob-nav-tab flex-none px-4 py-2 rounded-lg text-xs font-semibold text-lab-muted">
+            <i class="fa-solid fa-gamepad mr-1"></i>Desafío
+        </button>
+        <button onclick="switchTab('survey')" id="mob-tab-survey" class="mob-nav-tab flex-none px-4 py-2 rounded-lg text-xs font-semibold text-lab-muted">
+            <i class="fa-solid fa-poll-h mr-1"></i>Encuestas
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ==================== TAB 1: BIBLIOTECA DE CONCEPTOS ==================== -->
+        <section id="content-learning" class="tab-content block space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#0b2133] via-[#12324a] to-[#0f3d3a] p-6 sm:p-8 border border-white/10 shadow-xl">
+                <div class="relative z-10 max-w-3xl">
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="px-3 py-1 text-xs font-bold bg-teal-400/10 text-teal-300 rounded-full border border-teal-400/25 uppercase tracking-wide">Herramienta de aprendizaje</span>
+                        <span class="px-3 py-1 text-xs font-bold bg-amber-400/10 text-amber-300 rounded-full border border-amber-400/25 uppercase tracking-wide">Semana 1 y 2</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-1 mb-4 leading-tight">Fundamentos y Métodos de Colección de Datos</h2>
+                    <p class="text-lab-muted text-sm sm:text-base leading-relaxed">
+                        Bienvenido al simulador analítico. Como futuro administrador de empresas, la estadística no se trata de memorizar fórmulas, sino de estructurar la toma de decisiones digitales con base en datos reales del mercado guatemalteco.
+                    </p>
+                </div>
+                <div class="absolute right-0 bottom-0 top-0 w-1/3 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-400 via-[#0b2133] to-[#06141f] hidden md:block"></div>
+            </div>
+
+            <!-- Concept Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tarjeta 1: Población vs Muestra -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-teal-500/10 text-teal-400 rounded-lg"><i class="fa-solid fa-users text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">Población (N) vs Muestra (n)</h3>
+                        </div>
+                        <p class="text-lab-muted text-sm leading-relaxed mb-4">
+                            <strong>Población:</strong> Todo el universo de estudio (ej: Todas las MIPYMES registradas en la SAT en Guatemala).<br><br>
+                            <strong>Muestra:</strong> Un subconjunto representativo elegido científicamente (ej: 100 talleres de calzado artesanal de Pastores, Sacatepéquez).
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-3 rounded-lg border border-white/10 text-xs text-teal-400">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> <strong>Regla de oro:</strong> Una muestra debe ser aleatoria para evitar sesgos costosos.
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Por qué muestrear -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-sky-400/10 text-sky-300 rounded-lg"><i class="fa-solid fa-scale-balanced text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">¿Por qué Muestrear en lugar de un Censo?</h3>
+                        </div>
+                        <ul class="text-lab-muted text-sm space-y-2 mb-4">
+                            <li><i class="fa-solid fa-clock text-sky-300 mr-2"></i><strong>Tiempo:</strong> Realizar un censo es excesivamente lento.</li>
+                            <li><i class="fa-solid fa-hand-holding-dollar text-sky-300 mr-2"></i><strong>Costo:</strong> Un censo consume demasiados recursos.</li>
+                            <li><i class="fa-solid fa-eye-slash text-sky-300 mr-2"></i><strong>Accesibilidad:</strong> Poblaciones físicamente inaccesibles.</li>
+                            <li><i class="fa-solid fa-circle-exclamation text-sky-300 mr-2"></i><strong>Preservación:</strong> En pruebas destructivas (ej: Control de calidad de bolsas de Tortrix, el censo destruiría el producto).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Métodos de Muestreo -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-amber-400/10 text-amber-300 rounded-lg"><i class="fa-solid fa-dice-five text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">Procedimientos de Muestreo</h3>
+                        </div>
+                        <p class="text-lab-muted text-sm leading-relaxed mb-4">
+                            <strong>1. Método Físico:</strong> Depositar nombres/números en un recipiente, revolver y extraer al azar.<br><br>
+                            <strong>2. Tabla de Números Aleatorios:</strong> Uso de matrices de dígitos desordenadas eligiendo una coordenada inicial aleatoria.<br><br>
+                            <strong>3. Hoja electrónica:</strong> Uso de funciones como <em>ALEATORIO.ENTRE</em> en Excel u otras hojas de cálculo para generar valores aleatorios sin sesgos humanos.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 4: Clasificación de Variables -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-yellow-500/10 text-yellow-400 rounded-lg"><i class="fa-solid fa-tags text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">Clasificación de Variables</h3>
+                        </div>
+                        <p class="text-lab-muted text-sm leading-relaxed mb-4">
+                            <strong>Cualitativa (Categorías):</strong>
+                            <br>• <em>Nominal:</em> Sin jerarquía (ej. Proveedor de internet: Claro, Tigo).
+                            <br>• <em>Ordinal:</em> Con orden (ej. Nivel de madurez digital: Básico, Intermedio, Avanzado).
+                            <br><br>
+                            <strong>Cuantitativa (Numéricas):</strong>
+                            <br>• <em>Discreta:</em> Conteo, números enteros (ej. Número de cajas de cobro en un Cemaco).
+                            <br>• <em>Continua:</em> Medición, decimales (ej. Litros de combustible despachados).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 5: Escalas de Medición -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-red-500/10 text-red-400 rounded-lg"><i class="fa-solid fa-arrow-down-up-lock text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">Escalas de Medición</h3>
+                        </div>
+                        <p class="text-lab-muted text-sm leading-relaxed mb-4">
+                            • <strong>Nominal:</strong> Etiquetas descriptivas. No hay operaciones numéricas.
+                            <br>• <strong>Ordinal:</strong> Se establece un orden, pero la diferencia entre valores no es uniforme.
+                            <br>• <strong>Intervalo:</strong> Diferencias significativas. El cero es relativo (ej: Temperatura en grados Celsius de congeladores Sarita).
+                            <br>• <strong>Razón:</strong> El cero es absoluto; indica ausencia de la variable (ej: Las ventas mensuales en Quetzales del negocio).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 6: Escalas Likert -->
+                <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hover:border-teal-400/50 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <span class="p-2.5 bg-teal-500/10 text-teal-400 rounded-lg"><i class="fa-solid fa-ranking-star text-lg"></i></span>
+                            <h3 class="text-lg font-bold text-white">Escala Likert en Administración</h3>
+                        </div>
+                        <p class="text-lab-muted text-sm leading-relaxed mb-4">
+                            Utilizada para medir percepciones de servicio, fidelidad o clima organizacional.
+                            <br><br>
+                            <strong>Categorías típicas:</strong>
+                            <br>• <em>Acuerdo:</em> De acuerdo / En desacuerdo.
+                            <br>• <em>Frecuencia:</em> Siempre / Nunca.
+                            <br>• <em>Importancia:</em> Muy importante / Sin importancia.
+                            <br>• <em>Calidad/Opinión:</em> Excelente / Malo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: LAB DE MUESTREO (LA TERMINAL ZONA 4) ==================== -->
+        <section id="content-sampling" class="tab-content hidden space-y-6">
+            <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl">
+                <h2 class="text-xl font-bold text-white mb-2"><i class="fa-solid fa-store mr-2 text-teal-400"></i>Simulador de Muestreo: La Terminal, Zona 4</h2>
+                <p class="text-lab-muted text-sm mb-6 leading-relaxed">
+                    Estás auditando una base de datos física de <strong class="text-white">100 comercios mayoristas (del local 00 al 99)</strong> en La Terminal de la Zona 4 para verificar la veracidad de sus facturas mensuales. El censo es imposible por falta de personal y tiempo. Debes seleccionar una muestra representativa de <strong class="text-white">n = 10</strong> comercios usando diferentes métodos para evitar sesgos.
+                </p>
+
+                <!-- Grid de Locales -->
+                <div class="grid grid-cols-5 sm:grid-cols-10 gap-2 mb-6" id="stores-grid">
+                    <!-- Generado dinámicamente -->
+                </div>
+
+                <!-- Controles de Muestreo -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Método 1: Fisico -->
+                    <div class="bg-[rgba(8,24,38,0.4)] p-5 rounded-lg border border-white/15 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-white font-bold text-base mb-2"><i class="fa-solid fa-hand-holding mr-2 text-teal-400"></i>1. Método Físico</h3>
+                            <p class="text-xs text-lab-muted mb-4 leading-relaxed">Revolvemos virtualmente las fichas de los 100 locales en una tómbola virtual y extraemos 10 locales de forma secuencial.</p>
+                        </div>
+                        <button onclick="runPhysicalSampling()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2 px-4 rounded transition text-sm">
+                            Girar Tómbola y Extraer
+                        </button>
+                    </div>
+
+                    <!-- Método 2: Tabla de Números Aleatorios -->
+                    <div class="bg-[rgba(8,24,38,0.4)] p-5 rounded-lg border border-white/15 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-white font-bold text-base mb-2"><i class="fa-solid fa-table-cells mr-2 text-sky-300"></i>2. Tabla de Números</h3>
+                            <p class="text-xs text-lab-muted mb-4 leading-relaxed">Simulamos un punto de inicio al azar en una tabla técnica estándar de números aleatorios y extraemos parejas de dígitos de manera constante.</p>
+                        </div>
+                        <button onclick="runTableSampling()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition text-sm">
+                            Extraer con Tabla Aleatoria
+                        </button>
+                    </div>
+
+                    <!-- Método 3: Hoja electrónica -->
+                    <div class="bg-[rgba(8,24,38,0.4)] p-5 rounded-lg border border-white/15 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-white font-bold text-base mb-2"><i class="fa-solid fa-table mr-2 text-amber-300"></i>3. Muestreo con hoja electrónica</h3>
+                            <p class="text-xs text-lab-muted mb-4 leading-relaxed">Simulamos el uso de una hoja electrónica (Excel, Google Sheets, etc.) con funciones aleatorias que generan instantáneamente 10 códigos únicos de locales.</p>
+                        </div>
+                        <button onclick="runSoftwareSampling()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-2 px-4 rounded transition text-sm">
+                            Generar con hoja electrónica
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resultados del Muestreo -->
+                <div id="sampling-results" class="mt-6 p-4 bg-[rgba(8,24,38,0.55)] rounded-lg border border-white/10 hidden">
+                    <h4 class="text-sm font-bold text-teal-400 mb-2" id="results-method-title">Locales Seleccionados:</h4>
+                    <p class="text-sm text-[#d7e7f5] leading-relaxed mb-2" id="results-list"></p>
+                    <span class="text-xs text-lab-muted">Cada uno de estos locales representará una unidad experimental en nuestra auditoría de campo para examinar la fidelidad de sus cuentas.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: EL DESAFÍO CHAPÍN (QUIZ) ==================== -->
+        <section id="content-quiz" class="tab-content hidden max-w-3xl mx-auto space-y-6">
+            <!-- Pantalla de Inicio del Desafío -->
+            <div id="quiz-intro" class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl text-center">
+                <div class="inline-flex p-4 bg-teal-500/10 text-teal-400 rounded-full mb-4">
+                    <i class="fa-solid fa-award text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Desafío Estadístico Gerencial</h2>
+                <p class="text-lab-muted text-sm max-w-xl mx-auto mb-6 leading-relaxed">
+                    ¿Estás preparado para tomar decisiones gerenciales basadas en datos en el mercado de Guatemala? Este simulador pondrá a prueba tu capacidad de clasificación, muestreo y análisis del Capítulo 1 y 2.
+                </p>
+                <button onclick="startQuiz()" class="bg-gradient-to-r from-teal-400 to-sky-400 hover:from-teal-300 hover:to-sky-300 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
+                    ¡Comenzar Desafío!
+                </button>
+            </div>
+
+            <!-- Pantalla de Preguntas -->
+            <div id="quiz-container" class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl hidden">
+                <div class="flex items-center justify-between mb-4 pb-4 border-b border-white/10">
+                    <span class="text-xs font-bold text-teal-400 uppercase tracking-widest" id="quiz-progress">Pregunta 1 de 10</span>
+                    <span class="text-xs font-semibold px-2 py-1 bg-white/10 rounded text-lab-muted" id="quiz-score-badge">Puntos: 0</span>
+                </div>
+
+                <h3 class="text-lg font-bold text-white mb-4" id="quiz-question-text">Pregunta de prueba</h3>
+
+                <div class="space-y-3" id="quiz-options-container">
+                    <!-- Opciones generadas dinámicamente -->
+                </div>
+
+                <!-- Feedback del intento -->
+                <div id="quiz-feedback" class="mt-4 p-4 rounded-lg hidden"></div>
+
+                <div class="mt-6 flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuestion()" class="bg-white/10 hover:bg-white/10 text-white font-semibold py-2 px-6 rounded-lg transition hidden">
+                        Siguiente <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pantalla de Resultados -->
+            <div id="quiz-results" class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-8 rounded-xl text-center hidden">
+                <span class="text-6xl mb-4 block" id="results-emoji">🏆</span>
+                <h2 class="text-2xl font-extrabold text-white mb-2" id="results-title">¡Excelente Trabajo!</h2>
+                <p class="text-lab-muted text-sm max-w-md mx-auto mb-6 leading-relaxed" id="results-desc"></p>
+                
+                <div class="inline-block bg-[rgba(8,24,38,0.55)] p-4 rounded-xl border border-white/10 mb-6">
+                    <span class="text-xs text-lab-muted uppercase block tracking-wider font-bold">Tu Puntuación</span>
+                    <span class="text-3xl font-black text-teal-400" id="results-score">10 / 10</span>
+                </div>
+
+                <div>
+                    <button onclick="restartQuiz()" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-2.5 px-6 rounded-lg transition mr-2">
+                        Intentar de Nuevo
+                    </button>
+                    <button onclick="switchTab('learning')" class="bg-white/10 hover:bg-white/10 text-white font-bold py-2.5 px-6 rounded-lg transition">
+                        Ir a Biblioteca
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: DISEÑADOR DE ENCUESTAS LIKERT ==================== -->
+        <section id="content-survey" class="tab-content hidden space-y-6">
+            <div class="bg-[rgba(16,42,61,0.72)] border border-white/10 p-6 rounded-xl">
+                <h2 class="text-xl font-bold text-white mb-2"><i class="fa-solid fa-poll-h mr-2 text-teal-400"></i>Diseñador y Clasificador de Preguntas de Encuesta</h2>
+                <p class="text-lab-muted text-sm mb-6 leading-relaxed">
+                    Las encuestas son la herramienta reina de recolección de datos en mercadotecnia. Selecciona o edita preguntas basadas en una evaluación de servicio para restaurantes en Guatemala (ej. *San Martín* o *Saúl E. Méndez*) y observa cómo se clasifican y analizan de forma técnica según el libro de texto.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Panel Izquierdo: Creador/Selector -->
+                    <div class="space-y-6">
+                        <div class="bg-[rgba(8,24,38,0.55)] p-5 rounded-xl border border-white/10">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4"><i class="fa-solid fa-sliders mr-2 text-sky-300"></i>Configuración de Pregunta</h3>
+                            
+                            <!-- Pregunta Selector -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-lab-muted uppercase mb-2">Preguntas Predeterminadas de Evaluación de Servicio</label>
+                                    <select id="survey-question-selector" onchange="loadPresetQuestion()" class="w-full bg-[rgba(16,42,61,0.72)] border border-white/15 rounded p-2.5 text-sm text-[#e8f0f7] focus:outline-none focus:border-teal-400">
+                                        <option value="limpieza">1. Limpieza de los baños de la sucursal San Martín</option>
+                                        <option value="tiempo">2. Tiempo de espera en caja para pagar tu consumo</option>
+                                        <option value="temperatura">3. Temperatura del café servido</option>
+                                        <option value="metodo">4. Método de pago preferido por el cliente</option>
+                                        <option value="recomendacion">5. Nivel de importancia de tener parqueo techado</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-lab-muted uppercase mb-2">Enunciado de la Pregunta</label>
+                                    <input type="text" id="survey-question-text" class="w-full bg-[rgba(16,42,61,0.72)] border border-white/15 rounded p-2.5 text-sm text-[#e8f0f7] focus:outline-none focus:border-teal-400" value="¿Cómo calificaría la limpieza de los baños de la sucursal San Martín?">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-lab-muted uppercase mb-2">Tipo de Escala Requerido</label>
+                                    <select id="survey-scale-type" onchange="updateSurveyAnalysis()" class="w-full bg-[rgba(16,42,61,0.72)] border border-white/15 rounded p-2.5 text-sm text-[#e8f0f7] focus:outline-none focus:border-teal-400">
+                                        <option value="likert-opinion">Escala Likert de Opinión/Calidad (Excelente - Regular - Mala)</option>
+                                        <option value="likert-acuerdo">Escala Likert de Acuerdo (Totalmente de acuerdo - En desacuerdo)</option>
+                                        <option value="likert-importancia">Escala Likert de Importancia (Muy importante - Sin importancia)</option>
+                                        <option value="nominal">Escala Nominal (Sin jerarquías / Opciones Abiertas)</option>
+                                        <option value="razon">Escala de Razón (Numérico / Minutos / Quetzales)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview de Opciones de Respuesta -->
+                        <div class="bg-[rgba(8,24,38,0.55)] p-5 rounded-xl border border-white/10">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4"><i class="fa-solid fa-eye mr-2 text-teal-400"></i>Opciones que Verá el Cliente</h3>
+                            <div class="space-y-2" id="survey-options-preview">
+                                <!-- Opciones generadas según escala -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Derecho: Clasificación y Tratamiento Científico -->
+                    <div class="bg-[rgba(8,24,38,0.55)] p-6 rounded-xl border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-teal-400 uppercase tracking-wider mb-4"><i class="fa-solid fa-microscope mr-2"></i>Clasificación Técnica (Business Intelligence)</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-[rgba(16,42,61,0.72)] p-3 rounded-lg border border-white/10">
+                                        <span class="text-[10px] text-lab-muted uppercase block font-bold">Tipo de Variable</span>
+                                        <span class="text-sm font-bold text-white" id="analysis-var-type">Cualitativa (Categorías)</span>
+                                    </div>
+                                    <div class="bg-[rgba(16,42,61,0.72)] p-3 rounded-lg border border-white/10">
+                                        <span class="text-[10px] text-lab-muted uppercase block font-bold">Subtipo Técnico</span>
+                                        <span class="text-sm font-bold text-white" id="analysis-var-subtype">Ordinal</span>
+                                    </div>
+                                </div>
+
+                                <div class="bg-[rgba(16,42,61,0.72)] p-3 rounded-lg border border-white/10">
+                                    <span class="text-[10px] text-lab-muted uppercase block font-bold">Escala de Medición</span>
+                                    <span class="text-sm font-bold text-white" id="analysis-scale">Ordinal (Escala Likert de Opinión)</span>
+                                </div>
+
+                                <div class="bg-[rgba(16,42,61,0.72)] p-4 rounded-lg border border-teal-500/20 bg-teal-950/20">
+                                    <h4 class="text-xs font-bold text-teal-400 uppercase tracking-wider mb-2"><i class="fa-solid fa-calculator mr-2"></i>Tratamiento de Datos Sugerido</h4>
+                                    <p class="text-xs text-[#d7e7f5] leading-relaxed" id="analysis-description">
+                                        Al ser una variable cualitativa ordinal medida en escala Likert, los estadísticos descriptivos recomendados para resumir la información son la <strong>Frecuencia Relativa (%)</strong> por categoría y la <strong>Mediana</strong> como medida de tendencia central. Evite calcular promedios (medias aritméticas) ya que las distancias conceptuales entre las respuestas no son numéricas continuas.
+                                    </p>
+                                </div>
+
+                                <div class="bg-[rgba(16,42,61,0.72)] p-4 rounded-lg border border-sky-400/20 bg-sky-950/20">
+                                    <h4 class="text-xs font-bold text-sky-300 uppercase tracking-wider mb-2"><i class="fa-solid fa-gauge-high mr-2"></i>Aplicación Administrativa Directa</h4>
+                                    <p class="text-xs text-[#d7e7f5] leading-relaxed" id="analysis-application">
+                                        Permite detectar áreas críticas de fricción en la experiencia de consumo del restaurante. Si más del 20% de los comensales califica la limpieza como "Mala o Regular", se dispara una alerta operativa automática para cambiar los turnos y procesos de limpieza del personal de restaurante.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-white/10 text-center text-xs text-lab-muted">
+                            Basado en los lineamientos de Domínguez & Domínguez, Cap. 1 y 2.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-8 mt-8">
+        <div class="site-footer px-5 py-6 text-center">
+            <p class="text-sm font-bold text-white mb-1">Herramienta de aprendizaje · Estadística Business Lab</p>
+            <p class="text-xs text-lab-muted leading-relaxed m-0">
+                Diseñada por <strong class="text-white font-semibold">Ruldin Ayala</strong>, catedrático · Estadística 1
+            </p>
+            <p class="text-xs text-lab-muted leading-relaxed mt-1 mb-0">
+                <strong class="text-white font-semibold">Universidad Mariano Gálvez de Guatemala</strong> (UMG)
+                · Facultad de Administración de Empresas · 2026
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==================== NAVIGATION TAB MANAGEMENT ====================
+        function switchTab(tabId) {
+            // Ocultar todos los contenidos de pestaña
+            document.querySelectorAll('.tab-content').forEach(element => {
+                element.classList.add('hidden');
+                element.classList.remove('block');
+            });
+            
+            // Mostrar pestaña seleccionada
+            const selectedContent = document.getElementById(`content-${tabId}`);
+            selectedContent.classList.remove('hidden');
+            selectedContent.classList.add('block');
+
+            // Resetear estilos de botones navegación escritorio
+            document.querySelectorAll('.nav-tab').forEach(button => {
+                button.classList.remove('text-white', 'bg-white/10', 'border', 'border-white/15');
+                button.classList.add('text-lab-muted', 'hover:text-white', 'hover:bg-white/5');
+            });
+
+            // Activar botón escritorio actual
+            const activeTabButton = document.getElementById(`tab-${tabId}`);
+            activeTabButton.classList.remove('text-lab-muted', 'hover:text-white', 'hover:bg-white/5');
+            activeTabButton.classList.add('text-white', 'bg-white/10', 'border', 'border-white/15');
+
+            // Resetear y activar navegación móvil
+            document.querySelectorAll('.mob-nav-tab').forEach(button => {
+                button.classList.remove('text-white', 'bg-white/10');
+                button.classList.add('text-lab-muted');
+            });
+            const activeMobTabButton = document.getElementById(`mob-tab-${tabId}`);
+            activeMobTabButton.classList.remove('text-lab-muted');
+            activeMobTabButton.classList.add('text-white', 'bg-white/10');
+        }
+
+        // ==================== SAMPLING SIMULATOR ====================
+        // Generar grilla de 100 comercios (00 al 99)
+        const storesGrid = document.getElementById('stores-grid');
+        const storesData = [];
+
+        // Nombres comunes para locales en La Terminal
+        const marketCategories = ["Frutas", "Verduras", "Abarrotes", "Carnicería", "Cereales", "Plásticos", "Especias", "Mariscos"];
+
+        for (let i = 0; i < 100; i++) {
+            const id = i.toString().padStart(2, '0');
+            const category = marketCategories[i % marketCategories.length];
+            storesData.push({ id, category });
+
+            const storeCard = document.createElement('div');
+            storeCard.id = `store-${id}`;
+            storeCard.className = "bg-[rgba(16,42,61,0.72)] border border-white/10 p-2 rounded flex flex-col items-center justify-center text-center transition duration-200 cursor-default";
+            storeCard.innerHTML = `
+                <span class="text-xs font-bold text-lab-muted" id="store-label-${id}">${id}</span>
+                <span class="text-[9px] text-lab-muted block truncate w-full mt-0.5">${category}</span>
+            `;
+            storesGrid.appendChild(storeCard);
+        }
+
+        function resetGridHighlights() {
+            for (let i = 0; i < 100; i++) {
+                const id = i.toString().padStart(2, '0');
+                const card = document.getElementById(`store-${id}`);
+                const label = document.getElementById(`store-label-${id}`);
+                card.className = "bg-[rgba(16,42,61,0.72)] border border-white/10 p-2 rounded flex flex-col items-center justify-center text-center transition duration-200 cursor-default";
+                label.className = "text-xs font-bold text-lab-muted";
+            }
+        }
+
+        function highlightStores(selectedIds, colorClass, borderClass, textClass) {
+            resetGridHighlights();
+            selectedIds.forEach(id => {
+                const card = document.getElementById(`store-${id}`);
+                const label = document.getElementById(`store-label-${id}`);
+                card.className = `${colorClass} ${borderClass} border p-2 rounded flex flex-col items-center justify-center text-center transition duration-300 scale-105 shadow-lg shadow-black/40 z-10`;
+                label.className = `text-xs font-black ${textClass}`;
+            });
+
+            // Mostrar caja de resultados
+            const resultBox = document.getElementById('sampling-results');
+            resultBox.classList.remove('hidden');
+            const listText = selectedIds.map(id => `Local #${id} (${storesData[parseInt(id)].category})`).join(', ');
+            document.getElementById('results-list').innerHTML = `<strong>Locales:</strong> ${listText}`;
+        }
+
+        // 1. Método Físico (Extracción aleatoria sin reemplazo)
+        function runPhysicalSampling() {
+            let pool = Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0'));
+            let selected = [];
+            for (let i = 0; i < 10; i++) {
+                const randIndex = Math.floor(Math.random() * pool.length);
+                selected.push(pool.splice(randIndex, 1)[0]);
+            }
+            selected.sort();
+            document.getElementById('results-method-title').innerHTML = `<i class="fa-solid fa-hand-holding mr-1"></i> Resultados del Método Físico:`;
+            highlightStores(selected, 'bg-teal-950/40', 'border-teal-500', 'text-teal-400');
+        }
+
+        // 2. Tabla de Números Aleatorios
+        function runTableSampling() {
+            // Simulamos paso secuencial o sistemático en una "tabla técnica de números"
+            // Elegimos un número base inicial aleatorio de dos dígitos y luego sumamos un salto constante para simular un paso estructurado
+            let start = Math.floor(Math.random() * 10);
+            let step = Math.floor(Math.random() * 6) + 4; // Salto aleatorio entre 4 y 9
+            let selected = [];
+            for (let i = 0; i < 10; i++) {
+                let val = (start + i * step) % 100;
+                selected.push(val.toString().padStart(2, '0'));
+            }
+            // Aseguramos que no haya duplicados (si existieran por la modularidad, los corregimos)
+            selected = [...new Set(selected)];
+            while(selected.length < 10) {
+                let randomVal = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+                if(!selected.includes(randomVal)) selected.push(randomVal);
+            }
+            selected.sort();
+            document.getElementById('results-method-title').innerHTML = `<i class="fa-solid fa-table-cells mr-1"></i> Resultados del Muestreo por Tabla de Números:`;
+            highlightStores(selected, 'bg-blue-950/40', 'border-blue-500', 'text-sky-300');
+        }
+
+        // 3. Muestreo con hoja electrónica
+        function runSoftwareSampling() {
+            // Simula la generación aleatoria equivalente a ALEATORIO.ENTRE en una hoja electrónica
+            let selectedSet = new Set();
+            while (selectedSet.size < 10) {
+                let val = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+                selectedSet.add(val);
+            }
+            let selected = Array.from(selectedSet).sort();
+            document.getElementById('results-method-title').innerHTML = `<i class="fa-solid fa-table mr-1"></i> Resultados del Muestreo con hoja electrónica:`;
+            highlightStores(selected, 'bg-sky-950/40', 'border-sky-400', 'text-sky-300');
+        }
+
+
+        // ==================== GAMIFIED DESAFÍO CHAPÍN (QUIZ) ====================
+        const quizQuestions = [
+            {
+                question: "El administrador del restaurante Pollo Campero en El Trébol quiere saber el método de pago favorito de sus comensales (Efectivo, Tarjeta de Crédito, Tarjeta de Débito, Pago Móvil). ¿Qué tipo de variable y escala de medición está utilizando?",
+                options: [
+                    "Variable Cualitativa, Escala Nominal.",
+                    "Variable Cualitativa, Escala Ordinal.",
+                    "Variable Cuantitativa Discreta, Escala de Razón.",
+                    "Variable Cuantitativa Continua, Escala de Intervalo."
+                ],
+                answer: 0,
+                feedback: "Los métodos de pago son categorías (efectivo, tarjeta, pago móvil) sin un orden jerárquico natural: ninguna forma de pago es “mayor” que otra. Por eso es una variable cualitativa en escala nominal."
+            },
+            {
+                question: "La planta de producción de Tortrix en Guatemala realiza un control de calidad automático abriendo y pesando el contenido de 100 bolsas de un lote para ver si cumplen con los gramos prometidos. Las bolsas quedan inutilizables. ¿Qué razón principal justifica realizar un muestreo en lugar de un censo?",
+                options: [
+                    "Preservación (la prueba es destructiva para los elementos).",
+                    "Limitación física o geográfica.",
+                    "Disminución excesiva de costos operacionales únicamente.",
+                    "Para evitar que la SAT sancione a la distribuidora."
+                ],
+                answer: 0,
+                feedback: "Al abrir y pesar las bolsas, el producto queda inutilizable. Si hicieras un censo, destruirías todo el lote. Por preservación del producto, lo correcto es muestrear."
+            },
+            {
+                question: "El Banco Industrial clasifica el perfil crediticio de sus clientes microempresarios como 'A: Excelente', 'B: Bueno', 'C: Riesgo Regular', y 'D: Riesgo Crítico'. ¿Qué nivel o escala de medición representa esta categorización?",
+                options: [
+                    "Escala Nominal.",
+                    "Escala de Intervalo.",
+                    "Escala Ordinal.",
+                    "Escala de Razón."
+                ],
+                answer: 2,
+                feedback: "Las clasificaciones A, B, C y D sí tienen un orden claro (de mejor a peor riesgo), pero la “distancia” entre A y B no es una unidad numérica medible. Eso corresponde a una escala ordinal."
+            },
+            {
+                question: "Se recolectan los ingresos diarios por ventas netas (en Quetzales) en una tienda de ropa en el Centro Comercial Oakland Mall. Si la tienda reporta Q0.00 de ingresos, significa que no hubo ninguna transacción. ¿A qué escala de medición pertenece esta variable?",
+                options: [
+                    "Escala de Razón (el cero es absoluto).",
+                    "Escala de Intervalo (el cero es relativo).",
+                    "Escala Ordinal.",
+                    "Escala Cualitativa Discreta."
+                ],
+                answer: 0,
+                feedback: "Los ingresos en quetzales tienen un cero absoluto real: Q0.00 significa ausencia total de ventas. Además, Q200 es el doble de Q100. Por eso pertenece a la escala de razón."
+            },
+            {
+                question: "Una heladería local monitorea la temperatura de almacenamiento de sus congeladores en Quetzaltenango para conservar la consistencia de su producto. Si la temperatura medida es de 0 grados Celsius, no significa que no haya temperatura. ¿Qué escala de medición se aplica aquí?",
+                options: [
+                    "Escala de Intervalo.",
+                    "Escala de Razón.",
+                    "Escala Nominal.",
+                    "Escala Cualitativa Continua."
+                ],
+                answer: 0,
+                feedback: "En grados Celsius, 0 °C es un punto de referencia convencional, no “ausencia de temperatura”. Las diferencias sí tienen sentido, pero no las razones como “el doble de frío”. Por eso es escala de intervalo."
+            },
+            {
+                question: "El gerente de mercadeo de Saúl E. Méndez quiere probar la efectividad de una nueva campaña publicitaria para trajes en redes sociales. Divide su base de clientes en dos grupos homogéneos y les envía incentivos diferentes para medir el aumento en compras reales. ¿Qué tipo de recolección de datos aplicó?",
+                options: [
+                    "Estudio Observacional.",
+                    "Estudio de Censo Administrativo.",
+                    "Estudio de Proceso Experimental.",
+                    "Muestreo de Conveniencia No Probabilístico."
+                ],
+                answer: 2,
+                feedback: "Aquí el investigador aplica un estímulo activo (incentivos distintos) y compara el efecto en las compras. Al intervenir para observar causa y efecto, se trata de un proceso experimental."
+            },
+            {
+                question: "Estás auditando el rendimiento de las operaciones logísticas y cuentas los camiones de reparto de mercadería que ingresan a un centro de distribución de Walmart en Villa Nueva cada día. ¿A qué tipo de variable corresponde?",
+                options: [
+                    "Cuantitativa Continua.",
+                    "Cuantitativa Discreta.",
+                    "Cualitativa Nominal.",
+                    "Cualitativa Ordinal."
+                ],
+                answer: 1,
+                feedback: "Estás contando unidades enteras: 0, 1, 2, 3 camiones… No tiene sentido operativo registrar 1.5 camiones. Ese conteo define una variable cuantitativa discreta."
+            },
+            {
+                question: "La municipalidad de Guatemala monitorea el tráfico en la Calzada Roosevelt colocando un sensor automático de flujo vehicular para medir cuántos automóviles pasan cada hora sin intervenir en las condiciones del tráfico. ¿Cómo se clasifica técnicamente esta investigación?",
+                options: [
+                    "Estudio Observacional, Univariado.",
+                    "Proceso Experimental, Multivariado.",
+                    "Muestreo de Selección por Juicio Experto.",
+                    "Estudio de Caso Clínico Censo."
+                ],
+                answer: 0,
+                feedback: "Solo se observa el tráfico sin intervenir, y se mide una sola característica (vehículos por hora). Por eso es un estudio observacional univariado."
+            },
+            {
+                question: "Una encuesta a clientes del Hotel Camino Real Antigua contiene la siguiente pregunta: '¿Cómo calificaría la amabilidad del personal de recepción? [Excelente / Muy buena / Buena / Regular / Mala]'. ¿Qué herramienta y categoría de medición estamos usando?",
+                options: [
+                    "Escala Likert de Opinión o Calidad.",
+                    "Escala Likert de Nivel de Importancia.",
+                    "Variable Cuantitativa en Escala de Razón.",
+                    "Muestreo Probabilístico por Conveniencia."
+                ],
+                answer: 0,
+                feedback: "Las opciones van de Excelente a Mala: miden percepción de calidad con un orden claro. Esa es una escala Likert de opinión o calidad, muy usada en hotelería y servicios."
+            },
+            {
+                question: "Un analista de negocios recopila los siguientes datos de los compradores de un centro comercial en Guatemala: Género, Edad, Nivel de ingresos mensuales y Preferencia de marca. ¿Cómo se define este conjunto de datos por el número de variables?",
+                options: [
+                    "Univariado.",
+                    "Bivariado.",
+                    "Multivariado.",
+                    "Incalculable."
+                ],
+                answer: 2,
+                feedback: "Se miden cuatro características a la vez (género, edad, ingresos y preferencia). Cuando hay más de dos variables por unidad de observación, el conjunto se clasifica como multivariado."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('quiz-intro').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const questionData = quizQuestions[currentQuestionIndex];
+            
+            // Actualizar interfaz
+            document.getElementById('quiz-progress').textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+            document.getElementById('quiz-score-badge').textContent = `Puntos: ${score}`;
+            document.getElementById('quiz-question-text').textContent = questionData.question;
+            
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            questionData.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left p-4 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 hover:border-teal-400/40 transition duration-150 flex items-center justify-between group";
+                button.innerHTML = `
+                    <span class="text-sm text-[#e8f0f7] group-hover:text-white font-medium">${option}</span>
+                    <span class="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center group-hover:border-teal-300 text-xs text-transparent"><i class="fa-solid fa-check"></i></span>
+                `;
+                button.onclick = () => selectOption(index, button);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, selectedButton) {
+            const questionData = quizQuestions[currentQuestionIndex];
+            const optionsButtons = document.getElementById('quiz-options-container').children;
+            
+            // Bloquear otras opciones para evitar clicks extra
+            for (let btn of optionsButtons) {
+                btn.disabled = true;
+            }
+
+            const feedbackElement = document.getElementById('quiz-feedback');
+            feedbackElement.classList.remove('hidden');
+
+            if (selectedIndex === questionData.answer) {
+                // Correcto
+                score++;
+                selectedButton.classList.add('border-teal-500', 'bg-teal-950/20');
+                selectedButton.querySelector('.w-5').className = "w-5 h-5 rounded-full bg-teal-500 border border-teal-400 flex items-center justify-center text-xs text-white";
+                
+                feedbackElement.className = "mt-4 p-4 rounded-lg bg-teal-950/30 border border-teal-500/20 text-[#d7e7f5] text-xs leading-relaxed";
+                feedbackElement.innerHTML = `
+                    <p class="font-bold text-teal-300 mb-2">¡Correcto! Vas bien.</p>
+                    <p class="mb-0">${questionData.feedback}</p>
+                `;
+            } else {
+                // Incorrecto: tono tutor, claro y alentador
+                selectedButton.classList.add('border-red-500', 'bg-red-950/20');
+                selectedButton.querySelector('.w-5').className = "w-5 h-5 rounded-full bg-red-500 border border-red-400 flex items-center justify-center text-xs text-white";
+                selectedButton.querySelector('.fa-check').className = "fa-solid fa-xmark";
+
+                // Resaltar la respuesta correcta de forma sutil
+                const correctButton = optionsButtons[questionData.answer];
+                correctButton.classList.add('border-teal-500/50', 'bg-teal-950/10');
+
+                feedbackElement.className = "mt-4 p-4 rounded-lg bg-sky-950/25 border border-sky-400/25 text-[#d7e7f5] text-xs leading-relaxed";
+                feedbackElement.innerHTML = `
+                    <p class="font-bold text-sky-300 mb-2">Buen intento: aquí aprendemos juntos</p>
+                    <p class="mb-2">
+                        Tu opción no era la adecuada. La respuesta correcta es:
+                        <strong class="text-white">“${questionData.options[questionData.answer]}”</strong>
+                    </p>
+                    <p class="mb-2"><strong class="text-amber-300">¿Por qué?</strong> ${questionData.feedback}</p>
+                    <p class="mb-0 text-lab-muted">Tip: guarda esta idea y úsala en la siguiente pregunta. Cada error te acerca más al dominio del concepto.</p>
+                `;
+            }
+
+            document.getElementById('quiz-score-badge').textContent = `Puntos: ${score}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            
+            const scorePercent = (score / quizQuestions.length) * 100;
+            const emojiElem = document.getElementById('results-emoji');
+            const titleElem = document.getElementById('results-title');
+            const descElem = document.getElementById('results-desc');
+            const scoreElem = document.getElementById('results-score');
+
+            scoreElem.textContent = `${score} / ${quizQuestions.length}`;
+
+            if (scorePercent === 100) {
+                emojiElem.textContent = "🏆";
+                titleElem.textContent = "¡Estadígrafo de Oro!";
+                descElem.textContent = "Impresionante. Dominas perfectamente el Capítulo 1 y 2. Estás más que listo para aplicar business intelligence de primer nivel en las empresas de Guatemala.";
+            } else if (scorePercent >= 80) {
+                emojiElem.textContent = "🌟";
+                titleElem.textContent = "¡Gerente de Alto Rendimiento!";
+                descElem.textContent = "¡Excelente nivel! Sabes cómo clasificar tus variables y estructurar tus muestras para evitar errores costosos en las decisiones operativas.";
+            } else if (scorePercent >= 60) {
+                emojiElem.textContent = "📚";
+                titleElem.textContent = "Aprobado (Pilas)";
+                descElem.textContent = "Buen intento. Tienes la lógica adecuada, pero te sugiero dar una segunda leída para afianzar conceptos clave de las escalas de medición.";
+            } else {
+                emojiElem.textContent = "💪";
+                titleElem.textContent = "Sigue Practicando";
+                descElem.textContent = "La estadística y la toma de decisiones requieren dedicación. Repasa la biblioteca y vuelve a intentar el reto para consolidar tus conocimientos.";
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+
+        // ==================== SURVEY DESIGNER ====================
+        const presetQuestions = {
+            limpieza: {
+                text: "¿Cómo calificaría la limpieza de los baños de la sucursal San Martín?",
+                scaleType: "likert-opinion"
+            },
+            tiempo: {
+                text: "Indique su nivel de acuerdo con: 'El tiempo que esperé en caja para pagar mi consumo fue el adecuado'.",
+                scaleType: "likert-acuerdo"
+            },
+            temperatura: {
+                text: "¿Qué tan importante considera la temperatura del café que le servimos?",
+                scaleType: "likert-importancia"
+            },
+            metodo: {
+                text: "¿Cuál es su método de pago preferido al consumir en el restaurante?",
+                scaleType: "nominal"
+            },
+            recomendacion: {
+                text: "¿Cuántos minutos transcurrieron desde que ordenó hasta que recibió su comida en la mesa?",
+                scaleType: "razon"
+            }
+        };
+
+        const scalesDefinitions = {
+            "likert-opinion": {
+                options: ["Excelente", "Muy buena", "Buena", "Regular", "Mala"],
+                varType: "Cualitativa (Categorías)",
+                varSubtype: "Ordinal",
+                scale: "Ordinal (Escala Likert de Opinión)",
+                description: "Al ser una variable cualitativa ordinal medida en escala Likert, los estadísticos recomendados para resumir la información son la **Distribución de Frecuencia (%)** por opción y el cálculo de la **Mediana** como valor central representativo. No intente promediar estos valores de forma directa.",
+                application: "Alerta operativa automática para directores de área: Si las calificaciones conjuntas de 'Mala' y 'Regular' superan el 15%, se activa de forma obligatoria un proceso de auditoría y reentrenamiento del personal local."
+            },
+            "likert-acuerdo": {
+                options: ["Totalmente de acuerdo", "De acuerdo", "Indeciso", "En desacuerdo", "Totalmente en desacuerdo"],
+                varType: "Cualitativa (Categorías)",
+                varSubtype: "Ordinal",
+                scale: "Ordinal (Escala Likert de Acuerdo)",
+                description: "Se utiliza para conocer la alineación de percepciones del consumidor con propuestas específicas del negocio. Analice las frecuencias acumuladas agrupando las respuestas favorables ('Totalmente de acuerdo' + 'De acuerdo') frente a las desfavorables.",
+                application: "Se utiliza en la evaluación de satisfacción al cliente de marcas como Pollo Campero para reportar a la gerencia regional de mercadeo si la nueva promesa de valor de entrega rápida está siendo creíble para el mercado."
+            },
+            "likert-importancia": {
+                options: ["Muy importante", "Importante", "Moderadamente importante", "De poca importancia", "Sin importancia"],
+                varType: "Cualitativa (Categorías)",
+                varSubtype: "Ordinal",
+                scale: "Ordinal (Escala Likert de Importancia)",
+                description: "Clave para decisiones de diseño del servicio. Permite clasificar las prioridades percibidas por los comensales para priorizar las inversiones de remodelación física o reestructuración de la carta.",
+                application: "Decisión gerencial de inversión: Permite evaluar si es viable realizar el gasto de techar e iluminar un parqueo antes de invertir en pantallas digitales interactivas para ordenar en las mesas."
+            },
+            "nominal": {
+                options: ["Efectivo", "Tarjeta de Crédito / Débito", "Transferencia Directa", "Billetera Digital (Yappy, etc.)"],
+                varType: "Cualitativa (Categorías)",
+                varSubtype: "Nominal",
+                scale: "Nominal (Escala sin orden jerárquico)",
+                description: "Solo clasifica y agrupa los datos en categorías distintas. No es posible establecer ningún orden de importancia. El estadístico descriptivo estrella en este caso es la **Moda** (el método de pago que más veces se repite en el conjunto de observaciones).",
+                application: "Alianza comercial con pasarelas de pago digitales: Si la billetera digital supera el 30% del uso registrado, la empresa debe programar la integración directa de APIs de cobro con bancos guatemaltecos."
+            },
+            "razon": {
+                options: ["Ingresar valor numérico (Ej: 15.5 minutos, 50.00 Quetzales, etc.)"],
+                varType: "Cuantitativa (Numérica)",
+                varSubtype: "Continua (o Discreta según conteo)",
+                scale: "De Razón (El cero es absoluto)",
+                description: "Contiene la mayor riqueza de información analítica. Es posible aplicar toda la gama de estadística descriptiva: **Media Aritmética (promedio)**, **Mediana**, **Desviación Estándar**, varianza y modelado predictivo complejo.",
+                application: "Control de calidad operativo: Permite calibrar y optimizar los procesos de la cocina. Si el promedio de entrega supera los 20 minutos, indica cuellos de botella en la cadena de preparación."
+            }
+        };
+
+        function loadPresetQuestion() {
+            const selector = document.getElementById('survey-question-selector');
+            const selectedVal = selector.value;
+            const preset = presetQuestions[selectedVal];
+
+            document.getElementById('survey-question-text').value = preset.text;
+            document.getElementById('survey-scale-type').value = preset.scaleType;
+
+            updateSurveyAnalysis();
+        }
+
+        function updateSurveyAnalysis() {
+            const scaleType = document.getElementById('survey-scale-type').value;
+            const data = scalesDefinitions[scaleType];
+
+            // Actualizar opciones de respuesta visuales
+            const optionsPreview = document.getElementById('survey-options-preview');
+            optionsPreview.innerHTML = '';
+            
+            data.options.forEach(option => {
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-3 bg-[rgba(16,42,61,0.72)] p-2.5 rounded border border-white/10 text-xs";
+                item.innerHTML = `
+                    <div class="w-4 h-4 rounded-full border border-white/15 bg-[rgba(8,24,38,0.55)] flex-none flex items-center justify-center text-[8px] text-lab-muted">•</div>
+                    <span class="text-[#d7e7f5] font-medium">${option}</span>
+                `;
+                optionsPreview.appendChild(item);
+            });
+
+            // Actualizar análisis
+            document.getElementById('analysis-var-type').textContent = data.varType;
+            document.getElementById('analysis-var-subtype').textContent = data.varSubtype;
+            document.getElementById('analysis-scale').textContent = data.scale;
+            document.getElementById('analysis-description').textContent = data.description;
+            document.getElementById('analysis-application').textContent = data.application;
+        }
+
+        // Inicializar vistas al cargar la aplicación
+        window.onload = function() {
+            updateSurveyAnalysis();
+        };
+    </script>
+</body>
+</html>
