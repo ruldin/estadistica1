@@ -56,9 +56,15 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 Al ser un sitio web 100% estático, no requiere instalación de dependencias ni servidores:
 1. Clona o descarga este repositorio:
    ```bash
-   git clone <URL_DEL_REPOSOTORIO>
+   git clone https://github.com/ruldin/estadistica1.git
    ```
 2. Abre el archivo `index.html` directamente en cualquier navegador web moderno (Chrome, Edge, Firefox, Safari).
+
+---
+
+## 📌 Estado del Proyecto y Pruebas
+- **Repositorio oficial:** [https://github.com/ruldin/estadistica1](https://github.com/ruldin/estadistica1)
+- **Última actualización:** Pruebas de integración continua y despliegue completadas exitosamente.
 
 ---
 
