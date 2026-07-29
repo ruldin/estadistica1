@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Semana 4: Gráficos Cualitativos y Diagrama de Pareto · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Librerías locales (sitio estático, sin CDN de gráficos) -->
+    <script src="vendor/chart.umd.min.js"></script>
+    <script src="vendor/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .heading-font { font-family: 'Space Grotesk', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .neon-emerald { box-shadow: 0 0 18px rgba(16, 185, 129, 0.14); }
+        .neon-amber { box-shadow: 0 0 18px rgba(245, 158, 11, 0.14); }
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+            height: min(52vh, 420px);
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+        .row-vital { background: rgba(16, 185, 129, 0.12) !important; }
+        .row-trivial { background: transparent; }
+        @media (max-width: 640px) {
+            .chart-wrap { height: 300px; min-height: 260px; }
+        }
+        .ws-field label { display: block; }
+        .ws-input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.875rem;
+            color: #f1f5f9;
+        }
+        .ws-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        .ws-textarea { min-height: 88px; resize: vertical; }
+        .ws-hint { font-size: 10px; color: #64748b; margin-top: 0.25rem; line-height: 1.4; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <a href="index.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Menú principal">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-gradient-to-tr from-emerald-500 to-cyan-400 p-2.5 rounded-xl shadow-lg shadow-emerald-500/15 shrink-0">
+                        <i class="fa-solid fa-chart-column text-slate-950 text-xl font-black"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-xs font-semibold tracking-widest text-emerald-400 uppercase block heading-font">Módulo I · Semana 4</span>
+                        <h1 class="text-sm sm:text-lg font-bold text-white leading-tight heading-font truncate">Gráficos Cualitativos &amp; Pareto <span class="text-xs text-slate-500 font-normal">| UMG</span></h1>
+                    </div>
+                </div>
+                <nav class="hidden lg:flex space-x-2 shrink-0">
+                    <button onclick="switchSection('conceptos')" id="nav-conceptos" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        <i class="fa-solid fa-lightbulb mr-1.5"></i>Conceptos
+                    </button>
+                    <button onclick="switchSection('guia')" id="nav-guia" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-list-ol mr-1.5"></i>Cómo se hace
+                    </button>
+                    <button onclick="switchSection('lab')" id="nav-lab" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-flask mr-1.5"></i>Laboratorio
+                    </button>
+                    <button onclick="switchSection('taller')" id="nav-taller" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-chalkboard-user mr-1.5"></i>Taller
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE TABS -->
+    <div class="lg:hidden bg-slate-950 border-b border-slate-800 p-2 flex overflow-x-auto gap-2 custom-scrollbar">
+        <button onclick="switchSection('conceptos')" id="mob-nav-conceptos" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Conceptos</button>
+        <button onclick="switchSection('guia')" id="mob-nav-guia" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">Cómo se hace</button>
+        <button onclick="switchSection('lab')" id="mob-nav-lab" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">Laboratorio</button>
+        <button onclick="switchSection('taller')" id="mob-nav-taller" class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">Taller</button>
+    </div>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+        <!-- ==================== CONCEPTOS ==================== -->
+        <section id="sec-conceptos" class="space-y-6 block">
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-emerald-950/35 p-6 sm:p-8 border border-slate-800 shadow-2xl">
+                <span class="px-3 py-1 text-[10px] font-extrabold bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 uppercase tracking-widest heading-font">
+                    Herramienta de aprendizaje
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white heading-font mt-3 leading-tight">
+                    Gráfica de Datos Cualitativos y Diagrama de Pareto
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base mt-3 max-w-3xl leading-relaxed">
+                    Aprende a visualizar variables categóricas con <strong class="text-white">barras</strong> y <strong class="text-white">pastel</strong>,
+                    y a priorizar problemas administrativos con el <strong class="text-emerald-400">Diagrama de Pareto (80/20)</strong>
+                    usando casos de negocios guatemaltecos.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                    <button onclick="switchSection('lab')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-3 rounded-xl text-sm heading-font transition">
+                        <i class="fa-solid fa-flask mr-2"></i>Ir al Laboratorio
+                    </button>
+                    <button onclick="switchSection('guia')" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-5 py-3 rounded-xl text-sm transition">
+                        <i class="fa-solid fa-book-open mr-2 text-amber-400"></i>Ver guía paso a paso
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest heading-font mb-3">Objetivos de aprendizaje</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 flex gap-3">
+                        <span class="text-emerald-400 font-black shrink-0">01</span>
+                        <p>Identificar y construir gráficos de <strong class="text-white">barras</strong> y de <strong class="text-white">pastel</strong> para variables cualitativas o categóricas.</p>
+                    </div>
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 flex gap-3">
+                        <span class="text-emerald-400 font-black shrink-0">02</span>
+                        <p>Construir e interpretar un <strong class="text-white">Diagrama de Pareto</strong> con frecuencias absolutas y porcentajes acumulados.</p>
+                    </div>
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 flex gap-3">
+                        <span class="text-emerald-400 font-black shrink-0">03</span>
+                        <p>Aplicar la <strong class="text-white">Regla del 80/20</strong>: diferenciar causas vitales (≈20%) de causas triviales (≈80%).</p>
+                    </div>
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 flex gap-3">
+                        <span class="text-emerald-400 font-black shrink-0">04</span>
+                        <p>Tomar decisiones de alto impacto: reducir costos, mermas y mejorar el servicio en empresas guatemaltecas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <article class="bg-slate-900 border border-slate-800 rounded-2xl p-5 neon-emerald">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <h3 class="font-bold text-white heading-font mb-2">Gráfico de barras</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Ideal para <strong class="text-slate-200">comparar magnitudes</strong> entre categorías discretas
+                        (tipo de queja, sucursal, motivo de devolución). El eje X son categorías; el Y es frecuencia o quetzales.
+                    </p>
+                </article>
+                <article class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h3 class="font-bold text-white heading-font mb-2">Gráfico de pastel</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Excelente para ver la <strong class="text-slate-200">proporción</strong> de cada categoría respecto al 100%.
+                        Usa pocas categorías (idealmente ≤ 6–7) para que sea legible.
+                    </p>
+                </article>
+                <article class="bg-slate-900 border border-slate-800 rounded-2xl p-5 neon-amber">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-bold text-white heading-font mb-2">Diagrama de Pareto</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Combina barras (ordenadas de mayor a menor) + curva de % acumulado.
+                        Sirve para <strong class="text-slate-200">priorizar</strong> dónde atacar primero.
+                    </p>
+                </article>
+            </div>
+
+            <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4">
+                <h3 class="text-lg font-bold text-white heading-font"><i class="fa-solid fa-landmark text-amber-400 mr-2"></i>Resumen conceptual gerencial</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Las variables cualitativas (tipo de queja, marca preferida, sucursal, motivo de devolución) necesitan visualizarse
+                    para detectar patrones rápido. Vilfredo Pareto observó que el 80% de la tierra en Italia pertenecía al 20% de la población.
+                    Joseph Juran lo llevó a la calidad: <strong class="text-emerald-400">el 80% de los problemas suele venir del 20% de las causas raíz</strong>.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                        <span class="text-emerald-400 font-bold block mb-1">Eje X</span>
+                        Categorías ordenadas de mayor a menor frecuencia (obligatorio en Pareto).
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                        <span class="text-emerald-400 font-bold block mb-1">Eje Y izquierdo</span>
+                        Frecuencia absoluta o costo en Quetzales (Q).
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                        <span class="text-amber-400 font-bold block mb-1">Eje Y derecho</span>
+                        Porcentaje acumulado (0% a 100%).
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                        <span class="text-cyan-400 font-bold block mb-1">Curva de Pareto</span>
+                        Línea que une los porcentajes acumulados.
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-emerald-950/20 border border-emerald-500/25 rounded-2xl p-5">
+                    <h4 class="font-bold text-emerald-400 heading-font mb-2"><i class="fa-solid fa-bullseye mr-2"></i>Causas vitales (pocos vitales)</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Son las primeras categorías que acumulan cerca del <strong>80%</strong> del problema.
+                        Ahí debes concentrar presupuesto, supervisión y proyectos de mejora.
+                    </p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                    <h4 class="font-bold text-slate-200 heading-font mb-2"><i class="fa-solid fa-layer-group mr-2 text-slate-400"></i>Causas triviales (muchos triviales)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        El resto de categorías suma el último ~20%. Importan, pero <strong class="text-slate-300">no son el primer ataque</strong>
+                        si tu meta es reducir costos o mermas con impacto inmediato.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== GUÍA ==================== -->
+        <section id="sec-guia" class="space-y-6 hidden">
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 to-amber-950/30 p-6 sm:p-8 border border-slate-800">
+                <span class="px-3 py-1 text-[10px] font-extrabold bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 uppercase tracking-widest heading-font">Tutor paso a paso</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white heading-font mt-3">Cómo construir e interpretar un Diagrama de Pareto</h2>
+                <p class="text-slate-300 text-sm mt-2 max-w-3xl">Usa esta guía en clase. Luego replica el proceso en el Laboratorio con tus datos o los del taller.</p>
+            </div>
+
+            <ol class="space-y-4">
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">1</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Define el problema y las categorías</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">Ej.: “quejas de clientes en Pollo Campero Zona 9”. Categorías: demora, temperatura del producto, error en pedido, amabilidad, limpieza, app, etc.</p>
+                    </div>
+                </li>
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">2</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Cuenta (o suma costos en Q)</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">Obtén la frecuencia absoluta de cada categoría. También puedes usar quetzales perdidos por merma o por devolución.</p>
+                    </div>
+                </li>
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">3</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Ordena de mayor a menor</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">Sin este orden <strong class="text-amber-300">no es Pareto</strong>. La categoría más frecuente va primero a la izquierda.</p>
+                    </div>
+                </li>
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">4</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Calcula % relativo y % acumulado</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">
+                            % relativo = (frecuencia / total) × 100.<br>
+                            % acumulado = suma de % relativos hasta esa categoría.
+                        </p>
+                    </div>
+                </li>
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">5</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Dibuja barras + curva</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">Barras = frecuencia (eje izquierdo). Línea = % acumulado (eje derecho). Traza una línea horizontal en 80% para marcar el corte.</p>
+                    </div>
+                </li>
+                <li class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex gap-4">
+                    <span class="w-9 h-9 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center shrink-0 heading-font">6</span>
+                    <div>
+                        <h3 class="font-bold text-white heading-font">Interpreta y decide</h3>
+                        <p class="text-sm text-slate-400 mt-1 leading-relaxed">
+                            Las categorías que llevan el acumulado hasta ≈80% son tus <strong class="text-emerald-400">pocos vitales</strong>.
+                            Pregunta gerencial: ¿qué acción concreta reduce esas 2 o 3 causas esta semana?
+                        </p>
+                    </div>
+                </li>
+            </ol>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 overflow-x-auto">
+                <h3 class="font-bold text-white heading-font mb-3 text-sm">Ejemplo numérico rápido (total = 200 quejas)</h3>
+                <table class="w-full text-xs text-left min-w-[520px]">
+                    <thead class="text-slate-400 border-b border-slate-800">
+                        <tr>
+                            <th class="py-2 pr-3">Categoría</th>
+                            <th class="py-2 pr-3">f</th>
+                            <th class="py-2 pr-3">%</th>
+                            <th class="py-2 pr-3">% acum.</th>
+                            <th class="py-2">Lectura</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-300">
+                        <tr class="border-b border-slate-900 row-vital"><td class="py-2">Demora en entrega</td><td>90</td><td>45%</td><td>45%</td><td class="text-emerald-400">Vital</td></tr>
+                        <tr class="border-b border-slate-900 row-vital"><td class="py-2">Pedido incorrecto</td><td>50</td><td>25%</td><td>70%</td><td class="text-emerald-400">Vital</td></tr>
+                        <tr class="border-b border-slate-900 row-vital"><td class="py-2">Producto frío</td><td>30</td><td>15%</td><td>85%</td><td class="text-emerald-400">Vital (cruza 80%)</td></tr>
+                        <tr class="border-b border-slate-900"><td class="py-2">App falla</td><td>20</td><td>10%</td><td>95%</td><td class="text-slate-500">Trivial</td></tr>
+                        <tr><td class="py-2">Otros</td><td>10</td><td>5%</td><td>100%</td><td class="text-slate-500">Trivial</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-amber-300/90 mt-3"><i class="fa-solid fa-lightbulb mr-1"></i> Decisión: atacar demora + pedido incorrecto + producto frío cubre ~85% del dolor del cliente.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                    <h4 class="font-bold text-cyan-400 mb-2">¿Cuándo usar barras?</h4>
+                    <p class="text-slate-400">Cuando quieres comparar “quién gana” entre categorías (ventas por marca, quejas por sucursal).</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                    <h4 class="font-bold text-cyan-400 mb-2">¿Cuándo usar pastel?</h4>
+                    <p class="text-slate-400">Cuando el mensaje es la participación relativa (% del total). Evita demasiadas rebanadas.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                    <h4 class="font-bold text-amber-400 mb-2">¿Cuándo usar Pareto?</h4>
+                    <p class="text-slate-400">Cuando debes priorizar: calidad, mermas, costos, tiempos muertos o quejas recurrentes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== LABORATORIO ==================== -->
+        <section id="sec-lab" class="space-y-5 hidden">
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-cyan-950/30 p-5 sm:p-7 border border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div>
+                        <span class="px-3 py-1 text-[10px] font-extrabold bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20 uppercase tracking-widest heading-font">Laboratorio interactivo</span>
+                        <h2 class="text-2xl font-black text-white heading-font mt-2">Laboratorio + Hoja de Trabajo Gerencial</h2>
+                        <p class="text-sm text-slate-400 mt-1">Genera tus gráficos, completa la ficha de consultoría y exporta un informe PDF listo para entregar en clase.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="loadPreset('campero')" class="text-xs font-bold px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750">
+                            Ejemplo Campero
+                        </button>
+                        <button onclick="loadPreset('tortrix')" class="text-xs font-bold px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750">
+                            Ejemplo Tortrix
+                        </button>
+                        <button onclick="clearRows()" class="text-xs font-bold px-3 py-2 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 hover:bg-red-950/60">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+                <!-- INPUT PANEL -->
+                <div class="xl:col-span-5 space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Título del análisis</label>
+                        <input id="chart-title" type="text" value="Quejas de clientes — Pollo Campero"
+                               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Unidad del eje Y</label>
+                                <select id="value-unit" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="casos">Casos / frecuencia</option>
+                                    <option value="quetzales">Quetzales (Q)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Umbral Pareto</label>
+                                <select id="pareto-threshold" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="80">80%</option>
+                                    <option value="70">70%</option>
+                                    <option value="90">90%</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-bold text-white heading-font">Datos (categoría + valor)</h3>
+                            <button onclick="addRow()" class="text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-2 rounded-xl">
+                                <i class="fa-solid fa-plus mr-1"></i>Agregar
+                            </button>
+                        </div>
+                        <div id="data-rows" class="space-y-2 max-h-[380px] overflow-y-auto custom-scrollbar pr-1"></div>
+                        <p class="text-[11px] text-slate-500 mt-3">Tip: en celular, usa el teclado numérico. Mínimo 2 categorías para graficar.</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="renderChart('bar')" class="py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 border border-slate-700 text-white hover:border-emerald-500/50 active:scale-[0.98] transition">
+                            <i class="fa-solid fa-chart-simple block text-lg mb-1 text-emerald-400"></i>Barras
+                        </button>
+                        <button onclick="renderChart('pie')" class="py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 border border-slate-700 text-white hover:border-cyan-500/50 active:scale-[0.98] transition">
+                            <i class="fa-solid fa-chart-pie block text-lg mb-1 text-cyan-400"></i>Pastel
+                        </button>
+                        <button onclick="renderChart('pareto')" class="py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 active:scale-[0.98] transition heading-font">
+                            <i class="fa-solid fa-chart-line block text-lg mb-1"></i>Pareto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OUTPUT PANEL -->
+                <div class="xl:col-span-7 space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <h3 id="chart-heading" class="text-sm font-bold text-white heading-font">Vista del gráfico</h3>
+                            <span id="chart-type-badge" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400">Sin generar</span>
+                        </div>
+                        <div class="chart-wrap bg-slate-950/60 rounded-xl border border-slate-800 p-2">
+                            <canvas id="main-chart"></canvas>
+                        </div>
+                        <p id="chart-insight" class="text-xs text-slate-400 mt-3 leading-relaxed">Ingresa datos y pulsa <strong class="text-emerald-400">Pareto</strong>, <strong class="text-white">Barras</strong> o <strong class="text-cyan-400">Pastel</strong>.</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 overflow-x-auto">
+                        <h3 class="text-sm font-bold text-white heading-font mb-3">Tabla de frecuencias y acumulados</h3>
+                        <table class="w-full text-xs min-w-[480px]">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800 text-left">
+                                    <th class="py-2 pr-2">#</th>
+                                    <th class="py-2 pr-2">Categoría</th>
+                                    <th class="py-2 pr-2">Valor</th>
+                                    <th class="py-2 pr-2">%</th>
+                                    <th class="py-2 pr-2">% acum.</th>
+                                    <th class="py-2">Clase</th>
+                                </tr>
+                            </thead>
+                            <tbody id="freq-table-body" class="text-slate-300">
+                                <tr><td colspan="6" class="py-4 text-slate-500 text-center">Aún no hay datos calculados.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="decision-box" class="hidden bg-emerald-950/25 border border-emerald-500/30 rounded-2xl p-4 sm:p-5">
+                        <h3 class="text-sm font-bold text-emerald-400 heading-font mb-2"><i class="fa-solid fa-briefcase mr-2"></i>Lectura gerencial automática</h3>
+                        <p id="decision-text" class="text-sm text-slate-200 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA DE TRABAJO / INFORME GERENCIAL -->
+            <div class="bg-slate-900 border border-cyan-500/25 rounded-3xl p-5 sm:p-7 space-y-5 neon-emerald">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div>
+                        <span class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/25 uppercase tracking-widest heading-font">Hoja de trabajo · Entrega</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white heading-font mt-2">Informe de Análisis Estadístico de Pareto</h3>
+                        <p class="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                            Completa la ficha como consultor junior: identifica vitales vs triviales, traduce el impacto a quetzales
+                            y redacta tu conclusión y plan de mitigación. El PDF incluirá tu gráfico y todos los campos.
+                        </p>
+                    </div>
+                    <button type="button" onclick="exportReportPDF()" id="btn-export-pdf"
+                            class="shrink-0 w-full lg:w-auto bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-extrabold px-5 py-3.5 rounded-xl text-sm heading-font shadow-lg shadow-cyan-500/15 transition active:scale-[0.98]">
+                        <i class="fa-solid fa-file-pdf mr-2"></i>Exportar Reporte Gerencial a PDF
+                    </button>
+                </div>
+
+                <form id="worksheet-form" class="space-y-6" onsubmit="return false;">
+                    <!-- Ficha estudiante + empresa -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre del estudiante</label>
+                            <input type="text" id="ws-student-name" class="ws-input" placeholder="Ej.: María López García">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Número de carné</label>
+                            <input type="text" id="ws-student-carnet" class="ws-input" placeholder="Ej.: 25-12345">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fecha del informe</label>
+                            <input type="date" id="ws-fecha" class="ws-input">
+                        </div>
+                        <div class="ws-field md:col-span-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre de la empresa / PYME</label>
+                            <input type="text" id="ws-empresa" class="ws-input" placeholder="Ej.: Cafetería Calle del Arco, Distribuidora el Cenizal Z.12">
+                            <p class="ws-hint">Formato de informe de consultoría para presentar ante junta directiva.</p>
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Departamento / área evaluada</label>
+                            <input type="text" id="ws-area" class="ws-input" placeholder="Ej.: Control de Calidad, Servicio al Cliente">
+                        </div>
+                    </div>
+
+                    <!-- Vitales vs triviales + impacto -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="ws-field bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-4">
+                            <label class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-bullseye mr-1"></i>Causas prioritarias a atender (20% vital)
+                            </label>
+                            <textarea id="ws-causas-vitales" class="ws-input ws-textarea" placeholder="Redacta las causas vitales que identificaste en el gráfico. Ej.: Lentitud en cocina, Platos fríos"></textarea>
+                            <p class="ws-hint">Pocos vitales: el ~20% de causas que genera ~80% del problema. Identifícalas tú a partir del Pareto y la tabla.</p>
+                        </div>
+                        <div class="ws-field bg-slate-950/60 border border-slate-800 rounded-2xl p-4">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-layer-group mr-1"></i>Causas triviales identificadas (80% restante)
+                            </label>
+                            <textarea id="ws-causas-triviales" class="ws-input ws-textarea" placeholder="Lista las causas triviales que quedan fuera del corte 80/20."></textarea>
+                            <p class="ws-hint">Muchos triviales: categorías de menor impacto acumulado. Clasifícalas tú según la curva y la tabla.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Porcentaje acumulado de vitales (%)</label>
+                            <div class="relative">
+                                <input type="number" id="ws-impacto-acumulado" class="ws-input pr-10" min="0" max="100" step="0.1" placeholder="Ej.: 78.5">
+                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">%</span>
+                            </div>
+                            <p class="ws-hint">Lee el % acumulado en la tabla y la curva del Pareto. ¿Hasta qué punto llegan tus causas vitales?</p>
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Impacto financiero mensual estimado</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-400 font-bold text-sm">Q</span>
+                                <input type="number" id="ws-impacto-financiero" class="ws-input pl-9" min="0" step="0.01" placeholder="12500.00">
+                            </div>
+                            <p class="ws-hint">Estima el costo mensual en quetzales (GTQ) asociado a las causas vitales que identificaste.</p>
+                        </div>
+                    </div>
+
+                    <!-- Conclusión y plan -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Conclusión gerencial</label>
+                            <textarea id="ws-conclusion" class="ws-input ws-textarea" style="min-height:120px" placeholder="Analiza las causas raíz identificadas en el gráfico. ¿Qué patrón observas? ¿Qué implica para la operación?"></textarea>
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-clipboard-check mr-1"></i>Acción gerencial sugerida / plan de mitigación (80/20)
+                            </label>
+                            <textarea id="ws-plan-accion" class="ws-input ws-textarea" style="min-height:120px" placeholder="Propón acciones concretas sobre las causas vitales. Ej.: capacitación en cocina, checklist de despacho, supervisor en hora pico…"></textarea>
+                            <p class="ws-hint">Ve más allá de la descripción: define la acción inmediata sobre el 20% vital.</p>
+                        </div>
+                    </div>
+                </form>
+
+                <p class="text-[11px] text-slate-500 border-t border-slate-800 pt-4">
+                    <i class="fa-solid fa-circle-info text-cyan-500 mr-1"></i>
+                    Genera primero un gráfico (recomendado: <strong class="text-emerald-400">Pareto</strong>) y usa la tabla y la lectura gerencial como apoyo.
+                    Los campos de vitales, triviales, % acumulado e impacto en Q los completas tú: así ejercitas el pensamiento crítico antes de exportar el PDF.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==================== TALLER ==================== -->
+        <section id="sec-taller" class="space-y-6 hidden">
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 to-purple-950/30 p-6 sm:p-8 border border-slate-800">
+                <span class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/25 uppercase tracking-widest heading-font">Taller en clase</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white heading-font mt-3">Prioriza con Pareto: caso guatemalteco</h2>
+                <p class="text-slate-300 text-sm mt-2 max-w-3xl leading-relaxed">
+                    En clase trabajaremos un caso tipo taller. Usa el Laboratorio para graficar, interpretar el 80/20
+                    y proponer 2–3 acciones administrativas. Luego tendrás 3 ejercicios extra con tus propios datos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <article class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-3">
+                    <h3 class="font-bold text-white heading-font text-lg"><i class="fa-solid fa-drumstick-bite text-amber-400 mr-2"></i>Caso A · Pollo Campero</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Una sucursal registra 200 quejas en un mes. Categorías: Demora (90), Pedido incorrecto (50),
+                        Producto frío (30), Fallas de App (20), Limpieza (10).
+                    </p>
+                    <ol class="text-xs text-slate-300 space-y-1.5 list-decimal list-inside">
+                        <li>Carga el ejemplo “Campero” en el Laboratorio.</li>
+                        <li>Genera <strong>barras</strong>, <strong>pastel</strong> y <strong>Pareto</strong>.</li>
+                        <li>Identifica las causas vitales hasta el 80%.</li>
+                        <li>Escribe 2 acciones de alto impacto (operación / capacitación / app).</li>
+                    </ol>
+                    <button onclick="switchSection('lab'); loadPreset('campero'); renderChart('pareto');"
+                            class="mt-2 w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-4 py-3 rounded-xl heading-font">
+                        Abrir en Laboratorio →
+                    </button>
+                </article>
+
+                <article class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-3">
+                    <h3 class="font-bold text-white heading-font text-lg"><i class="fa-solid fa-industry text-emerald-400 mr-2"></i>Caso B · Control de calidad Tortrix</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Defectos detectados en un turno (unidades): Sellado incompleto (120), Peso bajo (80),
+                        Etiqueta torcida (45), Sabor alterado (25), Empaque roto (15), Otros (15).
+                    </p>
+                    <ol class="text-xs text-slate-300 space-y-1.5 list-decimal list-inside">
+                        <li>Carga “Tortrix” y genera el Pareto.</li>
+                        <li>¿Qué % acumulan las 2 primeras causas?</li>
+                        <li>Si cada defecto cuesta Q2.50 de merma, estima el costo de las vitales.</li>
+                        <li>Propón un plan de 1 semana para la causa #1.</li>
+                    </ol>
+                    <button onclick="switchSection('lab'); loadPreset('tortrix'); renderChart('pareto');"
+                            class="mt-2 w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-4 py-3 rounded-xl heading-font">
+                        Abrir en Laboratorio →
+                    </button>
+                </article>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 sm:p-6">
+                <h3 class="font-bold text-white heading-font mb-3"><i class="fa-solid fa-pen-to-square text-cyan-400 mr-2"></i>Ejercicios extra (tarea / zona)</h3>
+                <p class="text-sm text-slate-400 mb-4">El catedrático asignará 3 ejercicios adicionales. Usa el Laboratorio para generar <strong class="text-white">los tres tipos de gráfico</strong> y pegar capturas o copiar la tabla.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                        <span class="text-cyan-400 font-bold">Ejercicio 1</span>
+                        <p class="text-slate-400 mt-1">Datos de motivos de devolución en una tienda. Entrega barras + pastel + interpretación.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                        <span class="text-cyan-400 font-bold">Ejercicio 2</span>
+                        <p class="text-slate-400 mt-1">Costos en Q por tipo de merma. Entrega Pareto completo con % acumulado.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                        <span class="text-cyan-400 font-bold">Ejercicio 3</span>
+                        <p class="text-slate-400 mt-1">Quejas por sucursal. Identifica vitales vs triviales y propone decisión gerencial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-amber-950/20 border border-amber-500/25 rounded-2xl p-5 text-sm text-slate-300">
+                <strong class="text-amber-300">Checklist antes de entregar:</strong>
+                categorías claras · valores numéricos · orden de mayor a menor en Pareto · % y % acumulado ·
+                lectura 80/20 · al menos una decisión administrativa concreta.
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-sm text-slate-300 heading-font font-semibold">
+                Estadística 1, UMG, Hecho por <strong class="text-emerald-400">Ruldin Ayala</strong>
+            </p>
+            <p class="text-[11px] text-slate-500">
+                Universidad Mariano Gálvez de Guatemala · Facultad de Administración de Empresas · 2026
+            </p>
+            <p class="text-[10px] text-slate-600">Gráficos con Chart.js (vendor/) · Exportación PDF con jsPDF</p>
+        </div>
+    </footer>
+
+    <script>
+        // Chart.js plugins
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+            Chart.defaults.set('plugins.datalabels', { display: false });
+        }
+
+        const PRESETS = {
+            campero: {
+                title: 'Quejas de clientes — Pollo Campero',
+                unit: 'casos',
+                rows: [
+                    ['Demora en entrega', 90],
+                    ['Pedido incorrecto', 50],
+                    ['Producto frío', 30],
+                    ['Fallas de App', 20],
+                    ['Limpieza', 10]
+                ]
+            },
+            tortrix: {
+                title: 'Defectos de calidad — Planta Tortrix',
+                unit: 'casos',
+                rows: [
+                    ['Sellado incompleto', 120],
+                    ['Peso bajo', 80],
+                    ['Etiqueta torcida', 45],
+                    ['Sabor alterado', 25],
+                    ['Empaque roto', 15],
+                    ['Otros', 15]
+                ]
+            }
+        };
+
+        const PALETTE = ['#10b981', '#06b6d4', '#f59e0b', '#38bdf8', '#a78bfa', '#f472b6', '#34d399', '#fb923c', '#94a3b8'];
+
+        let mainChart = null;
+        let currentType = null;
+        let lastAnalysis = null;
+
+        function switchSection(id) {
+            ['conceptos', 'guia', 'lab', 'taller'].forEach((sec) => {
+                document.getElementById(`sec-${sec}`).classList.toggle('hidden', sec !== id);
+                document.getElementById(`sec-${sec}`).classList.toggle('block', sec === id);
+
+                const nav = document.getElementById(`nav-${sec}`);
+                const mob = document.getElementById(`mob-nav-${sec}`);
+                const active = sec === id;
+                if (nav) {
+                    nav.className = active
+                        ? 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white';
+                }
+                if (mob) {
+                    mob.className = active
+                        ? 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400';
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function addRow(cat = '', val = '') {
+            const wrap = document.getElementById('data-rows');
+            const row = document.createElement('div');
+            row.className = 'data-row grid grid-cols-[1fr_100px_40px] gap-2 items-center';
+            row.innerHTML = `
+                <input type="text" inputmode="text" placeholder="Categoría" value="${escapeAttr(cat)}"
+                       class="cat-input w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <input type="number" inputmode="decimal" min="0" step="any" placeholder="Valor" value="${val}"
+                       class="val-input w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <button type="button" onclick="this.closest('.data-row').remove()" class="h-11 rounded-xl bg-slate-800 text-slate-400 hover:text-red-300 hover:bg-red-950/40 border border-slate-700" aria-label="Eliminar">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+            `;
+            wrap.appendChild(row);
+        }
+
+        function escapeAttr(s) {
+            return String(s).replace(/"/g, '&quot;');
+        }
+
+        function clearRows() {
+            document.getElementById('data-rows').innerHTML = '';
+            addRow();
+            addRow();
+            document.getElementById('freq-table-body').innerHTML = '<tr><td colspan="6" class="py-4 text-slate-500 text-center">Aún no hay datos calculados.</td></tr>';
+            document.getElementById('decision-box').classList.add('hidden');
+            document.getElementById('chart-insight').textContent = 'Datos limpiados. Agrega categorías y genera un gráfico.';
+            if (mainChart) { mainChart.destroy(); mainChart = null; }
+            document.getElementById('chart-type-badge').textContent = 'Sin generar';
+            document.getElementById('chart-type-badge').className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400';
+        }
+
+        function loadPreset(key) {
+            const p = PRESETS[key];
+            if (!p) return;
+            document.getElementById('chart-title').value = p.title;
+            document.getElementById('value-unit').value = p.unit;
+            const wrap = document.getElementById('data-rows');
+            wrap.innerHTML = '';
+            p.rows.forEach(([c, v]) => addRow(c, v));
+        }
+
+        function readData() {
+            const rows = [...document.querySelectorAll('.data-row')];
+            const data = [];
+            rows.forEach((row) => {
+                const cat = row.querySelector('.cat-input').value.trim();
+                const val = parseFloat(row.querySelector('.val-input').value);
+                if (cat && !Number.isNaN(val) && val >= 0) data.push({ cat, val });
+            });
+            return data;
+        }
+
+        function buildAnalysis(raw, threshold) {
+            const sorted = [...raw].sort((a, b) => b.val - a.val);
+            const total = sorted.reduce((s, d) => s + d.val, 0);
+            let cum = 0;
+            let vitalCutoffIndex = -1;
+            const rows = sorted.map((d, i) => {
+                const pct = total > 0 ? (d.val / total) * 100 : 0;
+                cum += pct;
+                if (vitalCutoffIndex === -1 && cum >= threshold) vitalCutoffIndex = i;
+                return {
+                    cat: d.cat,
+                    val: d.val,
+                    pct,
+                    cum,
+                    vital: vitalCutoffIndex === -1 || i <= vitalCutoffIndex
+                };
+            });
+            if (vitalCutoffIndex === -1 && rows.length) {
+                rows.forEach((r) => { r.vital = true; });
+                vitalCutoffIndex = rows.length - 1;
+            }
+            return { rows, total, vitalCutoffIndex, threshold };
+        }
+
+        function updateTable(analysis, unitLabel) {
+            const tbody = document.getElementById('freq-table-body');
+            if (!analysis.rows.length) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-slate-500 text-center">No hay datos válidos.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = analysis.rows.map((r, i) => `
+                <tr class="border-b border-slate-900 ${r.vital ? 'row-vital' : ''}">
+                    <td class="py-2 pr-2 text-slate-500">${i + 1}</td>
+                    <td class="py-2 pr-2 font-medium text-white">${r.cat}</td>
+                    <td class="py-2 pr-2">${formatValue(r.val, unitLabel)}</td>
+                    <td class="py-2 pr-2">${r.pct.toFixed(1)}%</td>
+                    <td class="py-2 pr-2 font-semibold">${r.cum.toFixed(1)}%</td>
+                    <td class="py-2 ${r.vital ? 'text-emerald-400 font-bold' : 'text-slate-500'}">${r.vital ? 'Vital' : 'Trivial'}</td>
+                </tr>
+            `).join('') + `
+                <tr class="text-slate-200 font-bold">
+                    <td class="py-2" colspan="2">Total</td>
+                    <td class="py-2">${formatValue(analysis.total, unitLabel)}</td>
+                    <td class="py-2">100%</td>
+                    <td colspan="2"></td>
+                </tr>`;
+        }
+
+        function formatValue(v, unitLabel) {
+            if (unitLabel === 'quetzales') return 'Q ' + v.toLocaleString('es-GT', { maximumFractionDigits: 2 });
+            return v.toLocaleString('es-GT', { maximumFractionDigits: 2 });
+        }
+
+        function unitLabel() {
+            return document.getElementById('value-unit').value;
+        }
+
+        function yAxisTitle() {
+            return unitLabel() === 'quetzales' ? 'Quetzales (Q)' : 'Frecuencia absoluta';
+        }
+
+        function renderChart(type) {
+            const raw = readData();
+            if (raw.length < 2) {
+                alert('Necesitas al menos 2 categorías con valores numéricos.');
+                return;
+            }
+            const threshold = parseFloat(document.getElementById('pareto-threshold').value) || 80;
+            const analysis = buildAnalysis(raw, threshold);
+            lastAnalysis = analysis;
+            updateTable(analysis, unitLabel());
+
+            const title = document.getElementById('chart-title').value.trim() || 'Análisis de datos cualitativos';
+            document.getElementById('chart-heading').textContent = title;
+
+            const labels = type === 'pie'
+                ? analysis.rows.map((r) => r.cat)
+                : (type === 'pareto' ? analysis.rows.map((r) => r.cat) : analysis.rows.map((r) => r.cat));
+            // For bar (no-pareto) keep original order entered? Better compare magnitudes sorted too for clarity
+            const barSorted = type === 'bar' ? analysis.rows : analysis.rows;
+
+            if (mainChart) {
+                mainChart.destroy();
+                mainChart = null;
+            }
+
+            const ctx = document.getElementById('main-chart').getContext('2d');
+            const badge = document.getElementById('chart-type-badge');
+            const insight = document.getElementById('chart-insight');
+            const decisionBox = document.getElementById('decision-box');
+            const decisionText = document.getElementById('decision-text');
+
+            currentType = type;
+
+            if (type === 'bar') {
+                badge.textContent = 'Barras';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+                mainChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: barSorted.map((r) => r.cat),
+                        datasets: [{
+                            label: yAxisTitle(),
+                            data: barSorted.map((r) => r.val),
+                            backgroundColor: barSorted.map((_, i) => PALETTE[i % PALETTE.length] + 'cc'),
+                            borderColor: barSorted.map((_, i) => PALETTE[i % PALETTE.length]),
+                            borderWidth: 1,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: baseOptions(false)
+                });
+                insight.innerHTML = `Comparación de magnitudes entre categorías. La mayor es <strong class="text-emerald-400">${barSorted[0].cat}</strong> (${formatValue(barSorted[0].val, unitLabel())}).`;
+                decisionBox.classList.add('hidden');
+            }
+
+            if (type === 'pie') {
+                badge.textContent = 'Pastel';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30';
+                mainChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: analysis.rows.map((r) => r.val),
+                            backgroundColor: analysis.rows.map((_, i) => PALETTE[i % PALETTE.length]),
+                            borderColor: '#0b0f19',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: window.innerWidth < 640 ? 'bottom' : 'right',
+                                labels: { color: '#cbd5e1', boxWidth: 12, font: { size: 11 } }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => {
+                                        const r = analysis.rows[ctx.dataIndex];
+                                        return ` ${r.cat}: ${formatValue(r.val, unitLabel())} (${r.pct.toFixed(1)}%)`;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                color: '#fff',
+                                font: { weight: 'bold', size: 11 },
+                                formatter: (v, ctx) => {
+                                    const pct = analysis.rows[ctx.dataIndex].pct;
+                                    return pct >= 8 ? pct.toFixed(0) + '%' : '';
+                                }
+                            }
+                        }
+                    }
+                });
+                insight.innerHTML = `Cada rebanada es la <strong class="text-cyan-300">proporción del total</strong>. Útil para reportes de participación; si hay muchas categorías, prefiere barras o Pareto.`;
+                decisionBox.classList.add('hidden');
+            }
+
+            if (type === 'pareto') {
+                badge.textContent = 'Pareto 80/20';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30';
+                const vitals = analysis.rows.filter((r) => r.vital);
+                mainChart = new Chart(ctx, {
+                    data: {
+                        labels: analysis.rows.map((r) => r.cat),
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: yAxisTitle(),
+                                data: analysis.rows.map((r) => r.val),
+                                backgroundColor: analysis.rows.map((r, i) => r.vital ? '#10b981cc' : '#64748bcc'),
+                                borderColor: analysis.rows.map((r) => r.vital ? '#10b981' : '#64748b'),
+                                borderWidth: 1,
+                                borderRadius: 6,
+                                yAxisID: 'y',
+                                order: 2
+                            },
+                            {
+                                type: 'line',
+                                label: '% acumulado',
+                                data: analysis.rows.map((r) => r.cum),
+                                borderColor: '#f59e0b',
+                                backgroundColor: '#f59e0b',
+                                pointBackgroundColor: '#fbbf24',
+                                pointRadius: 4,
+                                tension: 0.25,
+                                yAxisID: 'y1',
+                                order: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { labels: { color: '#cbd5e1', boxWidth: 12, font: { size: 11 } } },
+                            annotation: undefined,
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: (items) => {
+                                        const i = items[0].dataIndex;
+                                        const r = analysis.rows[i];
+                                        return `${r.vital ? 'Causa VITAL' : 'Causa trivial'} · acum. ${r.cum.toFixed(1)}%`;
+                                    }
+                                }
+                            },
+                            datalabels: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#94a3b8',
+                                    maxRotation: 45,
+                                    minRotation: 0,
+                                    font: { size: 10 }
+                                },
+                                grid: { color: 'rgba(148,163,184,0.08)' }
+                            },
+                            y: {
+                                position: 'left',
+                                beginAtZero: true,
+                                title: { display: true, text: yAxisTitle(), color: '#94a3b8', font: { size: 11 } },
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: 'rgba(148,163,184,0.1)' }
+                            },
+                            y1: {
+                                position: 'right',
+                                min: 0,
+                                max: 100,
+                                title: { display: true, text: '% acumulado', color: '#f59e0b', font: { size: 11 } },
+                                ticks: {
+                                    color: '#f59e0b',
+                                    callback: (v) => v + '%'
+                                },
+                                grid: { drawOnChartArea: false }
+                            }
+                        }
+                    }
+                });
+
+                const vitalNames = vitals.map((v) => v.cat).join(', ');
+                const vitalPct = vitals.length ? vitals[vitals.length - 1].cum : 0;
+                insight.innerHTML = `Barras ordenadas de mayor a menor + curva ámbar de % acumulado. Umbral marcado en <strong class="text-amber-300">${threshold}%</strong>. Las barras verdes son causas vitales.`;
+                decisionBox.classList.remove('hidden');
+                decisionText.innerHTML = `
+                    Las causas vitales (<strong class="text-emerald-400">${vitalNames}</strong>) concentran aproximadamente
+                    <strong class="text-white">${vitalPct.toFixed(1)}%</strong> del total
+                    (${formatValue(vitals.reduce((s, v) => s + v.val, 0), unitLabel())} de ${formatValue(analysis.total, unitLabel())}).
+                    <br><br>
+                    <strong class="text-white">Decisión sugerida:</strong> prioriza recursos en esas ${vitals.length} categoría(s)
+                    antes de dispersar esfuerzo en las triviales. Eso es aplicar el principio 80/20 en la práctica gerencial.
+                `;
+            }
+        }
+
+        function wsVal(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function formatFechaGT(isoDate) {
+            if (!isoDate) return '—';
+            const [y, m, d] = isoDate.split('-');
+            if (!y || !m || !d) return isoDate;
+            return `${d}/${m}/${y}`;
+        }
+
+        function formatQPDF(n) {
+            const num = parseFloat(n);
+            if (Number.isNaN(num)) return '—';
+            return 'Q ' + num.toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function wrapText(doc, text, x, y, maxWidth, lineHeight) {
+            const lines = doc.splitTextToSize(text || '—', maxWidth);
+            doc.text(lines, x, y);
+            return y + lines.length * lineHeight;
+        }
+
+        function exportReportPDF() {
+            if (typeof window.jspdf === 'undefined') {
+                alert('No se pudo cargar jsPDF. Verifica tu conexión a internet e intenta de nuevo.');
+                return;
+            }
+            if (!mainChart) {
+                alert('Genera un gráfico primero (recomendado: Pareto) antes de exportar el informe.');
+                return;
+            }
+
+            const nombre = wsVal('ws-student-name');
+            const carnet = wsVal('ws-student-carnet');
+            if (!nombre || !carnet) {
+                alert('Completa al menos tu nombre y número de carné para exportar el informe.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const pageW = doc.internal.pageSize.getWidth();
+            const margin = 14;
+            const contentW = pageW - margin * 2;
+            let y = 16;
+
+            const title = document.getElementById('chart-title').value.trim() || 'Análisis de datos cualitativos';
+            const empresa = wsVal('ws-empresa') || '—';
+            const area = wsVal('ws-area') || '—';
+            const fecha = formatFechaGT(wsVal('ws-fecha'));
+            const chartTypeLabel = document.getElementById('chart-type-badge').textContent || 'Gráfico';
+
+            // Encabezado ejecutivo
+            doc.setFillColor(15, 23, 42);
+            doc.rect(0, 0, pageW, 28, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.text('INFORME DE ANÁLISIS ESTADÍSTICO DE PARETO', pageW / 2, 12, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(148, 163, 184);
+            doc.text('Estadística 1 · UMG · Semana 4 · Herramienta Ruldin Ayala', pageW / 2, 18, { align: 'center' });
+            doc.text('Universidad Mariano Gálvez de Guatemala — Administración de Empresas', pageW / 2, 23, { align: 'center' });
+
+            y = 36;
+            doc.setTextColor(30, 41, 59);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Estudiante:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(nombre, margin + 22, y);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Carné:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(carnet, pageW / 2 + 18, y);
+            y += 6;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Empresa evaluada:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(empresa, margin + 34, y);
+            y += 5;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Área:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(area, margin + 12, y);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Fecha:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(fecha, pageW / 2 + 18, y);
+            y += 8;
+
+            doc.setDrawColor(203, 213, 225);
+            doc.line(margin, y, pageW - margin, y);
+            y += 6;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(5, 150, 105);
+            doc.text(title, margin, y);
+            y += 4;
+            doc.setFontSize(8);
+            doc.setTextColor(100, 116, 139);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Tipo de gráfico: ' + chartTypeLabel, margin, y);
+            y += 4;
+
+            // Gráfico
+            try {
+                const imgData = mainChart.toBase64Image('image/png', 1);
+                const imgW = contentW;
+                const imgH = 72;
+                if (y + imgH > 270) {
+                    doc.addPage();
+                    y = 16;
+                }
+                doc.addImage(imgData, 'PNG', margin, y, imgW, imgH);
+                y += imgH + 6;
+            } catch (e) {
+                doc.setTextColor(220, 38, 38);
+                doc.text('[No se pudo insertar el gráfico]', margin, y);
+                y += 8;
+            }
+
+            const section = (heading, body, accent) => {
+                if (y > 265) { doc.addPage(); y = 16; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(accent[0], accent[1], accent[2]);
+                doc.text(heading, margin, y);
+                y += 4;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.5);
+                doc.setTextColor(51, 65, 85);
+                y = wrapText(doc, body, margin, y, contentW, 4.2) + 3;
+            };
+
+            const pctAcum = wsVal('ws-impacto-acumulado');
+            const impactoQ = wsVal('ws-impacto-financiero');
+            const vitales = wsVal('ws-causas-vitales');
+            const triviales = wsVal('ws-causas-triviales');
+
+            section('1. ANÁLISIS DE FRECUENCIAS Y PRIORIZACIÓN (80/20)', [
+                '• Causas vitales identificadas (20%): ' + (vitales || '—'),
+                '• Causas triviales (80% restante): ' + (triviales || '—'),
+                '• Porcentaje acumulado de vitales: ' + (pctAcum ? pctAcum + '%' : '—'),
+                '• Impacto financiero mensual estimado: ' + (impactoQ ? formatQPDF(impactoQ) : '—')
+            ].join('\n'), [5, 150, 105]);
+
+            section('2. CONCLUSIÓN GERENCIAL', wsVal('ws-conclusion') || '(Sin redactar)', [6, 182, 212]);
+            section('3. PLAN DE ACCIÓN / RECOMENDACIÓN EJECUTIVA', wsVal('ws-plan-accion') || '(Sin redactar)', [245, 158, 11]);
+
+            // Tabla resumida si hay análisis
+            if (lastAnalysis && lastAnalysis.rows.length) {
+                if (y > 240) { doc.addPage(); y = 16; }
+                y += 2;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(71, 85, 105);
+                doc.text('Anexo: Tabla de frecuencias', margin, y);
+                y += 5;
+                doc.setFontSize(7.5);
+                const cols = [margin, margin + 52, margin + 72, margin + 92, margin + 112];
+                doc.setFont('helvetica', 'bold');
+                ['Categoría', 'Valor', '%', '% acum.', 'Clase'].forEach((h, i) => doc.text(h, cols[i], y));
+                y += 4;
+                doc.setFont('helvetica', 'normal');
+                lastAnalysis.rows.forEach((r) => {
+                    if (y > 285) { doc.addPage(); y = 16; }
+                    doc.text(r.cat.substring(0, 28), cols[0], y);
+                    doc.text(formatValue(r.val, unitLabel()).replace(/\s/g, ' '), cols[1], y);
+                    doc.text(r.pct.toFixed(1) + '%', cols[2], y);
+                    doc.text(r.cum.toFixed(1) + '%', cols[3], y);
+                    doc.text(r.vital ? 'Vital' : 'Trivial', cols[4], y);
+                    y += 4;
+                });
+            }
+
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let p = 1; p <= pageCount; p++) {
+                doc.setPage(p);
+                doc.setFontSize(7);
+                doc.setTextColor(148, 163, 184);
+                doc.text('Estadística 1, UMG, Hecho por Ruldin Ayala', pageW / 2, 290, { align: 'center' });
+                doc.text('Página ' + p + ' de ' + pageCount, pageW - margin, 290, { align: 'right' });
+            }
+
+            const safeName = nombre.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ-]/g, '').replace(/\s+/g, '_').substring(0, 30);
+            const fileName = 'Informe_Pareto_' + (safeName || 'UMG') + '.pdf';
+            doc.save(fileName);
+        }
+
+        function baseOptions(isPie) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        display: true,
+                        color: '#e2e8f0',
+                        anchor: 'end',
+                        align: 'top',
+                        font: { size: 10, weight: '600' },
+                        formatter: (v) => unitLabel() === 'quetzales' ? 'Q' + Math.round(v) : v
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#94a3b8', maxRotation: 45, font: { size: 10 } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: 'rgba(148,163,184,0.1)' },
+                        title: { display: true, text: yAxisTitle(), color: '#94a3b8', font: { size: 11 } }
+                    }
+                }
+            };
+        }
+
+        // Init
+        document.getElementById('ws-fecha').value = new Date().toISOString().slice(0, 10);
+        loadPreset('campero');
+    </script>
+</body>
+</html>

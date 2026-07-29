@@ -1,5 +1,62 @@
 # AGENTS.md - Contexto, Arquitectura y Directrices del Proyecto
 
+Memoria persistente con Engram (OBLIGATORIO)
+Engram es la memoria del proyecto (MCP `user-engram`). El usuario no debe tener que recordarte el contexto en cada sesión: tú eres responsable de leerla al inicio y escribirla durante el trabajo. No esperes a que te lo pidan.
+
+Al iniciar cada sesión (primera acción, sin excepción)
+Ejecuta en este orden antes de responder o modificar código:
+
+1. `engram_stats` — confirmar estado del vault (memorias, entidades)
+2. `engram_briefing` — briefing estructurado de sesión (compromisos, actividad reciente, alertas)
+3. `engram_recall` con el tema o tarea actual — buscar memorias relevantes (ej. `"Semana 4 gráficos Pareto"`)
+4. `engram_alerts` (opcional) — pendientes, seguimientos vencidos o contradicciones
+
+Si el vault está vacío o casi vacío, bootstrap con `engram_remember` usando el contenido de este `AGENTS.md` y el estado actual del repo.
+
+Durante el trabajo (después de CADA cambio relevante)
+Llama a `engram_remember` de forma proactiva — no al final de la sesión, sino inmediatamente tras:
+
+| Evento | Qué guardar |
+|--------|-------------|
+| Decisión de diseño o arquitectura | Qué se decidió, por qué, archivos afectados |
+| Bug encontrado o corregido | Síntoma, causa raíz, fix aplicado |
+| Convención o patrón nuevo | Regla, ejemplo de uso, archivos de referencia |
+| Cambio en API, schema o flujo de negocio | Comportamiento anterior vs nuevo |
+| Commit o deploy relevante | Rama, hash, resumen de cambios |
+
+Formato recomendado para `engram_remember`:
+
+- `content`: afirmación clara y autocontenida (qué, por qué, dónde, aprendizaje)
+- `type`: `semantic` (hechos), `episodic` (eventos), `procedural` (cómo hacer algo)
+- `entities`: ej. `["WebAppEstadistica", "Ruldin Ayala", "UMG"]`
+- `topics`: ej. `["Semana4", "graficos-pareto", "chartjs"]`
+- `salience`: 0.7–1.0 para decisiones arquitectónicas; 0.5 para detalles menores
+
+Herramientas complementarias:
+
+- `engram_ask` — cuando necesites una respuesta sintetizada, no una lista de memorias
+- `engram_surface` — surfacing proactivo según contexto actual
+- `engram_connect` — relacionar memorias (`supersedes`, `contradicts`, `elaborates`, etc.)
+- `engram_audit` — contrastar `AGENTS.md` u otro doc externo contra el vault
+
+Al finalizar la sesión o tarea
+- `engram_checkpoint` — resumen de lo logrado (goal, accomplished, learned, next steps) antes de compactación o cierre
+- Actualizar `AGENTS.md` si hubo cambios importantes en código, APIs o convenciones
+
+Post-compactación (contexto truncado)
+Si el contexto fue compactado, ejecuta inmediatamente antes de continuar:
+
+1. `engram_stats`
+2. `engram_briefing`
+3. `engram_recall` con la tarea actual
+
+Regla de oro
+Si aprendiste algo que te ayudaría en una sesión futura, guárdalo en Engram ahora. Si el usuario tuvo que explicártelo dos veces, fallaste en persistir la memoria.
+
+Actualizaciones de AGENTS.md
+Cada actualización importante en el código debe reflejarse también en este archivo con la información relevante del proyecto.
+
+
 ## 📌 Contexto General del Proyecto
 Este proyecto es una **plataforma educativa estática de apoyo docente** desarrollada por el profesor **Ruldin Ayala** para el curso de **Estadística 1** de la carrera de **Administración de Empresas** en la **Universidad Mariano Gálvez de Guatemala (UMG)**.
 
@@ -18,7 +75,7 @@ El objetivo principal es brindar a los estudiantes:
   - **HTML5:** Estructura semántica, accesible, limpia y navegable.
   - **CSS3 / TailwindCSS (vía CDN):** Estilos modernos, diseño responsive, glassmorphism, tipografías ejecutivas (`Inter` & `Space Grotesk`) y paletas de colores profesionales.
   - **JavaScript (Vanilla / ES6+):** Toda la lógica de cálculo estadístico, interacción con el usuario, generación de gráficos de barras (SVG / Canvas / HTML dinámico) y manipulación del DOM se ejecuta **100% en el navegador del cliente**.
-  - **Librerías por CDN:** Se pueden usar librerías JS/CSS ligeras cargadas exclusivamente vía CDN (ej. Chart.js, MathJax, TailwindCSS, FontAwesome, Lucide Icons, Canvas-Confetti).
+  - **Librerías por CDN o vendor local:** Preferir CDN para CSS/JS ligeros (TailwindCSS, MathJax, FontAwesome, Lucide Icons, Canvas-Confetti). Para Chart.js en `sem4_graficos_pareto.html` se usan copias locales en `vendor/` (`chart.umd.min.js`, `chartjs-plugin-datalabels.min.js`) para garantizar gráficos sin depender de CDN externo.
 
 ---
 
@@ -61,6 +118,8 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 - [sem2_clasifica_variables.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_clasifica_variables.html): Módulo interactivo para entrenamiento en clasificación de variables (cualitativas, cuantitativas, nominales, ordinales, de razón/intervalo).
 - [sem2_estadistica_business_lab.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_estadistica_business_lab.html): Simulador de Muestreo probabilístico en La Terminal Z.4 (Método Físico, Tabla de Números Aleatorios y Hoja Electrónica).
 - [sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
+- [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, presets empresariales guatemaltecos y Chart.js local.
+- `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semana 4.
 - `AGENTS.md`: Este archivo de contexto, arquitectura y reglas para asistentes de código IA.
 
 ---
