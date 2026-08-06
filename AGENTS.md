@@ -118,9 +118,21 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 - [sem2_clasifica_variables.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_clasifica_variables.html): Módulo interactivo para entrenamiento en clasificación de variables (cualitativas, cuantitativas, nominales, ordinales, de razón/intervalo).
 - [sem2_estadistica_business_lab.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_estadistica_business_lab.html): Simulador de Muestreo probabilístico en La Terminal Z.4 (Método Físico, Tabla de Números Aleatorios y Hoja Electrónica).
 - [sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
-- [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, presets empresariales guatemaltecos y Chart.js local.
-- `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semana 4.
+- [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, hoja de trabajo con pensamiento crítico y exportación PDF (jsPDF), Chart.js local.
+- [sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF.
+- `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semanas 4 y 5.
 - `AGENTS.md`: Este archivo de contexto, arquitectura y reglas para asistentes de código IA.
+
+### Semanas habilitadas en `index.html` (acceso directo + módulos)
+1. Semana 2 — Clasifica Variables + Business Lab  
+2. Semana 3 — Tabulador & Caso Xela  
+3. Semana 4 — Gráficos & Pareto (+ PDF)  
+4. Semana 5 — Regla de Sturges (+ laboratorio + PDF)  
+
+### Convención pedagógica recurrente
+- Enfoque: interpretación administrativa (no solo fórmula).
+- Casos guatemaltecos reales (Campero, Tortrix, Café Xela, Lácteos El Oriental / Zacapa, etc.).
+- Laboratorio interactivo + sección de entrega/PDF donde el alumno escribe conclusiones (pensamiento crítico) antes de descargar.
 
 ---
 
