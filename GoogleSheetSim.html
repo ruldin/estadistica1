@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets & Slides - Diagrama de Pareto Estadísticas UMG</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for Pareto Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Product+Sans:wght@400;700&display=swap');
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .product-sans {
+      font-family: 'Product Sans', 'Roboto', sans-serif;
+    }
+
+    /* Google Sheets Custom Scrollbars & Grid Styling */
+    .sheets-grid {
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    
+    .sheets-grid th, .sheets-grid td {
+      border: 1px solid #e0e0e0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sheets-grid th {
+      background-color: #f1f3f4;
+      color: #5f6368;
+      font-weight: 500;
+      font-size: 12px;
+      text-align: center;
+      user-select: none;
+    }
+
+    .sheet-tab {
+      transition: all 0.15s ease-in-out;
+    }
+
+    .sheet-tab.active {
+      border-bottom: 3px solid #0f9d58;
+      color: #0f9d58;
+      background-color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Slide Aspect Ratio Container */
+    .slide-aspect {
+      aspect-ratio: 16 / 9;
+    }
+
+    /* Print styling */
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-gray-800">
+
+  <!-- TOP HEADER & NAVBAR (Google Workspace Aesthetic) -->
+  <header class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between no-print z-20">
+    <div class="flex items-center space-x-3">
+      <!-- App Icon & Title -->
+      <div class="p-2 rounded-lg bg-green-100 text-green-700 flex items-center justify-center">
+        <i class="fa-solid fa-file-spreadsheet text-xl" id="app-header-icon"></i>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="font-medium text-lg text-gray-800 product-sans leading-tight" id="doc-title">
+            Diagrama de Pareto & Toma de Decisiones - Estadística I (UMG)
+          </h1>
+          <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded font-medium">Guatemala Cases</span>
+        </div>
+        <div class="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Archivo</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Editar</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Ver</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Insertar</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Formato</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Herramientas</span>
+          <span class="hover:bg-gray-100 px-1.5 py-0.5 rounded cursor-pointer">Ayuda</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Mode Toggles & Action Buttons -->
+    <div class="flex items-center space-x-2">
+      <div class="bg-gray-100 p-1 rounded-lg flex space-x-1 border border-gray-200">
+        <button id="btn-mode-sheets" onclick="switchViewMode('sheets')" class="px-3 py-1.5 text-xs font-medium rounded-md bg-white text-gray-800 shadow-sm flex items-center space-x-1.5 transition-all">
+          <i class="fa-solid fa-table-cells text-green-600"></i>
+          <span>Vista Hoja (Sheets)</span>
+        </button>
+        <button id="btn-mode-slides" onclick="switchViewMode('slides')" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-600 hover:text-gray-900 flex items-center space-x-1.5 transition-all">
+          <i class="fa-solid fa-file-powerpoint text-yellow-600"></i>
+          <span>Presentación (Slides)</span>
+        </button>
+      </div>
+
+      <button onclick="exportToCSV()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-1 transition shadow-sm">
+        <i class="fa-solid fa-download text-gray-500"></i>
+        <span>Exportar CSV</span>
+      </button>
+
+      <button onclick="togglePresenterNotes()" id="btn-notes" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-1.5 transition shadow-sm">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>Informe Ejecutivo</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- FORMULA BAR (SHEETS MODE ONLY) -->
+  <div id="formula-bar" class="bg-white border-b border-gray-200 px-4 py-1.5 flex items-center space-x-3 text-xs no-print z-10">
+    <div class="font-mono text-gray-500 font-bold w-12 text-center bg-gray-100 py-1 rounded border border-gray-200" id="cell-address">A1</div>
+    <div class="text-gray-400 font-serif italic text-sm">fx</div>
+    <div class="flex-1 bg-gray-50 border border-gray-200 rounded px-2.5 py-1 text-gray-700 font-mono text-xs overflow-x-auto whitespace-nowrap" id="cell-formula">
+      =PARETO.80_20(FrecuenciaAbsoluta, Causas)
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE CONTENT AREA -->
+  <main class="flex-1 overflow-hidden relative flex">
+
+    <!-- ==================== VIEW 1: GOOGLE SHEETS WORKSPACE ==================== -->
+    <div id="view-sheets" class="w-full h-full flex flex-col bg-gray-50">
+      
+      <!-- Upper Section: Split Spreadsheet Grid & Dynamic Chart -->
+      <div class="flex-1 flex flex-col md:flex-row overflow-hidden border-b border-gray-200">
+        
+        <!-- Left Panel: Interactive Data Table -->
+        <div class="w-full md:w-7/12 h-full flex flex-col bg-white border-r border-gray-200 overflow-hidden">
+          <div class="bg-gray-100 border-b border-gray-200 px-4 py-2 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-gray-700 uppercase tracking-wider">Tabla de Distribución de Frecuencias</span>
+              <span id="case-badge" class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded font-medium">Módulo 1</span>
+            </div>
+            <button onclick="addNewRow()" class="text-xs bg-white border border-gray-300 hover:bg-gray-50 px-2.5 py-1 rounded text-gray-700 font-medium flex items-center space-x-1 shadow-2xs">
+              <i class="fa-solid fa-plus text-green-600"></i>
+              <span>Agregar Causa</span>
+            </button>
+          </div>
+
+          <!-- Table Container -->
+          <div class="flex-1 overflow-auto">
+            <table class="w-full sheets-grid text-xs">
+              <thead>
+                <tr>
+                  <th class="w-10 py-1.5">#</th>
+                  <th class="text-left px-3 py-1.5">Causa / Motivo de Defecto o Queja (Cualitativa)</th>
+                  <th class="w-24 text-right px-3 py-1.5" id="col-freq-header">Frecuencia (fi)</th>
+                  <th class="w-24 text-right px-3 py-1.5">Acumulada (Fi)</th>
+                  <th class="w-20 text-right px-3 py-1.5">Relativa (%)</th>
+                  <th class="w-20 text-right px-3 py-1.5">Acum. (%)</th>
+                  <th class="w-24 text-center px-2 py-1.5">Clasificación</th>
+                </tr>
+              </thead>
+              <tbody id="sheets-tbody">
+                <!-- Rows dynamically generated via JS -->
+              </tbody>
+              <tfoot>
+                <tr class="bg-gray-100 font-bold border-t-2 border-gray-300 text-gray-800">
+                  <td class="text-center py-2">∑</td>
+                  <td class="px-3 py-2 text-right">TOTAL GENERAL:</td>
+                  <td class="px-3 py-2 text-right text-blue-700 font-mono text-sm" id="total-fi">0</td>
+                  <td class="px-3 py-2 text-right font-mono text-gray-500">-</td>
+                  <td class="px-3 py-2 text-right font-mono">100.0%</td>
+                  <td class="px-3 py-2 text-right font-mono">-</td>
+                  <td class="text-center text-gray-500 font-normal">--</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Panel: Dual-Axis Pareto Chart -->
+        <div class="w-full md:w-5/12 h-full flex flex-col bg-white p-4 overflow-y-auto">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center space-x-1.5">
+              <i class="fa-solid fa-chart-column text-blue-600"></i>
+              <span>Diagrama de Pareto Interactivo (80/20)</span>
+            </h3>
+            <span class="text-xs text-gray-500 italic">Actualización automática</span>
+          </div>
+
+          <!-- Canvas Container -->
+          <div class="relative flex-1 min-h-[260px] w-full bg-gray-50 rounded-lg p-2 border border-gray-200">
+            <canvas id="paretoChartCanvas"></canvas>
+          </div>
+
+          <!-- Vital Few Summary Box -->
+          <div id="vital-few-summary" class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 flex items-start space-x-2.5">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5"></i>
+            <div>
+              <span class="font-bold text-amber-950 block mb-0.5">Diagnóstico del 80/20 (Pocas Vitales):</span>
+              <p id="vital-few-text" class="leading-relaxed">Cargando análisis de priorización...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lower Section: Managerial Decisions Workspace -->
+      <div class="h-44 bg-white px-5 py-3 border-t border-gray-200 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-6 overflow-y-auto">
+        <div class="flex-1 flex flex-col">
+          <label class="text-xs font-bold text-gray-700 mb-1 flex items-center space-x-1.5">
+            <i class="fa-solid fa-lightbulb text-yellow-500"></i>
+            <span>Decisión Gerencial 1 (Enfoque Prioritario en Causa Vital #1):</span>
+          </label>
+          <textarea id="decision-1" oninput="updateCurrentCaseDecision(1, this.value)" class="flex-1 w-full text-xs p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:bg-white resize-none outline-none leading-relaxed text-gray-800" placeholder="Redacte la primera propuesta estratégica..."></textarea>
+        </div>
+
+        <div class="flex-1 flex flex-col">
+          <label class="text-xs font-bold text-gray-700 mb-1 flex items-center space-x-1.5">
+            <i class="fa-solid fa-gears text-blue-500"></i>
+            <span>Decisión Gerencial 2 (Enfoque en Causa Vital #2 / Proceso Operativo):</span>
+          </label>
+          <textarea id="decision-2" oninput="updateCurrentCaseDecision(2, this.value)" class="flex-1 w-full text-xs p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:bg-white resize-none outline-none leading-relaxed text-gray-800" placeholder="Redacte la segunda propuesta de optimización de procesos..."></textarea>
+        </div>
+      </div>
+
+      <!-- Bottom Google Sheets Tab Navigation Bar -->
+      <div class="bg-gray-200 border-t border-gray-300 px-2 py-1 flex items-center space-x-1 overflow-x-auto no-print text-xs select-none">
+        <div class="flex items-center space-x-1 border-r border-gray-300 pr-2 mr-1">
+          <button onclick="alert('Función de agregar nueva hoja activa')" class="p-1 hover:bg-gray-300 rounded text-gray-700" title="Añadir Hoja"><i class="fa-solid fa-plus"></i></button>
+          <button onclick="alert('Lista de hojas')" class="p-1 hover:bg-gray-300 rounded text-gray-700" title="Todas las hojas"><i class="fa-solid fa-bars"></i></button>
+        </div>
+
+        <!-- Case Tabs -->
+        <div id="sheets-tab-container" class="flex space-x-1 overflow-x-auto">
+          <!-- Dynamically filled by JS -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== VIEW 2: GOOGLE SLIDES PRESENTATION MODE ==================== -->
+    <div id="view-slides" class="w-full h-full hidden flex flex-col bg-gray-900 text-white">
+      
+      <!-- Slide Toolbar -->
+      <div class="bg-gray-800 border-b border-gray-700 px-4 py-2 flex justify-between items-center no-print">
+        <div class="flex items-center space-x-3">
+          <span class="text-xs font-medium text-yellow-400 uppercase tracking-wider flex items-center space-x-1.5">
+            <i class="fa-solid fa-file-powerpoint text-yellow-500"></i>
+            <span>Presentación Ejecutiva UMG</span>
+          </span>
+          <span id="slide-counter" class="text-xs bg-gray-700 text-gray-300 px-2.5 py-0.5 rounded-full">Diapositiva 1 de 8</span>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="prevSlide()" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-xs rounded text-white flex items-center space-x-1">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span>Anterior</span>
+          </button>
+          <button onclick="nextSlide()" class="px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-xs font-semibold rounded text-white flex items-center space-x-1">
+            <span>Siguiente</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <button onclick="toggleFullScreen()" class="p-1.5 bg-gray-700 hover:bg-gray-600 text-xs rounded text-gray-300 ml-2" title="Pantalla Completa">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Slide Main Area (Thumbnails + Main Slide Canvas) -->
+      <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Left Thumbnail Navigation -->
+        <div class="w-48 bg-gray-950 border-r border-gray-800 p-2 overflow-y-auto space-y-2 no-print hidden md:block" id="slide-thumbnails">
+          <!-- Thumbnails loaded dynamically -->
+        </div>
+
+        <!-- Main Slide Render Area -->
+        <div class="flex-1 p-4 md:p-8 flex items-center justify-center overflow-auto bg-gray-900">
+          
+          <div id="slide-card" class="w-full max-w-5xl bg-white text-gray-900 rounded-xl shadow-2xl p-6 md:p-10 flex flex-col justify-between slide-aspect overflow-hidden relative">
+            
+            <!-- Slide Header -->
+            <div class="flex justify-between items-start border-b border-gray-200 pb-4">
+              <div>
+                <span id="slide-module-tag" class="text-xs font-bold uppercase tracking-widest text-emerald-600 block mb-1">MÓDULO 1: CASO GT</span>
+                <h2 id="slide-title" class="text-xl md:text-2xl font-bold text-gray-900 leading-snug">
+                  Título del Ejercicio de Pareto
+                </h2>
+              </div>
+              <div class="text-right">
+                <span class="text-2xs font-semibold uppercase bg-gray-100 text-gray-600 px-2 py-1 rounded">Estadística I - UMG</span>
+              </div>
+            </div>
+
+            <!-- Slide Body Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-4 flex-1 items-center">
+              
+              <!-- Stats & Vital Few Summary -->
+              <div class="md:col-span-5 space-y-3">
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3.5 rounded-r-lg">
+                  <span class="text-2xs uppercase font-bold text-emerald-700 tracking-wider block">Causas Vitales (Regla 80/20)</span>
+                  <p id="slide-vital-causes" class="text-xs font-semibold text-emerald-950 mt-1">
+                    Causas A y C representan el 74.0% de todos los defectos.
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-center">
+                    <span class="text-2xs text-gray-500 uppercase block">Total Ocurrencias</span>
+                    <span id="slide-total-val" class="text-lg font-bold text-gray-800">0</span>
+                  </div>
+                  <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-center">
+                    <span class="text-2xs text-gray-500 uppercase block">% Acum. Vitales</span>
+                    <span id="slide-vital-pct" class="text-lg font-bold text-blue-600">0%</span>
+                  </div>
+                </div>
+
+                <!-- Decision Cards -->
+                <div class="space-y-2 pt-1">
+                  <div class="text-2xs font-bold uppercase text-gray-400 tracking-wider">Acciones Gerenciales Directas:</div>
+                  <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200 text-xs">
+                    <span class="font-bold text-gray-900 block mb-0.5">1. Intervención Operativa:</span>
+                    <span id="slide-dec-1" class="text-gray-600 leading-tight block">...</span>
+                  </div>
+                  <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200 text-xs">
+                    <span class="font-bold text-gray-900 block mb-0.5">2. Optimización de Proceso:</span>
+                    <span id="slide-dec-2" class="text-gray-600 leading-tight block">...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pareto Chart Graphic on Slide -->
+              <div class="md:col-span-7 h-full min-h-[220px] bg-gray-50 p-3 rounded-lg border border-gray-200 relative">
+                <canvas id="slideParetoChartCanvas"></canvas>
+              </div>
+
+            </div>
+
+            <!-- Slide Footer -->
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+              <span>Universidad Mariano Gálvez de Guatemala • Licenciatura en Administración de Empresas</span>
+              <span id="slide-footer-num">Página 1</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- EXECUTIVE REPORT / PRESENTER NOTES MODAL DRAWER -->
+  <div id="notes-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex justify-end">
+    <div class="w-full max-w-lg bg-white h-full shadow-2xl flex flex-col p-6 overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <h3 class="text-base font-bold text-gray-800 flex items-center space-x-2">
+          <i class="fa-solid fa-file-contract text-emerald-600"></i>
+          <span>Informe Ejecutivo de Priorización (Pareto)</span>
+        </h3>
+        <button onclick="togglePresenterNotes()" class="text-gray-400 hover:text-gray-700 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-gray-700 leading-relaxed flex-1">
+        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-r">
+          <h4 class="font-bold text-emerald-900 mb-1">Resumen de Diagnóstico para la Junta Directiva</h4>
+          <p id="report-case-name" class="font-medium text-emerald-800 mb-2">Caso Seleccionado</p>
+          <p class="text-emerald-900">
+            Con base en el análisis del Principio de Pareto ($80/20$), se ha determinado que concentrar el esfuerzo y presupuesto administrativo en el <strong>20% de las causas raíz</strong> eliminará aproximadamente el <strong>80% del impacto negativo total</strong>.
+          </p>
+        </div>
+
+        <div>
+          <h5 class="font-bold text-gray-800 uppercase tracking-wider mb-2">1. Desglose de Causas Vitales Prioritarias:</h5>
+          <div id="report-vital-list" class="space-y-2">
+            <!-- Filled via JS -->
+          </div>
+        </div>
+
+        <div>
+          <h5 class="font-bold text-gray-800 uppercase tracking-wider mb-2">2. Dictamen Gerencial Recomendado:</h5>
+          <div class="p-3 bg-gray-50 border rounded-lg space-y-2">
+            <p id="report-dec-1"><strong>Decisión 1:</strong> ...</p>
+            <p id="report-dec-2"><strong>Decisión 2:</strong> ...</p>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 p-3 rounded border border-amber-200">
+          <span class="font-bold text-amber-900 block mb-1">Nota Metodológica (Estadística I - UMG):</span>
+          <p class="text-amber-800">
+            El gráfico de Pareto ordena las causas cualitativas de forma decreciente por frecuencia absoluta ($f_i$) y traza la curva de frecuencia acumulada porcentual ($\%A$). Las barras ubicadas antes de la intersección del $80\%$ representan el "Pocos Vitales".
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t mt-4 flex space-x-2">
+        <button onclick="copyExecutiveReport()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-medium text-xs flex items-center justify-center space-x-1">
+          <i class="fa-solid fa-copy"></i>
+          <span>Copiar Informe Completo</span>
+        </button>
+        <button onclick="togglePresenterNotes()" class="px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg font-medium text-xs">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DATASETS: 8 PARETO CASES IN GUATEMALAN BUSINESSES
+       ========================================================================== */
+    const casesData = [
+      {
+        id: "case-1",
+        module: "MÓDULO 1: MOMOSTENANGO",
+        title: "Ex 1: Control de Calidad en Guipiles",
+        unit: "Prendas Rechazadas",
+        unitLabel: "Unidades",
+        items: [
+          { cause: "Hilos rotos o destensados en el urdido", count: 185 },
+          { cause: "Medidas y tallas fuera de especificación", count: 148 },
+          { cause: "Decoloración o desteñido de hilaza en lavado", count: 73 },
+          { cause: "Manchas de grasa por lubricación de telares", count: 22 },
+          { cause: "Errores en la secuencia del patrón geométrico", count: 22 }
+        ],
+        decisions: [
+          "Intervenir inmediatamente el taller de Urdido instalando tensores estandarizados y capacitando a los artesanos en el ajuste de hilaza.",
+          "Implementar una plantilla técnica rígida de corte y control dimensional de tallas antes del ensamble final de exportación."
+        ]
+      },
+      {
+        id: "case-2",
+        module: "MÓDULO 1: MOMOSTENANGO",
+        title: "Ex 2: Quejas Mayoristas de Tejidos",
+        unit: "Número de Reclamaciones",
+        unitLabel: "Quejas",
+        items: [
+          { cause: "Entregas con retraso respecto a la fecha pactada", count: 132 },
+          { cause: "Combinación de colores distinta al catálogo", count: 81 },
+          { cause: "Acabados deshilachados en bordes del cuello", count: 38 },
+          { cause: "Empaque primario dañado por humedad", count: 18 },
+          { cause: "Etiquetado incorrecto de código de barras/precio", count: 11 }
+        ],
+        decisions: [
+          "Establecer alianzas con empresas logísticas exprés con penalizaciones por retraso y cronogramas estrictos de despacho.",
+          "Implementar un protocolo obligatorio de verificación de matiz cromático contra la muestra física autorizada antes del empaque."
+        ]
+      },
+      {
+        id: "case-3",
+        module: "MÓDULO 2: HOTEL TIKAL",
+        title: "Ex 3: Insatisfacción de Huéspedes Eco-Lodge",
+        unit: "Número de Menciones",
+        unitLabel: "Menciones",
+        items: [
+          { cause: "Cortes no programados de energía eléctrica / A/C", count: 144 },
+          { cause: "Presencia excesiva de mosquitos en habitaciones", count: 99 },
+          { cause: "Demora en servicio de restaurante durante desayuno", count: 42 },
+          { cause: "Inestabilidad o falta de señal Wi-Fi", count: 22 },
+          { cause: "Guías turísticos bilingües llegaron tarde", count: 13 }
+        ],
+        decisions: [
+          "Aprobar la compra e instalación inmediata de un sistema de paneles solares y generador diésel de respaldo automatizado.",
+          "Autorizar un programa de fumigación ecológica perimetral y colocar mosquiteros herméticos de alta densidad en todas las cabañas."
+        ]
+      },
+      {
+        id: "case-4",
+        module: "MÓDULO 2: HOTEL TIKAL",
+        title: "Ex 4: Merma Financiera en Cocina (Q)",
+        unit: "Pérdida Financiera (Quetzales)",
+        unitLabel: "Quetzales (Q)",
+        isCurrency: true,
+        items: [
+          { cause: "Vencimiento por falla en cuartos fríos", count: 39100 },
+          { cause: "Sobres de insumos / verduras por sobrecompra", count: 27200 },
+          { cause: "Platillos mal preparados o devueltos por cliente", count: 11050 },
+          { cause: "Rotura de vajilla y cristalería fina", count: 4250 },
+          { cause: "Comandas no consolidadas en cobros", count: 3400 }
+        ],
+        decisions: [
+          "Instalar termostatos inteligentes con alarmas remotas e implementar un plan de mantenimiento preventivo mensual para cuartos fríos.",
+          "Adopción estricta del sistema de compras Justo a Tiempo (JIT) y rotación de inventarios PEPS (Primeras Entradas, Primeras Salidas)."
+        ]
+      },
+      {
+        id: "case-5",
+        module: "MÓDULO 3: VINO DE NÍSPERO",
+        title: "Ex 5: Defectos en Embotellado de Vino",
+        unit: "Botellas Descartadas",
+        unitLabel: "Botellas",
+        items: [
+          { cause: "Sedimentación o turbidez excesiva del jugo", count: 258 },
+          { cause: "Filtraciones y mal sellado en tapón de corcho", count: 174 },
+          { cause: "Etiquetas de marca torcidas, arrugadas o manchadas", count: 96 },
+          { cause: "Nivel de llenado inconsistente (volumen)", count: 48 },
+          { cause: "Imperfecciones y fisuras en botella de vidrio", count: 24 }
+        ],
+        decisions: [
+          "Sustituir los filtros artesanales por un sistema de microfiltración tangencial e incrementar el tiempo de decantación previo al embotellado.",
+          "Adquirir una encorchadora neumática semiautomática calibrada con manómetro de presión constante."
+        ]
+      },
+      {
+        id: "case-6",
+        module: "MÓDULO 3: VINO DE NÍSPERO",
+        title: "Ex 6: Devoluciones de Distribuidores Gourmet",
+        unit: "Cajas Devueltas",
+        unitLabel: "Cajas",
+        items: [
+          { cause: "Inconsistencia en acidez y dulzor entre lotes", count: 66 },
+          { cause: "Cajas de cartón colapsadas o dañadas en estiba", count: 45 },
+          { cause: "Retrasos en el tiempo de entrega del pedido", count: 18 },
+          { cause: "Error en el precio o descuento en factura", count: 12 },
+          { cause: "Falta de material publicitario / exhibidores", count: 9 }
+        ],
+        decisions: [
+          "Estandarizar las pruebas de laboratorio en grados Brix y acidez titulable para la homologación química obligatoria de cada lote.",
+          "Rediseñar el empaque máster utilizando cartón corrugado de mayor gramaje (doble flauta) y separadores anticristal."
+        ]
+      },
+      {
+        id: "case-7",
+        module: "MÓDULO 4: XECAS QUETZALTENANGO",
+        title: "Ex 7: Rechazos en Horneado Masivo Exportación",
+        unit: "Paquetes Rechazados",
+        unitLabel: "Paquetes",
+        items: [
+          { cause: "Pérdida del sellado al vacío en empaque", count: 564 },
+          { cause: "Horneado desigual o checas parcialmente quemadas", count: 372 },
+          { cause: "Relleno de queso o fruta derramado fuera", count: 132 },
+          { cause: "Peso total del paquete por debajo de 350g", count: 84 },
+          { cause: "Deformación en la forma circular tradicional", count: 48 }
+        ],
+        decisions: [
+          "Sustituir mordazas térmicas y sensores de sellado en la empaquetadora al vacío industrial para asegurar el cierre hermético.",
+          "Nivelar y calibrar el sistema de quemadores y rotación de los hornos giratorios industriales mediante pirómetros láser."
+        ]
+      },
+      {
+        id: "case-8",
+        module: "MÓDULO 4: XECAS QUETZALTENANGO",
+        title: "Ex 8: Pérdidas en Tiendas Nostálgicas (EE.UU.)",
+        unit: "Pérdida Financiera (Quetzales)",
+        unitLabel: "Quetzales (Q)",
+        isCurrency: true,
+        items: [
+          { cause: "Vencimiento de vida útil por lentitud en rotación", count: 55200 },
+          { cause: "Panes endurecidos por microperforaciones de empaque", count: 38400 },
+          { cause: "Retención en aduana por documentación fitosanitaria", count: 14400 },
+          { cause: "Aplastamiento de producto por mala estiba", count: 7200 },
+          { cause: "Errores en la facturación del flete internacional", count: 4800 }
+        ],
+        decisions: [
+          "Reestructurar los despachos internacionales enviando lotes más frecuentes y reducidos, con apoyos de estantería en punto de venta.",
+          "Migrar a bolsas bilaminadas de alta barrera contra el oxígeno para evitar la pérdida de humedad y microfisuras durante el vuelo."
+        ]
+      }
+    ];
+
+    /* APP STATE VARIABLES */
+    let currentCaseIndex = 0;
+    let viewMode = 'sheets'; // 'sheets' or 'slides'
+    let sheetsChartInstance = null;
+    let slideChartInstance = null;
+
+    /* HELPER: Compute Pareto Table Statistics */
+    function computeParetoStats(items) {
+      // 1. Sort descending by count/frequency
+      const sorted = [...items].sort((a, b) => b.count - a.count);
+      
+      // 2. Compute total sum
+      const total = sorted.reduce((sum, item) => sum + item.count, 0);
+
+      let cumulativeCount = 0;
+      
+      const tableData = sorted.map((item, idx) => {
+        cumulativeCount += item.count;
+        const relativePct = total > 0 ? (item.count / total) * 100 : 0;
+        const cumulativePct = total > 0 ? (cumulativeCount / total) * 100 : 0;
+        
+        // Vital Few rule: items up to ~80% cumulative
+        // Note: The item that crosses 80% is often included as the last vital cause
+        const isVital = (cumulativePct - relativePct) < 80.0;
+
+        return {
+          rank: idx + 1,
+          cause: item.cause,
+          count: item.count,
+          cumulativeCount,
+          relativePct,
+          cumulativePct,
+          isVital
+        };
+      });
+
+      return { sortedData: tableData, total };
+    }
+
+    /* RENDER: Google Sheets Table and Workspace */
+    function renderSheetsView() {
+      const currentCase = casesData[currentCaseIndex];
+      const { sortedData, total } = computeParetoStats(currentCase.items);
+
+      // Update Case Headers & Badges
+      document.getElementById('case-badge').textContent = currentCase.module;
+      document.getElementById('col-freq-header').textContent = currentCase.isCurrency ? "Pérdida (Q)" : "Frecuencia (fi)";
+
+      const tbody = document.getElementById('sheets-tbody');
+      tbody.innerHTML = '';
+
+      sortedData.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = row.isVital ? 'bg-amber-50/60 hover:bg-amber-100/50' : 'hover:bg-gray-50';
+
+        const formattedCount = currentCase.isCurrency 
+          ? `Q ${row.count.toLocaleString('es-GT')}`
+          : row.count.toLocaleString('es-GT');
+
+        const formattedCum = currentCase.isCurrency
+          ? `Q ${row.cumulativeCount.toLocaleString('es-GT')}`
+          : row.cumulativeCount.toLocaleString('es-GT');
+
+        tr.innerHTML = `
+          <td class="text-center py-2 font-mono text-gray-500 bg-gray-50">${row.rank}</td>
+          <td class="px-3 py-2">
+            <input type="text" value="${escapeHtml(row.cause)}" 
+              onchange="updateItemCause(${idx}, this.value)" 
+              class="w-full bg-transparent outline-none focus:bg-white focus:ring-1 focus:ring-green-500 rounded px-1 text-xs">
+          </td>
+          <td class="px-3 py-2 text-right font-mono font-medium text-gray-900">
+            <input type="number" value="${row.count}" 
+              onchange="updateItemCount(${idx}, this.value)" 
+              class="w-20 text-right bg-transparent outline-none focus:bg-white focus:ring-1 focus:ring-green-500 rounded px-1 font-mono text-xs">
+          </td>
+          <td class="px-3 py-2 text-right font-mono text-gray-600 bg-gray-50/50">${formattedCum}</td>
+          <td class="px-3 py-2 text-right font-mono text-gray-700">${row.relativePct.toFixed(1)}%</td>
+          <td class="px-3 py-2 text-right font-mono font-bold ${row.isVital ? 'text-amber-700' : 'text-gray-700'}">${row.cumulativePct.toFixed(1)}%</td>
+          <td class="text-center px-2 py-1">
+            <span class="text-2xs px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+              row.isVital ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-gray-100 text-gray-600'
+            }">
+              ${row.isVital ? 'Poco Vital (20%)' : 'Mucho Útil'}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update Total Footer
+      document.getElementById('total-fi').textContent = currentCase.isCurrency 
+        ? `Q ${total.toLocaleString('es-GT')}` 
+        : total.toLocaleString('es-GT');
+
+      // Update Textareas
+      document.getElementById('decision-1').value = currentCase.decisions[0] || '';
+      document.getElementById('decision-2').value = currentCase.decisions[1] || '';
+
+      // Update Vital Few Text Summary
+      const vitalItems = sortedData.filter(d => d.isVital);
+      const vitalPctSum = vitalItems.length > 0 ? vitalItems[vitalItems.length - 1].cumulativePct : 0;
+      const vitalNames = vitalItems.map(i => `"${i.cause}"`).join(', ');
+
+      document.getElementById('vital-few-text').innerHTML = 
+        `Se han identificado <strong>${vitalItems.length} causa(s) vitales</strong> (${vitalNames}), las cuales concentran el <strong>${vitalPctSum.toFixed(1)}%</strong> del impacto acumulado. Intervenir aquí resolverá el 80% de los problemas de la empresa.`;
+
+      // Update Tabs
+      renderTabs();
+
+      // Render Pareto Chart
+      renderParetoChart('paretoChartCanvas', sortedData, currentCase);
+    }
+
+    /* CHART RENDERER (Dual Axis Pareto Chart) */
+    function renderParetoChart(canvasId, sortedData, currentCase) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+
+      const labels = sortedData.map(d => {
+        // Truncate long labels for clean charts
+        return d.cause.length > 22 ? d.cause.substring(0, 20) + '...' : d.cause;
+      });
+
+      const counts = sortedData.map(d => d.count);
+      const cumulativePcts = sortedData.map(d => d.cumulativePct);
+      const barColors = sortedData.map(d => d.isVital ? '#0f9d58' : '#a0aec0');
+
+      const chartConfig = {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: currentCase.unitLabel,
+              data: counts,
+              backgroundColor: barColors,
+              borderRadius: 4,
+              yAxisID: 'y',
+              order: 2
+            },
+            {
+              label: '% Acumulado',
+              data: cumulativePcts,
+              type: 'line',
+              borderColor: '#e65100',
+              borderWidth: 2.5,
+              pointBackgroundColor: '#e65100',
+              pointRadius: 4,
+              tension: 0.1,
+              yAxisID: 'y1',
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { font: { size: 10 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  if (context.dataset.yAxisID === 'y1') {
+                    return `% Acumulado: ${context.raw.toFixed(1)}%`;
+                  }
+                  return `${currentCase.unitLabel}: ${context.raw.toLocaleString('es-GT')}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { font: { size: 9 }, maxRotation: 30, minRotation: 0 }
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: { display: true, text: currentCase.unitLabel, font: { size: 10 } },
+              ticks: { font: { size: 9 } }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              min: 0,
+              max: 100,
+              title: { display: true, text: '% Acumulado', font: { size: 10 } },
+              ticks: { 
+                font: { size: 9 },
+                callback: function(value) { return value + '%'; } 
+              },
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      };
+
+      if (canvasId === 'paretoChartCanvas') {
+        if (sheetsChartInstance) sheetsChartInstance.destroy();
+        sheetsChartInstance = new Chart(ctx, chartConfig);
+      } else if (canvasId === 'slideParetoChartCanvas') {
+        if (slideChartInstance) slideChartInstance.destroy();
+        slideChartInstance = new Chart(ctx, chartConfig);
+      }
+    }
+
+    /* RENDER: Google Slides Presentation Mode */
+    function renderSlidesView() {
+      const currentCase = casesData[currentCaseIndex];
+      const { sortedData, total } = computeParetoStats(currentCase.items);
+
+      document.getElementById('slide-counter').textContent = `Diapositiva ${currentCaseIndex + 1} de ${casesData.length}`;
+      document.getElementById('slide-module-tag').textContent = currentCase.module;
+      document.getElementById('slide-title').textContent = currentCase.title;
+
+      const vitalItems = sortedData.filter(d => d.isVital);
+      const vitalPctSum = vitalItems.length > 0 ? vitalItems[vitalItems.length - 1].cumulativePct : 0;
+      const vitalNames = vitalItems.map(i => i.cause).join(' + ');
+
+      document.getElementById('slide-vital-causes').textContent = 
+        `Causas Vitales (${vitalItems.length}): ${vitalNames} concentran el ${vitalPctSum.toFixed(1)}% del problema.`;
+
+      document.getElementById('slide-total-val').textContent = currentCase.isCurrency 
+        ? `Q ${(total/1000).toFixed(1)}k`
+        : total.toLocaleString('es-GT');
+
+      document.getElementById('slide-vital-pct').textContent = `${vitalPctSum.toFixed(0)}%`;
+
+      document.getElementById('slide-dec-1').textContent = currentCase.decisions[0] || 'Por definir';
+      document.getElementById('slide-dec-2').textContent = currentCase.decisions[1] || 'Por definir';
+
+      document.getElementById('slide-footer-num').textContent = `Diapositiva ${currentCaseIndex + 1}`;
+
+      // Render Thumbnails
+      renderSlideThumbnails();
+
+      // Render Chart on Slide
+      setTimeout(() => {
+        renderParetoChart('slideParetoChartCanvas', sortedData, currentCase);
+      }, 50);
+    }
+
+    function renderSlideThumbnails() {
+      const container = document.getElementById('slide-thumbnails');
+      container.innerHTML = '';
+
+      casesData.forEach((c, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = `p-2 rounded cursor-pointer border text-xs transition ${
+          idx === currentCaseIndex 
+            ? 'bg-yellow-900/40 border-yellow-500 text-yellow-200 font-bold' 
+            : 'bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-800'
+        }`;
+        thumb.onclick = () => selectCase(idx);
+        thumb.innerHTML = `
+          <div class="text-2xs text-gray-500 uppercase">Diapositiva ${idx + 1}</div>
+          <div class="truncate">${c.title}</div>
+        `;
+        container.appendChild(thumb);
+      });
+    }
+
+    /* UI TABS RENDERER */
+    function renderTabs() {
+      const container = document.getElementById('sheets-tab-container');
+      container.innerHTML = '';
+
+      casesData.forEach((c, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `sheet-tab px-3 py-1.5 rounded-t text-xs flex items-center space-x-1.5 whitespace-nowrap ${
+          idx === currentCaseIndex ? 'active shadow-2xs' : 'text-gray-600 hover:bg-gray-300'
+        }`;
+        btn.onclick = () => selectCase(idx);
+        btn.innerHTML = `
+          <i class="fa-solid fa-table text-2xs ${idx === currentCaseIndex ? 'text-green-600' : 'text-gray-400'}"></i>
+          <span>Caso ${idx + 1}</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    /* CASE CONTROL FUNCTIONS */
+    function selectCase(index) {
+      currentCaseIndex = index;
+      if (viewMode === 'sheets') {
+        renderSheetsView();
+      } else {
+        renderSlidesView();
+      }
+      updateExecutiveReport();
+    }
+
+    function prevSlide() {
+      if (currentCaseIndex > 0) {
+        selectCase(currentCaseIndex - 1);
+      }
+    }
+
+    function nextSlide() {
+      if (currentCaseIndex < casesData.length - 1) {
+        selectCase(currentCaseIndex + 1);
+      }
+    }
+
+    function switchViewMode(mode) {
+      viewMode = mode;
+      const sheetsView = document.getElementById('view-sheets');
+      const slidesView = document.getElementById('view-slides');
+      const formulaBar = document.getElementById('formula-bar');
+      const btnSheets = document.getElementById('btn-mode-sheets');
+      const btnSlides = document.getElementById('btn-mode-slides');
+
+      if (mode === 'sheets') {
+        sheetsView.classList.remove('hidden');
+        slidesView.classList.add('hidden');
+        formulaBar.classList.remove('hidden');
+
+        btnSheets.className = "px-3 py-1.5 text-xs font-medium rounded-md bg-white text-gray-800 shadow-sm flex items-center space-x-1.5 transition-all";
+        btnSlides.className = "px-3 py-1.5 text-xs font-medium rounded-md text-gray-600 hover:text-gray-900 flex items-center space-x-1.5 transition-all";
+
+        renderSheetsView();
+      } else {
+        sheetsView.classList.add('hidden');
+        slidesView.classList.remove('hidden');
+        formulaBar.classList.add('hidden');
+
+        btnSlides.className = "px-3 py-1.5 text-xs font-medium rounded-md bg-white text-gray-800 shadow-sm flex items-center space-x-1.5 transition-all";
+        btnSheets.className = "px-3 py-1.5 text-xs font-medium rounded-md text-gray-600 hover:text-gray-900 flex items-center space-x-1.5 transition-all";
+
+        renderSlidesView();
+      }
+    }
+
+    /* DATA UPDATE HANDLERS */
+    function updateItemCause(idx, newCause) {
+      casesData[currentCaseIndex].items[idx].cause = newCause;
+      renderSheetsView();
+      updateExecutiveReport();
+    }
+
+    function updateItemCount(idx, newCount) {
+      casesData[currentCaseIndex].items[idx].count = Math.max(0, parseFloat(newCount) || 0);
+      renderSheetsView();
+      updateExecutiveReport();
+    }
+
+    function updateCurrentCaseDecision(num, text) {
+      casesData[currentCaseIndex].decisions[num - 1] = text;
+      updateExecutiveReport();
+    }
+
+    function addNewRow() {
+      casesData[currentCaseIndex].items.push({
+        cause: "Nueva causa cualitativa",
+        count: 10
+      });
+      renderSheetsView();
+    }
+
+    /* EXECUTIVE REPORT MODAL */
+    function togglePresenterNotes() {
+      const modal = document.getElementById('notes-modal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        updateExecutiveReport();
+      }
+    }
+
+    function updateExecutiveReport() {
+      const currentCase = casesData[currentCaseIndex];
+      const { sortedData } = computeParetoStats(currentCase.items);
+
+      document.getElementById('report-case-name').textContent = `${currentCase.module} - ${currentCase.title}`;
+
+      const vitalItems = sortedData.filter(d => d.isVital);
+      const listContainer = document.getElementById('report-vital-list');
+      listContainer.innerHTML = '';
+
+      vitalItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-100 p-2 rounded flex justify-between items-center';
+        div.innerHTML = `
+          <span class="font-medium text-gray-800">${item.cause}</span>
+          <span class="font-mono font-bold text-emerald-700">${item.cumulativePct.toFixed(1)}% Acum.</span>
+        `;
+        listContainer.appendChild(div);
+      });
+
+      document.getElementById('report-dec-1').innerHTML = `<strong>Decisión 1 (Vital #1):</strong> ${currentCase.decisions[0] || 'No definida.'}`;
+      document.getElementById('report-dec-2').innerHTML = `<strong>Decisión 2 (Vital #2):</strong> ${currentCase.decisions[1] || 'No definida.'}`;
+    }
+
+    function copyExecutiveReport() {
+      const currentCase = casesData[currentCaseIndex];
+      const text = `INFORME EJECUTIVO DE PARETO (80/20) - ESTADÍSTICA I\n` +
+        `Empresa/Caso: ${currentCase.module} - ${currentCase.title}\n\n` +
+        `DECISIONES GERENCIALES RECOMENDADAS:\n` +
+        `1. ${currentCase.decisions[0]}\n` +
+        `2. ${currentCase.decisions[1]}`;
+
+      // Clipboard helper
+      const dummy = document.createElement('textarea');
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+
+      alert('¡Informe Ejecutivo copiado al portapapeles exitosamente!');
+    }
+
+    function exportToCSV() {
+      const currentCase = casesData[currentCaseIndex];
+      const { sortedData } = computeParetoStats(currentCase.items);
+
+      let csv = `Causa,Frecuencia,Acumulado,Relativo_Pct,Acumulado_Pct,Clasificacion\n`;
+      sortedData.forEach(row => {
+        csv += `"${row.cause}",${row.count},${row.cumulativeCount},${row.relativePct.toFixed(2)},${row.cumulativePct.toFixed(2)},"${row.isVital ? 'Poco Vital' : 'Mucho Util'}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Pareto_${currentCase.id}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    /* KEYBOARD SHORTCUTS FOR SLIDES */
+    document.addEventListener('keydown', (e) => {
+      if (viewMode === 'slides') {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') nextSlide();
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+      }
+    });
+
+    /* INITIALIZATION ON LOAD */
+    window.onload = function() {
+      renderSheetsView();
+    };
+
+    // Helper HTML sanitizer
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

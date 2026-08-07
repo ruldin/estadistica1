@@ -16,13 +16,13 @@ Si el vault está vacío o casi vacío, bootstrap con `engram_remember` usando e
 Durante el trabajo (después de CADA cambio relevante)
 Llama a `engram_remember` de forma proactiva — no al final de la sesión, sino inmediatamente tras:
 
-| Evento | Qué guardar |
-|--------|-------------|
-| Decisión de diseño o arquitectura | Qué se decidió, por qué, archivos afectados |
-| Bug encontrado o corregido | Síntoma, causa raíz, fix aplicado |
-| Convención o patrón nuevo | Regla, ejemplo de uso, archivos de referencia |
-| Cambio en API, schema o flujo de negocio | Comportamiento anterior vs nuevo |
-| Commit o deploy relevante | Rama, hash, resumen de cambios |
+| Evento                                   | Qué guardar                                   |
+| ---------------------------------------- | --------------------------------------------- |
+| Decisión de diseño o arquitectura        | Qué se decidió, por qué, archivos afectados   |
+| Bug encontrado o corregido               | Síntoma, causa raíz, fix aplicado             |
+| Convención o patrón nuevo                | Regla, ejemplo de uso, archivos de referencia |
+| Cambio en API, schema o flujo de negocio | Comportamiento anterior vs nuevo              |
+| Commit o deploy relevante                | Rama, hash, resumen de cambios                |
 
 Formato recomendado para `engram_remember`:
 
@@ -40,6 +40,7 @@ Herramientas complementarias:
 - `engram_audit` — contrastar `AGENTS.md` u otro doc externo contra el vault
 
 Al finalizar la sesión o tarea
+
 - `engram_checkpoint` — resumen de lo logrado (goal, accomplished, learned, next steps) antes de compactación o cierre
 - Actualizar `AGENTS.md` si hubo cambios importantes en código, APIs o convenciones
 
@@ -56,11 +57,12 @@ Si aprendiste algo que te ayudaría en una sesión futura, guárdalo en Engram a
 Actualizaciones de AGENTS.md
 Cada actualización importante en el código debe reflejarse también en este archivo con la información relevante del proyecto.
 
-
 ## 📌 Contexto General del Proyecto
+
 Este proyecto es una **plataforma educativa estática de apoyo docente** desarrollada por el profesor **Ruldin Ayala** para el curso de **Estadística 1** de la carrera de **Administración de Empresas** en la **Universidad Mariano Gálvez de Guatemala (UMG)**.
 
 El objetivo principal es brindar a los estudiantes:
+
 - **Tutoriales y Guías Interactivas:** Explicaciones paso a paso de los capítulos del curso con un enfoque práctico y aplicado a la toma de decisiones empresariales.
 - **Laboratorios y Simuladores Estadísticos:** Herramientas dinámicas e interactivas que permiten ingresar datos, calcular medidas estadísticas (descriptivas, probabilidad, muestreo, etc.), visualizar gráficos de cuota de mercado e interpretar resultados ejecutivos.
 - **Reforzamiento Teórico y Práctico:** Dinámicas de autoevaluación, clasificación de variables y resolución de casos de estudio empresariales guatemaltecos (ej. La Terminal Z.4, Café en Xela, Calzado en Pastores, Cemaco, San Martín).
@@ -70,6 +72,7 @@ El objetivo principal es brindar a los estudiantes:
 ## 🛠️ Arquitectura y Restricciones Técnicas
 
 ### ⚠️ REGLA DE ORO: Sitio Estrictamente Estático
+
 - **No Backend / No Servers:** No se permite la inclusión de código de servidor (Node.js, Python, PHP, Ruby, Java, etc.) ni bases de datos activas (MySQL, PostgreSQL, MongoDB, etc.).
 - **Tecnologías Permitidas:**
   - **HTML5:** Estructura semántica, accesible, limpia y navegable.
@@ -103,10 +106,10 @@ El objetivo principal es brindar a los estudiantes:
    - Formularios limpios para ingreso de datos (brutos o conteo directo).
    - **Participación de Mercado Visual:** Todo módulo de tabulación debe incluir barras proporcionales y coloreadas de cuotas porcentuales ($\%$).
    - **Indicadores de Toma de Decisiones (KPIs):** Todo reporte tabulado debe incluir tarjetas de indicadores ejecutivos:
-     - 🏆 *Categoría Dominante (Líder)*
-     - 🎯 *Nivel de Concentración de Mercado* ($>50\%$ vs fragmentado)
-     - 📈 *Brecha de Liderazgo* (Margen $\%$ sobre el 2.º lugar)
-     - 💡 *Diagnóstico y Recomendación Ejecutiva Automática*
+     - 🏆 _Categoría Dominante (Líder)_
+     - 🎯 _Nivel de Concentración de Mercado_ ($>50\%$ vs fragmentado)
+     - 📈 _Brecha de Liderazgo_ (Margen $\%$ sobre el 2.º lugar)
+     - 💡 _Diagnóstico y Recomendación Ejecutiva Automática_
 
 ---
 
@@ -119,17 +122,19 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 - [sem2_estadistica_business_lab.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_estadistica_business_lab.html): Simulador de Muestreo probabilístico en La Terminal Z.4 (Método Físico, Tabla de Números Aleatorios y Hoja Electrónica).
 - [sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
 - [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, hoja de trabajo con pensamiento crítico y exportación PDF (jsPDF), Chart.js local.
-- [sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF.
+- [sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF. Incluye selector de tipo de dato en el laboratorio (moneda, unidades, decimales, litros, metros) y formato visual dinámico para intervalos, Xi, R, A y PDF, además de la columna `fp acum%`.
 - `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semanas 4 y 5.
 - `AGENTS.md`: Este archivo de contexto, arquitectura y reglas para asistentes de código IA.
 
 ### Semanas habilitadas en `index.html` (acceso directo + módulos)
-1. Semana 2 — Clasifica Variables + Business Lab  
-2. Semana 3 — Tabulador & Caso Xela  
-3. Semana 4 — Gráficos & Pareto (+ PDF)  
-4. Semana 5 — Regla de Sturges (+ laboratorio + PDF)  
+
+1. Semana 2 — Clasifica Variables + Business Lab
+2. Semana 3 — Tabulador & Caso Xela
+3. Semana 4 — Gráficos & Pareto (+ PDF)
+4. Semana 5 — Regla de Sturges (+ laboratorio + PDF)
 
 ### Convención pedagógica recurrente
+
 - Enfoque: interpretación administrativa (no solo fórmula).
 - Casos guatemaltecos reales (Campero, Tortrix, Café Xela, Lácteos El Oriental / Zacapa, etc.).
 - Laboratorio interactivo + sección de entrega/PDF donde el alumno escribe conclusiones (pensamiento crítico) antes de descargar.
