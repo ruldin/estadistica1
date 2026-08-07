@@ -43,6 +43,7 @@ Al finalizar la sesión o tarea
 
 - `engram_checkpoint` — resumen de lo logrado (goal, accomplished, learned, next steps) antes de compactación o cierre
 - Actualizar `AGENTS.md` si hubo cambios importantes en código, APIs o convenciones
+- Actualizar README.md con las nuevas funcionalidades y páginas que tiene el sitio
 
 Post-compactación (contexto truncado)
 Si el contexto fue compactado, ejecuta inmediatamente antes de continuar:
