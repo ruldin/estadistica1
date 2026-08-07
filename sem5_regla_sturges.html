@@ -545,47 +545,89 @@
                         a paso</h3>
                 </div>
                 <p class="text-sm text-slate-400">Pulsa cada botón en orden para revelar el cálculo correspondiente.</p>
+                <p class="text-[11px] text-slate-500">Pasa el cursor sobre cada botón para ver qué significa la variable
+                    y para qué sirve dentro de la tabla de frecuencias.</p>
 
                 <div class="flex flex-wrap gap-2">
                     <button
                         class="caso-btn text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750 transition"
-                        onclick="toggleCasoStep(1, this)">1. Calcular n</button>
+                        onclick="toggleCasoStep(1, this)"
+                        title="n = tamaño de la muestra. Sirve para contar cuántos datos vas a agrupar y es la base para calcular k.">1.
+                        Calcular n</button>
                     <button
                         class="caso-btn text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750 transition"
-                        onclick="toggleCasoStep(2, this)">2. Calcular k</button>
+                        onclick="toggleCasoStep(2, this)"
+                        title="k = número de clases o intervalos. Sirve para decidir en cuántos grupos se resumirán los datos.">2.
+                        Calcular k</button>
                     <button
                         class="caso-btn text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750 transition"
-                        onclick="toggleCasoStep(3, this)">3. Calcular R</button>
+                        onclick="toggleCasoStep(3, this)"
+                        title="R = rango o recorrido total. Sirve para medir qué tan separados están el dato mayor y el dato menor.">3.
+                        Calcular R</button>
                     <button
                         class="caso-btn text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750 transition"
-                        onclick="toggleCasoStep(4, this)">4. Calcular A</button>
+                        onclick="toggleCasoStep(4, this)"
+                        title="A = amplitud del intervalo. Sirve para saber cuánto debe abarcar cada clase.">4. Calcular
+                        A</button>
                     <button
                         class="caso-btn text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-750 transition"
-                        onclick="toggleCasoStep(5, this)">5. Tabla completa</button>
+                        onclick="toggleCasoStep(5, this)"
+                        title="La tabla completa reúne intervalos, frecuencias y Xi para interpretar la distribución y apoyar decisiones.">5.
+                        Tabla completa</button>
                 </div>
 
                 <div id="caso-step-1" class="step-caso hidden bg-slate-950 border border-slate-800 rounded-2xl p-4">
                     <p class="text-sm text-slate-300"><strong class="text-blue-400">n = 40</strong> — se contaron las 40
                         fincas proveedoras que entregaron leche ese día.</p>
+                    <p class="text-xs text-slate-400 mt-2"><strong class="text-white">n</strong> = muestra o número
+                        total de datos. En este caso, n indica cuántas fincas forman el estudio.</p>
+                    <p class="text-xs text-slate-400">En Google Sheets, <strong
+                            class="text-emerald-300">=CONTAR(rango_datos)</strong> equivale al concepto estadístico
+                        <strong class="text-white">n = cantidad de observaciones</strong>.</p>
                 </div>
                 <div id="caso-step-2"
                     class="step-caso hidden bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-1">
+                    <p class="text-xs text-slate-400"><strong class="text-white">k</strong> = número de clases o
+                        intervalos. Sirve para decidir en cuántos grupos se resumirá la información.</p>
                     <p class="text-sm text-slate-300">log<sub>10</sub>(40) ≈ <strong
                             class="text-blue-400">1.60206</strong></p>
                     <p class="text-sm text-slate-300">k = 1 + 3.322 × 1.60206 = 1 + 5.3225 = <strong
                             class="text-blue-400">6.3225</strong></p>
                     <p class="text-sm text-slate-300">Redondeando al entero más cercano: <strong
                             class="text-emerald-400">k = 6 clases</strong></p>
+                    <p class="text-xs text-slate-400">En Google Sheets, <strong
+                            class="text-emerald-300">=REDONDEAR(1+3.322*LOG10(CONTAR(rango_datos));0)</strong> equivale
+                        a la fórmula estadística <strong class="text-white">k = 1 + 3.322 log<sub>10</sub>(n)</strong>.
+                    </p>
                 </div>
                 <div id="caso-step-3" class="step-caso hidden bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                    <p class="text-xs text-slate-400"><strong class="text-white">R</strong> = rango o recorrido total.
+                        Mide la distancia entre el dato menor y el dato mayor.</p>
                     <p class="text-sm text-slate-300">R = X<sub>max</sub> − X<sub>min</sub> = 480 − 120 = <strong
                             class="text-blue-400">360 litros</strong></p>
+                    <p class="text-xs text-slate-400 mt-2">En Google Sheets, <strong
+                            class="text-emerald-300">=MAX(rango_datos)-MIN(rango_datos)</strong> equivale a la fórmula
+                        estadística <strong class="text-white">R = X<sub>max</sub> - X<sub>min</sub></strong>.</p>
                 </div>
                 <div id="caso-step-4" class="step-caso hidden bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                    <p class="text-xs text-slate-400"><strong class="text-white">A</strong> = amplitud del intervalo.
+                        Indica cuánto abarca cada clase.</p>
                     <p class="text-sm text-slate-300">A = R / k = 360 / 6 = <strong class="text-emerald-400">60 litros
                             por clase</strong> (división exacta, no requiere redondear hacia arriba).</p>
+                    <p class="text-xs text-slate-400 mt-2">En Google Sheets, <strong
+                            class="text-emerald-300">=REDONDEAR.MAS(R/k;2)</strong> equivale a la relación estadística
+                        <strong class="text-white">A = R / k</strong>. La función solo garantiza que, si hay decimales,
+                        la amplitud suba lo suficiente para no dejar datos fuera.</p>
                 </div>
                 <div id="caso-step-5" class="step-caso hidden space-y-4">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-2">
+                        <p class="text-xs text-slate-400"><strong class="text-white">L<sub>i</sub></strong> = límite
+                            inferior, <strong class="text-white">L<sub>s</sub></strong> = límite superior, <strong
+                                class="text-white">Xi</strong> = marca de clase.</p>
+                        <p class="text-xs text-slate-400">La marca de clase se calcula con <strong class="text-white">Xi
+                                = (L<sub>i</sub> + L<sub>s</sub>) / 2</strong>. En Google Sheets, <strong
+                                class="text-emerald-300">=(Li+Ls)/2</strong> expresa exactamente la misma idea.</p>
+                    </div>
                     <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 overflow-x-auto">
                         <table class="w-full text-xs text-left min-w-[620px]">
                             <thead class="text-slate-400 border-b border-slate-800">
@@ -649,6 +691,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-1">
+                        <p class="text-xs text-slate-400"><strong class="text-white">Ejemplo de Xi:</strong> para la
+                            clase [120 − 180), <strong class="text-blue-400">Xi = (120 + 180) / 2 = 150</strong>.</p>
+                        <p class="text-xs text-slate-400"><strong class="text-white">Uso pedagógico:</strong> Xi
+                            representa el punto medio de cada intervalo y ayuda a graficar el polígono de frecuencias y
+                            resumir el comportamiento de la clase.</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-emerald-950/20 border border-emerald-500/25 rounded-2xl p-4">
@@ -1189,30 +1238,39 @@
 
         function renderBreakdown(a) {
             const body = document.getElementById('step-breakdown-body');
-            const lastLi = a.intervals[a.intervals.length - 1].Li;
             body.innerHTML = `
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 1 · n</span>
-                    n = CONTAR(datos) = <strong class="text-white">${a.n}</strong>
+                    <p><strong class="text-white">n</strong> = tamaño de la muestra o número total de observaciones.</p>
+                    <p class="mt-1">En Google Sheets: <strong class="text-emerald-300">CONTAR(datos)</strong>. En estadística: <strong class="text-white">n = cantidad de datos</strong>.</p>
+                    <p class="mt-1">n = CONTAR(datos) = <strong class="text-white">${a.n}</strong></p>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 2 · k</span>
-                    k = 1 + 3.322 × log<sub>10</sub>(${a.n}) = 1 + 3.322 × ${fmtNum(Math.log10(a.n), 5)} = <strong class="text-white">${fmtNum(a.kRaw, 4)}</strong>
-                    → redondeado: <strong class="text-emerald-400">k = ${a.k}</strong>
+                    <p><strong class="text-white">k</strong> = número de clases o intervalos.</p>
+                    <p class="mt-1">En Google Sheets: <strong class="text-emerald-300">REDONDEAR(1+3.322*LOG10(CONTAR(datos));0)</strong>. En estadística: <strong class="text-white">k = 1 + 3.322 log<sub>10</sub>(n)</strong>.</p>
+                    <p class="mt-1">k = 1 + 3.322 × log<sub>10</sub>(${a.n}) = 1 + 3.322 × ${fmtNum(Math.log10(a.n), 5)} = <strong class="text-white">${fmtNum(a.kRaw, 4)}</strong></p>
+                    <p class="mt-1">Redondeado al entero más cercano: <strong class="text-emerald-400">k = ${a.k}</strong></p>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 3 · R</span>
-                    R = X<sub>max</sub> − X<sub>min</sub> = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-white">${formatDataValue(a.R)}</strong>
+                    <p><strong class="text-white">R</strong> = rango o recorrido total.</p>
+                    <p class="mt-1">En Google Sheets: <strong class="text-emerald-300">MAX(datos)-MIN(datos)</strong>. En estadística: <strong class="text-white">R = X<sub>max</sub> - X<sub>min</sub></strong>.</p>
+                    <p class="mt-1">R = X<sub>max</sub> − X<sub>min</sub> = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-white">${formatDataValue(a.R)}</strong></p>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 4 · A</span>
-                    A = REDONDEAR.MAS(R / k) = REDONDEAR.MAS(${formatDataValue(a.R)} / ${a.k}) = <strong class="text-emerald-400">${formatDataValue(a.A)}</strong>
+                    <p><strong class="text-white">A</strong> = amplitud del intervalo.</p>
+                    <p class="mt-1">En Google Sheets: <strong class="text-emerald-300">REDONDEAR.MAS(R/k;2)</strong>. En estadística: <strong class="text-white">A = R / k</strong>.</p>
+                    <p class="mt-1">A = REDONDEAR.MAS(R / k; 2) = REDONDEAR.MAS(${formatDataValue(a.R)} / ${a.k}; 2) = <strong class="text-emerald-400">${formatDataValue(a.A)}</strong></p>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
-                    <span class="text-blue-400 font-bold block mb-1">Paso 5 · Clases</span>
-                    Inicia en X<sub>min</sub> = ${formatDataValue(a.xmin)}, suma A = ${formatDataValue(a.A)} en cada clase hasta ${a.k} clases.
-                    La última clase se cierra en ambos extremos para cubrir X<sub>max</sub> = ${formatDataValue(a.xmax)}
-                    (última clase: <strong class="text-white">${intervalLabel(a.intervals[a.intervals.length - 1], true)}</strong>).
+                    <span class="text-blue-400 font-bold block mb-1">Paso 5 · Clases y Xi</span>
+                    <p><strong class="text-white">L<sub>i</sub></strong> = límite inferior, <strong class="text-white">L<sub>s</sub></strong> = límite superior, <strong class="text-white">Xi</strong> = marca de clase.</p>
+                    <p class="mt-1">La marca de clase se calcula con <strong class="text-white">Xi = (L<sub>i</sub> + L<sub>s</sub>) / 2</strong>. En Google Sheets: <strong class="text-emerald-300">=(Li+Ls)/2</strong>.</p>
+                    <p class="mt-1">Inicia en X<sub>min</sub> = ${formatDataValue(a.xmin)}, suma A = ${formatDataValue(a.A)} en cada clase hasta ${a.k} clases.</p>
+                    <p class="mt-1">La última clase se cierra en ambos extremos para cubrir X<sub>max</sub> = ${formatDataValue(a.xmax)} (última clase: <strong class="text-white">${intervalLabel(a.intervals[a.intervals.length - 1], true)}</strong>).</p>
+                    <p class="mt-1">Ejemplo: Xi de la primera clase = (${formatDataValue(a.intervals[0].Li)} + ${formatDataValue(a.intervals[0].Ls)}) / 2 = <strong class="text-white">${formatDataValue(a.intervals[0].Xi)}</strong>.</p>
                 </div>
             `;
         }
