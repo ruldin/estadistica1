@@ -710,6 +710,26 @@
 
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Datos (separados
                             por coma, espacio o salto de línea)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="lab-data-type"
+                                    class="block text-[11px] font-semibold text-slate-400 mb-1">Tipo de dato
+                                    representado</label>
+                                <select id="lab-data-type"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                                    <option value="normal" selected>Números (normal)</option>
+                                    <option value="currency">Moneda (Q)</option>
+                                    <option value="units">Unidades</option>
+                                    <option value="decimals">Decimales</option>
+                                    <option value="liters">Litros (L)</option>
+                                    <option value="meters">Metros (m)</option>
+                                </select>
+                            </div>
+                            <div class="text-[11px] text-slate-500 leading-relaxed sm:pt-6">
+                                La máscara se aplica visualmente en intervalos, Xi, rango, amplitud y etiquetas de
+                                gráficos.
+                            </div>
+                        </div>
                         <textarea id="lab-data-input"
                             class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-blue-500 ws-textarea"
                             style="min-height:160px"
@@ -1064,8 +1084,61 @@
             return rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toFixed(dec).replace(/0+$/, '').replace(/\.$/, '');
         }
 
+        function getSelectedDataType() {
+            const sel = document.getElementById('lab-data-type');
+            return sel ? sel.value : 'normal';
+        }
+
+        function hasDecimals(value) {
+            return Math.abs(value % 1) > 1e-9;
+        }
+
+        function formatDataValue(value, options = {}) {
+            const num = Number(value);
+            if (!Number.isFinite(num)) return '—';
+
+            const { forceDecimals = null } = options;
+            const type = getSelectedDataType();
+            const decimalPlaces = forceDecimals ?? (hasDecimals(num) ? 2 : 0);
+
+            if (type === 'currency') {
+                const fmt = new Intl.NumberFormat('es-GT', {
+                    minimumFractionDigits: decimalPlaces,
+                    maximumFractionDigits: 2
+                });
+                return `Q ${fmt.format(num)}`;
+            }
+
+            if (type === 'decimals') {
+                return fmtNum(num, forceDecimals ?? 3);
+            }
+
+            if (type === 'units' || type === 'liters' || type === 'meters') {
+                const suffixMap = {
+                    units: 'u',
+                    liters: 'L',
+                    meters: 'm'
+                };
+                const fmt = new Intl.NumberFormat('es-GT', {
+                    minimumFractionDigits: decimalPlaces,
+                    maximumFractionDigits: 2
+                });
+                return `${fmt.format(num)} ${suffixMap[type]}`;
+            }
+
+            return fmtNum(num, forceDecimals ?? 2);
+        }
+
         function intervalLabel(c, isLast) {
-            return isLast ? `[${fmtNum(c.Li)} − ${fmtNum(c.Ls)}]` : `[${fmtNum(c.Li)} − ${fmtNum(c.Ls)})`;
+            return isLast ? `[${formatDataValue(c.Li)} − ${formatDataValue(c.Ls)}]` : `[${formatDataValue(c.Li)} − ${formatDataValue(c.Ls)})`;
+        }
+
+        function reRenderFormattedViews() {
+            if (!lastAnalysis) return;
+            renderBreakdown(lastAnalysis);
+            renderKpis(lastAnalysis);
+            renderFreqTable(lastAnalysis);
+            if (currentChartType) renderLabChart(currentChartType);
         }
 
         // ==================== LABORATORIO: procesar / limpiar ====================
@@ -1121,16 +1194,16 @@
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 3 · R</span>
-                    R = X<sub>max</sub> − X<sub>min</sub> = ${fmtNum(a.xmax)} − ${fmtNum(a.xmin)} = <strong class="text-white">${fmtNum(a.R)}</strong>
+                    R = X<sub>max</sub> − X<sub>min</sub> = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-white">${formatDataValue(a.R)}</strong>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 4 · A</span>
-                    A = REDONDEAR.MAS(R / k) = REDONDEAR.MAS(${fmtNum(a.R)} / ${a.k}) = <strong class="text-emerald-400">${fmtNum(a.A)}</strong>
+                    A = REDONDEAR.MAS(R / k) = REDONDEAR.MAS(${formatDataValue(a.R)} / ${a.k}) = <strong class="text-emerald-400">${formatDataValue(a.A)}</strong>
                 </div>
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
                     <span class="text-blue-400 font-bold block mb-1">Paso 5 · Clases</span>
-                    Inicia en X<sub>min</sub> = ${fmtNum(a.xmin)}, suma A = ${fmtNum(a.A)} en cada clase hasta ${a.k} clases.
-                    La última clase se cierra en ambos extremos para cubrir X<sub>max</sub> = ${fmtNum(a.xmax)}
+                    Inicia en X<sub>min</sub> = ${formatDataValue(a.xmin)}, suma A = ${formatDataValue(a.A)} en cada clase hasta ${a.k} clases.
+                    La última clase se cierra en ambos extremos para cubrir X<sub>max</sub> = ${formatDataValue(a.xmax)}
                     (última clase: <strong class="text-white">${intervalLabel(a.intervals[a.intervals.length - 1], true)}</strong>).
                 </div>
             `;
@@ -1139,8 +1212,8 @@
         function renderKpis(a) {
             document.getElementById('kpi-n').textContent = a.n;
             document.getElementById('kpi-k').textContent = a.k;
-            document.getElementById('kpi-r').textContent = fmtNum(a.R);
-            document.getElementById('kpi-a').textContent = fmtNum(a.A);
+            document.getElementById('kpi-r').textContent = formatDataValue(a.R);
+            document.getElementById('kpi-a').textContent = formatDataValue(a.A);
             document.getElementById('kpi-modal').textContent = intervalLabel(a.intervals[a.modalIdx], a.modalIdx === a.intervals.length - 1);
         }
 
@@ -1157,7 +1230,7 @@
                     <td class="py-2 pr-2">${c.fp.toFixed(1)}%</td>
                     <td class="py-2 pr-2">${(c.fpAcum ?? ((c.Fa / a.n) * 100)).toFixed(1)}%</td>
                     <td class="py-2 pr-2">${c.Fa}</td>
-                    <td class="py-2">${fmtNum(c.Xi)}</td>
+                    <td class="py-2">${formatDataValue(c.Xi)}</td>
                 </tr>`;
             }).join('') + `
                 <tr class="text-slate-200 font-bold">
@@ -1214,7 +1287,7 @@
             if (type === 'polygon') {
                 badge.textContent = 'Polígono de frecuencia';
                 badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
-                const extLabels = [fmtNum(a.intervals[0].Li - a.A / 2), ...a.intervals.map((c) => fmtNum(c.Xi)), fmtNum(a.intervals[a.intervals.length - 1].Ls + a.A / 2)];
+                const extLabels = [formatDataValue(a.intervals[0].Li - a.A / 2), ...a.intervals.map((c) => formatDataValue(c.Xi)), formatDataValue(a.intervals[a.intervals.length - 1].Ls + a.A / 2)];
                 const extData = [0, ...a.intervals.map((c) => c.fi), 0];
                 mainChart = new Chart(ctx, {
                     type: 'line',
@@ -1239,7 +1312,7 @@
             if (type === 'ogive') {
                 badge.textContent = 'Ojiva (acumulada)';
                 badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30';
-                const ogLabels = [fmtNum(a.intervals[0].Li), ...a.intervals.map((c) => fmtNum(c.Ls))];
+                const ogLabels = [formatDataValue(a.intervals[0].Li), ...a.intervals.map((c) => formatDataValue(c.Ls))];
                 const ogData = [0, ...a.intervals.map((c) => c.Fa)];
                 mainChart = new Chart(ctx, {
                     type: 'line',
@@ -1395,7 +1468,7 @@
             doc.setFontSize(8);
             doc.setTextColor(100, 116, 139);
             doc.setFont('helvetica', 'normal');
-            doc.text('Tipo de gráfico: ' + chartTypeLabel + '  ·  n=' + a.n + '  k=' + a.k + '  R=' + fmtNum(a.R) + '  A=' + fmtNum(a.A), margin, y);
+            doc.text('Tipo de gráfico: ' + chartTypeLabel + '  ·  n=' + a.n + '  k=' + a.k + '  R=' + formatDataValue(a.R) + '  A=' + formatDataValue(a.A), margin, y);
             y += 4;
 
             // Gráfico
@@ -1456,7 +1529,7 @@
                     doc.text(c.fp.toFixed(1) + '%', cols[3], y);
                     doc.text((c.fpAcum ?? ((c.Fa / a.n) * 100)).toFixed(1) + '%', cols[4], y);
                     doc.text(String(c.Fa), cols[5], y);
-                    doc.text(fmtNum(c.Xi), cols[6], y);
+                    doc.text(formatDataValue(c.Xi), cols[6], y);
                     y += 4;
                 });
             }
@@ -1477,6 +1550,7 @@
 
         // Init
         document.getElementById('ws-fecha').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('lab-data-type').addEventListener('change', reRenderFormattedViews);
         processDataset();
     </script>
 </body>
