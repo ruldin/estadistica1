@@ -57,7 +57,14 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
    - Hoja de trabajo con campos de análisis y exportación PDF.
    - Campo **Contexto** en laboratorio, incluido en el PDF para documentar el enunciado del ejercicio.
 
-7. 📦 **`vendor/` (Librerías locales):**
+7. 📝 **`sem6_resolucion_parcial1.html` (Resolución del Primer Examen Parcial):**
+   - Solucionario y retroalimentación pedagógica interactiva del Primer Examen Parcial (Variante B, 15 Pts).
+   - Explicación analítica paso a paso de las 4 series: Clasificación de variables corporativas, Muestreo probabilístico en Escuintla, Tabulación & Diagrama de Pareto 80/20 de calzado y Regla de Sturges en tiempos de transporte.
+   - Tooltips explicativos en fórmulas, números y encabezados que se despliegan al pasar el puntero.
+   - Tablas interactivas con cálculo de frecuencias relativas, porcentajes y acumulados.
+   - Cuestionario de autoevaluación rápida con retroalimentación instantánea.
+
+8. 📦 **`vendor/` (Librerías locales):**
    - `chart.umd.min.js`
    - `chartjs-plugin-datalabels.min.js`
    - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.

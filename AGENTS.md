@@ -124,7 +124,8 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 - [sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
 - [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, hoja de trabajo con pensamiento crítico y exportación PDF (jsPDF), Chart.js local.
 - [sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF. Incluye selector de tipo de dato en el laboratorio (moneda, unidades, decimales, litros, metros) y formato visual dinámico para intervalos, Xi, R, A y PDF, además de la columna `fp acum%`.
-- `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semanas 4 y 5.
+- [sem6_resolucion_parcial1.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem6_resolucion_parcial1.html): Semana 6 — Resolución y retroalimentación pedagógica del Primer Examen Parcial (Variante B, 15 pts): Solucionario interactivo paso a paso para Serie I (Clasificación de 6 variables corporativas guatemaltecas con justificación), Serie II (Muestreo estratificado proporcional y muestreo sistemático con salto k en Escuintla), Serie III (Tabulación categórica, Pareto 80/20 y recomendación ejecutiva para calzado en San Pedro Sacatepéquez) y Serie IV (Regla de Sturges, límites nominales/reales, tabla completa de 6 clases, polígono/histograma y preguntas analíticas sobre tiempos de despacho). Incluye tooltips pedagógicos al pasar el puntero, gráficos con Chart.js y cuestionario de autoevaluación rápida.
+- `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semanas 4, 5 y 6.
 - `AGENTS.md`: Este archivo de contexto, arquitectura y reglas para asistentes de código IA.
 
 ### Semanas habilitadas en `index.html` (acceso directo + módulos)
@@ -133,6 +134,7 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 2. Semana 3 — Tabulador & Caso Xela
 3. Semana 4 — Gráficos & Pareto (+ PDF)
 4. Semana 5 — Regla de Sturges (+ laboratorio + PDF)
+5. Semana 6 — Resolución del Examen Parcial 1 (Solucionario interactivo + Tooltips + Autoevaluación)
 
 ### Convención pedagógica recurrente
 

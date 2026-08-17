@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Semana 6: Resolución del Primer Examen Parcial · UMG Estadística I</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Librerías locales de gráficos -->
+    <script src="vendor/chart.umd.min.js"></script>
+    <script src="vendor/chartjs-plugin-datalabels.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        /* Tooltip Custom Styles */
+        .tooltip-container {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip-container .tooltip-box {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 60;
+            pointer-events: none;
+            width: max-content;
+            max-width: 280px;
+        }
+
+        .tooltip-container:hover .tooltip-box,
+        .tooltip-container:focus-within .tooltip-box {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .tooltip-arrow {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        .neon-purple {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.15);
+        }
+
+        .neon-emerald {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+        }
+
+        .neon-amber {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+        }
+
+        .neon-blue {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 290px;
+            height: min(48vh, 380px);
+        }
+
+        .formula-card {
+            background: #030712;
+            border: 1px solid #1e293b;
+            border-radius: 1rem;
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        .table-highlight {
+            transition: all 0.3s ease;
+        }
+
+        .highlight-active {
+            background-color: rgba(59, 130, 246, 0.25) !important;
+            outline: 2px solid #60a5fa;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col custom-scrollbar antialiased">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-slate-950/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <!-- LOGO & TITULO -->
+                <div class="flex items-center space-x-3 min-w-0">
+                    <a href="index.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Volver al Menú Principal">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-gradient-to-tr from-purple-500 to-indigo-500 p-2.5 rounded-xl shadow-lg shadow-purple-500/20 shrink-0">
+                        <i class="fa-solid fa-file-signature text-slate-950 text-xl font-extrabold"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[10px] sm:text-xs font-bold tracking-widest text-purple-400 uppercase block heading-font">Módulo I · Semana 6</span>
+                        <h1 class="text-sm sm:text-lg font-extrabold text-white leading-tight heading-font truncate">
+                            Resolución Parcial 1 <span class="text-xs text-slate-400 font-normal">| VARIANTE B</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- AUTOR Y NAVEGACIÓN RÁPIDA -->
+                <div class="flex items-center space-x-2">
+                    <div class="hidden md:flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs text-slate-300">
+                        <i class="fa-solid fa-user-tie text-purple-400"></i>
+                        <span>Prof. <strong class="text-white">Ruldin Ayala</strong></span>
+                    </div>
+                    <div class="hidden lg:flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-xs">
+                        <a href="#serie-1" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">Serie I (3p)</a>
+                        <a href="#serie-2" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">Serie II (3p)</a>
+                        <a href="#serie-3" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">Serie III (4p)</a>
+                        <a href="#serie-4" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">Serie IV (5p)</a>
+                        <a href="#simulador-quiz" class="px-2.5 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30 hover:bg-purple-500/30 transition">
+                            <i class="fa-solid fa-award mr-1"></i>Autoevaluación
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+        <!-- HERO BANNER / IDENTIFICACIÓN OFICIAL UMG -->
+        <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-purple-950/40 p-6 sm:p-8 border border-slate-800 shadow-2xl neon-purple">
+            <div class="relative z-10 space-y-4">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-3 py-1 text-xs font-bold bg-purple-500/15 text-purple-300 rounded-full border border-purple-500/30 uppercase tracking-wider heading-font">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Universidad Mariano Gálvez de Guatemala
+                    </span>
+                    <span class="px-3 py-1 text-xs font-semibold bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                        Facultad de Ciencias de la Administración · Plan Sábado
+                    </span>
+                    <span class="px-3 py-1 text-xs font-bold bg-emerald-500/15 text-emerald-300 rounded-full border border-emerald-500/30">
+                        <i class="fa-solid fa-check-double mr-1"></i> Ponderación: 15 Puntos Netos
+                    </span>
+                </div>
+
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight heading-font">
+                            Solucionario Explicado: <br class="hidden sm:inline">
+                            <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-300 bg-clip-text text-transparent">
+                                Primer Examen Parcial (Variante B)
+                            </span>
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                            Aprende la lógica analítica de cada serie con explicaciones paso a paso, fórmulas matemáticas desglosadas,
+                            gráficos de control y <strong class="text-purple-300">Tooltips Interactivos</strong> que se activan al pasar el puntero sobre fórmulas y números.
+                        </p>
+                    </div>
+
+                    <!-- TARJETA RESUMEN DE SERIES -->
+                    <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
+                        <div class="text-center p-2 rounded-xl bg-slate-900/60 border border-slate-850">
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase">Serie I</span>
+                            <span class="text-lg font-black text-blue-400 heading-font">3.0 Pts</span>
+                            <span class="text-[10px] text-slate-400 block truncate">Variables</span>
+                        </div>
+                        <div class="text-center p-2 rounded-xl bg-slate-900/60 border border-slate-850">
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase">Serie II</span>
+                            <span class="text-lg font-black text-emerald-400 heading-font">3.0 Pts</span>
+                            <span class="text-[10px] text-slate-400 block truncate">Muestreo</span>
+                        </div>
+                        <div class="text-center p-2 rounded-xl bg-slate-900/60 border border-slate-850">
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase">Serie III</span>
+                            <span class="text-lg font-black text-amber-400 heading-font">4.0 Pts</span>
+                            <span class="text-[10px] text-slate-400 block truncate">Pareto 80/20</span>
+                        </div>
+                        <div class="text-center p-2 rounded-xl bg-slate-900/60 border border-slate-850">
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase">Serie IV</span>
+                            <span class="text-lg font-black text-purple-400 heading-font">5.0 Pts</span>
+                            <span class="text-[10px] text-slate-400 block truncate">Sturges & Tablas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLES DE VISTA PEDAGÓGICA -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-circle-info text-purple-400 mr-1"></i> Modo de visualización:</span>
+                        <button onclick="toggleAllExplanations(true)" class="px-3 py-1 text-xs bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/40 rounded-lg transition font-medium">
+                            <i class="fa-solid fa-eye mr-1"></i> Expandir Todas las Explicaciones
+                        </button>
+                        <button onclick="toggleAllExplanations(false)" class="px-3 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg transition">
+                            <i class="fa-solid fa-compress mr-1"></i> Vista Compacta
+                        </button>
+                    </div>
+                    <div class="text-xs text-slate-400 flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Pasa el ratón sobre los elementos con <span class="underline decoration-dotted decoration-purple-400 font-bold text-slate-200">subrayado punteado</span> para ver tooltips explicativos.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SERIE I: CLASIFICACIÓN DE VARIABLES
+             ========================================== -->
+        <section id="serie-1" class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 bg-blue-500/15 text-blue-400 text-xs font-bold rounded-md uppercase">Serie I · 3 Puntos Netos</span>
+                        <span class="text-xs text-slate-400">(0.5 pts c/u)</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font">
+                        Conceptos Fundamentales y Clasificación de Variables
+                    </h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400">Contexto: Entorno corporativo guatemalteco</span>
+                </div>
+            </div>
+
+            <!-- ENUNCIADO GENERAL SERIE I -->
+            <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-850 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <strong class="text-white"><i class="fa-solid fa-bullseye text-blue-400 mr-1.5"></i>Instrucciones de la Serie:</strong>
+                Para cada uno de los 6 escenarios tomados del entorno corporativo de Guatemala, identifique la <strong>Variable de Estudio</strong>, clasifíquela según su <strong>Tipo</strong> (Cualitativa Nominal, Cualitativa Ordinal, Cuantitativa Discreta o Cuantitativa Continua) e indique su correspondiente <strong>Escala de Medición</strong> (Nominal, Ordinal, Intervalo o Razón).
+            </div>
+
+            <!-- TABLA DE RESOLUCIÓN SERIE I CON TOOLTIPS -->
+            <div class="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-800">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead class="bg-slate-950 text-slate-400 font-bold uppercase tracking-wider heading-font border-b border-slate-800">
+                        <tr>
+                            <th class="p-3.5 w-12 text-center">No.</th>
+                            <th class="p-3.5 min-w-[240px]">Escenario Empresarial</th>
+                            <th class="p-3.5 min-w-[180px] text-emerald-400">Variable de Estudio</th>
+                            <th class="p-3.5 min-w-[160px] text-blue-400">Tipo de Variable</th>
+                            <th class="p-3.5 min-w-[140px] text-purple-400">Escala de Medición</th>
+                            <th class="p-3.5 min-w-[220px] text-amber-400">¿Por qué es esta respuesta?</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/80 bg-slate-900/40">
+                        
+                        <!-- ITEM 1 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">1</td>
+                            <td class="p-3.5 text-slate-200">
+                                Evaluación del nivel de satisfacción de clientes (<span class="text-amber-300 font-medium">Pésimo, Regular, Bueno, Excelente</span>) en una agencia bancaria de Quetzaltenango.
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Nivel de satisfacción
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Característica medible que varía de un cliente bancario a otro.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-lg font-bold text-[11px]">
+                                    Cualitativa Ordinal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Expresa cualidades no numéricas que guardan un orden o jerarquía natural (Pésimo &lt; Regular &lt; Bueno &lt; Excelente).
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-purple-500/15 text-purple-300 border border-purple-500/30 rounded-lg font-bold text-[11px]">
+                                    Ordinal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Permite clasificar y ordenar categorías jerárquicamente, pero no calcular diferencias matemáticas exactas entre rangos.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                Existe jerarquía clara entre niveles de servicio, pero la distancia entre "Pésimo" y "Regular" no es un valor numérico fijo.
+                            </td>
+                        </tr>
+
+                        <!-- ITEM 2 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">2</td>
+                            <td class="p-3.5 text-slate-200">
+                                Registro del costo total de flete (<span class="text-emerald-300 font-medium">en Quetzales</span>) para el envío de contenedores de arveja china desde Chimaltenango hacia el Puerto Santo Tomás de Castilla.
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Costo total de flete (Q)
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Monto monetario en Quetzales facturado por el servicio de transporte logístico.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 rounded-lg font-bold text-[11px]">
+                                    Cuantitativa Continua
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Los valores monetarios admiten números decimales fraccionarios (ej. Q 3,450.75).
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 rounded-lg font-bold text-[11px]">
+                                    Razón (Ratio)
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Posee un cero absoluto natural: Q 0.00 significa ausencia total de gasto en flete. Además, Q 4,000 es exactamente el doble de Q 2,000.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                El dinero tiene centavos (continuo) y el cero indica gasto nulo (escala de razón con operaciones de multiplicación válidas).
+                            </td>
+                        </tr>
+
+                        <!-- ITEM 3 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">3</td>
+                            <td class="p-3.5 text-slate-200">
+                                Número de colaboradores contratados en el área operativa de una maquila textil en Amatitlán durante el último trimestre.
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Número de colaboradores
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Conteo de personas contratadas en la nómina operativa de la fábrica.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 rounded-lg font-bold text-[11px]">
+                                    Cuantitativa Discreta
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Resulta de un conteo por números enteros no negativos. No existen 4.5 colaboradores contratados.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 rounded-lg font-bold text-[11px]">
+                                    Razón (Ratio)
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        0 colaboradores significa ausencia total de contrataciones.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                Las personas se cuentan por unidades enteras (discreta) y el valor cero representa ausencia real de contrataciones (razón).
+                            </td>
+                        </tr>
+
+                        <!-- ITEM 4 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">4</td>
+                            <td class="p-3.5 text-slate-200">
+                                Tipo de certificación de calidad (<span class="text-amber-300 font-medium">ISO 9001, HACCP, GLOBALG.A.P., Ninguna</span>) que poseen las fincas cafetaleras en Antigua Guatemala.
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Tipo de certificación
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Sello o estándar internacional acreditado por cada finca cafetalera.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded-lg font-bold text-[11px]">
+                                    Cualitativa Nominal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Etiquetas o nombres de normas sin un orden matemático o jerarquía obligatoria entre las certificaciones.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded-lg font-bold text-[11px]">
+                                    Nominal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Solo clasifica en grupos mutuamente excluyentes; no establece relación de orden mayor/menor.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                Son sellos técnicos diferentes que clasifican a las fincas sin que una norma sea inherentemente "mayor" a otra en orden algebraico.
+                            </td>
+                        </tr>
+
+                        <!-- ITEM 5 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">5</td>
+                            <td class="p-3.5 text-slate-200">
+                                Temperatura registrada (<span class="text-blue-300 font-medium">en grados °C</span>) dentro de un contenedor refrigerado de carne bovina para exportación en la Vía Alterna del Sur (VAS).
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Temperatura registrada (°C)
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Nivel térmico continuo medido por termómetros en la cadena de frío de transporte cárnico.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 rounded-lg font-bold text-[11px]">
+                                    Cuantitativa Continua
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        La temperatura puede tomar cualquier valor real fraccionario (ej. -4.2 °C ó 2.8 °C).
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-lg font-bold text-[11px]">
+                                    Intervalo
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        ¡OJO! El cero en grados Celsius (0 °C) es arbitrario (punto de congelación del agua), NO ausencia total de calor. Por tanto, 20 °C no es el doble de calor de 10 °C.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                <span class="text-amber-400 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Clave de examen:</span> El cero de la escala Celsius es relativo, no absoluto; por definición teórica pertenece a la escala de Intervalo.
+                            </td>
+                        </tr>
+
+                        <!-- ITEM 6 -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3.5 text-center font-bold text-slate-400">6</td>
+                            <td class="p-3.5 text-slate-200">
+                                Código de clasificación tributaria (<span class="text-amber-300 font-medium">Pequeño Contribuyente, Régimen Opcional Simplificado, Régimen Sobre Utilidades</span>) asignado por la SAT a comercios de la Zona 1 de Guatemala.
+                            </td>
+                            <td class="p-3.5 font-bold text-white">
+                                <span class="tooltip-container underline decoration-dotted decoration-emerald-400">
+                                    Código de régimen tributario
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Modalidad fiscal de tributación asignada por la SAT según la ley guatemalteca.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded-lg font-bold text-[11px]">
+                                    Cualitativa Nominal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Nombres o códigos legales que identifican el esquema fiscal de una empresa.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5">
+                                <span class="tooltip-container px-2.5 py-1 bg-pink-500/15 text-pink-300 border border-pink-500/30 rounded-lg font-bold text-[11px]">
+                                    Nominal
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        No hay un régimen "mayor" o "menor" en valor numérico intrínseco, solo categorías fiscales diferenciadas.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td class="p-3.5 text-slate-300 text-[11px] leading-relaxed">
+                                Clasifica jurídicamente a los contribuyentes en categorías tributarias independientes sin orden algebraico.
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- RESUMEN DIDÁCTICO SERIE I -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                    <span class="font-bold text-pink-400 block"><i class="fa-solid fa-tag mr-1"></i>Nominal</span>
+                    <p class="text-slate-400 text-[11px]">Nombres, códigos y etiquetas sin orden (Certificación ISO, Régimen SAT).</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                    <span class="font-bold text-blue-400 block"><i class="fa-solid fa-arrow-up-wide-short mr-1"></i>Ordinal</span>
+                    <p class="text-slate-400 text-[11px]">Categorías cualitativas con jerarquía establecida (Pésimo &lt; Regular &lt; Excelente).</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                    <span class="font-bold text-amber-400 block"><i class="fa-solid fa-temperature-half mr-1"></i>Intervalo</span>
+                    <p class="text-slate-400 text-[11px]">Cero arbitrario o relativo. Las restas tienen sentido, pero no las razones (0 °C).</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                    <span class="font-bold text-emerald-400 block"><i class="fa-solid fa-chart-pie mr-1"></i>Razón</span>
+                    <p class="text-slate-400 text-[11px]">Cero absoluto real (ausencia total). Quetzales de flete, cantidad de empleados.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SERIE II: MUESTREO PROBABILÍSTICO APLICADO
+             ========================================== -->
+        <section id="serie-2" class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 bg-emerald-500/15 text-emerald-400 text-xs font-bold rounded-md uppercase">Serie II · 3 Puntos Netos</span>
+                        <span class="text-xs text-slate-400">(1.5 pts c/u)</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font">
+                        Muestreo Probabilístico Aplicado
+                    </h3>
+                </div>
+                <span class="text-xs text-slate-400">Caso: Cadena distribuidora en Escuintla</span>
+            </div>
+
+            <!-- ENUNCIADO CASO ESCUINTLA -->
+            <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-3">
+                <div class="flex items-center space-x-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Caso de Estudio Empresarial:</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Una cadena distribuidora de consumo masivo cuenta con un universo de <span class="tooltip-container text-emerald-300 font-bold underline decoration-dotted">N = 1,200 tiendas<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">Población total (N) de tiendas clientes en Escuintla.<div class="tooltip-arrow"></div></div></span> de barrio que son clientes en el departamento de Escuintla. La gerencia comercial desea realizar una auditoría de servicio mediante una encuesta muestral de <span class="tooltip-container text-blue-300 font-bold underline decoration-dotted">n = 120 establecimientos<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">Tamaño de la muestra general (n) a encuestar.<div class="tooltip-arrow"></div></div></span>.
+                    La población de tiendas se encuentra clasificada según el volumen mensual de compras en tres estratos:
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-300 font-medium">Estrato 1 (Pequeñas):</span>
+                        <strong class="text-emerald-400 heading-font text-sm">N₁ = 600 tiendas (50%)</strong>
+                    </div>
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-300 font-medium">Estrato 2 (Medianas):</span>
+                        <strong class="text-blue-400 heading-font text-sm">N₂ = 400 tiendas (33.3%)</strong>
+                    </div>
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-300 font-medium">Estrato 3 (Grandes):</span>
+                        <strong class="text-purple-400 heading-font text-sm">N₃ = 200 tiendas (16.7%)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INCISOS DE LA SERIE II -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- NUMERAL 1: MUESTREO ESTRATIFICADO PROPORCIONAL -->
+                <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-bold rounded-lg uppercase">
+                                Numeral 1 · Valor: 1.5 Puntos
+                            </span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-layer-group text-emerald-400 mr-1"></i>Estratificado Proporcional</span>
+                        </div>
+
+                        <h4 class="text-base font-bold text-white heading-font">
+                            Cálculo de Tamaños Muestrales por Estrato (n₁, n₂, n₃)
+                        </h4>
+
+                        <!-- PASO A: FACTOR DE PROPORCIONALIDAD -->
+                        <div class="formula-card p-4 space-y-2">
+                            <span class="text-xs text-slate-400 block font-sans">1. Factor de Proporcionalidad ($f$):</span>
+                            <div class="flex items-center justify-center p-2 text-emerald-300 text-sm font-bold bg-slate-900/80 rounded-xl">
+                                <span class="tooltip-container">
+                                    f = (n / N) = 120 / 1,200 = 0.10 ó 10%
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Representa la fracción constante del 10% que debe extraerse de cada estrato.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- PASO B: TAMAÑOS POR ESTRATO -->
+                        <div class="space-y-2 text-xs">
+                            <span class="text-slate-400 block">2. Multiplicación del tamaño poblacional de cada estrato n * f:</span>
+                            
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-850 flex items-center justify-between">
+                                <div>
+                                    <strong class="text-slate-200 block">Estrato 1 (Pequeñas):</strong>
+                                    <span class="text-slate-400 font-mono text-[11px]">n₁ = 600 × 0.10</span>
+                                </div>
+                                <span class="text-sm font-black text-emerald-400 heading-font bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">
+                                    n₁ = 60 tiendas
+                                </span>
+                            </div>
+
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-850 flex items-center justify-between">
+                                <div>
+                                    <strong class="text-slate-200 block">Estrato 2 (Medianas):</strong>
+                                    <span class="text-slate-400 font-mono text-[11px]">n₂ = 400 × 0.10</span>
+                                </div>
+                                <span class="text-sm font-black text-blue-400 heading-font bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">
+                                    n₂ = 40 tiendas
+                                </span>
+                            </div>
+
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-850 flex items-center justify-between">
+                                <div>
+                                    <strong class="text-slate-200 block">Estrato 3 (Grandes):</strong>
+                                    <span class="text-slate-400 font-mono text-[11px]">n₃ = 200 × 0.10</span>
+                                </div>
+                                <span class="text-sm font-black text-purple-400 heading-font bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/20">
+                                    n₃ = 20 tiendas
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMPROBACIÓN -->
+                    <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl text-xs flex items-center justify-between text-emerald-300">
+                        <span class="font-semibold"><i class="fa-solid fa-circle-check mr-1.5"></i>Comprobación Total:</span>
+                        <strong class="heading-font">60 + 40 + 20 = 120 tiendas (100% de n)</strong>
+                    </div>
+                </div>
+
+                <!-- NUMERAL 2: MUESTREO ALEATORIO SISTEMÁTICO -->
+                <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-blue-500/10 text-blue-400 text-xs font-bold rounded-lg uppercase">
+                                Numeral 2 · Valor: 1.5 Puntos
+                            </span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-arrows-split-up-and-left text-blue-400 mr-1"></i>Sistemático ($k$)</span>
+                        </div>
+
+                        <h4 class="text-base font-bold text-white heading-font">
+                            Intervalo de Salto y Determinación de Unidades Muestrales
+                        </h4>
+
+                        <!-- PASO A: SALTO SISTEMÁTICO K -->
+                        <div class="formula-card p-4 space-y-2">
+                            <span class="text-xs text-slate-400 block font-sans">1. Intervalo de Salto Sistemático ($k$):</span>
+                            <div class="flex items-center justify-center p-2 text-blue-300 text-sm font-bold bg-slate-900/80 rounded-xl">
+                                <span class="tooltip-container">
+                                    k = N/n = 1,200 / 120 = 10
+                                    <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[11px] p-2.5 rounded-xl shadow-2xl">
+                                        Cada 10 tiendas del padrón ordenado se seleccionará un establecimiento para la muestra.
+                                        <div class="tooltip-arrow"></div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- PASO B: CADENA DE TIENDAS SELECCIONADAS -->
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center justify-between text-slate-400">
+                                <span>2. Punto de arranque inicial (sorteo):</span>
+                                <span class="font-bold text-amber-400">A₁ = 7 (Tienda #7)</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                                <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-center">
+                                    <span class="text-[10px] text-slate-400 block">Tienda 2</span>
+                                    <span class="text-xs font-mono text-slate-300">7 + 10 =</span>
+                                    <strong class="text-sm font-black text-white block heading-font text-blue-400">A₂ = 17</strong>
+                                </div>
+                                <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-center">
+                                    <span class="text-[10px] text-slate-400 block">Tienda 3</span>
+                                    <span class="text-xs font-mono text-slate-300">17 + 10 =</span>
+                                    <strong class="text-sm font-black text-white block heading-font text-blue-400">A₃ = 27</strong>
+                                </div>
+                                <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-center">
+                                    <span class="text-[10px] text-slate-400 block">Tienda 4</span>
+                                    <span class="text-xs font-mono text-slate-300">27 + 10 =</span>
+                                    <strong class="text-sm font-black text-white block heading-font text-blue-400">A₄ = 37</strong>
+                                </div>
+                                <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-center">
+                                    <span class="text-[10px] text-slate-400 block">Tienda 5</span>
+                                    <span class="text-xs font-mono text-slate-300">37 + 10 =</span>
+                                    <strong class="text-sm font-black text-white block heading-font text-blue-400">A₅ = 47</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FÓRMULA GENERAL SISTEMÁTICA -->
+                    <div class="p-3 bg-blue-950/40 border border-blue-500/30 rounded-xl text-xs text-blue-300 leading-relaxed">
+                        <strong class="block"><i class="fa-solid fa-calculator mr-1.5"></i>Regla Recursiva de Selección:</strong>
+                        <span class="font-mono text-[11px]">Aᵢ = A₁ + (i - 1) × k &nbsp;→&nbsp; Elementos: 7, 17, 27, 37, 47, 57... hasta 1,197.</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SERIE III: TABULACIÓN CATEGÓRICA Y PARETO
+             ========================================== -->
+        <section id="serie-3" class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 bg-amber-500/15 text-amber-400 text-xs font-bold rounded-md uppercase">Serie III · 4 Puntos Netos</span>
+                        <span class="text-xs text-slate-400">(2.0 pts tabla + 1.0 pt Pocas Vitales + 1.0 pt Recomendación)</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font">
+                        Tabulación Categórica y Diagrama de Pareto 80/20
+                    </h3>
+                </div>
+                <span class="text-xs text-slate-400">Caso: Distribuidora de Calzado en San Pedro Sacatepéquez</span>
+            </div>
+
+            <!-- ENUNCIADO CASO CALZADO SAN PEDRO -->
+            <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-3">
+                <div class="flex items-center space-x-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                    <i class="fa-solid fa-shoe-prints"></i>
+                    <span>Control de Calidad en Devoluciones (n = 200 reclamos):</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Una distribuidora de calzado en <strong class="text-white">San Pedro Sacatepéquez</strong> registró durante el último mes un total de <span class="text-amber-300 font-bold">200 devoluciones</span> de producto por parte de sus clientes mayoristas. Las fallas reportadas fueron:
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
+                    <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-850">
+                        <span class="text-slate-400 text-[10px] block">A: Costura / Suela</span>
+                        <strong class="text-amber-400 text-sm heading-font">A = 84</strong>
+                    </div>
+                    <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-850">
+                        <span class="text-slate-400 text-[10px] block">B: Talla Incorrecta</span>
+                        <strong class="text-blue-400 text-sm heading-font">B = 52</strong>
+                    </div>
+                    <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-850">
+                        <span class="text-slate-400 text-[10px] block">C: Empaque Dañado</span>
+                        <strong class="text-cyan-400 text-sm heading-font">C = 28</strong>
+                    </div>
+                    <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-850">
+                        <span class="text-slate-400 text-[10px] block">D: Modelo Erróneo</span>
+                        <strong class="text-pink-400 text-sm heading-font">D = 20</strong>
+                    </div>
+                    <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-850">
+                        <span class="text-slate-400 text-[10px] block">E: Decoloración Cuero</span>
+                        <strong class="text-purple-400 text-sm heading-font">E = 16</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA DE FRECUENCIAS Y GRÁFICO DE PARETO -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- TABLA ORDENADA DESCENDENTEMENTE (7 COLS) -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white heading-font flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 mr-2"></span>
+                            1. Tabla de Frecuencias (Orden Descendente)
+                        </h4>
+                        <span class="text-[11px] text-slate-400">Total n = 200</span>
+                    </div>
+
+                    <div class="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-800">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-950 text-slate-400 font-bold uppercase tracking-wider heading-font border-b border-slate-800">
+                                <tr>
+                                    <th class="p-3">Categoría de Falla</th>
+                                    <th class="p-3 text-center">
+                                        <span class="tooltip-container">
+                                            fᵢ
+                                            <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                                Frecuencia Absoluta: conteo de devoluciones por falla.
+                                                <div class="tooltip-arrow"></div>
+                                            </div>
+                                        </span>
+                                    </th>
+                                    <th class="p-3 text-center">
+                                        <span class="tooltip-container">
+                                            fᵣ
+                                            <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                                Frecuencia Relativa: fᵢ ÷ n (fᵢ ÷ 200).
+                                                <div class="tooltip-arrow"></div>
+                                            </div>
+                                        </span>
+                                    </th>
+                                    <th class="p-3 text-center">
+                                        <span class="tooltip-container">
+                                            %
+                                            <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                                Frecuencia Porcentual: fᵣ × 100%.
+                                                <div class="tooltip-arrow"></div>
+                                            </div>
+                                        </span>
+                                    </th>
+                                    <th class="p-3 text-center">
+                                        <span class="tooltip-container">
+                                            %A (Acum.)
+                                            <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                                Porcentaje Acumulado: suma progresiva de %.
+                                                <div class="tooltip-arrow"></div>
+                                            </div>
+                                        </span>
+                                    </th>
+                                    <th class="p-3 text-center">Estado 80/20</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/80 bg-slate-900/40">
+                                <tr class="hover:bg-slate-800/40 bg-amber-500/5 font-semibold">
+                                    <td class="p-3 text-white">
+                                        <span class="font-bold text-amber-400">A:</span> Costura / Pegado de suela
+                                    </td>
+                                    <td class="p-3 text-center font-bold text-slate-200">84</td>
+                                    <td class="p-3 text-center font-mono text-slate-300">0.420</td>
+                                    <td class="p-3 text-center font-bold text-amber-400">42.0%</td>
+                                    <td class="p-3 text-center font-black text-amber-300">42.0%</td>
+                                    <td class="p-3 text-center">
+                                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded text-[10px] font-bold">Poca Vital</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40 bg-amber-500/5 font-semibold">
+                                    <td class="p-3 text-white">
+                                        <span class="font-bold text-amber-400">B:</span> Talla o medida incorrecta
+                                    </td>
+                                    <td class="p-3 text-center font-bold text-slate-200">52</td>
+                                    <td class="p-3 text-center font-mono text-slate-300">0.260</td>
+                                    <td class="p-3 text-center font-bold text-amber-400">26.0%</td>
+                                    <td class="p-3 text-center font-black text-amber-300">68.0%</td>
+                                    <td class="p-3 text-center">
+                                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded text-[10px] font-bold">Poca Vital</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40 bg-amber-500/5 font-semibold">
+                                    <td class="p-3 text-white">
+                                        <span class="font-bold text-amber-400">C:</span> Empaque dañado transporte
+                                    </td>
+                                    <td class="p-3 text-center font-bold text-slate-200">28</td>
+                                    <td class="p-3 text-center font-mono text-slate-300">0.140</td>
+                                    <td class="p-3 text-center font-bold text-amber-400">14.0%</td>
+                                    <td class="p-3 text-center font-black text-emerald-400">82.0%</td>
+                                    <td class="p-3 text-center">
+                                        <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold">Corte 80%</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40 opacity-75">
+                                    <td class="p-3 text-slate-300">
+                                        <span class="font-bold text-slate-400">D:</span> Color / Modelo erróneo
+                                    </td>
+                                    <td class="p-3 text-center font-medium text-slate-300">20</td>
+                                    <td class="p-3 text-center font-mono text-slate-400">0.100</td>
+                                    <td class="p-3 text-center text-slate-300">10.0%</td>
+                                    <td class="p-3 text-center text-slate-400">92.0%</td>
+                                    <td class="p-3 text-center">
+                                        <span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-[10px]">Mucho Trivial</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/40 opacity-75">
+                                    <td class="p-3 text-slate-300">
+                                        <span class="font-bold text-slate-400">E:</span> Mal olor / Decoloración
+                                    </td>
+                                    <td class="p-3 text-center font-medium text-slate-300">16</td>
+                                    <td class="p-3 text-center font-mono text-slate-400">0.080</td>
+                                    <td class="p-3 text-center text-slate-300">8.0%</td>
+                                    <td class="p-3 text-center text-slate-400">100.0%</td>
+                                    <td class="p-3 text-center">
+                                        <span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-[10px]">Mucho Trivial</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-slate-950 font-bold border-t border-slate-800 text-white">
+                                <tr>
+                                    <td class="p-3 uppercase">TOTALES</td>
+                                    <td class="p-3 text-center font-black text-amber-400">200</td>
+                                    <td class="p-3 text-center font-mono">1.000</td>
+                                    <td class="p-3 text-center font-black text-emerald-400">100.0%</td>
+                                    <td class="p-3 text-center text-slate-500">—</td>
+                                    <td class="p-3 text-center text-slate-500">—</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- DIAGRAMA DE PARETO DINÁMICO (5 COLS) -->
+                <div class="lg:col-span-5 space-y-4 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white heading-font flex items-center">
+                            <i class="fa-solid fa-chart-column text-amber-400 mr-2"></i>
+                            Diagrama de Pareto Interactivo
+                        </h4>
+                        <span class="text-[10px] bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded font-bold">80/20</span>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="chart-container">
+                            <canvas id="paretoCanvas"></canvas>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-850">
+                            <span class="flex items-center"><span class="w-3 h-3 bg-amber-500 rounded-sm mr-1.5 inline-block"></span> Barras: Frecuencia (fᵢ)</span>
+                            <span class="flex items-center"><span class="w-3 h-0.5 bg-red-400 mr-1.5 inline-block"></span> Línea: % Acumulado</span>
+                            <span class="text-emerald-400 font-bold">Corte: 82%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CONCLUSIONES Y RECOMENDACIÓN GERENCIAL (PUNTOS 2 Y 3) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                
+                <!-- POCAS VITALES -->
+                <div class="p-5 rounded-2xl bg-slate-950/90 border border-amber-500/30 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                            <i class="fa-solid fa-key mr-1.5"></i>2. Pocas Vitales (Principio 80/20)
+                        </span>
+                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">1.0 Punto</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        Las fallas <strong class="text-amber-400">A (Costura/Suela: 42%)</strong>, <strong class="text-blue-400">B (Talla: 26%)</strong> y <strong class="text-cyan-400">C (Empaque: 14%)</strong> constituyen las <span class="bg-amber-500/20 text-amber-200 px-1.5 py-0.5 rounded font-bold">"Pocas Vitales"</span>, ya que juntas acumulan el <strong class="text-emerald-400 text-base heading-font">82.0%</strong> de todas las devoluciones.
+                    </p>
+                    <p class="text-[11px] text-slate-400">
+                        Las fallas D y E sólo representan el 18.0% restante (Muchos Triviales).
+                    </p>
+                </div>
+
+                <!-- RECOMENDACIÓN EJECUTIVA -->
+                <div class="p-5 rounded-2xl bg-slate-950/90 border border-emerald-500/30 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                            <i class="fa-solid fa-lightbulb mr-1.5"></i>3. Recomendación Ejecutiva
+                        </span>
+                        <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold rounded">1.0 Punto</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed italic bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                        "Priorizar la auditoría de calidad en el pegado de suelas con los talleres maquiladores y reforzar el control de despacho en bodega para verificación de tallas y empaque, resolviendo de inmediato el <strong>82% de las quejas mayoristas</strong> con el menor costo operativo."
+                    </p>
+                    <p class="text-[11px] text-slate-400">
+                        Enfoque administrativo: atacar las causas A, B y C genera el máximo retorno sobre el esfuerzo de calidad.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SERIE IV: DISTRIBUCIÓN DE FRECUENCIAS AGRUPADAS (STURGES)
+             ========================================== -->
+        <section id="serie-4" class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 bg-purple-500/15 text-purple-400 text-xs font-bold rounded-md uppercase">Serie IV · 5 Puntos Netos</span>
+                        <span class="text-xs text-slate-400">(1.0 pt fórmulas + 2.5 pts tabla completa + 1.5 pts análisis)</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font">
+                        Distribución de Frecuencias Agrupadas por Intervalos
+                    </h3>
+                </div>
+                <span class="text-xs text-slate-400">Caso: Tiempos de Despacho Logístico (Occidente)</span>
+            </div>
+
+            <!-- ENUNCIADO CASO TRANSPORTE OCCIDENTE & MATRIZ DE DATOS -->
+            <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-purple-400 uppercase tracking-wider">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Lote de Monitoreo: n = 40 viajes interurbanos (tiempos en minutos):</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-300 rounded font-mono">Dato Mín: 35</span>
+                        <span class="px-2 py-0.5 bg-pink-500/10 text-pink-300 rounded font-mono">Dato Máx: 78</span>
+                    </div>
+                </div>
+
+                <!-- MATRIZ DE 40 DATOS INTERACTIVA -->
+                <div class="grid grid-cols-5 sm:grid-cols-10 gap-1.5 text-center font-mono text-xs">
+                    <!-- FILA 1 -->
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(42)">42</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(55)">55</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(68)">68</span>
+                    <span class="p-2 bg-blue-500/20 border border-blue-500/40 rounded-lg text-blue-300 font-bold hover:border-blue-400 transition cursor-pointer" title="DATO MÍNIMO" onclick="highlightDatasetVal(35)">35</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(48)">48</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(62)">62</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(71)">71</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(50)">50</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(58)">58</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(44)">44</span>
+
+                    <!-- FILA 2 -->
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(39)">39</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(60)">60</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(52)">52</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(47)">47</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(65)">65</span>
+                    <span class="p-2 bg-pink-500/20 border border-pink-500/40 rounded-lg text-pink-300 font-bold hover:border-pink-400 transition cursor-pointer" title="DATO MÁXIMO" onclick="highlightDatasetVal(78)">78</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(53)">53</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(41)">41</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(56)">56</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(63)">63</span>
+
+                    <!-- FILA 3 -->
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(49)">49</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(57)">57</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(43)">43</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(66)">66</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(70)">70</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(38)">38</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(51)">51</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(61)">61</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(46)">46</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(59)">59</span>
+
+                    <!-- FILA 4 -->
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(54)">54</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(45)">45</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(67)">67</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(73)">73</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(36)">36</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(64)">64</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(49)">49</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(58)">58</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(52)">52</span>
+                    <span class="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 hover:border-purple-400 transition cursor-pointer" onclick="highlightDatasetVal(69)">69</span>
+                </div>
+            </div>
+
+            <!-- PASO 1: CÁLCULOS PRELIMINARES (RANGO, STURGES, AMPLITUD) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-bold text-white heading-font flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 mr-2"></span>
+                        1. Cálculos Preliminares (Valor: 1.0 Punto)
+                    </h4>
+                    <span class="text-[11px] text-slate-400">Paso obligatorio antes de tabular</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <!-- RANGO -->
+                    <div class="formula-card p-4 space-y-2 border-blue-500/30">
+                        <span class="text-xs text-blue-400 font-bold block font-sans">A. Rango o Recorrido ($R$):</span>
+                        <div class="text-xs text-slate-300 space-y-1 font-mono">
+                            <p>R = max - min</p>
+                            <p class="text-base text-blue-300 font-bold">R = 78 - 35 = 43</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-sans">Diferencia total entre el despacho más rápido y el más demorado.</p>
+                    </div>
+
+                    <!-- REGLA DE STURGES -->
+                    <div class="formula-card p-4 space-y-2 border-purple-500/30">
+                        <span class="text-xs text-purple-400 font-bold block font-sans">B. Número de Clases (Sturges $k$):</span>
+                        <div class="text-xs text-slate-300 space-y-1 font-mono">
+                            <p>k = 1 + 3.322 \log_{10}(40)</p>
+                            <p>k = 1 + 3.322(1.60205) = 6.322</p>
+                            <p class="text-base text-purple-300 font-bold">k =6 clases</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-sans">Se redondea al entero más cercano (6 clases).</p>
+                    </div>
+
+                    <!-- AMPLITUD A -->
+                    <div class="formula-card p-4 space-y-2 border-emerald-500/30">
+                        <span class="text-xs text-emerald-400 font-bold block font-sans">C. Amplitud o Ancho de Clase ($A$):</span>
+                        <div class="text-xs text-slate-300 space-y-1 font-mono">
+                            <p>A = R / k  = 43 / 6 = 7.166...</p>
+                            <p class="text-base text-emerald-300 font-bold">A=8 minutos</p>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-sans">Se redondea a 8 para que 6 × 8 = 48 cubra holgadamente el rango de 43.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PASO 2: TABLA DE FRECUENCIAS AGRUPADAS COMPLETA -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-bold text-white heading-font flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 mr-2"></span>
+                        2. Tabla de Distribución de Frecuencias Agrupadas (Valor: 2.5 Puntos)
+                    </h4>
+                    <span class="text-[11px] text-slate-400">Pasa el ratón sobre cada celda para ver el procedimiento</span>
+                </div>
+
+                <div class="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-800">
+                    <table class="w-full text-left text-xs border-collapse" id="tabla-sturges-examen">
+                        <thead class="bg-slate-950 text-slate-400 font-bold uppercase tracking-wider heading-font border-b border-slate-800 text-[11px]">
+                            <tr>
+                                <th class="p-3 text-center">Clase</th>
+                                <th class="p-3 text-center text-blue-300 min-w-[95px]">
+                                    <span class="tooltip-container">
+                                        Lím. Nominales
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Límites discretos declarados (Li - Ls) con amplitud A = 8.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-cyan-300 min-w-[105px]">
+                                    <span class="tooltip-container">
+                                        Lím. Reales
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Fronteras continuas: Li - 0.5 hasta Ls + 0.5.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">
+                                        Marca (Xᵢ)
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Punto medio: (Li + Ls) ÷ 2.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-white">
+                                    <span class="tooltip-container">
+                                        fᵢ
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Frecuencia Absoluta: número de viajes en el intervalo.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-purple-300">
+                                    <span class="tooltip-container">
+                                        Fᵢ (Acum.)
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Frecuencia Absoluta Acumulada.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-slate-300">
+                                    <span class="tooltip-container">
+                                        fᵣ
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Frecuencia Relativa: fᵢ ÷ 40.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-amber-300">
+                                    <span class="tooltip-container">
+                                        %
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Frecuencia Porcentual: fᵣ × 100%.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                                <th class="p-3 text-center text-pink-300">
+                                    <span class="tooltip-container">
+                                        %A (Acum.)
+                                        <div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">
+                                            Porcentaje Acumulado.
+                                            <div class="tooltip-arrow"></div>
+                                        </div>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/80 bg-slate-900/40 font-mono">
+                            
+                            <!-- CLASE 1 -->
+                            <tr id="row-clase-1" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">1</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">35 – 42<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 35; Ls = 35 + 8 - 1 = 42<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">34.5 – 42.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">35 - 0.5 = 34.5; 42 + 0.5 = 42.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">38.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(35 + 42) ÷ 2 = 38.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-white">6</td>
+                                <td class="p-3 text-center font-bold text-purple-300">6</td>
+                                <td class="p-3 text-center text-slate-300">0.150</td>
+                                <td class="p-3 text-center font-bold text-amber-300">15.0%</td>
+                                <td class="p-3 text-center text-pink-300">15.0%</td>
+                            </tr>
+
+                            <!-- CLASE 2 -->
+                            <tr id="row-clase-2" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">2</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">43 – 50<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 43; Ls = 43 + 8 - 1 = 50<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">42.5 – 50.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">43 - 0.5 = 42.5; 50 + 0.5 = 50.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">46.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(43 + 50) ÷ 2 = 46.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-white">10</td>
+                                <td class="p-3 text-center font-bold text-purple-300">
+                                    <span class="tooltip-container">16<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">F₂ = 6 + 10 = 16 viajes<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-slate-300">0.250</td>
+                                <td class="p-3 text-center font-bold text-amber-300">25.0%</td>
+                                <td class="p-3 text-center font-black text-pink-300">40.0%</td>
+                            </tr>
+
+                            <!-- CLASE 3 -->
+                            <tr id="row-clase-3" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">3</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">51 – 58<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 51; Ls = 51 + 8 - 1 = 58<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">50.5 – 58.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">51 - 0.5 = 50.5; 58 + 0.5 = 58.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">54.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(51 + 58) ÷ 2 = 54.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-black text-emerald-400">
+                                    <span class="tooltip-container">11 (Modal)<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Clase Modal: Mayor concentración de viajes (11)<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-purple-300">27</td>
+                                <td class="p-3 text-center text-slate-300">0.275</td>
+                                <td class="p-3 text-center font-bold text-amber-300">27.5%</td>
+                                <td class="p-3 text-center text-pink-300">67.5%</td>
+                            </tr>
+
+                            <!-- CLASE 4 -->
+                            <tr id="row-clase-4" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">4</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">59 – 66<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 59; Ls = 59 + 8 - 1 = 66<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">58.5 – 66.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">59 - 0.5 = 58.5; 66 + 0.5 = 66.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">62.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(59 + 66) ÷ 2 = 62.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-white">8</td>
+                                <td class="p-3 text-center font-bold text-purple-300">35</td>
+                                <td class="p-3 text-center text-slate-300">0.200</td>
+                                <td class="p-3 text-center font-bold text-amber-300">20.0%</td>
+                                <td class="p-3 text-center text-pink-300">87.5%</td>
+                            </tr>
+
+                            <!-- CLASE 5 -->
+                            <tr id="row-clase-5" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">5</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">67 – 74<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 67; Ls = 67 + 8 - 1 = 74<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">66.5 – 74.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">67 - 0.5 = 66.5; 74 + 0.5 = 74.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">70.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(67 + 74) ÷ 2 = 70.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-white">4</td>
+                                <td class="p-3 text-center font-bold text-purple-300">39</td>
+                                <td class="p-3 text-center text-slate-300">0.100</td>
+                                <td class="p-3 text-center font-bold text-amber-300">10.0%</td>
+                                <td class="p-3 text-center text-pink-300">97.5%</td>
+                            </tr>
+
+                            <!-- CLASE 6 -->
+                            <tr id="row-clase-6" class="table-highlight hover:bg-slate-800/50 transition">
+                                <td class="p-3 text-center font-bold text-slate-400">6</td>
+                                <td class="p-3 text-center font-bold text-blue-300">
+                                    <span class="tooltip-container">75 – 82<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">Li = 75; Ls = 75 + 8 - 1 = 82<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-cyan-300">
+                                    <span class="tooltip-container">74.5 – 82.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">75 - 0.5 = 74.5; 82 + 0.5 = 82.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center text-emerald-300">
+                                    <span class="tooltip-container">78.5<div class="tooltip-box bg-slate-900 border border-slate-700 text-slate-200 text-[10px] p-2 rounded-xl">(75 + 82) ÷ 2 = 78.5<div class="tooltip-arrow"></div></div></span>
+                                </td>
+                                <td class="p-3 text-center font-bold text-white">1</td>
+                                <td class="p-3 text-center font-bold text-purple-300">40</td>
+                                <td class="p-3 text-center text-slate-300">0.025</td>
+                                <td class="p-3 text-center font-bold text-amber-300">2.5%</td>
+                                <td class="p-3 text-center text-pink-300">100.0%</td>
+                            </tr>
+
+                        </tbody>
+                        <tfoot class="bg-slate-950 font-bold border-t border-slate-800 text-white font-sans text-[11px]">
+                            <tr>
+                                <td class="p-3 text-center uppercase" colspan="4">TOTALES</td>
+                                <td class="p-3 text-center font-black text-purple-400 font-mono text-sm">40</td>
+                                <td class="p-3 text-center text-slate-500 font-mono">—</td>
+                                <td class="p-3 text-center font-mono">1.000</td>
+                                <td class="p-3 text-center font-black text-emerald-400 font-mono">100.0%</td>
+                                <td class="p-3 text-center text-slate-500 font-mono">—</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PASO 3: RESPUESTAS ANALÍTICAS (PREGUNTAS DE EXAMEN) -->
+            <div class="space-y-3 pt-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-bold text-white heading-font flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 mr-2"></span>
+                        3. Preguntas Analíticas de Interpretación (Valor: 1.5 Puntos)
+                    </h4>
+                    <span class="text-[11px] text-slate-400">Haz clic en cada botón para resaltar las clases involucradas</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- PREGUNTA A -->
+                    <div class="p-5 rounded-2xl bg-slate-950/90 border border-blue-500/30 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                                <i class="fa-solid fa-clock mr-1.5"></i>Pregunta A · 0.75 Pts
+                            </span>
+                            <button onclick="highlightClasses([1, 2])" class="px-2.5 py-1 text-[11px] bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-lg border border-blue-500/40 transition">
+                                <i class="fa-solid fa-highlighter mr-1"></i>Resaltar en Tabla
+                            </button>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed">
+                            ¿Qué porcentaje de los viajes requirió un tiempo de despacho inferior a <strong class="text-blue-300">50.5 minutos reales</strong>?
+                        </p>
+                        <div class="formula-card p-3 text-xs space-y-1.5 font-mono text-slate-300">
+                            <p class="text-slate-400 font-sans text-[11px]">Procedimiento analítico:</p>
+                            <p>Suma de clases 1 y 2: F_2 = 6 + 10 = 16 viajes</p>
+                            <p class="text-sm text-blue-300 font-bold font-sans">
+                                \% = 16/40 = 0.40 = 40.0%
+                            </p>
+                        </div>
+                        <p class="text-[11px] text-slate-400">
+                            Interpretación gerencial: El 40% de la flota sale a tiempo dentro de los primeros 50.5 minutos.
+                        </p>
+                    </div>
+
+                    <!-- PREGUNTA B -->
+                    <div class="p-5 rounded-2xl bg-slate-950/90 border border-purple-500/30 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">
+                                <i class="fa-solid fa-arrows-left-right mr-1.5"></i>Pregunta B · 0.75 Pts
+                            </span>
+                            <button onclick="highlightClasses([3, 4, 5])" class="px-2.5 py-1 text-[11px] bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg border border-purple-500/40 transition">
+                                <i class="fa-solid fa-highlighter mr-1"></i>Resaltar en Tabla
+                            </button>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed">
+                            ¿Cuántos viajes tuvieron un tiempo de despacho entre <strong class="text-purple-300">50.5 y 74.5 minutos reales</strong>?
+                        </p>
+                        <div class="formula-card p-3 text-xs space-y-1.5 font-mono text-slate-300">
+                            <p class="text-slate-400 font-sans text-[11px]">Procedimiento analítico:</p>
+                            <p>Suma de frecuencias absolutas de clases 3, 4 y 5:</p>
+                            <p class="text-sm text-purple-300 font-bold font-sans">
+                                Viajes = 11 + 8 + 4 = 23 viajes (57.5%)
+                            </p>
+                        </div>
+                        <p class="text-[11px] text-slate-400">
+                            Interpretación gerencial: Más de la mitad de las operaciones (57.5%) se ubican en este rango intermedio.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- GRÁFICO HISTOGRAMA Y POLÍGONO DE FRECUENCIAS -->
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-chart-area text-purple-400"></i>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider heading-font">
+                            Histograma y Polígono de Frecuencias (Serie IV)
+                        </h4>
+                    </div>
+                    <span class="text-[11px] text-slate-400">Distribución de 40 viajes</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="sturgesChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             SIMULADOR DE AUTOEVALUACIÓN / QUIZ
+             ========================================== -->
+        <section id="simulador-quiz" class="bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950/40 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 neon-purple">
+            <div class="flex items-center space-x-3">
+                <div class="p-3 bg-purple-500/20 text-purple-400 rounded-2xl">
+                    <i class="fa-solid fa-circle-question text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font">
+                        Simulador de Autoevaluación Rápida
+                    </h3>
+                    <p class="text-xs text-slate-400">Comprueba lo aprendido resolviendo 4 preguntas clave del examen parcial:</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- PREGUNTA 1 QUIZ -->
+                <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-purple-400 block">1. Escalas de Medición</span>
+                    <p class="text-xs sm:text-sm text-slate-200">
+                        ¿Por qué la temperatura en °C pertenece a la escala de <strong class="text-amber-300">Intervalo</strong> y no a la de Razón?
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <button onclick="checkQuiz(1, false, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            A. Porque no se pueden medir números decimales bajo cero.
+                        </button>
+                        <button onclick="checkQuiz(1, true, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            B. Porque el cero (0 °C) es relativo/arbitrario y no representa ausencia total de calor.
+                        </button>
+                    </div>
+                    <div id="quiz-fb-1" class="hidden text-xs p-2.5 rounded-xl"></div>
+                </div>
+
+                <!-- PREGUNTA 2 QUIZ -->
+                <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-emerald-400 block">2. Muestreo Estratificado</span>
+                    <p class="text-xs sm:text-sm text-slate-200">
+                        Si N = 1,200 y n = 120, ¿cuántas tiendas corresponden al Estrato 2 con N₂ = 400?
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <button onclick="checkQuiz(2, true, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            A. n₂ = 40 tiendas (400 × 0.10).
+                        </button>
+                        <button onclick="checkQuiz(2, false, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            B. n₂ = 33 tiendas (400 ÷ 12).
+                        </button>
+                    </div>
+                    <div id="quiz-fb-2" class="hidden text-xs p-2.5 rounded-xl"></div>
+                </div>
+
+                <!-- PREGUNTA 3 QUIZ -->
+                <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-amber-400 block">3. Diagrama de Pareto</span>
+                    <p class="text-xs sm:text-sm text-slate-200">
+                        En el caso del calzado, ¿qué porcentaje de problemas resuelves si eliminas las fallas A, B y C?
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <button onclick="checkQuiz(3, false, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            A. El 50% de las quejas.
+                        </button>
+                        <button onclick="checkQuiz(3, true, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            B. El 82.0% de todas las devoluciones.
+                        </button>
+                    </div>
+                    <div id="quiz-fb-3" class="hidden text-xs p-2.5 rounded-xl"></div>
+                </div>
+
+                <!-- PREGUNTA 4 QUIZ -->
+                <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-blue-400 block">4. Regla de Sturges</span>
+                    <p class="text-xs sm:text-sm text-slate-200">
+                        Con un rango de R = 43 y k = 6 clases, ¿por qué la amplitud se fija en A = 8?
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <button onclick="checkQuiz(4, true, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            A. Porque 43 ÷ 6 = 7.16 y se redondea hacia arriba a 8 para cubrir todo el recorrido de datos.
+                        </button>
+                        <button onclick="checkQuiz(4, false, this)" class="w-full text-left p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 transition">
+                            B. Porque la amplitud siempre debe ser un número par obligatorio.
+                        </button>
+                    </div>
+                    <div id="quiz-fb-4" class="hidden text-xs p-2.5 rounded-xl"></div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL UMG -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Solucionario docente elaborado por <strong class="text-purple-400 font-bold">Prof. Ruldin Ayala</strong> | Cátedra de **Estadística I**.<br>
+                Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).
+            </p>
+            <p class="text-[10px] text-slate-500">
+                &copy; 2026 UMG Administración de Empresas · Transformando datos en estrategias comerciales de alto impacto.
+            </p>
+        </div>
+    </footer>
+
+    <!-- LOGICA JAVASCRIPT DINAMICA -->
+    <script>
+        // 1. INICIALIZAR GRÁFICO DE PARETO
+        document.addEventListener('DOMContentLoaded', () => {
+            initParetoChart();
+            initSturgesChart();
+        });
+
+        let paretoChartInstance = null;
+        let sturgesChartInstance = null;
+
+        function initParetoChart() {
+            const ctx = document.getElementById('paretoCanvas');
+            if (!ctx) return;
+
+            const labels = [
+                'A: Suela (42%)',
+                'B: Talla (26%)',
+                'C: Empaque (14%)',
+                'D: Modelo (10%)',
+                'E: Decoloración (8%)'
+            ];
+            const freqs = [84, 52, 28, 20, 16];
+            const cumPcts = [42.0, 68.0, 82.0, 92.0, 100.0];
+
+            paretoChartInstance = new Chart(ctx, {
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: '% Acumulado (%A)',
+                            data: cumPcts,
+                            borderColor: '#f87171',
+                            backgroundColor: '#f87171',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ef4444',
+                            pointRadius: 4,
+                            yAxisID: 'y1',
+                            order: 1
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Frecuencia (fᵢ)',
+                            data: freqs,
+                            backgroundColor: [
+                                'rgba(245, 158, 11, 0.85)',
+                                'rgba(245, 158, 11, 0.85)',
+                                'rgba(16, 185, 129, 0.85)',
+                                'rgba(100, 116, 139, 0.5)',
+                                'rgba(100, 116, 139, 0.5)'
+                            ],
+                            borderColor: [
+                                '#f59e0b',
+                                '#f59e0b',
+                                '#10b981',
+                                '#475569',
+                                '#475569'
+                            ],
+                            borderWidth: 1,
+                            borderRadius: 6,
+                            yAxisID: 'y',
+                            order: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#94a3b8',
+                                font: { family: 'Inter', size: 10 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8', font: { size: 10 } },
+                            grid: { color: 'rgba(51, 65, 85, 0.2)' }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'Devoluciones (fᵢ)', color: '#f59e0b', font: { size: 10 } },
+                            ticks: { color: '#94a3b8', font: { size: 10 } },
+                            grid: { color: 'rgba(51, 65, 85, 0.2)' },
+                            max: 100
+                        },
+                        y1: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: '% Acumulado', color: '#f87171', font: { size: 10 } },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 10 },
+                                callback: val => val + '%'
+                            },
+                            grid: { display: false },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. INICIALIZAR HISTOGRAMA STURGES
+        function initSturgesChart() {
+            const ctx = document.getElementById('sturgesChart');
+            if (!ctx) return;
+
+            const labels = ['34.5 - 42.5 (38.5)', '42.5 - 50.5 (46.5)', '50.5 - 58.5 (54.5)', '58.5 - 66.5 (62.5)', '66.5 - 74.5 (70.5)', '74.5 - 82.5 (78.5)'];
+            const freqs = [6, 10, 11, 8, 4, 1];
+
+            sturgesChartInstance = new Chart(ctx, {
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Polígono de Frecuencias',
+                            data: freqs,
+                            borderColor: '#a855f7',
+                            backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                            borderWidth: 2.5,
+                            pointBackgroundColor: '#c084fc',
+                            pointRadius: 5,
+                            tension: 0.25,
+                            fill: false,
+                            order: 1
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Histograma (fᵢ viajes)',
+                            data: freqs,
+                            backgroundColor: 'rgba(59, 130, 246, 0.55)',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            barPercentage: 0.95,
+                            categoryPercentage: 0.98,
+                            order: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#94a3b8',
+                                font: { family: 'Inter', size: 10 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8', font: { size: 10 } },
+                            grid: { color: 'rgba(51, 65, 85, 0.2)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Cantidad de Viajes (fᵢ)', color: '#60a5fa', font: { size: 10 } },
+                            ticks: { color: '#94a3b8', font: { size: 10 }, stepSize: 2 },
+                            grid: { color: 'rgba(51, 65, 85, 0.2)' },
+                            min: 0,
+                            max: 14
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. INTERACCIÓN DE RESALTADO EN TABLA
+        function highlightClasses(classNumbers) {
+            for (let i = 1; i <= 6; i++) {
+                const row = document.getElementById(`row-clase-${i}`);
+                if (row) row.classList.remove('highlight-active');
+            }
+            classNumbers.forEach(num => {
+                const row = document.getElementById(`row-clase-${num}`);
+                if (row) row.classList.add('highlight-active');
+            });
+        }
+
+        function highlightDatasetVal(val) {
+            alert(`Dato seleccionado: ${val} minutos.\nPertenece a los 40 tiempos monitoreados hacia el occidente de Guatemala.`);
+        }
+
+        // 4. MODO COMPACTO / EXPANDIDO
+        function toggleAllExplanations(show) {
+            const tooltips = document.querySelectorAll('.tooltip-box');
+            tooltips.forEach(t => {
+                if (show) {
+                    t.style.visibility = 'visible';
+                    t.style.opacity = '1';
+                } else {
+                    t.style.visibility = '';
+                    t.style.opacity = '';
+                }
+            });
+        }
+
+        // 5. VALIDACIÓN DEL QUIZ DE AUTOEVALUACIÓN
+        function checkQuiz(qNum, isCorrect, btnEl) {
+            const fb = document.getElementById(`quiz-fb-${qNum}`);
+            if (!fb) return;
+
+            fb.classList.remove('hidden', 'bg-emerald-950', 'text-emerald-300', 'border-emerald-500', 'bg-red-950', 'text-red-300', 'border-red-500');
+            fb.classList.add('border');
+
+            if (isCorrect) {
+                fb.classList.add('bg-emerald-950/80', 'text-emerald-300', 'border-emerald-500/40');
+                fb.innerHTML = '<i class="fa-solid fa-circle-check mr-1 text-emerald-400"></i> <strong>¡Correcto!</strong> Excelente razonamiento estadístico.';
+            } else {
+                fb.classList.add('bg-red-950/80', 'text-red-300', 'border-red-500/40');
+                fb.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1 text-red-400"></i> <strong>Incorrecto.</strong> Revisa el solucionario de esta serie para reforzar el concepto.';
+            }
+        }
+    </script>
+</body>
+</html>
