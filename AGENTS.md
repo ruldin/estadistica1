@@ -87,7 +87,7 @@ El objetivo principal es brindar a los estudiantes:
 
 - **Carrera:** Licenciatura en Administración de Empresas.
 - **Nivel de Matemáticas/Estadística:** Introductorio a Intermedio (Estadística 1).
-- **Catedrático:** Prof. Ruldin Ayala.
+- **Catedrático:** Ruldin Ayala.
 - **Enfoque Pedagógico:**
   - Menos memorización de fórmulas abstractas y **más interpretación administrativa de los resultados** (ej. en lugar de solo calcular la media, desviación estándar o frecuencias, explicar qué significan para el control de calidad, la cuota de mercado o la inversión publicitaria).
   - Ejemplos contextualizados en empresas, comercio, finanzas y mercado guatemalteco/regional (Quetzales GTQ, variables empresariales, estudios de mercado).
@@ -118,23 +118,32 @@ El objetivo principal es brindar a los estudiantes:
 
 El repositorio se organiza mediante archivos HTML autocontenidos o modularizados estáticamente:
 
-- [index.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/index.html): Página principal / Dashboard rediseñado con accesos directos por semana y simulador rápido de repaso.
-- [sem2_clasifica_variables.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_clasifica_variables.html): Módulo interactivo para entrenamiento en clasificación de variables (cualitativas, cuantitativas, nominales, ordinales, de razón/intervalo).
-- [sem2_estadistica_business_lab.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem2_estadistica_business_lab.html): Simulador de Muestreo probabilístico en La Terminal Z.4 (Método Físico, Tabla de Números Aleatorios y Hoja Electrónica).
-- [sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
-- [sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, hoja de trabajo con pensamiento crítico y exportación PDF (jsPDF), Chart.js local.
-- [sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF. Incluye selector de tipo de dato en el laboratorio (moneda, unidades, decimales, litros, metros) y formato visual dinámico para intervalos, Xi, R, A y PDF, además de la columna `fp acum%`.
-- [sem6_resolucion_parcial1.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/sem6_resolucion_parcial1.html): Semana 6 — Resolución y retroalimentación pedagógica del Primer Examen Parcial (Variante B, 15 pts): Solucionario interactivo paso a paso para Serie I (Clasificación de 6 variables corporativas guatemaltecas con justificación), Serie II (Muestreo estratificado proporcional y muestreo sistemático con salto k en Escuintla), Serie III (Tabulación categórica, Pareto 80/20 y recomendación ejecutiva para calzado en San Pedro Sacatepéquez) y Serie IV (Regla de Sturges, límites nominales/reales, tabla completa de 6 clases, polígono/histograma y preguntas analíticas sobre tiempos de despacho). Incluye tooltips pedagógicos al pasar el puntero, gráficos con Chart.js y cuestionario de autoevaluación rápida.
+- [index.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/index.html): Portal Académico Principal / Landing General de la UMG con acceso centralizado a los cursos de **Estadística I** e **Informática I**, mensajes de liderazgo y optimismo educativo para futuros administradores guatemaltecos.
+- [Estadistica1/index_estadistica.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/index_estadistica.html): Página principal / Dashboard de Estadística I con accesos directos por semana, logo UMG y navegación.
+- [informatica1/index_informatica.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/informatica1/index_informatica.html): Página principal / Dashboard del curso de **Informática I** con diseño visual adaptado (paleta cian/azul/índigo), accesos directos a herramientas de IA, mapa de contenidos y enlace al Módulo de Semana 7.
+- [informatica1/Guia_IA_Administradores.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/informatica1/Guia_IA_Administradores.html): Semana 7 de Informática I — Guía interactiva integral de IA para la Gestión Empresarial (2026): glosario técnico interactivo (tokens, embeddings, temperatura, KV Cache), arquitectura MoE vs. densos y reducción de memoria MLA con Chart.js, matriz de modelos de frontera cerrados vs. pesos abiertos y ecosistema chino, calculadora financiera de tokens y proyección de ROI empresarial, simulador del ciclo cognitivo de Agentes ReAct (Pensamiento, Acción, Observación, Respuesta), y marco de gobernanza, riesgos y mitigación de Shadow AI.
+- [Estadistica1/sem2_clasifica_variables.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem2_clasifica_variables.html): Módulo interactivo para entrenamiento en clasificación de variables (cualitativas, cuantitativas, nominales, ordinales, de razón/intervalo).
+- [Estadistica1/sem2_estadistica_business_lab.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem2_estadistica_business_lab.html): Simulador de Muestreo probabilístico en La Terminal Z.4 (Método Físico, Tabla de Números Aleatorios y Hoja Electrónica).
+- [Estadistica1/sem3.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem3.html): Módulo de Tablas de Frecuencia (Escalas Likert, Caso Café Xela y Tabulador Universal con Barras Visuales y KPIs de Decisiones Gerenciales).
+- [Estadistica1/sem4_graficos_pareto.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem4_graficos_pareto.html): Semana 4 — Gráficos cualitativos (barras, pastel) y Diagrama de Pareto con regla 80/20, laboratorio interactivo, hoja de trabajo con pensamiento crítico y exportación PDF (jsPDF), Chart.js local en `vendor/`.
+- [Estadistica1/sem5_regla_sturges.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem5_regla_sturges.html): Semana 5 — Regla de Sturges para administradores: conceptos, guía de 5 pasos, caso tutorial Lácteos El Oriental (Teculután, Zacapa), laboratorio para pegar datasets, desglose paso a paso (n, k, R, A, tabla), gráficos histograma/polígono/ojiva y exportación de informe PDF. Incluye selector de tipo de dato en el laboratorio (moneda, unidades, decimales, litros, metros) y formato visual dinámico para intervalos, Xi, R, A y PDF, además de la columna `fp acum%`.
+- [Estadistica1/sem6_resolucion_parcial1.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/sem6_resolucion_parcial1.html): Semana 6 — Resolución y retroalimentación pedagógica del Primer Examen Parcial (Variante B, 15 pts): Solucionario interactivo paso a paso para Serie I (Clasificación de 6 variables corporativas guatemaltecas con justificación), Serie II (Muestreo estratificado proporcional y muestreo sistemático con salto k en Escuintla), Serie III (Tabulación categórica, Pareto 80/20 y recomendación ejecutiva para calzado en San Pedro Sacatepéquez) y Serie IV (Regla de Sturges, límites nominales/reales, tabla completa de 6 clases, polígono/histograma y preguntas analíticas sobre tiempos de despacho). Incluye tooltips pedagógicos al pasar el puntero, gráficos con Chart.js y cuestionario de autoevaluación rápida.
+- [Estadistica1/GoogleSheetSim.html](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/GoogleSheetSim.html): Simulador interactivo estilo Google Sheets & Slides de Diagrama de Pareto para casos empresariales.
 - `vendor/`: Librerías JS empaquetadas localmente (Chart.js + plugin datalabels) usadas por Semanas 4, 5 y 6.
+- `cosas/`: Recursos multimedia y logotipos institucionales (`Umg.png`).
 - `AGENTS.md`: Este archivo de contexto, arquitectura y reglas para asistentes de código IA.
 
-### Semanas habilitadas en `index.html` (acceso directo + módulos)
+### Semanas y Módulos habilitados
 
+**Estadística I (`Estadistica1/index_estadistica.html`):**
 1. Semana 2 — Clasifica Variables + Business Lab
 2. Semana 3 — Tabulador & Caso Xela
 3. Semana 4 — Gráficos & Pareto (+ PDF)
 4. Semana 5 — Regla de Sturges (+ laboratorio + PDF)
 5. Semana 6 — Resolución del Examen Parcial 1 (Solucionario interactivo + Tooltips + Autoevaluación)
+
+**Informática I (`informatica1/index_informatica.html`):**
+1. Semana 7 — IA para la Gestión Empresarial (Glosario, MoE/MLA, Modelos de Frontera, Calculadora ROI Tokens, Agentes ReAct y Gobernanza Shadow AI) en `informatica1/Guia_IA_Administradores.html`.
 
 ### Convención pedagógica recurrente
 

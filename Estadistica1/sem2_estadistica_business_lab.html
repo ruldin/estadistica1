@@ -169,20 +169,25 @@
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center space-x-3">
-                        <div class="brand-mark" aria-hidden="true">Σ</div>
+                        <div class="brand-mark" style="background: #ffffff; padding: 2px; display: flex; align-items: center; justify-content: center; border-radius: 12px;" aria-hidden="true">
+                            <img src="../cosas/Umg.png" alt="Logo UMG" style="height: 28px; width: auto; object-fit: contain;" onerror="this.onerror=null; this.src='../cosas/umg.png';">
+                        </div>
                         <div>
                             <h1 class="text-base sm:text-lg font-extrabold text-white leading-tight">Estadística Business Lab · UMG</h1>
                             <p class="text-xs text-lab-muted mt-0.5">Herramienta de aprendizaje · Facultad de Administración de Empresas</p>
                         </div>
                     </div>
-                    <a href="index.html" class="btn-home lg:hidden" title="Regresar al menú principal">
+                    <a href="index_estadistica.html" class="btn-home lg:hidden" title="Regresar al menú de Estadística 1">
                         <i class="fa-solid fa-arrow-left"></i> Menú
                     </a>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <a href="index.html" class="btn-home hidden lg:inline-flex" title="Regresar al menú principal">
-                        <i class="fa-solid fa-arrow-left"></i> Menú principal
+                <div class="flex items-center gap-2">
+                    <a href="index_estadistica.html" class="btn-home hidden lg:inline-flex" title="Regresar al menú de Estadística 1">
+                        <i class="fa-solid fa-arrow-left"></i> Menú Estadística
+                    </a>
+                    <a href="../index.html" class="btn-home hidden lg:inline-flex" title="Portal Académico General UMG" style="background: rgba(255,255,255,0.05); color: #9db4c7;">
+                        <i class="fa-solid fa-house"></i> Portal
                     </a>
                     <nav class="hidden md:flex space-x-2">
                         <button onclick="switchTab('learning')" id="tab-learning" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-white bg-white/10 border border-white/15 transition">

@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA para la Gestión Empresarial (2026) - Plataforma de Estudio Interactiva</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        slateBg: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #0284c7;
+            color: #0284c7;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body class="bg-slateBg text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Soft Warm Professional Neutral (Background: #f8fafc, Cards: #ffffff, Primary Accent: #0284c7 Sky Blue, Secondary: #0f172a Deep Slate, Highlights: Amber & Emerald) -->
+
+    <!-- Application Structure Plan:
+        Designed as an interactive executive study portal for 2nd-year business administration students.
+        Structure:
+        1. Header & Dynamic Navigation Bar with direct links to main sections.
+        2. Hero & Contextual Overview: Metrics dashboard showing impact of AI on corporate efficiency (ROI, cost reduction, Shadow AI risk).
+        3. Concept Explorer & Glossary: Interactive search & category filter for technical terms (Tokens, Embeddings, Temperature, KV Cache, VLM vs LLM).
+        4. Architecture & Innovation Showcase: Visual comparative modules for MoE vs Dense models and MLA vs Traditional Attention KV Cache impact with live Chart.js visualization.
+        5. Frontier Models Matrix: Dynamic comparison table/cards of Closed vs Open Weights, with details on Chinese models (DeepSeek, Qwen, Kimi, GLM).
+        6. Interactive Token & API Cost Calculator: A hands-on financial simulator allowing students to project corporate chatbot costs, input vs output token asymmetry, prompt caching discounts, and human cost offsets with live Chart.js breakdowns.
+        7. ReAct Agent & RAG Interactive Simulator: Step-by-step cognitive cycle simulator (Thought -> Action -> Observation -> Answer) illustrating business automation.
+        8. Governance & Risk Framework: Interactive checklist and risk matrix evaluating Shadow AI vs Secure Enterprise AI deployment.
+        Why this design: Business students learn best through practical financial modeling and scenario simulation rather than passive text reading. This structure transitions them from foundational tech terminology to concrete financial and strategic leadership applications.
+    -->
+
+    <!-- Visualization & Content Choices:
+        - Hero Metrics: Summary KPI Cards for instant ROI impact and efficiency stats.
+        - Terminology Explorer: Dynamic Javascript filtering and key metric highlights.
+        - KV Cache & Attention Efficiency: Chart.js Bar Chart comparing memory footprint of Standard Attention vs DeepSeek MLA.
+        - Frontier Models: Interactive Filterable Grid with license types, use cases, and token cost metrics.
+        - Financial Token Calculator: Form controls driving a real-time Chart.js Doughnut Chart splitting input vs output costs, with margin-of-safety multipliers.
+        - ReAct Agent Simulator: Interactive stepper demonstrating automated SQL queries, API calls, and context integration.
+        - Governance Matrix: Structured HTML/Tailwind table with risk level indicators.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All visual graphics use standard HTML/CSS styling, Unicode icons, or Canvas Chart.js.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header & Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">🎓</span>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-tight">IA para la Gestión
+                            Empresarial</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Guía Estratégica & Financiera de Estudio |
+                            2026</p>
+                    </div>
+                </div>
+                <nav class="hidden lg:flex items-center space-x-5 text-xs font-semibold text-slate-600">
+                    <a href="index_informatica.html" class="flex items-center text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition border border-brand-200">
+                        <span class="mr-1">←</span> Portal Informática I
+                    </a>
+                    <a href="#vision" class="hover:text-brand-600 transition">Visión General</a>
+                    <a href="#glosario" class="hover:text-brand-600 transition">Glosario</a>
+                    <a href="#arquitectura" class="hover:text-brand-600 transition">Arquitectura</a>
+                    <a href="#modelos" class="hover:text-brand-600 transition">Modelos</a>
+                    <a href="#calculadora" class="hover:text-brand-600 transition">Calculadora</a>
+                    <a href="#agentes" class="hover:text-brand-600 transition">Agentes</a>
+                    <a href="#gobernanza" class="hover:text-brand-600 transition">Gobernanza</a>
+                </nav>
+                <div class="lg:hidden flex items-center space-x-2">
+                    <a href="index_informatica.html" class="text-xs text-brand-700 bg-brand-50 border border-brand-200 px-2.5 py-1 rounded-lg">← Volver</a>
+                    <button id="mobile-menu-btn" class="p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu"
+            class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2 text-sm font-medium text-slate-700">
+            <a href="index_informatica.html" class="block py-1 text-brand-700 font-bold">← Portal Informática I</a>
+            <a href="#vision" class="block py-1 hover:text-brand-600">Visión General</a>
+            <a href="#glosario" class="block py-1 hover:text-brand-600">Glosario Técnico</a>
+            <a href="#arquitectura" class="block py-1 hover:text-brand-600">Arquitectura & MoE</a>
+            <a href="#modelos" class="block py-1 hover:text-brand-600">Modelos de Frontera</a>
+            <a href="#calculadora" class="block py-1 hover:text-brand-600">Calculadora de Tokens</a>
+            <a href="#agentes" class="block py-1 hover:text-brand-600">Agentes ReAct</a>
+            <a href="#gobernanza" class="block py-1 hover:text-brand-600">Gobernanza</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- SECTION 1: VISIÓN GENERAL Y IMPACTO EN LA GERENCIA -->
+        <section id="vision" class="space-y-6">
+            <div
+                class="bg-gradient-to-r from-slate-900 via-slate-800 to-brand-900 rounded-2xl p-6 sm:p-10 text-white shadow-xl">
+                <div class="max-w-3xl space-y-4">
+                    <span
+                        class="inline-block px-3 py-1 bg-brand-600/30 border border-brand-500/40 text-brand-200 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        Documento de Estudio Universitario - Administración de Empresas
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight">
+                        La IA como Infraestructura Operativa Central en 2026
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Para un administrador de empresas, la Inteligencia Artificial ha dejado de ser una simple
+                        herramienta de chat conversacional. Se ha convertido en la infraestructura estratégica sobre la
+                        cual se calculan presupuestos, se automatizan flujos de trabajo con agentes autónomos y se
+                        compite en eficiencia global. Comprender su arquitectura y su economía de tokens es la clave
+                        para liderar organizaciones rentables y seguras.
+                    </p>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pt-8 border-t border-slate-700/60">
+                    <div class="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                        <div class="text-3xl font-extrabold text-emerald-400">Hasta 30%</div>
+                        <div class="text-xs text-slate-300 font-medium mt-1">Reducción Directa de Costos Operativos
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">En empresas con despliegue profundo alineado a
+                            procesos clave.</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                        <div class="text-3xl font-extrabold text-brand-200">55%</div>
+                        <div class="text-xs text-slate-300 font-medium mt-1">ROI Tangible en < 12 Meses</div>
+                                <p class="text-[11px] text-slate-400 mt-2">Reportado en iniciativas bien estructuradas y
+                                    acotadas.</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                            <div class="text-3xl font-extrabold text-amber-300">66%</div>
+                            <div class="text-xs text-slate-300 font-medium mt-1">Riesgo de "Shadow AI"</div>
+                            <p class="text-[11px] text-slate-400 mt-2">Empleados que usan IA pública ignorando políticas
+                                de seguridad.</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
+                            <div class="text-3xl font-extrabold text-purple-300">~4 Meses</div>
+                            <div class="text-xs text-slate-300 font-medium mt-1">Brecha Abiertos vs. Cerrados</div>
+                            <p class="text-[11px] text-slate-400 mt-2">Los modelos de pesos abiertos casi igualan la
+                                frontera propietaria.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Introductory Paragraph -->
+                <div
+                    class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-600 leading-relaxed space-y-2">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center space-x-2">
+                        <span>💡</span> <span>¿Por qué este módulo es fundamental para tu formación gerencial?</span>
+                    </h3>
+                    <p>
+                        Este portal trasciende los conceptos teóricos convencionales. Como estudiante universitario de
+                        segundo año, pronto tendrás la responsabilidad de aprobar presupuestos de software, autorizar la
+                        contratación de infraestructura en la nube y mitigar riesgos legales. En esta sección aprenderás
+                        el panorama general del mercado en 2026 y cómo la transformación digital apoyada en modelos de
+                        inteligencia artificial no requiere conocimientos profundos de programación, sino una sólida
+                        visión financiera, analítica y de gestión del cambio.
+                    </p>
+                </div>
+        </section>
+
+        <!-- SECTION 2: GLOSARIO TÉCNICO INTERACTIVO Y FUNDAMENTOS -->
+        <section id="glosario" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Glosario Técnico e Idioma Empresarial de la IA
+                        </h2>
+                        <p class="text-slate-500 text-sm">Aprende la terminología técnica esencial que dicta el costo,
+                            el rendimiento y la precisión de los sistemas.</p>
+                    </div>
+                    <!-- Search & Filter Control -->
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="glossary-search"
+                            placeholder="🔍 Buscar término (ej. Token, Temperatura)..."
+                            class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 bg-white shadow-sm">
+                        <select id="glossary-category"
+                            class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 bg-white shadow-sm">
+                            <option value="all">Todas las categorías</option>
+                            <option value="unidades">Unidades & Métricas</option>
+                            <option value="modelos">Tipos de Modelos</option>
+                            <option value="parametros">Parámetros de Control</option>
+                            <option value="memoria">Memoria & Infraestructura</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-blue-50/60 border border-blue-200 p-4 rounded-xl text-xs sm:text-sm text-blue-900 leading-relaxed">
+                <strong>Contexto Educativo:</strong> Ignorar la diferencia entre un Token, un Embedding o una Ventana de
+                Contexto equivale a administrar una aerolínea sin entender el costo del combustible por kilómetro. Pasa
+                el cursor o filtra los conceptos abajo para descubrir el significado técnico y su impacto directo en el
+                presupuesto corporativo.
+            </div>
+
+            <!-- Glossary Grid -->
+            <div id="glossary-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Terms injected dynamically by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: ARQUITECTURA E INNOVACIÓN COMPUTACIONAL -->
+        <section id="arquitectura" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900">Arquitectura Avanzada: Transformer, MoE y MLA</h2>
+                <p class="text-slate-500 text-sm">Descubre por qué las empresas tecnológicas están reduciendo sus costos
+                    operativos en más de un 90% mediante eficiencias algorítmicas.</p>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-600 leading-relaxed space-y-2">
+                <p>
+                    <strong>¿Por qué es relevante para un Administrador?</strong> El costo de mantener un modelo de IA
+                    en la nube (Inferencia) depende del consumo de energía y memoria RAM de video (VRAM) en los
+                    servidores. Arquitecturas innovadoras como <strong>MoE (Mezcla de Expertos)</strong> y <strong>MLA
+                        (Atención Latente Multicabezal)</strong> permiten ejecutar modelos masivos utilizando solo una
+                    fracción del hardware necesario, lo que abarata drásticamente las tarifas de suscripción por API
+                    para las organizaciones.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <!-- Interactive Comparison Card: Dense vs MoE -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                        <span>⚙️</span> <span>Modelo Denso vs. Mezcla de Expertos (MoE)</span>
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        En un <strong>Modelo Denso tradicional</strong>, cada palabra procesada activa el 100% de las
+                        neuronas del sistema. En un <strong>Modelo MoE</strong>, un enrutador inteligente activa
+                        únicamente las subredes o "expertos" especializados necesarios.
+                    </p>
+
+                    <!-- Dynamic Architecture Visualizer Switcher -->
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-4">
+                        <div class="flex justify-center space-x-2">
+                            <button id="btn-dense" onclick="setArchitecture('dense')"
+                                class="px-4 py-2 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">
+                                Ver Modelo Denso (Tradicional)
+                            </button>
+                            <button id="btn-moe" onclick="setArchitecture('moe')"
+                                class="px-4 py-2 text-xs font-bold rounded-lg bg-brand-600 text-white shadow-sm transition">
+                                Ver Modelo MoE (Eficiente 2026)
+                            </button>
+                        </div>
+
+                        <div id="arch-display-container"
+                            class="p-4 bg-white rounded-lg border border-slate-200 min-h-[160px] flex flex-col justify-center items-center text-center space-y-3">
+                            <!-- Visual Content rendered via JS -->
+                        </div>
+                    </div>
+
+                    <div class="text-xs bg-amber-50 border border-amber-200 p-3 rounded-lg text-amber-900">
+                        <strong>Ejemplo Real:</strong> DeepSeek posee 671 mil millones de parámetros totales, pero
+                        gracias a MoE, ¡solo activa 37 mil millones para responder a una consulta! Esto reduce
+                        drásticamente el consumo eléctrico y la tarifa por token.
+                    </div>
+                </div>
+
+                <!-- Chart.js Visualization Card: Standard Attention vs DeepSeek MLA KV Cache Memory -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span>📊</span> <span>Impacto de MLA en la Memoria KV Cache</span>
+                        </h3>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">-90%
+                            Memoria</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        La tecnología <strong>MLA (Multi-Head Latent Attention)</strong> comprime geométricamente los
+                        datos de contexto en la VRAM del servidor. Esto permite atender a miles de empleados
+                        concurrentemente sin colapsar el sistema.
+                    </p>
+
+                    <!-- Chart Container with explicit height and max-width compliance -->
+                    <div class="chart-container">
+                        <canvas id="kvCacheChart"></canvas>
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 text-center italic">
+                        Comparativa estimada del consumo de VRAM (GB) al procesar una ventana de contexto de 128k tokens
+                        concurrentemente.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MATRIZ DE MODELOS DE FRONTERA Y EL IMPACTO CHINO -->
+        <section id="modelos" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900">Matriz de Modelos de Frontera y Competencia Global</h2>
+                <p class="text-slate-500 text-sm">Evaluación estratégica: Ecosistemas cerrados vs. Pesos abiertos y el
+                    ascenso de los laboratorios asiáticos.</p>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-600 leading-relaxed space-y-2">
+                <p>
+                    <strong>Análisis Estratégico para la Toma de Decisiones:</strong> En 2026, la mayor sorpresa
+                    geopolítica e industrial ha sido el liderazgo de laboratorios asiáticos en modelos de "Pesos
+                    Abiertos". Como administrador, deberás elegir entre usar APIs propietarias (como OpenAI o Anthropic)
+                    o alojar modelos de pesos abiertos (como DeepSeek o Qwen) en tus propios servidores.
+                </p>
+            </div>
+
+            <!-- Interactive Filter Controls -->
+            <div
+                class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Filtrar Modelos por:</span>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button onclick="filterModels('all')"
+                        class="model-filter-btn px-3 py-1.5 rounded-lg border bg-slate-800 text-white font-medium">Todos</button>
+                    <button onclick="filterModels('abiertos')"
+                        class="model-filter-btn px-3 py-1.5 rounded-lg border bg-white text-slate-700 hover:bg-slate-100 font-medium">Pesos
+                        Abiertos</button>
+                    <button onclick="filterModels('cerrados')"
+                        class="model-filter-btn px-3 py-1.5 rounded-lg border bg-white text-slate-700 hover:bg-slate-100 font-medium">Cerrados
+                        / Propietarios</button>
+                    <button onclick="filterModels('chinos')"
+                        class="model-filter-btn px-3 py-1.5 rounded-lg border bg-white text-slate-700 hover:bg-slate-100 font-medium">Ecosistema
+                        Chino 🇨🇳</button>
+                </div>
+            </div>
+
+            <!-- Models Cards Container -->
+            <div id="models-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 5: CALCULADORA INTERACTIVA DE COSTOS DE TOKENS Y ROI -->
+        <section id="calculadora" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">💰</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Calculadora Interactiva de Costos de Tokens & ROI</h2>
+                </div>
+                <p class="text-slate-500 text-sm">Simula el costo mensual del despliegue de un asistente virtual
+                    corporativo y evalúa el retorno financiero.</p>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-amber-50/80 border border-amber-200 p-4 rounded-xl text-xs sm:text-sm text-amber-900 leading-relaxed space-y-1">
+                <strong>Regla de Oro Contable:</strong> Los tokens de <em>Entrada (Input)</em> son sustancialmente más
+                baratos que los tokens de <em>Salida (Output)</em>. Esto se debe a que leer un documento se procesa en
+                paralelo en la GPU, mientras que generar texto requiere una pasada iterativa secuencial. Además, los
+                presupuestos reales deben incluir un multiplicador de margen de seguridad (1.5x a 2.0x) para cubrir
+                errores, reintentos y consultas imprevistas.
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Controls Panel (5 cols) -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">Parámetros de Entrada
+                        del Proyecto</h3>
+
+                    <!-- Form Controls -->
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <div class="flex justify-between font-medium text-slate-700 mb-1">
+                                <label for="num-cases">Conversaciones Mensuales:</label>
+                                <span id="val-cases" class="font-bold text-brand-700">10,000</span>
+                            </div>
+                            <input type="range" id="num-cases" min="1000" max="100000" step="1000" value="10000"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between font-medium text-slate-700 mb-1">
+                                <label for="input-tokens">Tokens de Entrada / Conversación:</label>
+                                <span id="val-input-tokens" class="font-bold text-slate-900">1,000 tokens</span>
+                            </div>
+                            <input type="range" id="input-tokens" min="200" max="5000" step="100" value="1000"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
+                            <span class="text-[10px] text-slate-400">Contexto, instrucciones, historial y PDFs
+                                inyectados.</span>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between font-medium text-slate-700 mb-1">
+                                <label for="output-tokens">Tokens de Salida / Conversación:</label>
+                                <span id="val-output-tokens" class="font-bold text-slate-900">600 tokens</span>
+                            </div>
+                            <input type="range" id="output-tokens" min="100" max="2000" step="50" value="600"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
+                            <span class="text-[10px] text-slate-400">Respuesta generada por el bot (Proceso
+                                autorregresivo costoso).</span>
+                        </div>
+
+                        <div>
+                            <label for="model-tier" class="block font-medium text-slate-700 mb-1">Nivel de Modelo &
+                                Tarifa API (por MTok):</label>
+                            <select id="model-tier"
+                                class="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white font-medium focus:ring-2 focus:ring-brand-600">
+                                <option value="ultra-low">Tier Ultralower (DeepSeek-R1 API / Eficiente) - $0.14 In /
+                                    $0.55 Out</option>
+                                <option value="standard" selected>Tier Estándar empresarial (Batch Mode -50%) - $1.25 In
+                                    / $7.50 Out</option>
+                                <option value="premium">Tier Frontera Razonamiento Avanzado - $5.00 In / $25.00 Out
+                                </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between font-medium text-slate-700 mb-1">
+                                <label for="safety-margin">Multiplicador de Seguridad (Imprevistos/Reintentos):</label>
+                                <span id="val-safety" class="font-bold text-amber-700">1.7x</span>
+                            </div>
+                            <input type="range" id="safety-margin" min="1.0" max="2.5" step="0.1" value="1.7"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Output Panel (7 cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-slate-900 text-white p-6 rounded-xl shadow-lg space-y-6">
+                        <h3
+                            class="text-sm uppercase tracking-wider text-slate-400 font-bold border-b border-slate-800 pb-3">
+                            Resultados de la Proyección Financiera Mensual
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                            <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+                                <div class="text-[11px] text-slate-400">Costo Base Crudo</div>
+                                <div id="res-base-cost" class="text-xl font-bold text-slate-200">$57.50</div>
+                                <div class="text-[10px] text-slate-500">Sin margen de seguridad</div>
+                            </div>
+                            <div class="bg-brand-900/60 p-3 rounded-lg border border-brand-500/40">
+                                <div class="text-[11px] text-brand-300">Presupuesto Ajustado Final</div>
+                                <div id="res-final-cost" class="text-2xl font-extrabold text-emerald-400">$97.75</div>
+                                <div class="text-[10px] text-brand-200">Con margen ajustado</div>
+                            </div>
+                            <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+                                <div class="text-[11px] text-slate-400">Ahorro Estimado vs Humano</div>
+                                <div id="res-human-saving" class="text-xl font-bold text-amber-300">$3,902.25</div>
+                                <div class="text-[10px] text-slate-500">Basado en 0.5 FTE de atención</div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Container for Breakdown -->
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                            <div class="text-xs font-semibold text-slate-300 mb-2 text-center">
+                                Desglose Financiero: Costo de Tokens de Entrada vs. Salida
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="costBreakdownChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Cost Disclaimer -->
+                    <div
+                        class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-xs text-slate-600 space-y-2">
+                        <h4 class="font-bold text-slate-900 flex items-center space-x-1">
+                            <span>⚠️</span> <span>Costos Ocultos de Implementación (El Abismo Presupuestario)</span>
+                        </h4>
+                        <p>
+                            Recuerda que la tarifa de la API representa solo entre el <strong>20% y el 30%</strong> del
+                            costo total del proyecto. Para un despliegue exitoso debes presupuestar:
+                        </p>
+                        <ul class="list-disc pl-5 space-y-1 text-slate-500">
+                            <li><strong>Ingeniería de Limpieza de Datos (25-35%):</strong> Estructurar bases de datos
+                                privadas para RAG.</li>
+                            <li><strong>Gestión del Cambio Organizacional (15-25%):</strong> Capacitación continua de
+                                empleados y combate a la resistencia cultural.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: FLUJO DE TRABAJO: RAG Y AGENTES AUTÓNOMOS (ReAct) -->
+        <section id="agentes" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900">Agentes Autónomos & Arquitectura ReAct</h2>
+                <p class="text-slate-500 text-sm">Cómo los sistemas modernos superan la pasividad de los chatbots
+                    mediante ciclos cognitivos de Pensamiento, Acción y Observación.</p>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-600 leading-relaxed space-y-2">
+                <p>
+                    <strong>El Salto Cualitativo:</strong> En lugar de esperar a que un usuario redacte manualmente una
+                    orden, un <strong>Agente de IA</strong> recibe un objetivo corporativo general, planifica una
+                    secuencia de pasos, consulta sistemas externos (CRM, bases de datos SQL, inventarios) y soluciona
+                    errores de manera autónoma utilizando el paradigma <strong>ReAct (Reasoning and Acting)</strong>.
+                </p>
+            </div>
+
+            <!-- Interactive Agent Loop Simulator -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <span>🤖</span> <span>Simulador Interactivo de Agente de Negocios</span>
+                        </h3>
+                        <p class="text-xs text-slate-500">Selecciona un objetivo empresarial y ejecuta el ciclo ReAct
+                            paso a paso.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <label for="agent-scenario" class="text-xs font-bold text-slate-700">Escenario:</label>
+                        <select id="agent-scenario" onchange="resetAgentSimulator()"
+                            class="p-2 border border-slate-300 rounded-lg text-xs bg-slate-50">
+                            <option value="inventory">Pronóstico de Inventario & Alertas</option>
+                            <option value="invoice">Validación de Facturas & VLM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Simulation Stepper Buttons -->
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <button id="step-btn-1" onclick="runAgentStep(1)"
+                        class="px-4 py-2 rounded-lg text-xs font-bold bg-brand-600 text-white shadow-sm hover:bg-brand-700">
+                        1. Pensamiento (Thought)
+                    </button>
+                    <button id="step-btn-2" onclick="runAgentStep(2)" disabled
+                        class="px-4 py-2 rounded-lg text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed">
+                        2. Acción (Action)
+                    </button>
+                    <button id="step-btn-3" onclick="runAgentStep(3)" disabled
+                        class="px-4 py-2 rounded-lg text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed">
+                        3. Observación (Observation)
+                    </button>
+                    <button id="step-btn-4" onclick="runAgentStep(4)" disabled
+                        class="px-4 py-2 rounded-lg text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed">
+                        4. Respuesta Final
+                    </button>
+                </div>
+
+                <!-- Live Simulation Console -->
+                <div
+                    class="bg-slate-900 text-slate-200 p-5 rounded-xl font-mono text-xs space-y-4 min-h-[220px] shadow-inner">
+                    <div
+                        class="flex items-center justify-between text-slate-500 text-[10px] border-b border-slate-800 pb-2">
+                        <span>ESTADO DEL SISTEMA AGÉNTICO</span>
+                        <span id="agent-status-tag" class="text-amber-400 font-bold">ESPERANDO INICIO...</span>
+                    </div>
+
+                    <div id="agent-console-output" class="space-y-3">
+                        <p class="text-slate-400 italic">Haz clic en "1. Pensamiento" para iniciar el ciclo cognitivo
+                            del agente...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: GOBERNANZA, RIESGOS Y ÉTICA EMPRESARIAL -->
+        <section id="gobernanza" class="space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900">Gobernanza, Shadow AI y Gestión del Riesgo</h2>
+                <p class="text-slate-500 text-sm">Marco de protección de datos, cumplimiento normativo (EU AI Act, GDPR)
+                    y políticas de uso aceptable.</p>
+            </div>
+
+            <!-- Introductory Paragraph -->
+            <div
+                class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-600 leading-relaxed space-y-2">
+                <p>
+                    <strong>La Responsabilidad del Futuro Líder:</strong> Prohibir categóricamente el uso de IA en una
+                    empresa no funciona y solo fomenta el <strong>"Shadow AI"</strong> (empleados usando chats públicos
+                    para tareas confidenciales). La solución estratégica consiste en crear un <strong>Marco de
+                        Gobernanza Empresarial</strong> con entornos locales seguros y supervisión humana activa
+                    (<em>Human-in-the-Loop</em>).
+                </p>
+            </div>
+
+            <!-- Governance Matrix & Shadow AI Comparison -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Shadow AI vs Enterprise Governance -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center space-x-2">
+                        <span>🛡️</span> <span>Shadow AI vs. Gobernanza Corporativa</span>
+                    </h3>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-red-50 border border-red-200 rounded-lg space-y-1">
+                            <span class="font-bold text-red-800">❌ Práctica de Riesgo: Shadow AI (34% filtra
+                                datos)</span>
+                            <p class="text-red-700">Copiar código fuente, contratos confidenciales o nombres de clientes
+                                en interfaces públicas de terceros. Los datos pueden reincorporarse al entrenamiento
+                                público del modelo.</p>
+                        </div>
+
+                        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg space-y-1">
+                            <span class="font-bold text-emerald-800">✅ Solución Corporativa: Entorno Aislado
+                                (On-Premises / API Enterprise)</span>
+                            <p class="text-emerald-700">Proporcionar modelos de Pesos Abiertos (ej. DeepSeek o Llama)
+                                alojados en servidores internos aislados con encriptación estricta y zero-data
+                                retention.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Risk Matrix Checklist -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center space-x-2">
+                        <span>📋</span> <span>Lista de Control de Gobernanza Gerencial</span>
+                    </h3>
+                    <p class="text-xs text-slate-500">Marca los elementos obligatorios que debes evaluar antes de
+                        aprobar un proyecto de IA:</p>
+
+                    <div class="space-y-2 text-xs">
+                        <label
+                            class="flex items-start space-x-2 p-2 hover:bg-slate-50 rounded cursor-pointer border border-slate-100">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-600 focus:ring-brand-500">
+                            <span><strong>Clasificación del Nivel de Impacto:</strong> ¿El sistema es de bajo riesgo
+                                (marketing) o alto riesgo (evaluación de crédito/contrataciones)?</span>
+                        </label>
+                        <label
+                            class="flex items-start space-x-2 p-2 hover:bg-slate-50 rounded cursor-pointer border border-slate-100">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-600 focus:ring-brand-500">
+                            <span><strong>Mecanismo Human-in-the-Loop:</strong> ¿Existe un supervisor humano responsable
+                                de validar las decisiones automatizadas antes de su ejecución?</span>
+                        </label>
+                        <label
+                            class="flex items-start space-x-2 p-2 hover:bg-slate-50 rounded cursor-pointer border border-slate-100">
+                            <input type="checkbox" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500">
+                            <span><strong>Auditoría de Sesgo Algorítmico:</strong> Se evalúa si el conjunto de datos de
+                                prueba genera discriminación de género, raza o geografía.</span>
+                        </label>
+                        <label
+                            class="flex items-start space-x-2 p-2 hover:bg-slate-50 rounded cursor-pointer border border-slate-100">
+                            <input type="checkbox" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500">
+                            <span><strong>Cumplimiento Regulatorio (EU AI Act / GDPR):</strong> Garantía explícita de
+                                que no se violan normativas de privacidad internacionales.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-bold text-slate-200">Guía de Estudio Universitaria: Inteligencia Artificial para la
+                    Gestión Empresarial (2026)</p>
+                <p class="text-slate-500 mt-1">Diseñado para estudiantes de Administración de Empresas. Basado en
+                    estándares globales de economía de IA.</p>
+            </div>
+            <div class="text-slate-500">
+                <span>© 2026 - Material Académico e Interactivo</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- 1. DATA STORAGE FOR GLOSSARY ---
+        const glossaryData = [
+            {
+                term: "Token",
+                category: "unidades",
+                badge: "Unidad Fundamental",
+                desc: "Fragmento básico de texto en el que la IA divide la información (aprox. 0.75 palabras en inglés, ~4 caracteres). Es la moneda de cambio para calcular tarifas de API y capacidad computacional.",
+                bizImpact: "Toda factura de IA se calcula estrictamente por número de tokens leídos (entrada) y generados (salida)."
+            },
+            {
+                term: "Embeddings",
+                category: "unidades",
+                badge: "Representación Semántica",
+                desc: "Vectores matemáticos que representan el significado de las palabras en un espacio multidimensional. Permiten a los sistemas buscar por intención semántica y no solo por coincidencia de palabras clave exactas.",
+                bizImpact: "Es el motor esencial detrás de los buscadores corporativos inteligentes y sistemas RAG."
+            },
+            {
+                term: "Temperatura",
+                category: "parametros",
+                badge: "Control de Creatividad (0.0 - 1.0)",
+                desc: "Parámetro de configuración que dictamina la aleatoriedad en la selección de tokens. Una temperatura baja (0.1) produce respuestas deterministas y lógicas. Una temperatura alta (0.8+) genera diversidad creativa.",
+                bizImpact: "Ajusta la temperatura a 0.1 para finanzas/contratos legales y a 0.8 para brainstorming de marketing."
+            },
+            {
+                term: "KV Cache",
+                category: "memoria",
+                badge: "Memoria de Atención Temporaria",
+                desc: "Caché de Clave-Valor almacenado en la VRAM de la GPU para recordar el contexto de tokens anteriores durante la generación iterativa de respuestas.",
+                bizImpact: "El cuello de botella computacional #1 que encarece los costos de servidores corporativos."
+            },
+            {
+                term: "LLM vs. VLM",
+                category: "modelos",
+                badge: "Multimodalidad",
+                desc: "Un LLM procesa únicamente texto. Un VLM (Vision-Language Model) procesa texto, imágenes, diagramas y videos de forma nativa.",
+                bizImpact: "Los VLM permiten automatizar la lectura de facturas escaneadas y gráficos financieros en tiempo real."
+            },
+            {
+                term: "Ventana de Contexto",
+                category: "memoria",
+                badge: "Capacidad de Memoria Activa",
+                desc: "Cantidad máxima de tokens que un modelo puede mantener en memoria durante una sola consulta (alcanzando hasta 1M+ de tokens en 2026).",
+                bizImpact: "Permite analizar libros enteros o balances de 10 años en un solo envío."
+            }
+        ];
+
+        // --- 2. DATA STORAGE FOR FRONTIER MODELS ---
+        const modelsData = [
+            {
+                name: "DeepSeek V4 / R1",
+                developer: "DeepSeek 🇨🇳",
+                type: "abiertos",
+                license: "MIT (Permisiva)",
+                specialty: "Razonamiento y Programación",
+                cost: "$0.14 / MTok",
+                isChinese: true,
+                desc: "Líder en eficiencia matemática y código. Rompió el mercado global cobrando centavos por millón de tokens gracias a MoE y MLA."
+            },
+            {
+                name: "Qwen 3.x",
+                developer: "Alibaba 🇨🇳",
+                type: "abiertos",
+                license: "Apache 2.0 / Propietaria",
+                specialty: "Multilingüismo y VLM",
+                cost: "$0.30 / MTok",
+                isChinese: true,
+                desc: "Maneja fluidamente más de 119 idiomas y visión nativa. Domina la ejecución de código corporativo en SWE-Bench."
+            },
+            {
+                name: "Kimi K3",
+                developer: "Moonshot AI 🇨🇳",
+                type: "abiertos",
+                license: "Licencia Comercial",
+                specialty: "Memoria Masiva (2.8T Params)",
+                cost: "$0.60 / MTok",
+                isChinese: true,
+                desc: "Diseñado para digerir bibliotecas documentales corporativas gigantescas y coordinar agentes autónomos de largo horizonte."
+            },
+            {
+                name: "GLM-5.2",
+                developer: "Z.ai 🇨🇳",
+                type: "abiertos",
+                license: "MIT",
+                specialty: "Flujos Autónomos Continuos",
+                cost: "$0.40 / MTok",
+                isChinese: true,
+                desc: "Gran integración en plataformas de desarrollo de agentes en occidente con bajo latencia."
+            },
+            {
+                name: "GPT-4o / O3",
+                developer: "OpenAI 🇺🇸",
+                type: "cerrados",
+                license: "Propietaria Cerrada",
+                specialty: "Frontera Razonamiento",
+                cost: "$2.50 - $10.00 / MTok",
+                isChinese: false,
+                desc: "Ecosistema comercial premium. Alto costo operativo pero integración nativa sencilla sin gestión de servidores."
+            },
+            {
+                name: "Claude 3.5 Sonnet",
+                developer: "Anthropic 🇺🇸",
+                type: "cerrados",
+                license: "Propietaria Cerrada",
+                specialty: "Redacción y Código Complejo",
+                cost: "$3.00 - $15.00 / MTok",
+                isChinese: false,
+                desc: "Muy valorado por su naturalidad en la redacción corporativa y análisis riguroso de seguridad."
+            }
+        ];
+
+        // --- 3. RENDER GLOSSARY ITEMS ---
+        function renderGlossary(filterText = "", category = "all") {
+            const grid = document.getElementById("glossary-grid");
+            grid.innerHTML = "";
+
+            const filtered = glossaryData.filter(item => {
+                const matchesText = item.term.toLowerCase().includes(filterText.toLowerCase()) ||
+                    item.desc.toLowerCase().includes(filterText.toLowerCase());
+                const matchesCat = category === "all" || item.category === category;
+                return matchesText && matchesCat;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs">No se encontraron términos con los filtros seleccionados.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-3";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-slate-900 text-base">${item.term}</h4>
+                            <span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-semibold">${item.badge}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">${item.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 bg-slate-50 -mx-5 -mb-5 p-3 rounded-b-xl">
+                        <span class="text-[10px] font-bold text-brand-700 uppercase tracking-wider block mb-0.5">Impacto en el Negocio:</span>
+                        <p class="text-[11px] text-slate-700 font-medium">${item.bizImpact}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 4. RENDER FRONTIER MODELS ---
+        function renderModels(filter = "all") {
+            const grid = document.getElementById("models-grid");
+            grid.innerHTML = "";
+
+            const filtered = modelsData.filter(m => {
+                if (filter === "all") return true;
+                if (filter === "abiertos") return m.type === "abiertos";
+                if (filter === "cerrados") return m.type === "cerrados";
+                if (filter === "chinos") return m.isChinese;
+                return true;
+            });
+
+            filtered.forEach(m => {
+                const card = document.createElement("div");
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4";
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">${m.name}</h4>
+                                <span class="text-[11px] text-slate-500 font-medium">${m.developer}</span>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${m.type === 'abiertos' ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'}">
+                                ${m.type === 'abiertos' ? 'Pesos Abiertos' : 'Cerrado API'}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">${m.desc}</p>
+                    </div>
+                    <div class="space-y-1.5 pt-3 border-t border-slate-100 text-[11px]">
+                        <div class="flex justify-between text-slate-500">
+                            <span>Licencia:</span>
+                            <span class="font-semibold text-slate-700">${m.license}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500">
+                            <span>Especialidad:</span>
+                            <span class="font-semibold text-slate-700">${m.specialty}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500">
+                            <span>Costo Base Estimado:</span>
+                            <span class="font-bold text-emerald-600">${m.cost}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterModels(filter) {
+            document.querySelectorAll(".model-filter-btn").forEach(btn => {
+                btn.classList.remove("bg-slate-800", "text-white");
+                btn.classList.add("bg-white", "text-slate-700");
+            });
+            event.target.classList.remove("bg-white", "text-slate-700");
+            event.target.classList.add("bg-slate-800", "text-white");
+            renderModels(filter);
+        }
+
+        // --- 5. ARCHITECTURE SWITCHER VISUALIZER ---
+        function setArchitecture(type) {
+            const container = document.getElementById("arch-display-container");
+            const btnDense = document.getElementById("btn-dense");
+            const btnMoe = document.getElementById("btn-moe");
+
+            if (type === 'dense') {
+                btnDense.className = "px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 text-white shadow-sm transition";
+                btnMoe.className = "px-4 py-2 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                container.innerHTML = `
+                    <div class="text-xs font-bold text-red-600 uppercase tracking-wider">Modelo Denso: 100% Neuronas Activas</div>
+                    <div class="flex flex-wrap justify-center gap-1.5 max-w-xs my-2">
+                        ${Array(16).fill(0).map(() => `<span class="w-6 h-6 bg-red-500 text-white text-[10px] flex items-center justify-center rounded font-bold shadow-sm">ON</span>`).join('')}
+                    </div>
+                    <p class="text-[11px] text-slate-500">Cada token procesado consume energía e infraestructura equivalente a los 600B+ parámetros enteros.</p>
+                `;
+            } else {
+                btnMoe.className = "px-4 py-2 text-xs font-bold rounded-lg bg-brand-600 text-white shadow-sm transition";
+                btnDense.className = "px-4 py-2 text-xs font-bold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                container.innerHTML = `
+                    <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Modelo MoE: Activación Dispersa (~5-8% Neuronas)</div>
+                    <div class="flex flex-wrap justify-center gap-1.5 max-w-xs my-2">
+                        <span class="w-6 h-6 bg-emerald-500 text-white text-[10px] flex items-center justify-center rounded font-bold shadow-sm">Exp1</span>
+                        <span class="w-6 h-6 bg-emerald-500 text-white text-[10px] flex items-center justify-center rounded font-bold shadow-sm">Exp2</span>
+                        ${Array(14).fill(0).map(() => `<span class="w-6 h-6 bg-slate-200 text-slate-400 text-[10px] flex items-center justify-center rounded font-medium">OFF</span>`).join('')}
+                    </div>
+                    <p class="text-[11px] text-slate-500">Un enrutador asigna la consulta solo a los "Expertos" en finanzas o código. Ahorro energético monumental.</p>
+                `;
+            }
+        }
+
+        // --- 6. CHART.JS IMPLEMENTATION (KV Cache & Token Cost) ---
+        let kvChart = null;
+        let costChart = null;
+
+        function initCharts() {
+            // Chart 1: KV Cache Memory Footprint
+            const ctxKv = document.getElementById('kvCacheChart').getContext('2d');
+            kvChart = new Chart(ctxKv, {
+                type: 'bar',
+                data: {
+                    labels: ['Atención Estándar (Transformer)', 'Atención Reducida (MHA)', 'DeepSeek MLA (Latente)'],
+                    datasets: [{
+                        label: 'Consumo de VRAM por Usuario (GB)',
+                        data: [32.0, 14.5, 3.2],
+                        backgroundColor: ['#f87171', '#fbbf24', '#10b981'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return ` Consumo: ${context.parsed.y} GB VRAM`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Memoria VRAM (GB)', font: { size: 11 } }
+                        },
+                        x: {
+                            ticks: {
+                                callback: function (val, index) {
+                                    let label = this.getLabelForValue(index);
+                                    return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                },
+                                font: { size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Token Cost Breakdown
+            const ctxCost = document.getElementById('costBreakdownChart').getContext('2d');
+            costChart = new Chart(ctxCost, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tokens de Entrada (Lectura)', 'Tokens de Salida (Escritura Costosa)'],
+                    datasets: [{
+                        data: [12.50, 45.00],
+                        backgroundColor: ['#0284c7', '#f59e0b'],
+                        borderWidth: 2,
+                        borderColor: '#0f172a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#e2e8f0', font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 7. CALCULATOR SIMULATION ENGINE ---
+        function updateCalculations() {
+            const cases = parseInt(document.getElementById('num-cases').value);
+            const inputTokensPerCase = parseInt(document.getElementById('input-tokens').value);
+            const outputTokensPerCase = parseInt(document.getElementById('output-tokens').value);
+            const modelTier = document.getElementById('model-tier').value;
+            const safetyMultiplier = parseFloat(document.getElementById('safety-margin').value);
+
+            // UI label updates
+            document.getElementById('val-cases').innerText = cases.toLocaleString();
+            document.getElementById('val-input-tokens').innerText = `${inputTokensPerCase.toLocaleString()} tokens`;
+            document.getElementById('val-output-tokens').innerText = `${outputTokensPerCase.toLocaleString()} tokens`;
+            document.getElementById('val-safety').innerText = `${safetyMultiplier.toFixed(1)}x`;
+
+            // Tier Rates
+            let inputRate = 1.25;  // Default standard batch
+            let outputRate = 7.50;
+
+            if (modelTier === 'ultra-low') {
+                inputRate = 0.14;
+                outputRate = 0.55;
+            } else if (modelTier === 'premium') {
+                inputRate = 5.00;
+                outputRate = 25.00;
+            }
+
+            // Calculations
+            const totalInputMTok = (cases * inputTokensPerCase) / 1000000;
+            const totalOutputMTok = (cases * outputTokensPerCase) / 1000000;
+
+            const rawInputCost = totalInputMTok * inputRate;
+            const rawOutputCost = totalOutputMTok * outputRate;
+            const rawTotalCost = rawInputCost + rawOutputCost;
+
+            const finalAdjustedCost = rawTotalCost * safetyMultiplier;
+
+            // Estimated Human cost offset (0.5 FTE customer service agent ~$4000/mo)
+            const humanEquivalentCost = 4000;
+            const netSaving = Math.max(0, humanEquivalentCost - finalAdjustedCost);
+
+            // Render Results
+            document.getElementById('res-base-cost').innerText = `$${rawTotalCost.toFixed(2)}`;
+            document.getElementById('res-final-cost').innerText = `$${finalAdjustedCost.toFixed(2)}`;
+            document.getElementById('res-human-saving').innerText = `$${netSaving.toFixed(2)}`;
+
+            // Update Doughnut Chart
+            if (costChart) {
+                costChart.data.datasets[0].data = [
+                    parseFloat(rawInputCost.toFixed(2)),
+                    parseFloat(rawOutputCost.toFixed(2))
+                ];
+                costChart.update();
+            }
+        }
+
+        // --- 8. REACT AGENT SIMULATOR LOGIC ---
+        const agentScenarios = {
+            inventory: {
+                title: "Previsión de Inventario & Alertas de Stock",
+                t1: "PENSAMIENTO: El sistema detecta que las ventas del Producto X aumentaron un 45% hoy. Necesito verificar si el stock alcanzará para cubrir la demanda de la semana.",
+                a2: "ACCIÓN: Ejecutando llamada API a Base de Datos PostgreSQL -> SELECT stock_qty, lead_time_days FROM inventory WHERE product_id = 'X-984';",
+                o3: "OBSERVACIÓN: La base de datos responde: {'stock_qty': 120, 'lead_time_days': 5, 'daily_sales': 48}. Alerta: Quedan solo 2.5 días de stock.",
+                ans4: "RESPUESTA FINAL: Agente emite orden automática de compra a proveedor por 500 unidades y notifica al Gerente de Logística con informe estructurado en JSON."
+            },
+            invoice: {
+                title: "Validación de Facturas Multilingüe (VLM)",
+                t1: "PENSAMIENTO: Se ha recibido un PDF escaneado de una factura de un proveedor en China escrita en chino mandarín. Debo procesar el documento visualmente.",
+                a2: "ACCIÓN: Invocando modelo VLM (Qwen-3 Vision) -> Extraer 'RUT_emisor', 'Monto_Total_USD', 'Items_Comprados'.",
+                o3: "OBSERVACIÓN: VLM devuelve: {'Monto': 14500.00, 'Moneda': 'USD', 'Items': ['Aceleradores GPU V100'], 'Coincidencia_PO': True}.",
+                ans4: "RESPUESTA FINAL: Factura validada contra la Orden de Compra #8842. Se registra el pago automático en el ERP ERP/SAP con cero intervención manual."
+            }
+        };
+
+        function resetAgentSimulator() {
+            document.getElementById("agent-console-output").innerHTML = `<p class="text-slate-400 italic">Haz clic en "1. Pensamiento" para iniciar el ciclo cognitivo del agente...</p>`;
+            document.getElementById("agent-status-tag").innerText = "ESPERANDO INICIO...";
+            document.getElementById("agent-status-tag").className = "text-amber-400 font-bold";
+
+            // Enable step 1, disable rest
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                if (i === 1) {
+                    btn.disabled = false;
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold bg-brand-600 text-white shadow-sm hover:bg-brand-700 cursor-pointer";
+                } else {
+                    btn.disabled = true;
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold bg-slate-200 text-slate-400 cursor-not-allowed";
+                }
+            }
+        }
+
+        function runAgentStep(stepNum) {
+            const scenarioKey = document.getElementById("agent-scenario").value;
+            const scenario = agentScenarios[scenarioKey];
+            const consoleBox = document.getElementById("agent-console-output");
+            const statusTag = document.getElementById("agent-status-tag");
+
+            if (stepNum === 1) {
+                consoleBox.innerHTML = `<div class="text-blue-300"><strong>🧠 Paso 1 - Thought:</strong> ${scenario.t1}</div>`;
+                statusTag.innerText = "RAZONANDO...";
+                statusTag.className = "text-blue-400 font-bold";
+            } else if (stepNum === 2) {
+                consoleBox.innerHTML += `<div class="text-amber-300"><strong>⚡ Paso 2 - Action:</strong> ${scenario.a2}</div>`;
+                statusTag.innerText = "EJECUTANDO HERRAMIENTA EXTERNA...";
+                statusTag.className = "text-amber-400 font-bold";
+            } else if (stepNum === 3) {
+                consoleBox.innerHTML += `<div class="text-purple-300"><strong>🔍 Paso 3 - Observation:</strong> ${scenario.o3}</div>`;
+                statusTag.innerText = "EVALUANDO RESULTADOS...";
+                statusTag.className = "text-purple-400 font-bold";
+            } else if (stepNum === 4) {
+                consoleBox.innerHTML += `<div class="text-emerald-300 bg-emerald-950/50 p-3 rounded border border-emerald-800"><strong>🎯 Paso 4 - Final Answer:</strong> ${scenario.ans4}</div>`;
+                statusTag.innerText = "OBJETIVO CUMPLIDO";
+                statusTag.className = "text-emerald-400 font-bold";
+            }
+
+            // Enable next button
+            const currentBtn = document.getElementById(`step-btn-${stepNum}`);
+            currentBtn.disabled = true;
+            currentBtn.className = "px-4 py-2 rounded-lg text-xs font-bold bg-slate-700 text-slate-300 cursor-not-allowed";
+
+            if (stepNum < 4) {
+                const nextBtn = document.getElementById(`step-btn-${stepNum + 1}`);
+                nextBtn.disabled = false;
+                nextBtn.className = "px-4 py-2 rounded-lg text-xs font-bold bg-brand-600 text-white shadow-sm hover:bg-brand-700 cursor-pointer";
+            }
+        }
+
+        // --- 9. EVENT LISTENERS & INITIALIZATION ---
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mobile Menu Toggle
+            const mobileBtn = document.getElementById("mobile-menu-btn");
+            const mobileMenu = document.getElementById("mobile-menu");
+            mobileBtn.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
+
+            // Initial Glossary & Models Render
+            renderGlossary();
+            renderModels();
+            setArchitecture('moe');
+
+            // Glossary Filters
+            document.getElementById("glossary-search").addEventListener("input", (e) => {
+                const cat = document.getElementById("glossary-category").value;
+                renderGlossary(e.target.value, cat);
+            });
+            document.getElementById("glossary-category").addEventListener("change", (e) => {
+                const search = document.getElementById("glossary-search").value;
+                renderGlossary(search, e.target.value);
+            });
+
+            // Calculator Listeners
+            ['num-cases', 'input-tokens', 'output-tokens', 'model-tier', 'safety-margin'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateCalculations);
+                document.getElementById(id).addEventListener('change', updateCalculations);
+            });
+
+            // Init Charts & First Calculation
+            initCharts();
+            updateCalculations();
+        });
+    </script>
+</body>
+
+</html>
