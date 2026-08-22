@@ -533,15 +533,30 @@
                         </h3>
                         <p class="text-xs text-slate-400">Selecciona si deseas analizar una sola serie o superponer dos series para análisis comparativo.</p>
                     </div>
-                    <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto">
-                        <button onclick="setLabMode('single')" id="btn-mode-single"
-                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                            <i class="fa-solid fa-chart-pie mr-1.5"></i>Serie Simple
-                        </button>
-                        <button onclick="setLabMode('compare')" id="btn-mode-compare"
-                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">
-                            <i class="fa-solid fa-code-compare mr-1.5"></i>Superposición (A vs B)
-                        </button>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto">
+                            <button onclick="setLabMode('single')" id="btn-mode-single"
+                                class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                <i class="fa-solid fa-chart-pie mr-1.5"></i>Serie Simple
+                            </button>
+                            <button onclick="setLabMode('compare')" id="btn-mode-compare"
+                                class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">
+                                <i class="fa-solid fa-code-compare mr-1.5"></i>Superposición (A vs B)
+                            </button>
+                        </div>
+
+                        <!-- Selector de Serie Activa en Modo Simple -->
+                        <div id="container-active-single" class="flex items-center gap-1 bg-slate-950 p-1 rounded-2xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase px-2">Analizar:</span>
+                            <button onclick="setActiveSingleSeries('A')" id="btn-active-a"
+                                class="px-3 py-1 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                Serie A
+                            </button>
+                            <button onclick="setActiveSingleSeries('B')" id="btn-active-b"
+                                class="px-3 py-1 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">
+                                Serie B
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -576,7 +591,7 @@
                         </div>
 
                         <!-- Panel Dataset A -->
-                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+                        <div id="container-dataset-a" class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
                             <div class="flex items-center justify-between gap-2">
                                 <label id="label-dataset-a" class="text-xs font-bold text-blue-400 flex items-center">
                                     <i class="fa-solid fa-database mr-1.5"></i>Datos de la Serie A (o Principal)
@@ -947,6 +962,8 @@
         }
 
         // Modo Single vs Modo Compare
+        let activeSingleSeries = 'A';
+
         function setLabMode(mode) {
             labMode = mode;
             const isComp = mode === 'compare';
@@ -959,21 +976,55 @@
                 ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-purple-500/20 text-purple-400 border border-purple-500/30'
                 : 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
 
-            document.getElementById('container-dataset-b').classList.toggle('hidden', !isComp);
-            document.getElementById('container-table-b').classList.toggle('hidden', !isComp);
+            document.getElementById('container-active-single').classList.toggle('hidden', isComp);
 
-            document.getElementById('chart-buttons-single').classList.toggle('hidden', isComp);
-            document.getElementById('chart-buttons-compare').classList.toggle('hidden', !isComp);
-
-            document.getElementById('label-dataset-a').innerHTML = isComp
-                ? '<i class="fa-solid fa-sun mr-1.5 text-blue-400"></i>Datos Serie A (Turno Matutino / Base)'
-                : '<i class="fa-solid fa-database mr-1.5 text-blue-400"></i>Datos de la Serie Principal';
-
-            document.getElementById('table-title-a').innerHTML = isComp
-                ? '<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Frecuencias Serie A'
-                : '<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias';
-
+            updateSingleDoubleContainers();
             processLab();
+        }
+
+        function setActiveSingleSeries(series) {
+            activeSingleSeries = series;
+            updateSingleDoubleContainers();
+            processLab();
+        }
+
+        function updateSingleDoubleContainers() {
+            const isComp = labMode === 'compare';
+            
+            if (isComp) {
+                document.getElementById('container-dataset-a').classList.remove('hidden');
+                document.getElementById('container-dataset-b').classList.remove('hidden');
+                document.getElementById('container-table-b').classList.remove('hidden');
+                document.getElementById('chart-buttons-single').classList.add('hidden');
+                document.getElementById('chart-buttons-compare').classList.remove('hidden');
+
+                document.getElementById('label-dataset-a').innerHTML = '<i class="fa-solid fa-sun mr-1.5 text-blue-400"></i>Datos Serie A (Turno Matutino / Base)';
+                document.getElementById('table-title-a').innerHTML = `<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Frecuencias Serie A`;
+            } else {
+                document.getElementById('chart-buttons-single').classList.remove('hidden');
+                document.getElementById('chart-buttons-compare').classList.add('hidden');
+                document.getElementById('container-table-b').classList.add('hidden');
+
+                const showA = activeSingleSeries === 'A';
+                document.getElementById('container-dataset-a').classList.toggle('hidden', !showA);
+                document.getElementById('container-dataset-b').classList.toggle('hidden', showA);
+
+                document.getElementById('btn-active-a').className = showA
+                    ? 'px-3 py-1 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                    : 'px-3 py-1 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+
+                document.getElementById('btn-active-b').className = !showA
+                    ? 'px-3 py-1 rounded-xl text-xs font-bold transition bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    : 'px-3 py-1 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+
+                if (showA) {
+                    document.getElementById('label-dataset-a').innerHTML = '<i class="fa-solid fa-database mr-1.5 text-blue-400"></i>Datos de la Serie A (o Principal)';
+                    document.getElementById('table-title-a').innerHTML = `<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · ${getSeriesNameA()}`;
+                } else {
+                    document.getElementById('label-dataset-a').innerHTML = '<i class="fa-solid fa-database mr-1.5 text-emerald-400"></i>Datos de la Serie B (Comparativa)';
+                    document.getElementById('table-title-a').innerHTML = `<i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · ${getSeriesNameB()}`;
+                }
+            }
         }
 
         function loadComparativeCaseIntoLab() {
@@ -1149,31 +1200,63 @@
         function processLab() {
             const rawA = document.getElementById('lab-data-a').value;
             const dataA = parseDataset(rawA);
-
             document.getElementById('count-badge-a').textContent = `${dataA.length} valores`;
 
-            if (dataA.length < 5) {
-                if (rawA.trim().length > 0) {
-                    alert('Ingresa al menos 5 datos numéricos válidos en la Serie A.');
+            const rawB = document.getElementById('lab-data-b').value;
+            const dataB = parseDataset(rawB);
+            document.getElementById('count-badge-b').textContent = `${dataB.length} valores`;
+
+            if (labMode === 'single') {
+                const activeSeries = activeSingleSeries;
+                const activeData = activeSeries === 'A' ? dataA : dataB;
+                const activeRaw = activeSeries === 'A' ? rawA : rawB;
+                const activeName = activeSeries === 'A' ? getSeriesNameA() : getSeriesNameB();
+
+                if (activeData.length < 5) {
+                    if (activeRaw.trim().length > 0) {
+                        alert(`Ingresa al menos 5 datos numéricos válidos en la Serie ${activeSeries === 'A' ? getSeriesNameA() : getSeriesNameB()}.`);
+                    }
+                    return;
                 }
-                return;
-            }
 
-            analysisA = computeSturges(dataA);
-            renderKpis(analysisA);
-            renderBreakdown(analysisA, getSeriesNameA());
-            renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
-            document.getElementById('kpi-cards').classList.remove('hidden');
-            document.getElementById('step-breakdown').classList.remove('hidden');
+                analysisA = computeSturges(activeData);
+                analysisB = null;
 
-            document.getElementById('table-title-a').innerHTML = `
-                <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
-            `;
+                renderKpis(analysisA);
+                renderBreakdown(analysisA, activeName);
+                renderFreqTable(analysisA, 'freq-table-body-a', activeName);
+                document.getElementById('kpi-cards').classList.remove('hidden');
+                document.getElementById('step-breakdown').classList.remove('hidden');
 
-            if (labMode === 'compare') {
-                const rawB = document.getElementById('lab-data-b').value;
-                const dataB = parseDataset(rawB);
-                document.getElementById('count-badge-b').textContent = `${dataB.length} valores`;
+                if (activeSeries === 'A') {
+                    document.getElementById('table-title-a').innerHTML = `
+                        <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
+                    `;
+                } else {
+                    document.getElementById('table-title-a').innerHTML = `
+                        <i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-emerald-300 font-bold">${getSeriesNameB()}</span>
+                    `;
+                }
+
+                renderLabChart(currentChartType && !currentChartType.startsWith('compare_') ? currentChartType : 'hist_poly');
+            } else {
+                if (dataA.length < 5) {
+                    if (rawA.trim().length > 0) {
+                        alert('Ingresa al menos 5 datos numéricos válidos en la Serie A.');
+                    }
+                    return;
+                }
+
+                analysisA = computeSturges(dataA);
+                renderKpis(analysisA);
+                renderBreakdown(analysisA, getSeriesNameA());
+                renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
+                document.getElementById('kpi-cards').classList.remove('hidden');
+                document.getElementById('step-breakdown').classList.remove('hidden');
+
+                document.getElementById('table-title-a').innerHTML = `
+                    <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
+                `;
 
                 if (dataB.length >= 5) {
                     analysisB = computeSturges(dataB);
@@ -1186,19 +1269,26 @@
                 } else {
                     renderLabChart('polygon');
                 }
-            } else {
-                renderLabChart(currentChartType && !currentChartType.startsWith('compare_') ? currentChartType : 'hist_poly');
             }
         }
 
         function reRenderFormattedViews() {
             if (!analysisA) return;
-            renderKpis(analysisA);
-            renderBreakdown(analysisA, getSeriesNameA());
-            renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
-            if (analysisB && labMode === 'compare') {
-                renderFreqTable(analysisB, 'freq-table-body-b', getSeriesNameB());
+            
+            if (labMode === 'single') {
+                const activeName = activeSingleSeries === 'A' ? getSeriesNameA() : getSeriesNameB();
+                renderKpis(analysisA);
+                renderBreakdown(analysisA, activeName);
+                renderFreqTable(analysisA, 'freq-table-body-a', activeName);
+            } else {
+                renderKpis(analysisA);
+                renderBreakdown(analysisA, getSeriesNameA());
+                renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
+                if (analysisB) {
+                    renderFreqTable(analysisB, 'freq-table-body-b', getSeriesNameB());
+                }
             }
+
             if (currentChartType) {
                 renderLabChart(currentChartType);
             }
