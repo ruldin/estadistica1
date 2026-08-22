@@ -773,7 +773,10 @@
                                     class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
                                     <option value="normal" selected>Números (normal)</option>
                                     <option value="currency">Moneda (Q)</option>
-                                    <option value="units">Unidades</option>
+                                    <option value="units">Unidades (u)</option>
+                                    <option value="minutes">Tiempo en Minutos (min)</option>
+                                    <option value="hours">Tiempo en Horas (hrs)</option>
+                                    <option value="seconds">Tiempo en Segundos (s)</option>
                                     <option value="decimals">Decimales</option>
                                     <option value="liters">Litros (L)</option>
                                     <option value="meters">Metros (m)</option>
@@ -833,9 +836,18 @@
 
                     <div id="step-breakdown"
                         class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
-                        <h3 class="text-sm font-bold text-white heading-font"><i
-                                class="fa-solid fa-diagram-project text-blue-400 mr-2"></i>Desglose paso a paso</h3>
-                        <div id="step-breakdown-body" class="space-y-2 text-xs text-slate-300"></div>
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <h3 class="text-sm font-bold text-white heading-font"><i
+                                    class="fa-solid fa-diagram-project text-blue-400 mr-2"></i>Desglose paso a paso</h3>
+                            <button type="button" onclick="toggleStepBreakdown()" id="btn-toggle-breakdown"
+                                class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition active:scale-95">
+                                <i class="fa-solid fa-chevron-up text-[10px]" id="icon-toggle-breakdown"></i>
+                                <span id="text-toggle-breakdown">Contraer</span>
+                            </button>
+                        </div>
+                        <div id="step-breakdown-content">
+                            <div id="step-breakdown-body" class="space-y-2 text-xs text-slate-300"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -1169,11 +1181,14 @@
                 return fmtNum(num, forceDecimals ?? 3);
             }
 
-            if (type === 'units' || type === 'liters' || type === 'meters') {
+            if (type === 'units' || type === 'liters' || type === 'meters' || type === 'hours' || type === 'minutes' || type === 'seconds') {
                 const suffixMap = {
                     units: 'u',
                     liters: 'L',
-                    meters: 'm'
+                    meters: 'm',
+                    hours: 'hrs',
+                    minutes: 'min',
+                    seconds: 's'
                 };
                 const fmt = new Intl.NumberFormat('es-GT', {
                     minimumFractionDigits: decimalPlaces,
@@ -1234,6 +1249,25 @@
             if (mainChart) { mainChart.destroy(); mainChart = null; }
             lastAnalysis = null;
             currentChartType = null;
+        }
+
+        let isBreakdownExpanded = true;
+
+        function toggleStepBreakdown() {
+            const content = document.getElementById('step-breakdown-content');
+            const icon = document.getElementById('icon-toggle-breakdown');
+            const text = document.getElementById('text-toggle-breakdown');
+            if (!content) return;
+
+            isBreakdownExpanded = !isBreakdownExpanded;
+            content.classList.toggle('hidden', !isBreakdownExpanded);
+
+            if (icon) {
+                icon.className = isBreakdownExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+            }
+            if (text) {
+                text.textContent = isBreakdownExpanded ? 'Contraer' : 'Expandir';
+            }
         }
 
         function renderBreakdown(a) {

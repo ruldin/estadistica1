@@ -57,7 +57,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
    - Módulo completo con conceptos, guía de 5 pasos y caso tutorial de **Lácteos El Oriental S.A.**
    - Laboratorio para pegar datasets y calcular automáticamente: `n`, `k`, `R`, `A`, tabla de frecuencias y clase modal.
    - Gráficos: histograma, polígono y ojiva.
-   - Selector de tipo de dato (normal, moneda, unidades, decimales, litros, metros).
+   - Selector de tipo de dato (normal, moneda, unidades, tiempo en horas `hrs`, minutos `min`, segundos `s`, decimales, litros, metros).
    - Hoja de trabajo con campos de análisis y exportación PDF.
    - Campo **Contexto** en laboratorio, incluido en el PDF para documentar el enunciado del ejercicio.
 
@@ -68,13 +68,22 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
    - Tablas interactivas con cálculo de frecuencias relativas, porcentajes y acumulados.
    - Cuestionario de autoevaluación rápida con retroalimentación instantánea.
 
-9. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
-   - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
+9. 📊 **`Estadistica1/sem7_frecuencia_pareto.html` (Semana 7: Polígonos de Frecuencia, Ojivas e Histogramas Comparativos):**
+   - Tutorial integral y paso a paso para construir e interpretar gráficos cuantitativos continuos:
+     - **Histograma de frecuencias:** Identificación de modas, concentración y sesgo.
+     - **Polígono de frecuencias:** Conexión de marcas de clase $(X_i)$ y anclaje en extremos a frecuencia cero $(X_1 - A, 0)$ y $(X_k + A, 0)$.
+     - **Ojivas Acumuladas:** Ojiva "Menor que" (ascendente $F_a$) y Ojiva "Mayor que" (descendente), cálculo visual de la mediana ($Me$) e interpolación de percentiles.
+     - **Superposición Mixta y Comparativa:** Superposición de Histograma + Polígono de una misma serie, y superposición de Polígonos u Ojivas entre dos series independientes (**Serie A vs Serie B**) para análisis de turnos, sucursales y periodos.
+     - **Caso Textil San Lucas S.A.:** Comparativa de turnos matutino vs vespertino en confección de exportación.
+     - **Laboratorio Interactivo & Exportación PDF:** Ingreso de datasets simples o comparativos, selector de tipo de dato (Q, u, L, m, decimales) y generación de informe ejecutivo con gráfico en alta resolución y conclusiones gerenciales con jsPDF.
 
-10. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
+10. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
+    - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
+
+11. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
     - Dashboard principal para el curso de **Informática I**, con diseño ejecutivo cian/azul, accesos directos por semana y mapa curricular.
 
-11. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
+12. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
     - Guía interactiva integral sobre Inteligencia Artificial aplicada a la administración:
       - **Glosario & Fundamentos:** Tokens, embeddings, temperatura, KV cache.
       - **Arquitectura Eficiente:** Modelos densos vs. MoE (Mezcla de Expertos) y compresión MLA (-90% memoria).

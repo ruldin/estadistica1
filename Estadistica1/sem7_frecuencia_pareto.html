@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Semana 7: Polígonos de Frecuencia, Ojivas e Histogramas Comparativos · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Librerías locales (sitio estático, sin dependencias de servidor) -->
+    <script src="../vendor/chart.umd.min.js"></script>
+    <script src="../vendor/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .neon-blue {
+            box-shadow: 0 0 22px rgba(59, 130, 246, 0.18);
+        }
+
+        .neon-emerald {
+            box-shadow: 0 0 22px rgba(16, 185, 129, 0.18);
+        }
+
+        .neon-purple {
+            box-shadow: 0 0 22px rgba(168, 85, 247, 0.18);
+        }
+
+        .neon-amber {
+            box-shadow: 0 0 22px rgba(245, 158, 11, 0.18);
+        }
+
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 320px;
+            height: min(55vh, 460px);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+            .chart-wrap {
+                height: 300px;
+                min-height: 270px;
+            }
+        }
+
+        .ws-field label {
+            display: block;
+        }
+
+        .ws-input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.875rem;
+            color: #f1f5f9;
+        }
+
+        .ws-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .ws-textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .ws-hint {
+            font-size: 10.5px;
+            color: #64748b;
+            margin-top: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .formula-box {
+            background: #020617;
+            border: 1px solid #1e3a8a;
+            border-radius: 1rem;
+            padding: 0.85rem 1.15rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #93c5fd;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            overflow-x: auto;
+        }
+
+        .step-caso {
+            transition: max-height 0.25s ease, opacity 0.2s ease;
+        }
+
+        .caso-btn.active {
+            background: rgba(59, 130, 246, 0.25) !important;
+            color: #60a5fa !important;
+            border-color: rgba(59, 130, 246, 0.5) !important;
+        }
+
+        textarea.code-font {
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        .tab-indicator {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col custom-scrollbar selection:bg-blue-500 selection:text-slate-950">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <a href="index_estadistica.html"
+                        class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0"
+                        title="Regresar al menú de Estadística 1">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div
+                        class="bg-white p-1 rounded-xl shadow-lg shadow-blue-500/15 shrink-0 flex items-center justify-center">
+                        <img src="../cosas/Umg.png" alt="Logo UMG" class="h-8 w-auto object-contain"
+                            onerror="this.onerror=null; this.src='../cosas/umg.png';">
+                    </div>
+                    <div class="min-w-0">
+                        <span
+                            class="text-xs font-semibold tracking-widest text-emerald-400 uppercase block heading-font">Módulo
+                            I · Semana 7</span>
+                        <h1 class="text-sm sm:text-lg font-bold text-white leading-tight heading-font truncate">
+                            Polígonos, Ojivas & Superposición <span class="text-xs text-slate-500 font-normal">| UMG</span>
+                        </h1>
+                    </div>
+                </div>
+                <nav class="hidden lg:flex space-x-1.5 shrink-0">
+                    <button onclick="switchSection('conceptos')" id="nav-conceptos"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                        <i class="fa-solid fa-lightbulb mr-1.5"></i>Conceptos & Guía
+                    </button>
+                    <button onclick="switchSection('guia')" id="nav-guia"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i>Cómo Interpretar
+                    </button>
+                    <button onclick="switchSection('caso')" id="nav-caso"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-industry mr-1.5"></i>Caso Comparativo
+                    </button>
+                    <button onclick="switchSection('lab')" id="nav-lab"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-flask mr-1.5"></i>Laboratorio & Superposición
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE TABS -->
+    <div class="lg:hidden bg-slate-950 border-b border-slate-800 p-2 flex overflow-x-auto gap-2 custom-scrollbar">
+        <button onclick="switchSection('conceptos')" id="mob-nav-conceptos"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+            Conceptos
+        </button>
+        <button onclick="switchSection('guia')" id="mob-nav-guia"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            Cómo Interpretar
+        </button>
+        <button onclick="switchSection('caso')" id="mob-nav-caso"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            Caso Comparativo
+        </button>
+        <button onclick="switchSection('lab')" id="mob-nav-lab"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            Laboratorio & Gráficos
+        </button>
+    </div>
+
+    <!-- HERO SECTION -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+        <div
+            class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950/40 p-6 sm:p-8 lg:p-10 border border-slate-800 shadow-xl relative overflow-hidden">
+            <div class="relative z-10 max-w-3xl space-y-3">
+                <span
+                    class="px-3 py-1 text-xs font-bold bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/25 uppercase tracking-widest heading-font inline-flex items-center">
+                    <i class="fa-solid fa-chart-area mr-1.5"></i> Gráficos Cuantitativos Continuos
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-white heading-font">
+                    Polígonos de Frecuencia, Ojivas & Superposición Gráfica
+                </h2>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    Aprende a construir e interpretar con profundidad el <strong>Histograma</strong>, el <strong>Polígono de Frecuencias</strong>
+                    y las <strong>Ojivas Acumuladas</strong> ("Menor que" y "Mayor que"). Descubre cómo la <strong>superposición de dos curvas</strong>
+                    permite al administrador comparar turnos de producción, sucursales y periodos para tomar decisiones estratégicas basadas en evidencia.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-2 text-xs text-slate-400">
+                    <span class="bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center"><i
+                            class="fa-solid fa-chart-column text-blue-400 mr-2"></i>Histogramas con Sturges</span>
+                    <span class="bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center"><i
+                            class="fa-solid fa-chart-line text-emerald-400 mr-2"></i>Polígonos en Marcas (Xi)</span>
+                    <span class="bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center"><i
+                            class="fa-solid fa-chart-simple text-amber-400 mr-2"></i>Ojivas Menor/Mayor que</span>
+                    <span class="bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center"><i
+                            class="fa-solid fa-code-compare text-purple-400 mr-2"></i>Superposición Comparativa</span>
+                </div>
+            </div>
+            <div
+                class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-emerald-500/10 to-transparent pointer-events-none hidden md:block">
+            </div>
+        </div>
+
+        <!-- ==================== SECCIÓN 1: CONCEPTOS ==================== -->
+        <section id="sec-conceptos" class="space-y-6 block">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Card 1: Histograma -->
+                <div
+                    class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-blue-500/40 transition duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white heading-font">1. Histograma de Frecuencias</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Gráfico de barras verticales continuas (sin separación) donde el ancho representa la amplitud del intervalo $[L_i, L_s]$
+                            y la altura la frecuencia absoluta ($f_i$) o porcentual ($fp\%$).
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-xs text-slate-400 space-y-1">
+                            <p><strong class="text-blue-400">Eje X:</strong> Límites de intervalos de clase.</p>
+                            <p><strong class="text-blue-400">Eje Y:</strong> Frecuencia ($f_i$ o $fp\%$).</p>
+                            <p><strong class="text-slate-200">Uso clave:</strong> Identificar modas, concentración y sesgo (simetría).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Polígono -->
+                <div
+                    class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-emerald-500/40 transition duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white heading-font">2. Polígono de Frecuencias</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Gráfico de líneas que une los puntos medios o marcas de clase $(X_i, f_i)$ de cada intervalo.
+                            Se cierra en el eje horizontal añadiendo una clase ficticia a la izquierda ($X_1 - A$) y a la derecha ($X_k + A$) con frecuencia cero.
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-xs text-slate-400 space-y-1">
+                            <p><strong class="text-emerald-400">Eje X:</strong> Marca de clase $X_i = \frac{L_i + L_s}{2}$.</p>
+                            <p><strong class="text-emerald-400">Eje Y:</strong> Frecuencia absoluta ($f_i$).</p>
+                            <p><strong class="text-slate-200">Uso clave:</strong> Comparar dos o más series en el mismo plano.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Ojiva -->
+                <div
+                    class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 hover:border-amber-500/40 transition duration-300 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white heading-font">3. Ojiva (Curva Acumulativa)</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Representación de frecuencias acumuladas ($F_a$ o $fp\text{ acum}\%$). Permite determinar cuántas observaciones
+                            o qué porcentaje del total caen por debajo ("menor que") o por encima ("mayor que") de un umbral específico.
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-xs text-slate-400 space-y-1">
+                            <p><strong class="text-amber-400">Eje X:</strong> Límite superior $L_s$ (o $L_i$ en mayor que).</p>
+                            <p><strong class="text-amber-400">Eje Y:</strong> Frecuencia acumulada ($F_a$ o $fp\text{ acum}\%$).</p>
+                            <p><strong class="text-slate-200">Uso clave:</strong> Hallar percentiles, medianas y cumplimiento de SLAs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA COMPARATIVA GERENCIAL -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
+                <div class="flex items-center space-x-3">
+                    <span class="p-2 bg-blue-500/10 text-blue-400 rounded-xl"><i class="fa-solid fa-table-list"></i></span>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-white heading-font">Matriz de Decisión Gerencial: ¿Cuál Gráfico Elegir?</h3>
+                        <p class="text-xs text-slate-400">Selecciona la visualización correcta según la pregunta de negocio que debas resolver:</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left border-collapse min-w-[650px]">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 bg-slate-950/60">
+                                <th class="p-3">Tipo de Gráfico</th>
+                                <th class="p-3">Variable en el Eje X</th>
+                                <th class="p-3">Variable en el Eje Y</th>
+                                <th class="p-3">Pregunta de Negocio Típica</th>
+                                <th class="p-3">Ejemplo Administrativo UMG</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr class="hover:bg-slate-850/50">
+                                <td class="p-3 font-bold text-blue-400"><i class="fa-solid fa-chart-column mr-1.5"></i>Histograma</td>
+                                <td class="p-3">Intervalos continuos $[L_i, L_s]$</td>
+                                <td class="p-3">Frecuencia $f_i$ / $fp\%$</td>
+                                <td class="p-3 text-slate-200">¿En qué rango de valores se agrupa la mayor cantidad de clientes o productos?</td>
+                                <td class="p-3 text-slate-400">Montos de compra en supermercados La Torre.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/50">
+                                <td class="p-3 font-bold text-emerald-400"><i class="fa-solid fa-chart-line mr-1.5"></i>Polígono</td>
+                                <td class="p-3">Marcas de Clase ($X_i$)</td>
+                                <td class="p-3">Frecuencia $f_i$ / $fp\%$</td>
+                                <td class="p-3 text-slate-200">¿Cómo evoluciona la curva y cómo se compara con otro departamento o turno?</td>
+                                <td class="p-3 text-slate-400">Tiempos de despacho Sucursal Mixco vs Zona 10.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/50">
+                                <td class="p-3 font-bold text-amber-400"><i class="fa-solid fa-chart-simple mr-1.5"></i>Ojiva "Menor que"</td>
+                                <td class="p-3">Límites Superiores ($L_s$)</td>
+                                <td class="p-3">Frecuencia Acumulada ($F_a, fp\%$)</td>
+                                <td class="p-3 text-slate-200">¿Qué porcentaje de despachos se entrega en menos de 45 minutos?</td>
+                                <td class="p-3 text-slate-400">Cumplimiento de meta de entrega rápida (SLA).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/50">
+                                <td class="p-3 font-bold text-purple-400"><i class="fa-solid fa-layer-group mr-1.5"></i>Superposición</td>
+                                <td class="p-3">Intervalos / Marcas ($X_i$)</td>
+                                <td class="p-3">Doble eje / Múltiples curvas</td>
+                                <td class="p-3 text-slate-200">¿Qué sucursal es más eficiente y dónde existe mayor variación o riesgo?</td>
+                                <td class="p-3 text-slate-400">Comparación de productividad Turno 1 vs Turno 2.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN 2: CÓMO INTERPRETAR ==================== -->
+        <section id="sec-guia" class="space-y-6 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                <div>
+                    <span class="px-3 py-1 text-[10px] font-extrabold bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/25 uppercase tracking-widest heading-font">
+                        Metodología Paso a Paso
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-black text-white heading-font mt-2">
+                        Guía de Construcción e Interpretación Profunda
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                        Sigue estos 5 pasos estructurados para transformar datos brutos en visualizaciones ejecutivas listas para la junta directiva.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Paso 1 -->
+                    <div class="bg-slate-950 border border-slate-800/90 rounded-2xl p-5 space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-black flex items-center justify-center text-xs heading-font">1</span>
+                            <h4 class="text-sm font-bold text-white heading-font">Tabulación mediante Regla de Sturges</h4>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed pl-11">
+                            Calcula el tamaño de muestra $n$, el número de clases $k = 1 + 3.322 \log_{10}(n)$, el rango $R = X_{max} - X_{min}$ y la amplitud $A = \lceil R / k \rceil$.
+                            Calcula las marcas de clase $X_i = (L_i + L_s) / 2$ y las frecuencias acumuladas $F_a$.
+                        </p>
+                        <div class="pl-11 pt-1">
+                            <div class="formula-box text-xs inline-block">k = 1 + 3.322 * LOG10(n) &nbsp;|&nbsp; A = R / k &nbsp;|&nbsp; Xi = (Li + Ls) / 2</div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="bg-slate-950 border border-slate-800/90 rounded-2xl p-5 space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-black flex items-center justify-center text-xs heading-font">2</span>
+                            <h4 class="text-sm font-bold text-white heading-font">Construcción y Cierre del Polígono de Frecuencias</h4>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed pl-11">
+                            Se grafican las parejas $(X_i, f_i)$. Para que sea un <strong>polígono cerrado</strong> (área bajo la curva igual a la del histograma), se agrega una marca antes de la primera clase $(X_1 - A, 0)$ y una marca después de la última $(X_k + A, 0)$, anclando los extremos a frecuencia cero.
+                        </p>
+                        <div class="pl-11 text-[11px] text-emerald-400/90 font-medium">
+                            <i class="fa-solid fa-circle-check mr-1"></i>Regla de oro: El área total encerrada por el polígono es exactamente idéntica al área de todas las barras del histograma.
+                        </div>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="bg-slate-950 border border-slate-800/90 rounded-2xl p-5 space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-black flex items-center justify-center text-xs heading-font">3</span>
+                            <h4 class="text-sm font-bold text-white heading-font">Construcción de Ojivas: "Menor Que" y "Mayor Que"</h4>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed pl-11">
+                            • <strong>Ojiva Menor Que (Ascendente):</strong> Une los límites superiores $L_s$ con la frecuencia acumulada $F_a$ (inicia en $(L_{1\text{inf}}, 0)$ y culmina en $(L_{k\text{sup}}, n)$).<br>
+                            • <strong>Ojiva Mayor Que (Descendente):</strong> Une los límites inferiores $L_i$ con las frecuencias desacumuladas (inicia en $(L_{1\text{inf}}, n)$ y desciende hasta $(L_{k\text{sup}}, 0)$).<br>
+                            • <strong>Punto de intersección:</strong> La intersección de ambas ojivas proyectada al eje X coincide con la <strong>Mediana ($Me$)</strong> de la distribución.
+                        </p>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="bg-slate-950 border border-slate-800/90 rounded-2xl p-5 space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-black flex items-center justify-center text-xs heading-font">4</span>
+                            <h4 class="text-sm font-bold text-white heading-font">Superposición de Gráficas para Toma de Decisiones</h4>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed pl-11">
+                            Al superponer dos polígonos de frecuencia (ej. Turno A vs Turno B), el administrador evalúa:
+                        </p>
+                        <ul class="pl-16 text-xs text-slate-300 list-disc space-y-1">
+                            <li><strong>Desplazamiento horizontal:</strong> Si la curva de B está más a la derecha, B tiene en promedio valores mayores.</li>
+                            <li><strong>Altura del pico (Curtosis):</strong> Un pico más alto y angosto indica mayor consistencia (menor variabilidad).</li>
+                            <li><strong>Anchura de la base (Dispersión):</strong> Una curva ancha y aplanada refleja inestabilidad y procesos fuera de control.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIAGNÓSTICO DE FORMAS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                    <h4 class="font-bold text-blue-400 text-sm flex items-center"><i class="fa-solid fa-mountain mr-2"></i>Distribución Simétrica (Campana)</h4>
+                    <p class="text-slate-300">La moda está al centro. Las frecuencias caen uniformemente a ambos lados. La media, mediana y moda coinciden aproximadamente. Proceso estable y predecible.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                    <h4 class="font-bold text-amber-400 text-sm flex items-center"><i class="fa-solid fa-arrow-trend-up mr-2"></i>Sesgo a la Derecha (Positivo)</h4>
+                    <p class="text-slate-300">La cola se extiende hacia valores altos. La mayoría de los datos se concentran en rangos bajos, con pocos casos excepcionalmente altos (ej. salarios o quejas por cliente).</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                    <h4 class="font-bold text-red-400 text-sm flex items-center"><i class="fa-solid fa-arrows-split-up-and-left mr-2"></i>Distribución Bimodal (Dos Picos)</h4>
+                    <p class="text-slate-300">Dos picos visibles sugieren la mezcla de dos poblaciones distintas (ej. mezclar ventas de días de quincena con días normales, o dos máquinas con calibración distinta).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN 3: CASO PRÁCTICO ==================== -->
+        <section id="sec-caso" class="space-y-6 hidden">
+            <div class="rounded-3xl bg-gradient-to-r from-slate-900 to-indigo-950/40 p-6 sm:p-8 border border-slate-800">
+                <span
+                    class="px-3 py-1 text-[10px] font-extrabold bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/25 uppercase tracking-widest heading-font">
+                    Caso Empresarial Guatemalteco
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white heading-font mt-3">
+                    Fábrica Textil San Lucas · San Lucas Sacatepéquez
+                </h2>
+                <p class="text-slate-300 text-xs sm:text-sm mt-3 max-w-3xl leading-relaxed">
+                    <strong class="text-white">Textiles San Lucas S.A.</strong> confecciona prendas para exportación. La gerencia de operaciones está evaluando la eficiencia de producción diaria en unidades ($u$) comparando el <strong class="text-blue-400">Turno Matutino (Serie A, n=35 días)</strong> contra el <strong class="text-emerald-400">Turno Vespertino (Serie B, n=35 días)</strong> para determinar cuál turno tiene mayor productividad y cuál presenta mayor variabilidad en sus líneas de costura.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <button onclick="loadComparativeCaseIntoLab()"
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center">
+                        <i class="fa-solid fa-flask mr-2"></i>Cargar este Caso en el Laboratorio
+                    </button>
+                </div>
+            </div>
+
+            <!-- Datasets del Caso -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-blue-400 heading-font flex items-center">
+                            <i class="fa-solid fa-sun mr-2"></i>Turno Matutino (Serie A - n=35 días)
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-mono">Unidades / día</span>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 font-mono leading-relaxed break-words">
+                        310, 315, 320, 325, 330, 335, 340, 345, 350, 350, 355, 360, 360, 365, 370, 370, 375, 380, 380, 385, 390, 395, 400, 405, 410, 415, 420, 425, 430, 440, 445, 450, 460, 470, 485
+                    </div>
+                    <p class="text-[11px] text-slate-500">Rango: 310 a 485 u · Producción más homogénea y centrada.</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-emerald-400 heading-font flex items-center">
+                            <i class="fa-solid fa-moon mr-2"></i>Turno Vespertino (Serie B - n=35 días)
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono">Unidades / día</span>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 font-mono leading-relaxed break-words">
+                        250, 265, 280, 290, 300, 305, 310, 320, 325, 330, 340, 345, 350, 355, 360, 365, 370, 375, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 535, 550
+                    </div>
+                    <p class="text-[11px] text-slate-500">Rango: 250 a 550 u · Mayor dispersión y fluctuaciones operativas.</p>
+                </div>
+            </div>
+
+            <!-- Recorrido de Análisis -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+                <h3 class="text-base font-bold text-white heading-font"><i class="fa-solid fa-comments-dollar text-amber-400 mr-2"></i>Preguntas de Decisión Gerencial para la Junta Directiva</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-blue-400 font-bold block mb-1">1. ¿Qué turno tiene mayor estabilidad?</span>
+                        <p class="text-slate-400">El polígono del <strong>Turno Matutino</strong> tiene una base más estrecha (Rango = 175 u vs 300 u) y mayor concentración en torno a 375 u.</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-emerald-400 font-bold block mb-1">2. ¿Qué turno alcanza metas altas?</span>
+                        <p class="text-slate-400">La <strong>Ojiva del Turno Vespertino</strong> muestra que el 20% de sus días supera las 480 unidades, pero también tiene un 15% por debajo de 300 u.</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-purple-400 font-bold block mb-1">3. Decisión de Mantenimiento</span>
+                        <p class="text-slate-400">Se recomienda auditar las máquinas en el turno vespertino para corregir la alta variabilidad y estandarizar con los procesos del turno matutino.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN 4: LABORATORIO & SUPERPOSICIÓN ==================== -->
+        <section id="sec-lab" class="space-y-6 hidden">
+            <!-- Selector de Modo de Trabajo -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-white heading-font flex items-center">
+                            <i class="fa-solid fa-flask-vial text-emerald-400 mr-2"></i>Laboratorio Estadístico & Superposición
+                        </h3>
+                        <p class="text-xs text-slate-400">Selecciona si deseas analizar una sola serie o superponer dos series para análisis comparativo.</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto">
+                        <button onclick="setLabMode('single')" id="btn-mode-single"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                            <i class="fa-solid fa-chart-pie mr-1.5"></i>Serie Simple
+                        </button>
+                        <button onclick="setLabMode('compare')" id="btn-mode-compare"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-code-compare mr-1.5"></i>Superposición (A vs B)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FORMULARIO DE ENTRADA -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    <!-- INPUT PANEL -->
+                    <div class="xl:col-span-5 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Título del Estudio</label>
+                                <input type="text" id="lab-title" class="ws-input" value="Análisis de Rendimiento Textil San Lucas">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Tipo de Variable / Formato</label>
+                                <select id="lab-data-type" class="ws-input">
+                                    <option value="units" selected>Unidades producidas (u)</option>
+                                    <option value="minutes">Tiempo en Minutos (min)</option>
+                                    <option value="hours">Tiempo en Horas (hrs)</option>
+                                    <option value="seconds">Tiempo en Segundos (s)</option>
+                                    <option value="currency">Moneda (Q Quetzales)</option>
+                                    <option value="liters">Litros (L)</option>
+                                    <option value="meters">Metros (m)</option>
+                                    <option value="decimals">Decimales (3 dec)</option>
+                                    <option value="normal">Número entero</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Contexto Empresarial</label>
+                            <input type="text" id="lab-context" class="ws-input" value="Evaluación de líneas de confección para exportación en San Lucas Sacatepéquez.">
+                        </div>
+
+                        <!-- Panel Dataset A -->
+                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <label id="label-dataset-a" class="text-xs font-bold text-blue-400 flex items-center">
+                                    <i class="fa-solid fa-database mr-1.5"></i>Datos de la Serie A (o Principal)
+                                </label>
+                                <span id="count-badge-a" class="text-[10px] text-slate-400 font-mono">0 valores</span>
+                            </div>
+                            <div>
+                                <label class="text-[10.5px] font-semibold text-slate-400 block mb-1">
+                                    <i class="fa-solid fa-tag text-blue-400 mr-1"></i>Nombre / Etiqueta de la Serie A
+                                </label>
+                                <input type="text" id="lab-name-a" class="ws-input text-xs font-bold text-blue-400"
+                                    value="Turno Matutino" placeholder="Ej.: Turno Matutino, Sucursal Zona 10, Mes 1...">
+                            </div>
+                            <textarea id="lab-data-a" class="ws-input code-font h-24 text-xs"
+                                placeholder="Pega valores separados por coma, espacio o saltos de línea (ej. 310, 315, 320...)"></textarea>
+                        </div>
+
+                        <!-- Panel Dataset B (Visible en modo compare) -->
+                        <div id="container-dataset-b" class="hidden bg-slate-950 border border-emerald-500/30 rounded-2xl p-4 space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="text-xs font-bold text-emerald-400 flex items-center">
+                                    <i class="fa-solid fa-database mr-1.5"></i>Datos de la Serie B (Comparativa)
+                                </label>
+                                <span id="count-badge-b" class="text-[10px] text-slate-400 font-mono">0 valores</span>
+                            </div>
+                            <div>
+                                <label class="text-[10.5px] font-semibold text-slate-400 block mb-1">
+                                    <i class="fa-solid fa-tag text-emerald-400 mr-1"></i>Nombre / Etiqueta de la Serie B
+                                </label>
+                                <input type="text" id="lab-name-b" class="ws-input text-xs font-bold text-emerald-400"
+                                    value="Turno Vespertino" placeholder="Ej.: Turno Vespertino, Sucursal Mixco, Mes 2...">
+                            </div>
+                            <textarea id="lab-data-b" class="ws-input code-font h-24 text-xs"
+                                placeholder="Pega valores de la segunda serie a comparar (ej. Turno Vespertino, Sucursal B...)"></textarea>
+                        </div>
+
+                        <!-- Botonera de Acción -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <button onclick="processLab()"
+                                class="col-span-2 sm:col-span-1 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-extrabold py-3 px-3 rounded-xl text-xs shadow-lg shadow-blue-500/15 transition active:scale-[0.98] flex items-center justify-center">
+                                <i class="fa-solid fa-calculator mr-1.5"></i>Procesar
+                            </button>
+                            <button onclick="loadComparativeCaseIntoLab()"
+                                class="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center">
+                                <i class="fa-solid fa-industry mr-1.5 text-indigo-400"></i>Caso Textil
+                            </button>
+                            <button onclick="clearLab()"
+                                class="bg-red-950/30 hover:bg-red-950/50 text-red-400 border border-red-500/30 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center">
+                                <i class="fa-solid fa-broom mr-1.5"></i>Limpiar
+                            </button>
+                        </div>
+
+                        <!-- KPIs RÁPIDOS -->
+                        <div id="kpi-cards" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-center">
+                                <span class="text-[10px] text-slate-500 uppercase block">n (Datos)</span>
+                                <span id="kpi-n" class="text-base font-black text-white heading-font">—</span>
+                            </div>
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-center">
+                                <span class="text-[10px] text-slate-500 uppercase block">k (Clases)</span>
+                                <span id="kpi-k" class="text-base font-black text-blue-400 heading-font">—</span>
+                            </div>
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-center">
+                                <span class="text-[10px] text-slate-500 uppercase block">R (Rango)</span>
+                                <span id="kpi-r" class="text-base font-black text-white heading-font">—</span>
+                            </div>
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-center">
+                                <span class="text-[10px] text-slate-500 uppercase block">A (Amplitud)</span>
+                                <span id="kpi-a" class="text-base font-black text-emerald-400 heading-font">—</span>
+                            </div>
+                        </div>
+
+                        <!-- DESGLOSE PASO A PASO PEDAGÓGICO -->
+                        <div id="step-breakdown" class="hidden bg-slate-900 border border-blue-500/25 rounded-2xl p-4 sm:p-5 space-y-3 neon-blue">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <h3 class="text-sm font-bold text-white heading-font flex items-center">
+                                    <i class="fa-solid fa-diagram-project text-blue-400 mr-2"></i>Desglose Paso a Paso de Cálculos
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 hidden sm:inline">Guía del Estudiante</span>
+                                    <button type="button" onclick="toggleStepBreakdown()" id="btn-toggle-breakdown"
+                                        class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition active:scale-95">
+                                        <i class="fa-solid fa-chevron-up text-[10px]" id="icon-toggle-breakdown"></i>
+                                        <span id="text-toggle-breakdown">Contraer</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="step-breakdown-content" class="space-y-2.5">
+                                <p class="text-xs text-slate-400">
+                                    Explicación detallada de cómo se calcula cada columna y valor de la tabla de distribución de frecuencias:
+                                </p>
+                                <div id="step-breakdown-body" class="space-y-2.5 text-xs text-slate-300"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OUTPUT PANEL: GRÁFICO Y CONTROLES -->
+                    <div class="xl:col-span-7 space-y-4">
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4">
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                <div>
+                                    <h3 id="chart-heading" class="text-sm font-bold text-white heading-font">Visualización de Gráfico</h3>
+                                    <p id="chart-subheading" class="text-[11px] text-slate-400">Selecciona el tipo de gráfico cuantitativo</p>
+                                </div>
+                                <span id="chart-type-badge"
+                                    class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400">
+                                    Sin generar
+                                </span>
+                            </div>
+
+                            <!-- Botones de Vistas de Gráficos -->
+                            <div id="chart-buttons-single" class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                <button onclick="renderLabChart('hist')" id="btn-chart-hist"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-slate-700 text-white hover:border-blue-500/50 transition">
+                                    <i class="fa-solid fa-chart-column block text-sm mb-0.5 text-blue-400"></i>Histograma
+                                </button>
+                                <button onclick="renderLabChart('polygon')" id="btn-chart-polygon"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-slate-700 text-white hover:border-emerald-500/50 transition">
+                                    <i class="fa-solid fa-chart-line block text-sm mb-0.5 text-emerald-400"></i>Polígono
+                                </button>
+                                <button onclick="renderLabChart('hist_poly')" id="btn-chart-histpoly"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-slate-700 text-white hover:border-cyan-500/50 transition">
+                                    <i class="fa-solid fa-layer-group block text-sm mb-0.5 text-cyan-400"></i>Histo + Políg
+                                </button>
+                                <button onclick="renderLabChart('ogive_less')" id="btn-chart-ogiveless"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-slate-700 text-white hover:border-amber-500/50 transition">
+                                    <i class="fa-solid fa-arrow-trend-up block text-sm mb-0.5 text-amber-400"></i>Ojiva Menor
+                                </button>
+                                <button onclick="renderLabChart('ogive_both')" id="btn-chart-ogiveboth"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-slate-700 text-white hover:border-purple-500/50 transition">
+                                    <i class="fa-solid fa-arrows-split-up-and-left block text-sm mb-0.5 text-purple-400"></i>Ojiva Doble
+                                </button>
+                            </div>
+
+                            <!-- Botones para Modo Comparativo (Superposición A vs B) -->
+                            <div id="chart-buttons-compare" class="hidden grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                <button onclick="renderLabChart('compare_poly')" id="btn-chart-comppoly"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-purple-500/40 text-purple-300 hover:border-purple-400 transition">
+                                    <i class="fa-solid fa-code-compare block text-sm mb-0.5 text-purple-400"></i>Polígonos Superpuestos (A vs B)
+                                </button>
+                                <button onclick="renderLabChart('compare_ogive')" id="btn-chart-compogive"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-amber-500/40 text-amber-300 hover:border-amber-400 transition">
+                                    <i class="fa-solid fa-timeline block text-sm mb-0.5 text-amber-400"></i>Ojivas Superpuestas (A vs B)
+                                </button>
+                                <button onclick="renderLabChart('compare_hist')" id="btn-chart-comphist"
+                                    class="py-2 px-2 rounded-xl text-[11px] font-bold bg-slate-800 border border-blue-500/40 text-blue-300 hover:border-blue-400 transition">
+                                    <i class="fa-solid fa-chart-column block text-sm mb-0.5 text-blue-400"></i>Histogramas Lado a Lado
+                                </button>
+                            </div>
+
+                            <!-- Canvas del Gráfico -->
+                            <div class="chart-wrap bg-slate-950/80 rounded-2xl border border-slate-800 p-2">
+                                <canvas id="main-chart"></canvas>
+                            </div>
+
+                            <!-- Mensaje / Interpretación automática -->
+                            <div id="chart-insight-box" class="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
+                                <div class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-lightbulb text-amber-400 text-sm mt-0.5"></i>
+                                    <p id="chart-insight" class="text-xs text-slate-300 leading-relaxed">
+                                        Ingresa o carga tus datos y presiona <strong class="text-blue-400">Procesar</strong> para visualizar histogramas, polígonos, ojivas y superposiciones.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLAS DE DISTRIBUCIÓN DE FRECUENCIAS -->
+                <div class="space-y-4 pt-2">
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 overflow-x-auto">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 id="table-title-a" class="text-sm font-bold text-white heading-font flex items-center">
+                                <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias (Serie A)
+                            </h4>
+                            <span class="text-[10px] text-slate-500">Regla de Sturges</span>
+                        </div>
+                        <table class="w-full text-xs min-w-[640px]">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800 text-left bg-slate-950/60">
+                                    <th class="py-2.5 px-3">Intervalo [Li - Ls)</th>
+                                    <th class="py-2.5 px-3">fi (Absoluta)</th>
+                                    <th class="py-2.5 px-3">fr (Relativa)</th>
+                                    <th class="py-2.5 px-3">fp% (Porcentual)</th>
+                                    <th class="py-2.5 px-3">fp acum%</th>
+                                    <th class="py-2.5 px-3">Fa (Acumulada)</th>
+                                    <th class="py-2.5 px-3">Fa Mayor Que</th>
+                                    <th class="py-2.5 px-3">Xi (Marca)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="freq-table-body-a" class="text-slate-300 divide-y divide-slate-850">
+                                <tr>
+                                    <td colspan="8" class="py-4 text-slate-500 text-center">Aún no hay datos procesados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Tabla B (solo en modo comparativo) -->
+                    <div id="container-table-b" class="hidden bg-slate-900 border border-emerald-500/30 rounded-3xl p-5 overflow-x-auto">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-bold text-emerald-400 heading-font flex items-center">
+                                <i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias (Serie B)
+                            </h4>
+                            <span class="text-[10px] text-slate-500">Serie Comparativa</span>
+                        </div>
+                        <table class="w-full text-xs min-w-[640px]">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800 text-left bg-slate-950/60">
+                                    <th class="py-2.5 px-3">Intervalo [Li - Ls)</th>
+                                    <th class="py-2.5 px-3">fi (Absoluta)</th>
+                                    <th class="py-2.5 px-3">fr (Relativa)</th>
+                                    <th class="py-2.5 px-3">fp% (Porcentual)</th>
+                                    <th class="py-2.5 px-3">fp acum%</th>
+                                    <th class="py-2.5 px-3">Fa (Acumulada)</th>
+                                    <th class="py-2.5 px-3">Fa Mayor Que</th>
+                                    <th class="py-2.5 px-3">Xi (Marca)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="freq-table-body-b" class="text-slate-300 divide-y divide-slate-850">
+                                <tr>
+                                    <td colspan="8" class="py-4 text-slate-500 text-center">Aún no hay datos procesados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA DE TRABAJO / INFORME PDF DESCARGABLE -->
+            <div class="bg-slate-900 border border-blue-500/30 rounded-3xl p-6 sm:p-8 space-y-6 neon-blue">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div>
+                        <span
+                            class="px-3 py-1 text-[10px] font-extrabold bg-blue-500/10 text-blue-300 rounded-full border border-blue-500/25 uppercase tracking-widest heading-font">
+                            Hoja de Trabajo · Evaluación Ejecutiva
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white heading-font mt-2">
+                            Informe de Polígonos, Ojivas & Toma de Decisiones
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                            Completa los campos de redacción analítica. El informe PDF incluirá la visualización actual de tu gráfico en alta definición, las tablas de frecuencias calculadas y tu análisis gerencial.
+                        </p>
+                    </div>
+                    <button type="button" onclick="exportReportPDF()" id="btn-export-pdf"
+                        class="shrink-0 w-full lg:w-auto bg-gradient-to-r from-blue-500 via-teal-500 to-emerald-500 hover:from-blue-400 hover:to-emerald-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-xl text-xs sm:text-sm heading-font shadow-lg shadow-blue-500/20 transition active:scale-[0.98]">
+                        <i class="fa-solid fa-file-pdf mr-2"></i>Exportar Informe a PDF
+                    </button>
+                </div>
+
+                <form id="worksheet-form" class="space-y-5" onsubmit="return false;">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre del Estudiante</label>
+                            <input type="text" id="ws-student-name" class="ws-input" placeholder="Ej.: Carlos Mendoza Alvarado">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Número de Carné</label>
+                            <input type="text" id="ws-student-carnet" class="ws-input" placeholder="Ej.: 25-18942">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fecha de Presentación</label>
+                            <input type="date" id="ws-fecha" class="ws-input">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Empresa / Organización Analizada</label>
+                            <input type="text" id="ws-empresa" class="ws-input" value="Textiles San Lucas S.A., San Lucas Sacatepéquez">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Variable Analizada (y Unidad de Medida)</label>
+                            <input type="text" id="ws-variable" class="ws-input" value="Prendas de vestir confeccionadas por día (Unidades u)">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="ws-field bg-blue-950/20 border border-blue-500/20 rounded-2xl p-4">
+                            <label class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-chart-line mr-1"></i>1. Interpretación de la Forma, Concentración y Picos
+                            </label>
+                            <textarea id="ws-forma" class="ws-input ws-textarea"
+                                placeholder="Describe la forma del polígono o histograma: ¿dónde está el pico principal?, ¿es simétrica o sesgada?, ¿qué representan las marcas de clase?"></textarea>
+                            <p class="ws-hint">Indica la clase modal y el comportamiento de las frecuencias extremas.</p>
+                        </div>
+
+                        <div class="ws-field bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-4">
+                            <label class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-code-compare mr-1"></i>2. Análisis Comparativo / Superposición (si aplica)
+                            </label>
+                            <textarea id="ws-comparativo" class="ws-input ws-textarea"
+                                placeholder="Si superpusiste dos curvas (ej. Turno A vs Turno B), explica qué serie es más homogénea, cuál tiene mayor dispersión y qué diferencias existen."></textarea>
+                            <p class="ws-hint">Compara los rangos de amplitud y la altura de las curvas.</p>
+                        </div>
+                    </div>
+
+                    <div class="ws-field bg-amber-950/20 border border-amber-500/20 rounded-2xl p-4">
+                        <label class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+                            <i class="fa-solid fa-bullseye mr-1"></i>3. Decisión Administrativa & Estrategia Gerencial
+                        </label>
+                        <textarea id="ws-decision" class="ws-input ws-textarea"
+                            placeholder="Con base en las gráficas y tablas, ¿qué decisión toma la gerencia? (Ej.: capacitar operadores, reprogramar horarios de turnos, ajustar metas de calidad, reasignar presupuesto)..."></textarea>
+                        <p class="ws-hint">Fundamenta la decisión en los percentiles de la ojiva o en la moda del polígono.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-sm text-slate-300 heading-font font-semibold">
+                Estadística 1, UMG, Hecho por <strong class="text-blue-400">Ruldin Ayala</strong>
+            </p>
+            <p class="text-[11px] text-slate-500">
+                Universidad Mariano Gálvez de Guatemala · Facultad de Administración de Empresas · 2026
+            </p>
+            <p class="text-[10px] text-slate-600">Polígonos de Frecuencia, Ojivas e Histogramas Comparativos · Chart.js & jsPDF</p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT -->
+    <script>
+        // Registro de plugin datalabels si está disponible
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+            Chart.defaults.set('plugins.datalabels', { display: false });
+        }
+
+        // Datasets del caso Textil San Lucas
+        const CASE_DATA_A = '310, 315, 320, 325, 330, 335, 340, 345, 350, 350, 355, 360, 360, 365, 370, 370, 375, 380, 380, 385, 390, 395, 400, 405, 410, 415, 420, 425, 430, 440, 445, 450, 460, 470, 485';
+        const CASE_DATA_B = '250, 265, 280, 290, 300, 305, 310, 320, 325, 330, 340, 345, 350, 355, 360, 365, 370, 375, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 535, 550';
+        const CASE_TITLE = 'Eficiencia de Confección: Turno Matutino vs Turno Vespertino';
+        const CASE_CONTEXT = 'Textiles San Lucas S.A. — Comparativa de unidades confeccionadas por día para optimizar turnos de exportación.';
+
+        let labMode = 'single'; // 'single' o 'compare'
+        let mainChart = null;
+        let currentChartType = null;
+        let analysisA = null;
+        let analysisB = null;
+
+        // ==================== NAVEGACIÓN ENTRE PESTAÑAS ====================
+        function switchSection(id) {
+            ['conceptos', 'guia', 'caso', 'lab'].forEach((sec) => {
+                const el = document.getElementById(`sec-${sec}`);
+                if (el) {
+                    el.classList.toggle('hidden', sec !== id);
+                    el.classList.toggle('block', sec === id);
+                }
+
+                const nav = document.getElementById(`nav-${sec}`);
+                const mob = document.getElementById(`mob-nav-${sec}`);
+                const active = sec === id;
+                if (nav) {
+                    nav.className = active
+                        ? 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                        : 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white';
+                }
+                if (mob) {
+                    mob.className = active
+                        ? 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                        : 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400';
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Modo Single vs Modo Compare
+        function setLabMode(mode) {
+            labMode = mode;
+            const isComp = mode === 'compare';
+
+            document.getElementById('btn-mode-single').className = !isComp
+                ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                : 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+
+            document.getElementById('btn-mode-compare').className = isComp
+                ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                : 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+
+            document.getElementById('container-dataset-b').classList.toggle('hidden', !isComp);
+            document.getElementById('container-table-b').classList.toggle('hidden', !isComp);
+
+            document.getElementById('chart-buttons-single').classList.toggle('hidden', isComp);
+            document.getElementById('chart-buttons-compare').classList.toggle('hidden', !isComp);
+
+            document.getElementById('label-dataset-a').innerHTML = isComp
+                ? '<i class="fa-solid fa-sun mr-1.5 text-blue-400"></i>Datos Serie A (Turno Matutino / Base)'
+                : '<i class="fa-solid fa-database mr-1.5 text-blue-400"></i>Datos de la Serie Principal';
+
+            document.getElementById('table-title-a').innerHTML = isComp
+                ? '<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Frecuencias Serie A'
+                : '<i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias';
+
+            processLab();
+        }
+
+        function loadComparativeCaseIntoLab() {
+            switchSection('lab');
+            setLabMode('compare');
+            document.getElementById('lab-title').value = CASE_TITLE;
+            document.getElementById('lab-context').value = CASE_CONTEXT;
+            document.getElementById('lab-name-a').value = 'Turno Matutino';
+            document.getElementById('lab-name-b').value = 'Turno Vespertino';
+            document.getElementById('lab-data-a').value = CASE_DATA_A;
+            document.getElementById('lab-data-b').value = CASE_DATA_B;
+            document.getElementById('lab-data-type').value = 'units';
+            processLab();
+        }
+
+        // ==================== NÚCLEO MATEMÁTICO & STURGES ====================
+        function parseDataset(text) {
+            if (!text) return [];
+            return text
+                .split(/[,;\s\n\r\t]+/)
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0)
+                .map((s) => parseFloat(s.replace(',', '.')))
+                .filter((n) => Number.isFinite(n));
+        }
+
+        function computeSturges(data) {
+            const n = data.length;
+            if (n === 0) return null;
+
+            const xmin = Math.min(...data);
+            const xmax = Math.max(...data);
+            const R = xmax - xmin;
+
+            const kRaw = 1 + 3.322 * Math.log10(n);
+            let k = Math.round(kRaw);
+            if (k < 1) k = 1;
+
+            let A;
+            if (R === 0) {
+                A = 1;
+            } else {
+                const Adiv = R / k;
+                const roundedDiv = Math.round(Adiv * 100) / 100;
+                A = Math.abs(roundedDiv - Adiv) < 1e-9 ? roundedDiv : Math.ceil(Adiv * 100) / 100;
+            }
+
+            const intervals = [];
+            let Li = xmin;
+            const EPS = 1e-9;
+            for (let i = 0; i < k; i++) {
+                let Ls = Li + A;
+                if (i === k - 1 && Ls < xmax - EPS) Ls = xmax;
+                intervals.push({ Li, Ls, fi: 0, fr: 0, fp: 0, Fa: 0, FaMayor: 0, Xi: (Li + Ls) / 2 });
+                Li = Ls;
+            }
+
+            data.forEach((x) => {
+                let idx = -1;
+                for (let i = 0; i < intervals.length; i++) {
+                    const { Li: li, Ls: ls } = intervals[i];
+                    const isLast = i === intervals.length - 1;
+                    if ((x >= li - EPS) && (isLast ? x <= ls + EPS : x < ls - EPS)) {
+                        idx = i;
+                        break;
+                    }
+                }
+                if (idx === -1) {
+                    idx = x <= intervals[0].Li ? 0 : intervals.length - 1;
+                }
+                intervals[idx].fi += 1;
+            });
+
+            let cum = 0;
+            intervals.forEach((c) => {
+                cum += c.fi;
+                c.fr = n > 0 ? c.fi / n : 0;
+                c.fp = c.fr * 100;
+                c.Fa = cum;
+                c.fpAcum = n > 0 ? (cum / n) * 100 : 0;
+            });
+
+            // Fa Mayor Que (desacumulada)
+            intervals.forEach((c, idx) => {
+                const anteriorCum = idx === 0 ? 0 : intervals[idx - 1].Fa;
+                c.FaMayor = n - anteriorCum;
+            });
+
+            let modalIdx = 0;
+            intervals.forEach((c, i) => {
+                if (c.fi > intervals[modalIdx].fi) modalIdx = i;
+            });
+
+            // Media aritmética estimada
+            let sumXiFi = 0;
+            intervals.forEach(c => sumXiFi += (c.Xi * c.fi));
+            const mean = n > 0 ? sumXiFi / n : 0;
+
+            return { n, xmin, xmax, R, kRaw, k, A, intervals, modalIdx, mean };
+        }
+
+        // ==================== FORMATOS DE VISUALIZACIÓN ====================
+        function fmtNum(v, dec = 2) {
+            const num = Number(v);
+            if (!Number.isFinite(num)) return '—';
+            const rounded = Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+            return rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toFixed(dec).replace(/0+$/, '').replace(/\.$/, '');
+        }
+
+        function getSelectedDataType() {
+            const sel = document.getElementById('lab-data-type');
+            return sel ? sel.value : 'units';
+        }
+
+        function formatDataValue(value, options = {}) {
+            const num = Number(value);
+            if (!Number.isFinite(num)) return '—';
+
+            const { forceDecimals = null } = options;
+            const type = getSelectedDataType();
+            const hasDec = Math.abs(num % 1) > 1e-9;
+            const decimalPlaces = forceDecimals ?? (hasDec ? 2 : 0);
+
+            if (type === 'currency') {
+                const fmt = new Intl.NumberFormat('es-GT', {
+                    minimumFractionDigits: decimalPlaces,
+                    maximumFractionDigits: 2
+                });
+                return `Q ${fmt.format(num)}`;
+            }
+
+            if (type === 'decimals') {
+                return fmtNum(num, forceDecimals ?? 3);
+            }
+
+            if (type === 'units' || type === 'liters' || type === 'meters' || type === 'hours' || type === 'minutes' || type === 'seconds') {
+                const suffixMap = {
+                    units: 'u',
+                    liters: 'L',
+                    meters: 'm',
+                    hours: 'hrs',
+                    minutes: 'min',
+                    seconds: 's'
+                };
+                const fmt = new Intl.NumberFormat('es-GT', {
+                    minimumFractionDigits: decimalPlaces,
+                    maximumFractionDigits: 2
+                });
+                return `${fmt.format(num)} ${suffixMap[type]}`;
+            }
+
+            return fmtNum(num, forceDecimals ?? 2);
+        }
+
+        function intervalLabel(c, isLast) {
+            return isLast
+                ? `[${formatDataValue(c.Li)} − ${formatDataValue(c.Ls)}]`
+                : `[${formatDataValue(c.Li)} − ${formatDataValue(c.Ls)})`;
+        }
+
+        // Helper para nombres personalizados de series
+        function getSeriesNameA() {
+            const el = document.getElementById('lab-name-a');
+            return (el && el.value.trim()) ? el.value.trim() : 'Serie A';
+        }
+
+        function getSeriesNameB() {
+            const el = document.getElementById('lab-name-b');
+            return (el && el.value.trim()) ? el.value.trim() : 'Serie B';
+        }
+
+        // ==================== PROCESAMIENTO DEL LABORATORIO ====================
+        function processLab() {
+            const rawA = document.getElementById('lab-data-a').value;
+            const dataA = parseDataset(rawA);
+
+            document.getElementById('count-badge-a').textContent = `${dataA.length} valores`;
+
+            if (dataA.length < 5) {
+                if (rawA.trim().length > 0) {
+                    alert('Ingresa al menos 5 datos numéricos válidos en la Serie A.');
+                }
+                return;
+            }
+
+            analysisA = computeSturges(dataA);
+            renderKpis(analysisA);
+            renderBreakdown(analysisA, getSeriesNameA());
+            renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
+            document.getElementById('kpi-cards').classList.remove('hidden');
+            document.getElementById('step-breakdown').classList.remove('hidden');
+
+            document.getElementById('table-title-a').innerHTML = `
+                <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
+            `;
+
+            if (labMode === 'compare') {
+                const rawB = document.getElementById('lab-data-b').value;
+                const dataB = parseDataset(rawB);
+                document.getElementById('count-badge-b').textContent = `${dataB.length} valores`;
+
+                if (dataB.length >= 5) {
+                    analysisB = computeSturges(dataB);
+                    renderFreqTable(analysisB, 'freq-table-body-b', getSeriesNameB());
+                    const titleB = document.querySelector('#container-table-b h4');
+                    if (titleB) {
+                        titleB.innerHTML = `<i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-emerald-300 font-bold">${getSeriesNameB()}</span>`;
+                    }
+                    renderLabChart(currentChartType && currentChartType.startsWith('compare_') ? currentChartType : 'compare_poly');
+                } else {
+                    renderLabChart('polygon');
+                }
+            } else {
+                renderLabChart(currentChartType && !currentChartType.startsWith('compare_') ? currentChartType : 'hist_poly');
+            }
+        }
+
+        function reRenderFormattedViews() {
+            if (!analysisA) return;
+            renderKpis(analysisA);
+            renderBreakdown(analysisA, getSeriesNameA());
+            renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
+            if (analysisB && labMode === 'compare') {
+                renderFreqTable(analysisB, 'freq-table-body-b', getSeriesNameB());
+            }
+            if (currentChartType) {
+                renderLabChart(currentChartType);
+            }
+        }
+
+        function clearLab() {
+            document.getElementById('lab-data-a').value = '';
+            document.getElementById('lab-data-b').value = '';
+            document.getElementById('count-badge-a').textContent = '0 valores';
+            document.getElementById('count-badge-b').textContent = '0 valores';
+            document.getElementById('kpi-cards').classList.add('hidden');
+            document.getElementById('step-breakdown').classList.add('hidden');
+            document.getElementById('freq-table-body-a').innerHTML = '<tr><td colspan="8" class="py-4 text-slate-500 text-center">Aún no hay datos procesados.</td></tr>';
+            document.getElementById('freq-table-body-b').innerHTML = '<tr><td colspan="8" class="py-4 text-slate-500 text-center">Aún no hay datos procesados.</td></tr>';
+            document.getElementById('chart-insight').textContent = 'Datos limpiados. Pega tus datos y presiona Procesar.';
+            document.getElementById('chart-type-badge').textContent = 'Sin generar';
+            document.getElementById('chart-type-badge').className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400';
+            if (mainChart) { mainChart.destroy(); mainChart = null; }
+            analysisA = null;
+            analysisB = null;
+            currentChartType = null;
+        }
+
+        function renderKpis(a) {
+            document.getElementById('kpi-n').textContent = a.n;
+            document.getElementById('kpi-k').textContent = a.k;
+            document.getElementById('kpi-r').textContent = formatDataValue(a.R);
+            document.getElementById('kpi-a').textContent = formatDataValue(a.A);
+        }
+
+        // ==================== TOGGLE DESGLOSE PASO A PASO ====================
+        let isBreakdownExpanded = true;
+
+        function toggleStepBreakdown() {
+            const content = document.getElementById('step-breakdown-content');
+            const icon = document.getElementById('icon-toggle-breakdown');
+            const text = document.getElementById('text-toggle-breakdown');
+            if (!content) return;
+
+            isBreakdownExpanded = !isBreakdownExpanded;
+            content.classList.toggle('hidden', !isBreakdownExpanded);
+
+            if (icon) {
+                icon.className = isBreakdownExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+            }
+            if (text) {
+                text.textContent = isBreakdownExpanded ? 'Contraer' : 'Expandir';
+            }
+        }
+
+        // DESGLOSE PASO A PASO DETALLADO
+        function renderBreakdown(a, seriesName = 'Serie Principal') {
+            const body = document.getElementById('step-breakdown-body');
+            if (!body || !a) return;
+
+            body.innerHTML = `
+                <!-- Paso 1: n -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-calculator mr-1.5"></i>Paso 1 · n (Tamaño de la Muestra / Conteo Total)</span>
+                    <p><strong class="text-white">n</strong> = Número total de observaciones registradas en la serie <span class="text-blue-300 font-semibold">${seriesName}</span>.</p>
+                    <p class="text-slate-400">En Google Sheets: <code class="text-emerald-300 font-mono">=CONTAR(rango_datos)</code>. En estadística: <strong class="text-white">n = Σ fi</strong>.</p>
+                    <p class="text-slate-200">Resultado: <strong class="text-emerald-400">n = ${a.n} observaciones</strong>.</p>
+                </div>
+
+                <!-- Paso 2: k -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-layer-group mr-1.5"></i>Paso 2 · k (Número de Clases o Intervalos - Sturges)</span>
+                    <p><strong class="text-white">Fórmula de Sturges:</strong> <code class="text-blue-300 font-mono">k = 1 + 3.322 × log₁₀(n)</code></p>
+                    <p class="text-slate-400">En Google Sheets: <code class="text-emerald-300 font-mono">=REDONDEAR(1 + 3.322 * LOG10(CONTAR(datos)); 0)</code>.</p>
+                    <p class="text-slate-200">Cálculo: k = 1 + 3.322 × log₁₀(${a.n}) = 1 + 3.322 × ${fmtNum(Math.log10(a.n), 5)} = <strong class="text-white">${fmtNum(a.kRaw, 4)}</strong></p>
+                    <p class="text-slate-200">Redondeado al entero más cercano: <strong class="text-emerald-400">k = ${a.k} clases</strong>.</p>
+                </div>
+
+                <!-- Paso 3: R -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-arrows-left-right mr-1.5"></i>Paso 3 · R (Rango o Recorrido Total)</span>
+                    <p><strong class="text-white">R</strong> = Diferencia entre el valor máximo y el valor mínimo registrado en la muestra.</p>
+                    <p class="text-slate-400">En Google Sheets: <code class="text-emerald-300 font-mono">=MAX(datos) - MIN(datos)</code>. En estadística: <strong class="text-white">R = Xmax − Xmin</strong>.</p>
+                    <p class="text-slate-200">Cálculo: R = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-emerald-400">R = ${formatDataValue(a.R)}</strong>.</p>
+                </div>
+
+                <!-- Paso 4: A -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-ruler-horizontal mr-1.5"></i>Paso 4 · A (Amplitud o Ancho de Cada Intervalo)</span>
+                    <p><strong class="text-white">A</strong> = Ancho que debe abarcar cada clase para cubrir todo el rango de datos.</p>
+                    <p class="text-slate-400">En Google Sheets: <code class="text-emerald-300 font-mono">=REDONDEAR.MAS(R / k; 2)</code> (o <code class="text-emerald-300 font-mono">ROUNDUP</code>). Siempre redondea hacia arriba para no dejar datos fuera.</p>
+                    <p class="text-slate-200">Cálculo: A = ${formatDataValue(a.R)} / ${a.k} = <strong class="text-emerald-400">A = ${formatDataValue(a.A)}</strong>.</p>
+                </div>
+
+                <!-- Paso 5: Intervalos y Xi -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-table-columns mr-1.5"></i>Paso 5 · Límites de Intervalos [Li, Ls) y Marcas de Clase (Xi)</span>
+                    <p><strong class="text-white">Límites:</strong> La clase 1 inicia en <code class="text-white font-mono">Li = Xmin = ${formatDataValue(a.xmin)}</code>. Suma <code class="text-white font-mono">A = ${formatDataValue(a.A)}</code> para obtener <code class="text-white font-mono">Ls = Li + A</code>. La última clase se cierra para cubrir <code class="text-white font-mono">Xmax = ${formatDataValue(a.xmax)}</code>.</p>
+                    <p><strong class="text-white">Marca de Clase (Xi):</strong> Punto medio del intervalo: <code class="text-cyan-300 font-mono">Xi = (Li + Ls) / 2</code>. En Google Sheets: <code class="text-emerald-300 font-mono">=(Li + Ls) / 2</code>. Es el valor colocado en el <strong class="text-emerald-400">Eje X del Polígono de Frecuencias</strong>.</p>
+                    <p class="text-slate-200">Ejemplo Clase 1: Xi = (${formatDataValue(a.intervals[0].Li)} + ${formatDataValue(a.intervals[0].Ls)}) / 2 = <strong class="text-cyan-300">${formatDataValue(a.intervals[0].Xi)}</strong>.</p>
+                </div>
+
+                <!-- Paso 6: fi, fr, fp% -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-percent mr-1.5"></i>Paso 6 · fi (Absoluta), fr (Relativa) y fp% (Porcentual)</span>
+                    <p>• <strong class="text-blue-400">fi (Frecuencia Absoluta):</strong> Conteo directo de datos dentro de [Li, Ls). En Google Sheets: <code class="text-emerald-300 font-mono">=CONTAR.SI.CONJUNTO(datos; "&gt;="&Li; datos; "&lt;"&Ls)</code>. Suma total = <strong class="text-white">${a.n}</strong>.</p>
+                    <p>• <strong class="text-blue-400">fr (Frecuencia Relativa):</strong> Proporción de la clase: <code class="text-blue-300 font-mono">fr = fi / n</code>. En Google Sheets: <code class="text-emerald-300 font-mono">=fi / $n$</code>. Suma total = <strong class="text-white">1.000</strong>.</p>
+                    <p>• <strong class="text-blue-400">fp% (Frecuencia Porcentual):</strong> Participación porcentual: <code class="text-blue-300 font-mono">fp% = fr × 100</code>. En Google Sheets: <code class="text-emerald-300 font-mono">=fr * 100</code>. Suma total = <strong class="text-white">100%</strong>.</p>
+                    <p class="text-slate-200">Clase modal: <strong class="text-blue-400">${intervalLabel(a.intervals[a.modalIdx], a.modalIdx === a.intervals.length - 1)}</strong> con <strong class="text-white">${a.intervals[a.modalIdx].fi} datos (${a.intervals[a.modalIdx].fp.toFixed(1)}%)</strong>.</p>
+                </div>
+
+                <!-- Paso 7: Fa, fp acum% y Fa Mayor Que -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-amber-400 font-bold block"><i class="fa-solid fa-chart-simple mr-1.5"></i>Paso 7 · Fa (Acumulada Menor Que), fp acum% y Fa Mayor Que (Desacumulada)</span>
+                    <p>• <strong class="text-emerald-400">Fa (Frecuencia Acumulada "Menor Que"):</strong> Suma sucesiva de fi hasta la clase i (<code class="text-emerald-300 font-mono">Fa_i = Fa_anterior + fi</code>). Se ubica en el eje Y de la <strong class="text-amber-400">Ojiva Menor Que</strong> para saber cuántos datos son menores al límite superior Ls.</p>
+                    <p>• <strong class="text-emerald-400">fp acum% (Porcentaje Acumulado):</strong> <code class="text-emerald-300 font-mono">fp acum% = (Fa / n) × 100</code>. Indica qué porcentaje de la muestra no sobrepasa el límite superior Ls (la última clase siempre llega a <strong class="text-white">100.0%</strong>).</p>
+                    <p>• <strong class="text-amber-400">Fa Mayor Que (Desacumulada):</strong> Cantidad de observaciones mayores o iguales al límite inferior Li (<code class="text-amber-300 font-mono">Fa Mayor = n − Fa_anterior</code>). Inicia en <strong class="text-white">${a.n}</strong> en la clase 1 y desciende, formando la <strong class="text-purple-400">Ojiva Mayor Que</strong>.</p>
+                </div>
+            `;
+        }
+
+        function renderFreqTable(a, tableBodyId, seriesName = '') {
+            const tbody = document.getElementById(tableBodyId);
+            if (!a || !tbody) return;
+
+            tbody.innerHTML = a.intervals.map((c, i) => {
+                const isLast = i === a.intervals.length - 1;
+                const isModal = i === a.modalIdx;
+                return `
+                <tr class="border-b border-slate-850 hover:bg-slate-850/40 ${isModal ? 'bg-blue-500/10' : ''}">
+                    <td class="py-2.5 px-3 font-medium text-white">${intervalLabel(c, isLast)}</td>
+                    <td class="py-2.5 px-3 ${isModal ? 'text-blue-400 font-bold' : ''}">${c.fi}</td>
+                    <td class="py-2.5 px-3">${c.fr.toFixed(3)}</td>
+                    <td class="py-2.5 px-3">${c.fp.toFixed(1)}%</td>
+                    <td class="py-2.5 px-3">${c.fpAcum.toFixed(1)}%</td>
+                    <td class="py-2.5 px-3 font-semibold text-emerald-400">${c.Fa}</td>
+                    <td class="py-2.5 px-3 text-amber-400 font-semibold">${c.FaMayor}</td>
+                    <td class="py-2.5 px-3 text-cyan-300">${formatDataValue(c.Xi)}</td>
+                </tr>`;
+            }).join('') + `
+                <tr class="text-slate-200 font-bold bg-slate-950/80">
+                    <td class="py-2.5 px-3">Total (${seriesName ? seriesName + ' · ' : ''}n = ${a.n})</td>
+                    <td class="py-2.5 px-3 text-blue-400">${a.n}</td>
+                    <td class="py-2.5 px-3">1.000</td>
+                    <td class="py-2.5 px-3">100.0%</td>
+                    <td class="py-2.5 px-3">100.0%</td>
+                    <td class="py-2.5 px-3" colspan="3">Media estimada: <strong class="text-white">${formatDataValue(a.mean)}</strong></td>
+                </tr>`;
+        }
+
+        // ==================== RENDERIZADO DE GRÁFICOS (CHART.JS) ====================
+        function renderLabChart(type) {
+            if (!analysisA) {
+                alert('Primero debes ingresar y procesar un conjunto de datos válido.');
+                return;
+            }
+
+            const title = document.getElementById('lab-title').value.trim() || 'Gráfico Estadístico';
+            document.getElementById('chart-heading').textContent = title;
+
+            if (mainChart) { mainChart.destroy(); mainChart = null; }
+            const ctx = document.getElementById('main-chart').getContext('2d');
+            const badge = document.getElementById('chart-type-badge');
+            const insight = document.getElementById('chart-insight');
+            currentChartType = type;
+
+            const a = analysisA;
+            const b = analysisB;
+            const nameA = getSeriesNameA();
+            const nameB = getSeriesNameB();
+
+            // 1. HISTOGRAMA CLÁSICO
+            if (type === 'hist') {
+                badge.textContent = 'Histograma';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30';
+                const labels = a.intervals.map((c, i) => intervalLabel(c, i === a.intervals.length - 1));
+
+                mainChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: `${nameA} · Frecuencia Absoluta (fi)`,
+                            data: a.intervals.map(c => c.fi),
+                            backgroundColor: a.intervals.map((c, i) => i === a.modalIdx ? 'rgba(59, 130, 246, 0.85)' : 'rgba(56, 189, 248, 0.55)'),
+                            borderColor: a.intervals.map((c, i) => i === a.modalIdx ? '#3b82f6' : '#38bdf8'),
+                            borderWidth: 1.5,
+                            borderRadius: 4,
+                            categoryPercentage: 1.0,
+                            barPercentage: 0.98
+                        }]
+                    },
+                    options: baseChartOptions('Intervalos de Clase [Li - Ls)', 'Frecuencia fi')
+                });
+
+                insight.innerHTML = `<strong>Histograma (${nameA}):</strong> La clase modal es <span class="text-blue-400 font-bold">${labels[a.modalIdx]}</span> con ${a.intervals[a.modalIdx].fi} observaciones (${a.intervals[a.modalIdx].fp.toFixed(1)}%). La distribución refleja la concentración y el sesgo de los datos.`;
+            }
+
+            // 2. POLÍGONO DE FRECUENCIAS
+            if (type === 'polygon') {
+                badge.textContent = 'Polígono de Frecuencias';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+                const extLabels = [formatDataValue(a.intervals[0].Li - a.A / 2), ...a.intervals.map(c => formatDataValue(c.Xi)), formatDataValue(a.intervals[a.intervals.length - 1].Ls + a.A / 2)];
+                const extData = [0, ...a.intervals.map(c => c.fi), 0];
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: extLabels,
+                        datasets: [{
+                            label: `${nameA} · Frecuencia (fi) en Marcas Xi`,
+                            data: extData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.18)',
+                            pointBackgroundColor: '#34d399',
+                            pointBorderColor: '#059669',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            tension: 0.25,
+                            fill: true
+                        }]
+                    },
+                    options: baseChartOptions('Marca de Clase (Xi) [con extremos anclados a cero]', 'Frecuencia fi')
+                });
+
+                insight.innerHTML = `<strong>Polígono de Frecuencia (${nameA}):</strong> Conecta los puntos medios $(X_i, f_i)$ y cierra en los extremos a frecuencia cero. La cima se sitúa en la marca de clase <span class="text-emerald-400 font-bold">${formatDataValue(a.intervals[a.modalIdx].Xi)}</span>.`;
+            }
+
+            // 3. SUPERPOSICIÓN: HISTOGRAMA + POLÍGONO (MISMA SERIE)
+            if (type === 'hist_poly') {
+                badge.textContent = 'Superposición: Histograma + Polígono';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30';
+
+                const labels = a.intervals.map((c, i) => `${formatDataValue(c.Xi)}\n${intervalLabel(c, i === a.intervals.length - 1)}`);
+
+                mainChart = new Chart(ctx, {
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                type: 'line',
+                                label: `Curva Polígono (${nameA})`,
+                                data: a.intervals.map(c => c.fi),
+                                borderColor: '#06b6d4',
+                                backgroundColor: 'rgba(6, 182, 212, 0.15)',
+                                pointBackgroundColor: '#22d3ee',
+                                pointRadius: 5,
+                                tension: 0.3,
+                                fill: false,
+                                order: 1
+                            },
+                            {
+                                type: 'bar',
+                                label: `Barras Histograma (${nameA})`,
+                                data: a.intervals.map(c => c.fi),
+                                backgroundColor: 'rgba(59, 130, 246, 0.45)',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1.5,
+                                borderRadius: 4,
+                                categoryPercentage: 1.0,
+                                barPercentage: 0.95,
+                                order: 2
+                            }
+                        ]
+                    },
+                    options: baseChartOptions('Marca de Clase Xi e Intervalo', 'Frecuencia fi')
+                });
+
+                insight.innerHTML = `<strong>Superposición Mixta (${nameA}):</strong> Permite apreciar simultáneamente los bloques del histograma y el comportamiento continuo del polígono, facilitando la identificación de la densidad y forma del proceso.`;
+            }
+
+            // 4. OJIVA "MENOR QUE"
+            if (type === 'ogive_less') {
+                badge.textContent = 'Ojiva "Menor Que" (Acumulada)';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+                const ogLabels = [formatDataValue(a.intervals[0].Li), ...a.intervals.map(c => formatDataValue(c.Ls))];
+                const ogData = [0, ...a.intervals.map(c => c.Fa)];
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ogLabels,
+                        datasets: [{
+                            label: `${nameA} · Frecuencia Acumulada Menor Que (Fa)`,
+                            data: ogData,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.16)',
+                            pointBackgroundColor: '#fbbf24',
+                            pointRadius: 5,
+                            tension: 0.18,
+                            fill: true
+                        }]
+                    },
+                    options: baseChartOptions('Límite Superior de Clase (Ls)', 'Frecuencia Acumulada Fa')
+                });
+
+                insight.innerHTML = `<strong>Ojiva "Menor Que" (${nameA}):</strong> Inicia en el límite inferior de la primera clase y acumula observaciones hasta llegar a $n = ${a.n}$. Útil para responder qué proporción cae por debajo de un valor límite.`;
+            }
+
+            // 5. OJIVA DOBLE (MENOR QUE & MAYOR QUE)
+            if (type === 'ogive_both') {
+                badge.textContent = 'Ojivas Cruzadas (Menor y Mayor Que)';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30';
+
+                const ogLabels = [formatDataValue(a.intervals[0].Li), ...a.intervals.map(c => formatDataValue(c.Ls))];
+                const ogDataLess = [0, ...a.intervals.map(c => c.Fa)];
+                const ogDataMore = [a.n, ...a.intervals.map((c, i) => a.intervals[i].FaMayor - c.fi)];
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ogLabels,
+                        datasets: [
+                            {
+                                label: `${nameA} · Ojiva Menor Que (Ascendente)`,
+                                data: ogDataLess,
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                pointBackgroundColor: '#34d399',
+                                pointRadius: 5,
+                                tension: 0.2
+                            },
+                            {
+                                label: `${nameA} · Ojiva Mayor Que (Descendente)`,
+                                data: ogDataMore,
+                                borderColor: '#ec4899',
+                                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                                pointBackgroundColor: '#f472b6',
+                                pointRadius: 5,
+                                tension: 0.2
+                            }
+                        ]
+                    },
+                    options: baseChartOptions('Límites de Clase', 'Frecuencias Acumuladas')
+                });
+
+                insight.innerHTML = `<strong>Ojivas Cruzadas (${nameA}):</strong> El punto donde se intersectan ambas curvas equivale aproximadamente al 50% de la muestra, señalando la <strong>Mediana ($Me$)</strong> de la distribución.`;
+            }
+
+            // 6. MODO COMPARATIVO: POLÍGONOS SUPERPUESTOS (SERIE A vs SERIE B)
+            if (type === 'compare_poly') {
+                if (!b) {
+                    alert(`Ingresa los datos de ${nameB} para superponer curvas comparativas.`);
+                    return;
+                }
+
+                badge.textContent = `Polígonos Superpuestos (${nameA} vs ${nameB})`;
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30';
+
+                const labelsA = a.intervals.map(c => formatDataValue(c.Xi));
+                const labelsB = b.intervals.map(c => formatDataValue(c.Xi));
+                const combinedLabels = Array.from(new Set([...labelsA, ...labelsB])).sort((x, y) => parseFloat(x) - parseFloat(y));
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: combinedLabels,
+                        datasets: [
+                            {
+                                label: `${nameA} (n=${a.n})`,
+                                data: combinedLabels.map(l => {
+                                    const match = a.intervals.find(c => formatDataValue(c.Xi) === l);
+                                    return match ? match.fi : 0;
+                                }),
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.18)',
+                                pointBackgroundColor: '#60a5fa',
+                                pointRadius: 5,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: `${nameB} (n=${b.n})`,
+                                data: combinedLabels.map(l => {
+                                    const match = b.intervals.find(c => formatDataValue(c.Xi) === l);
+                                    return match ? match.fi : 0;
+                                }),
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.18)',
+                                pointBackgroundColor: '#34d399',
+                                pointRadius: 5,
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: baseChartOptions('Marca de Clase (Xi)', 'Frecuencia fi')
+                });
+
+                insight.innerHTML = `<strong>Comparativa de Polígonos:</strong> <span class="text-blue-400 font-bold">${nameA}</span> tiene Rango = ${formatDataValue(a.R)} (Media ≈ ${formatDataValue(a.mean)}) vs <span class="text-emerald-400 font-bold">${nameB}</span> con Rango = ${formatDataValue(b.R)} (Media ≈ ${formatDataValue(b.mean)}). Observa qué curva es más estrecha y regular.`;
+            }
+
+            // 7. MODO COMPARATIVO: OJIVAS SUPERPUESTAS (SERIE A vs SERIE B)
+            if (type === 'compare_ogive') {
+                if (!b) {
+                    alert(`Ingresa los datos de ${nameB} para superponer ojivas comparativas.`);
+                    return;
+                }
+
+                badge.textContent = `Ojivas Superpuestas (${nameA} vs ${nameB})`;
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+                const labelsA = a.intervals.map(c => formatDataValue(c.Ls));
+                const labelsB = b.intervals.map(c => formatDataValue(c.Ls));
+                const combinedLabels = Array.from(new Set([...labelsA, ...labelsB])).sort((x, y) => parseFloat(x) - parseFloat(y));
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: combinedLabels,
+                        datasets: [
+                            {
+                                label: `Ojiva ${nameA} (% Acumulado)`,
+                                data: combinedLabels.map(l => {
+                                    const match = a.intervals.find(c => formatDataValue(c.Ls) === l);
+                                    return match ? match.fpAcum : null;
+                                }),
+                                spanGaps: true,
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                pointBackgroundColor: '#60a5fa',
+                                pointRadius: 5,
+                                tension: 0.2
+                            },
+                            {
+                                label: `Ojiva ${nameB} (% Acumulado)`,
+                                data: combinedLabels.map(l => {
+                                    const match = b.intervals.find(c => formatDataValue(c.Ls) === l);
+                                    return match ? match.fpAcum : null;
+                                }),
+                                spanGaps: true,
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                pointBackgroundColor: '#34d399',
+                                pointRadius: 5,
+                                tension: 0.2
+                            }
+                        ]
+                    },
+                    options: baseChartOptions('Límites Superiores (Ls)', 'Porcentaje Acumulado (fp acum %)')
+                });
+
+                insight.innerHTML = `<strong>Superposición de Ojivas Porcentuales:</strong> La serie cuya curva asciende más rápido alcanza sus volúmenes y cuotas en valores más bajos. Permite comparar umbrales de riesgo entre ${nameA} y ${nameB}.`;
+            }
+
+            // 8. MODO COMPARATIVO: HISTOGRAMAS LADO A LADO
+            if (type === 'compare_hist') {
+                if (!b) {
+                    alert(`Ingresa los datos de ${nameB} para comparar histogramas.`);
+                    return;
+                }
+
+                badge.textContent = `Histogramas Lado a Lado (${nameA} vs ${nameB})`;
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30';
+
+                const maxClasses = Math.max(a.intervals.length, b.intervals.length);
+                const labels = Array.from({ length: maxClasses }, (_, i) => `Clase ${i + 1}`);
+
+                mainChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: `${nameA} (fi)`,
+                                data: a.intervals.map(c => c.fi),
+                                backgroundColor: 'rgba(59, 130, 246, 0.75)',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1
+                            },
+                            {
+                                label: `${nameB} (fi)`,
+                                data: b.intervals.map(c => c.fi),
+                                backgroundColor: 'rgba(16, 185, 129, 0.75)',
+                                borderColor: '#10b981',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: baseChartOptions('Clases de Sturges', 'Frecuencia fi')
+                });
+
+                insight.innerHTML = `<strong>Histogramas Comparativos:</strong> Permite contrastar la altura de cada clase entre <span class="text-blue-400 font-bold">${nameA}</span> y <span class="text-emerald-400 font-bold">${nameB}</span> para detectar desfases en las modas operativas.`;
+            }
+        }
+
+        function baseChartOptions(xTitle, yTitle) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { color: '#cbd5e1', font: { size: 11, family: 'Space Grotesk' } }
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#f8fafc',
+                        anchor: 'end',
+                        align: 'top',
+                        font: { size: 10, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#94a3b8', font: { size: 10 } },
+                        grid: { color: 'rgba(148, 163, 184, 0.08)' },
+                        title: { display: !!xTitle, text: xTitle || '', color: '#94a3b8', font: { size: 11, weight: '600' } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#94a3b8', font: { size: 10 } },
+                        grid: { color: 'rgba(148, 163, 184, 0.12)' },
+                        title: { display: !!yTitle, text: yTitle || '', color: '#94a3b8', font: { size: 11, weight: '600' } }
+                    }
+                }
+            };
+        }
+
+        // ==================== EXPORTACIÓN A PDF EJECUTIVO (JSPDF) ====================
+        function wsVal(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function formatFechaGT(isoDate) {
+            if (!isoDate) return '—';
+            const [y, m, d] = isoDate.split('-');
+            if (!y || !m || !d) return isoDate;
+            return `${d}/${m}/${y}`;
+        }
+
+        function wrapText(doc, text, x, y, maxWidth, lineHeight) {
+            const lines = doc.splitTextToSize(text || '—', maxWidth);
+            doc.text(lines, x, y);
+            return y + lines.length * lineHeight;
+        }
+
+        function exportReportPDF() {
+            if (typeof window.jspdf === 'undefined') {
+                alert('No se pudo cargar jsPDF. Verifica tu conexión a internet e intenta de nuevo.');
+                return;
+            }
+            if (!mainChart || !analysisA) {
+                alert('Ingresa datos y genera un gráfico antes de exportar el informe.');
+                return;
+            }
+
+            const nombre = wsVal('ws-student-name');
+            const carnet = wsVal('ws-student-carnet');
+            if (!nombre || !carnet) {
+                alert('Por favor completa al menos tu Nombre y Número de Carné para generar el PDF.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const pageW = doc.internal.pageSize.getWidth();
+            const margin = 14;
+            const contentW = pageW - margin * 2;
+            let y = 16;
+
+            const a = analysisA;
+            const nameA = getSeriesNameA();
+            const nameB = getSeriesNameB();
+            const title = document.getElementById('lab-title').value.trim() || 'Informe Estadístico Cuantitativo';
+            const empresa = wsVal('ws-empresa') || '—';
+            const variable = wsVal('ws-variable') || '—';
+            const fecha = formatFechaGT(wsVal('ws-fecha'));
+            const chartBadge = document.getElementById('chart-type-badge').textContent || 'Gráfico';
+
+            // ENCABEZADO UMG
+            doc.setFillColor(15, 23, 42);
+            doc.rect(0, 0, pageW, 28, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text('INFORME ESTADÍSTICO: POLÍGONOS, OJIVAS & SUPERPOSICIÓN', pageW / 2, 11, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(148, 163, 184);
+            doc.text('Estadística 1 · UMG · Semana 7 · Catedrático: Ruldin Ayala', pageW / 2, 17, { align: 'center' });
+            doc.text('Universidad Mariano Gálvez de Guatemala — Facultad de Administración de Empresas', pageW / 2, 22, { align: 'center' });
+
+            // DATOS DEL ESTUDIANTE
+            y = 35;
+            doc.setTextColor(30, 41, 59);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Estudiante:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(nombre, margin + 22, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Carné:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(carnet, pageW / 2 + 18, y);
+            y += 5.5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Empresa:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(empresa, margin + 20, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Fecha:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(fecha, pageW / 2 + 18, y);
+            y += 5.5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Variable:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(variable, margin + 18, y);
+            y += 7;
+
+            doc.setDrawColor(203, 213, 225);
+            doc.line(margin, y, pageW - margin, y);
+            y += 6;
+
+            // TÍTULO DEL ESTUDIO
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10.5);
+            doc.setTextColor(37, 99, 235);
+            doc.text(title, margin, y);
+            y += 4;
+
+            doc.setFontSize(8);
+            doc.setTextColor(100, 116, 139);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Serie: ${nameA} (n=${a.n}, k=${a.k}, R=${formatDataValue(a.R)}, A=${formatDataValue(a.A)})  ·  Visualización: ${chartBadge}`, margin, y);
+            y += 4;
+
+            // IMAGEN DEL GRÁFICO
+            try {
+                const imgData = mainChart.toBase64Image('image/png', 1);
+                const imgW = contentW;
+                const imgH = 68;
+                if (y + imgH > 270) {
+                    doc.addPage();
+                    y = 16;
+                }
+                doc.addImage(imgData, 'PNG', margin, y, imgW, imgH);
+                y += imgH + 6;
+            } catch (e) {
+                doc.setTextColor(220, 38, 38);
+                doc.text('[Error al renderizar el gráfico]', margin, y);
+                y += 8;
+            }
+
+            // SECCIONES DE REDACCIÓN EJECUTIVA
+            const printSection = (heading, text, accent) => {
+                if (y > 265) { doc.addPage(); y = 16; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(accent[0], accent[1], accent[2]);
+                doc.text(heading, margin, y);
+                y += 4;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(51, 65, 85);
+                y = wrapText(doc, text || '(Sin redacción)', margin, y, contentW, 4) + 3;
+            };
+
+            printSection('1. INTERPRETACIÓN DE LA FORMA, CONCENTRACIÓN Y PICOS', wsVal('ws-forma'), [37, 99, 235]);
+            printSection('2. ANÁLISIS COMPARATIVO / SUPERPOSICIÓN GRÁFICA', wsVal('ws-comparativo'), [16, 185, 129]);
+            printSection('3. DECISIÓN ADMINISTRATIVA & ESTRATEGIA GERENCIAL', wsVal('ws-decision'), [245, 158, 11]);
+
+            // TABLA RESUMEN EN ANEXO (Serie A)
+            if (a.intervals.length) {
+                if (y > 235) { doc.addPage(); y = 16; }
+                y += 2;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(71, 85, 105);
+                doc.text(`Anexo: Tabla de Distribución de Frecuencias — ${nameA}`, margin, y);
+                y += 5;
+
+                doc.setFontSize(7);
+                const cols = [margin, margin + 35, margin + 52, margin + 70, margin + 92, margin + 115, margin + 140, margin + 162];
+                doc.setFont('helvetica', 'bold');
+                ['Intervalo', 'fi', 'fr', 'fp%', 'fp acum%', 'Fa', 'Fa Mayor', 'Xi'].forEach((h, i) => doc.text(h, cols[i], y));
+                y += 3.5;
+                doc.setFont('helvetica', 'normal');
+
+                a.intervals.forEach((c, i) => {
+                    if (y > 285) { doc.addPage(); y = 16; }
+                    const isLast = i === a.intervals.length - 1;
+                    doc.text(intervalLabel(c, isLast), cols[0], y);
+                    doc.text(String(c.fi), cols[1], y);
+                    doc.text(c.fr.toFixed(3), cols[2], y);
+                    doc.text(c.fp.toFixed(1) + '%', cols[3], y);
+                    doc.text(c.fpAcum.toFixed(1) + '%', cols[4], y);
+                    doc.text(String(c.Fa), cols[5], y);
+                    doc.text(String(c.FaMayor), cols[6], y);
+                    doc.text(formatDataValue(c.Xi), cols[7], y);
+                    y += 3.5;
+                });
+            }
+
+            // PIE DE PÁGINA
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let p = 1; p <= pageCount; p++) {
+                doc.setPage(p);
+                doc.setFontSize(7);
+                doc.setTextColor(148, 163, 184);
+                doc.text('Estadística 1, UMG, Hecho por Ruldin Ayala', pageW / 2, 290, { align: 'center' });
+                doc.text('Página ' + p + ' de ' + pageCount, pageW - margin, 290, { align: 'right' });
+            }
+
+            const safeName = nombre.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ-]/g, '').replace(/\s+/g, '_').substring(0, 30);
+            const fileName = 'Informe_Semana7_Graficos_' + (safeName || 'UMG') + '.pdf';
+            doc.save(fileName);
+        }
+
+        // ==================== INICIALIZACIÓN ====================
+        document.getElementById('ws-fecha').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('lab-data-type').addEventListener('change', reRenderFormattedViews);
+
+        // Listeners para actualizar nombres de series en tiempo real
+        document.getElementById('lab-name-a').addEventListener('input', () => {
+            if (analysisA) {
+                document.getElementById('table-title-a').innerHTML = `
+                    <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
+                `;
+                reRenderFormattedViews();
+            }
+        });
+
+        document.getElementById('lab-name-b').addEventListener('input', () => {
+            if (analysisB && labMode === 'compare') {
+                const titleB = document.querySelector('#container-table-b h4');
+                if (titleB) {
+                    titleB.innerHTML = `<i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-emerald-300 font-bold">${getSeriesNameB()}</span>`;
+                }
+                reRenderFormattedViews();
+            }
+        });
+
+        // Cargar por defecto el caso demostrativo textil
+        loadComparativeCaseIntoLab();
+    </script>
+</body>
+
+</html>
