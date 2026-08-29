@@ -86,13 +86,19 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Laboratorio IA Integrado (Next.js en iframe):** Acceso directo y visor integrado a la aplicación web interactiva (`https://temporary-instant-apogee-hran4bx.vercel.app/`) para evaluar el ciclo de 5 pasos: Contexto, Datos, Estadística, System Prompt y Decisión del Agente de IA.
       - **Tabla de Frecuencias y Exportación PDF:** Generación de informe ejecutivo A4 con captura del gráfico activo, tabla tabulada y respuestas del estudiante con jsPDF.
 
-11. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
+11. 🎮 **`Estadistica1/sem8_ejercicio.html` (Semana 8: CentralTrend — Ejercicios Prácticos y Gamificación):**
+    - Aplicación interactiva de práctica aplicada con 5 casos de estudio reales:
+      - **Casos de Negocio:** Farmacias La Salud (Media ponderada), Tiempos de atención al cliente (Mediana vs Outliers), Demanda de tallas de calzado (Moda en retail), etc.
+      - **Gamificación:** Sistema de puntuación, medallas por precisión y feedback explicativo inmediato.
+      - **Reporte PDF:** Generación automática de constancia de resultados y resolución de ejercicios.
+
+12. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
     - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
 
-12. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
+13. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
     - Dashboard principal para el curso de **Informática I**, con diseño ejecutivo cian/azul, accesos directos por semana y mapa curricular.
 
-13. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
+14. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
     - Guía interactiva integral sobre Inteligencia Artificial aplicada a la administración:
       - **Glosario & Fundamentos:** Tokens, embeddings, temperatura, KV cache.
       - **Arquitectura Eficiente:** Modelos densos vs. MoE (Mezcla de Expertos) y compresión MLA (-90% memoria).
@@ -101,7 +107,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Agentes ReAct:** Simulador del ciclo cognitivo de automatización (Pensamiento, Acción, Observación, Respuesta).
       - **Gobernanza:** Mitigación de Shadow AI, supervisión humana y marcos normativos.
 
-14. 📦 **`vendor/` (Librerías locales):**
+15. 📦 **`vendor/` (Librerías locales):**
     - `chart.umd.min.js`
     - `chartjs-plugin-datalabels.min.js`
     - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.
