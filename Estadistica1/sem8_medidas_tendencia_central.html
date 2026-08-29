@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Semana 8: Medidas de Tendencia Central (Media, Mediana y Moda) · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Librerías locales (sitio estático) -->
+    <script src="../vendor/chart.umd.min.js"></script>
+    <script src="../vendor/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .neon-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.18);
+        }
+
+        .neon-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.16);
+        }
+
+        .neon-amber {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.16);
+        }
+
+        .neon-purple {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.18);
+        }
+
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 300px;
+            height: min(54vh, 430px);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+            .chart-wrap {
+                height: 310px;
+                min-height: 270px;
+            }
+        }
+
+        .ws-field label {
+            display: block;
+        }
+
+        .ws-input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.875rem;
+            color: #f1f5f9;
+        }
+
+        .ws-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .ws-textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .formula-box {
+            background: #020617;
+            border: 1px solid #1e3a8a;
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #93c5fd;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            overflow-x: auto;
+        }
+
+        textarea#lab-data-input {
+            font-family: 'Space Grotesk', monospace;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col custom-scrollbar">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <a href="index_estadistica.html"
+                        class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0"
+                        title="Regresar al menú de Estadística 1">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div
+                        class="bg-white p-1 rounded-xl shadow-lg shadow-purple-500/15 shrink-0 flex items-center justify-center">
+                        <img src="../cosas/Umg.png" alt="Logo UMG" class="h-8 w-auto object-contain"
+                            onerror="this.onerror=null; this.src='../cosas/umg.png';">
+                    </div>
+                    <div class="min-w-0">
+                        <span
+                            class="text-xs font-semibold tracking-widest text-purple-400 uppercase block heading-font">Módulo
+                            I · Semana 8</span>
+                        <h1 class="text-sm sm:text-lg font-bold text-white leading-tight heading-font truncate">
+                            Medidas de Tendencia Central <span class="text-xs text-slate-500 font-normal">| Media, Mediana y Moda</span>
+                        </h1>
+                    </div>
+                </div>
+                <nav class="hidden lg:flex space-x-2 shrink-0">
+                    <button onclick="switchSection('conceptos')" id="nav-conceptos"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                        <i class="fa-solid fa-lightbulb mr-1.5"></i>Conceptos Clave
+                    </button>
+                    <button onclick="switchSection('duelo')" id="nav-duelo"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-scale-balanced mr-1.5"></i>Caso Garnachas & Duelo
+                    </button>
+                    <button onclick="switchSection('lab')" id="nav-lab"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-900 hover:text-white">
+                        <i class="fa-solid fa-flask mr-1.5"></i>Laboratorio & Decisiones
+                    </button>
+                    <button onclick="switchSection('ia')" id="nav-ia"
+                        class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-purple-300 hover:bg-purple-950/40 hover:text-white border border-purple-500/40 bg-purple-900/20 shadow-sm shadow-purple-500/20">
+                        <i class="fa-solid fa-robot mr-1.5 text-purple-400"></i>Laboratorio IA
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE TABS -->
+    <div class="lg:hidden bg-slate-950 border-b border-slate-800 p-2 flex overflow-x-auto gap-2 custom-scrollbar">
+        <button onclick="switchSection('conceptos')" id="mob-nav-conceptos"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">
+            Conceptos Clave
+        </button>
+        <button onclick="switchSection('duelo')" id="mob-nav-duelo"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            Caso Garnachas
+        </button>
+        <button onclick="switchSection('lab')" id="mob-nav-lab"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            Laboratorio & Decisiones
+        </button>
+        <button onclick="switchSection('ia')" id="mob-nav-ia"
+            class="mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400">
+            <i class="fa-solid fa-robot mr-1 text-purple-400"></i>Laboratorio IA
+        </button>
+    </div>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+        <!-- ==================== CONCEPTOS ==================== -->
+        <section id="sec-conceptos" class="space-y-6 block">
+            <!-- HERO BANNER -->
+            <div
+                class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-purple-950/35 p-6 sm:p-8 border border-slate-800 shadow-2xl">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <span
+                        class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/10 text-purple-400 rounded-full border border-purple-500/20 uppercase tracking-widest heading-font">
+                        Herramienta de Supervivencia Gerencial
+                    </span>
+                    <span class="text-xs text-slate-400 font-semibold">
+                        <i class="fa-solid fa-graduation-cap text-purple-400 mr-1.5"></i>Cátedra Ruldin Ayala
+                    </span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-black text-white heading-font mt-3 leading-tight">
+                    Medidas de Tendencia Central en la Toma de Decisiones
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base mt-3 max-w-3xl leading-relaxed">
+                    Si el departamento de Recursos Humanos te informa que el salario promedio de tu equipo es de <strong class="text-emerald-400">Q 7,000</strong>,
+                    existe una alta probabilidad matemática de que ese único número esté encubriendo una realidad completamente distinta.
+                    En la administración de empresas, la <strong class="text-blue-400">Media</strong>, la <strong class="text-emerald-400">Mediana</strong> y la <strong class="text-amber-400">Moda</strong> no son solo fórmulas de pizarrón: son tres lentes estratégicos para comprimir el caos de cientos de datos y tomar decisiones correctas de compras, nóminas, créditos y servicio al cliente.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                    <button onclick="switchSection('lab')"
+                        class="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-bold px-5 py-3 rounded-xl text-sm heading-font shadow-lg shadow-purple-500/20 transition">
+                        <i class="fa-solid fa-flask mr-2"></i>Ir al Laboratorio de Datos
+                    </button>
+                    <button onclick="switchSection('ia')"
+                        class="bg-purple-950/60 hover:bg-purple-900/80 text-purple-200 border border-purple-500/40 font-semibold px-5 py-3 rounded-xl text-sm transition flex items-center shadow-lg shadow-purple-500/10">
+                        <i class="fa-solid fa-robot mr-2 text-purple-400"></i>Laboratorio IA
+                    </button>
+                    <button onclick="switchSection('duelo')"
+                        class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-5 py-3 rounded-xl text-sm transition">
+                        <i class="fa-solid fa-utensils mr-2 text-amber-400"></i>Ver Caso Garnachas & Duelo
+                    </button>
+                </div>
+            </div>
+
+            <!-- PARÁMETRO VS ESTADÍSTICO -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-blue-400 tracking-wider block">Población Total</span>
+                            <h3 class="text-lg font-bold text-white heading-font">El Parámetro (&mu;)</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Es la verdad absoluta e innegable de <em>toda</em> tu población. Si diriges una empresa de telecomunicaciones con 2 millones de usuarios en Guatemala y tienes presupuesto ilimitado para encuestar a cada uno, obtienes un <strong>parámetro</strong>.
+                    </p>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-400">
+                        <strong class="text-white"><i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>Realidad de Negocios:</strong> Es un lujo inalcanzable por costo y tiempo. Para cuando termines de encuestar a 2 millones de personas, el mercado ya cambió.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-vial"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block">Muestra Representativa</span>
+                            <h3 class="text-lg font-bold text-white heading-font">El Estadístico (x̄)</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Es la estimación rigurosa obtenida de una muestra aleatoria (ej. 400 clientes seleccionados). Toda la toma de decisiones gerenciales en auditoría, finanzas y control de calidad opera con <strong>estadísticos</strong>.
+                    </p>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-400">
+                        <strong class="text-white"><i class="fa-solid fa-bullseye text-emerald-400 mr-1"></i>Regla de Oro:</strong> Apostamos a que una muestra bien seleccionada refleja con precisión matemática al universo completo de clientes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAS 3 MEDIDAS EN PROFUNDIDAD -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- 1. LA MEDIA -->
+                <div class="bg-slate-900/80 border border-blue-500/30 rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-4 neon-blue">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-blue-500/15 text-blue-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                                Métrica 1
+                            </span>
+                            <span class="text-xs font-mono font-bold text-blue-400">x̄ = Σx / n</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white heading-font flex items-center">
+                            <i class="fa-solid fa-scale-balanced text-blue-400 mr-2 text-base"></i>La Media Aritmética
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-blue-300">"El Centro de Gravedad Numérico"</strong>. Es profundamente inclusiva: suma el esfuerzo de cada una de las observaciones y lo reparte equitativamente.
+                        </p>
+
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-xs">
+                            <div class="text-slate-400 font-semibold">Ejemplo Asesores de Ventas:</div>
+                            <div class="font-mono text-slate-300 text-[11px]">67 + 70 + 53 + 79 + 61 = 330 trámites</div>
+                            <div class="text-blue-400 font-bold">Media = 330 / 5 = 66 contratos / asesor</div>
+                        </div>
+
+                        <div class="bg-red-950/20 border border-red-500/30 rounded-xl p-3 text-xs text-red-200">
+                            <strong class="text-red-400 block mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Talón de Aquiles (Outliers):</strong>
+                            Un solo dato masivo (el "elefante en la balanza") rompe el equilibrio y arrastra la media hacia la cola de la distribución.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. LA MEDIANA -->
+                <div class="bg-slate-900/80 border border-emerald-500/30 rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-4 neon-emerald">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-emerald-500/15 text-emerald-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                                Métrica 2
+                            </span>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Posición (n+1)/2</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white heading-font flex items-center">
+                            <i class="fa-solid fa-map-pin text-emerald-400 mr-2 text-base"></i>La Mediana
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-emerald-300">"Ejercicio de Topografía"</strong>. El valor que divide al conjunto de datos rigurosamente ordenados en dos mitades exactas del 50%.
+                        </p>
+
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-xs">
+                            <div class="text-slate-400 font-semibold">Ejemplo Clínica Médica (11 pacientes):</div>
+                            <div class="text-[11px] text-slate-300">Tiempos: 36 a 45 min. Posición 6 = 42 min.</div>
+                            <div class="text-emerald-400 font-bold">Mediana = 42 min (50% esperó más de 42 min).</div>
+                        </div>
+
+                        <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3 text-xs text-emerald-200">
+                            <strong class="text-emerald-400 block mb-1"><i class="fa-solid fa-shield-halved mr-1"></i>Superpotencia Inmune:</strong>
+                            Le da la espalda a los extremos. Si el último paciente esperó 9 horas por pérdida de expediente, la mediana sigue inmutable en 42 min.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. LA MODA -->
+                <div class="bg-slate-900/80 border border-amber-500/30 rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-4 neon-amber">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-amber-500/15 text-amber-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                                Métrica 3
+                            </span>
+                            <span class="text-xs font-mono font-bold text-amber-400">Máx Frecuencia (fi)</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white heading-font flex items-center">
+                            <i class="fa-solid fa-fire text-amber-400 mr-2 text-base"></i>La Moda
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-amber-300">"El Latido del Retail"</strong>. Es el valor que ocurre con mayor frecuencia. Vital para variables cualitativas donde sumar carece de sentido matemático.
+                        </p>
+
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2 text-xs">
+                            <div class="text-slate-400 font-semibold">Ejemplo Boutique 6ta Avenida:</div>
+                            <div class="text-[11px] text-slate-300">Ventas: 60 talla M, 20 talla L, 20 otras.</div>
+                            <div class="text-amber-400 font-bold">Moda = Talla M (Evita inventario muerto).</div>
+                        </div>
+
+                        <div class="bg-amber-950/20 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-200">
+                            <strong class="text-amber-400 block mb-1"><i class="fa-solid fa-shuffle mr-1"></i>Bimodalidad = Mercado Segmentado:</strong>
+                            Si empatan la talla S y la talla XL, no es un error: indica dos segmentos demográficos (jóvenes y sus padres).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CASO SALARIOS & DISTORSIÓN DEL PROMEDIO -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5">
+                <div class="flex items-center space-x-3">
+                    <span class="p-2.5 bg-red-500/15 text-red-400 rounded-xl">
+                        <i class="fa-solid fa-money-bill-transfer text-xl"></i>
+                    </span>
+                    <div>
+                        <span class="text-[10px] font-bold text-red-400 uppercase tracking-wider block">Caso de Estudio Crítico</span>
+                        <h3 class="text-xl font-bold text-white heading-font">Equidad Salarial: La Falacia de la Media vs la Honestidad de la Mediana</h3>
+                    </div>
+                </div>
+                
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    Imagina una empresa guatemalteca con <strong class="text-white">10 empleados operativos</strong> que ganan <strong class="text-emerald-400">Q 3,000 al mes</strong> cada uno, y el <strong class="text-white">Gerente General</strong> que se asigna <strong class="text-red-400">Q 50,000</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-950 border border-red-500/30 rounded-2xl p-4 sm:p-5 space-y-2">
+                        <span class="text-xs font-bold text-red-400 uppercase tracking-wider"><i class="fa-solid fa-xmark mr-1.5"></i>Uso Engañoso de la Media</span>
+                        <div class="text-2xl font-black text-white heading-font">Q 7,273 <span class="text-xs text-slate-400 font-normal">/ mes</span></div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Suma Q 30,000 + Q 50,000 = Q 80,000 / 11 personas. Técnicamente impecable, pero <strong class="text-red-300">10 de los 11 empleados ganan menos de la mitad</strong> de ese promedio. "La media persigue a la cola de la distribución".
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 space-y-2">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider"><i class="fa-solid fa-check mr-1.5"></i>Realidad con la Mediana</span>
+                        <div class="text-2xl font-black text-emerald-400 heading-font">Q 3,000 <span class="text-xs text-slate-400 font-normal">/ mes</span></div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Al ordenar los 11 salarios, la posición 6 es Q 3,000. La mediana elimina el maquillaje corporativo y muestra la experiencia salarial real y honesta de la organización.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SESGOS Y DILEMA ÉTICO DE IA -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-3">
+                    <h3 class="text-base font-bold text-white heading-font flex items-center">
+                        <i class="fa-solid fa-chart-simple text-cyan-400 mr-2"></i>Formas de la Distribución & Asimetría
+                    </h3>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                            <strong class="text-emerald-400 block">Distribución Simétrica (Normal):</strong>
+                            Media ≈ Mediana ≈ Moda. Los datos se distribuyen uniformemente a ambos lados del centro.
+                        </li>
+                        <li class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                            <strong class="text-blue-400 block">Sesgo Positivo (Hacia la Derecha):</strong>
+                            Media > Mediana > Moda. Un dato atípicamente alto (outlier positivo) jala a la media hacia la derecha.
+                        </li>
+                        <li class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                            <strong class="text-amber-400 block">Sesgo Negativo (Hacia la Izquierda):</strong>
+                            Media < Mediana < Moda. Valores atípicamente bajos arrastran a la media hacia abajo.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 border border-purple-500/30 rounded-3xl p-5 sm:p-6 space-y-3 neon-purple">
+                    <h3 class="text-base font-bold text-white heading-font flex items-center">
+                        <i class="fa-solid fa-robot text-purple-400 mr-2"></i>El Dilema Ético y los Algoritmos de IA
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Hoy en día, las decisiones sobre bonos, aumento de precios o aprobación de créditos bancarios son ejecutadas por algoritmos de IA.
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Si los programadores instruyen a la IA a optimizar basándose en la <strong class="text-white">Media</strong>, la máquina castigará a la base siguiendo a los extremos. Si eligen la <strong class="text-emerald-400">Mediana</strong>, priorizan la equidad. 
+                    </p>
+                    <div class="p-2.5 bg-purple-950/30 border border-purple-500/30 rounded-xl text-purple-200 text-xs font-semibold">
+                        "Elegir la métrica correcta no es un cálculo de Excel: es una decisión de ética y supervivencia empresarial."
+                    </div>
+                    <button onclick="switchSection('ia')"
+                        class="w-full py-2 px-3 rounded-xl text-xs font-bold bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/40 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play text-purple-400"></i>Abrir Laboratorio IA en Vivo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== DUELO DE MÉTRICAS (CASO GARNACHAS) ==================== -->
+        <section id="sec-duelo" class="space-y-6 hidden">
+            <div
+                class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-amber-950/30 p-6 sm:p-8 border border-slate-800 shadow-2xl">
+                <span
+                    class="px-3 py-1 text-[10px] font-extrabold bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 uppercase tracking-widest heading-font">
+                    Caso Empresarial Guatemalteco
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white heading-font mt-3 leading-tight">
+                    El Gran Duelo Gerencial: El Puesto de Garnachas en la Feria Patronal
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base mt-3 max-w-3xl leading-relaxed">
+                    Un negocio tradicional de comida típica en el interior de Guatemala registra sus cierres de caja en quetzales durante 10 días seguidos.
+                    Durante 9 días su venta es estable, pero el día 8 ocurre la <strong class="text-amber-400">feria patronal del pueblo</strong> y la caja registra un ingreso atípico de <strong class="text-emerald-400">Q 1,500</strong>.
+                </p>
+            </div>
+
+            <!-- DATOS CRUDOS Y PROCESAMIENTO -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-3">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider heading-font">Cierres de Caja (10 Días)</h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 1: Q 240</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 2: Q 245</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 3: Q 250</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 4: Q 250</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 5: Q 255</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 6: Q 260</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 7: Q 260</div>
+                        <div class="bg-amber-950/40 p-2 rounded-lg border border-amber-500/40 font-bold text-amber-300">Día 8 (Feria): Q 1,500 ⭐</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 9: Q 265</div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800">Día 10: Q 270</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-3 lg:col-span-2">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider heading-font">Resultados Estadísticos Comparados</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-slate-950 border border-blue-500/30 p-4 rounded-2xl text-center">
+                            <span class="text-[11px] font-bold text-blue-400 uppercase block">Media Aritmética</span>
+                            <span class="text-2xl font-black text-white heading-font block mt-1">Q 379.00</span>
+                            <p class="text-[10px] text-slate-400 mt-1">Suma Q 3,790 / 10 días</p>
+                        </div>
+                        <div class="bg-slate-950 border border-emerald-500/30 p-4 rounded-2xl text-center">
+                            <span class="text-[11px] font-bold text-emerald-400 uppercase block">Mediana (Centro)</span>
+                            <span class="text-2xl font-black text-emerald-400 heading-font block mt-1">Q 257.50</span>
+                            <p class="text-[10px] text-slate-400 mt-1">Promedio de pos 5 y 6 (Q255 + Q260)/2</p>
+                        </div>
+                        <div class="bg-slate-950 border border-amber-500/30 p-4 rounded-2xl text-center">
+                            <span class="text-[11px] font-bold text-amber-400 uppercase block">Moda (Bimodal)</span>
+                            <span class="text-xl font-black text-amber-400 heading-font block mt-1">Q 250 & Q 260</span>
+                            <p class="text-[10px] text-slate-400 mt-1">Repetidos 2 veces cada uno</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+                        <strong class="text-white"><i class="fa-solid fa-magnifying-glass-chart text-cyan-400 mr-1.5"></i>Diagnóstico de Sesgo:</strong>
+                        Media (Q 379) > Mediana (Q 257.50). Existe un <strong class="text-amber-400">fuerte sesgo positivo hacia la derecha</strong> causado por el evento atípico de la feria patronal.
+                    </div>
+                </div>
+            </div>
+
+            <!-- LA PREGUNTA DE SUPERVIVENCIA GERENCIAL -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- DECISIÓN 1: COMPRAS DE INSUMOS -->
+                <div class="bg-slate-900 border border-red-500/30 rounded-3xl p-6 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </span>
+                        <div>
+                            <span class="text-[10px] font-bold text-red-400 uppercase tracking-wider block">Decisión Operativa Diaria</span>
+                            <h4 class="text-lg font-bold text-white heading-font">Compras de Masa, Carne y Repollo</h4>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        ¿Qué pasa si el dueño compra insumos guiándose por la <strong class="text-red-400">Media de Q 379 diarios</strong>?
+                    </p>
+                    <div class="bg-slate-950 border border-red-500/20 p-3.5 rounded-xl text-xs text-slate-300 space-y-2">
+                        <p><strong class="text-red-400">Consecuencia Fatal:</strong> Comprará el triple de carne y vegetales para un día ordinario. Como la feria ya terminó, 9 de cada 10 días se le descompondrán los insumos, generará merma y caerá en quiebra en un mes.</p>
+                        <p><strong class="text-emerald-400">La Solución Correcta:</strong> Utilizar la <strong class="text-emerald-400">Mediana (Q 257.50)</strong> y la <strong class="text-amber-400">Moda</strong> para comprar únicamente lo necesario para el flujo operativo habitual.</p>
+                    </div>
+                </div>
+
+                <!-- DECISIÓN 2: CRÉDITO BANCARIO -->
+                <div class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-6 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </span>
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">Decisión Financiera Estratégica</span>
+                            <h4 class="text-lg font-bold text-white heading-font">Solicitud de Crédito para Refrigeración</h4>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        ¿Debe el dueño ocultar la feria y presentar solo la <strong class="text-emerald-400">Mediana de Q 257.50</strong> ante el banco?
+                    </p>
+                    <div class="bg-slate-950 border border-emerald-500/20 p-3.5 rounded-xl text-xs text-slate-300 space-y-2">
+                        <p><strong class="text-amber-400">El Error Financiero:</strong> Se estaría disparando en el pie al subestimar la capacidad total de generación de flujo de caja que su ubicación le permite capturar en festividades.</p>
+                        <p><strong class="text-blue-400">La Solución Correcta:</strong> Presentar la <strong class="text-blue-400">Media (Q 379.00)</strong>, porque la media no deja ningún centavo fuera y demuestra la robustez anual acumulada del negocio para pagar el préstamo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÓN PARA CARGAR EN LABORATORIO -->
+            <div class="text-center pt-2">
+                <button onclick="loadPresetCase('garnachas')"
+                    class="bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm heading-font shadow-lg shadow-amber-500/15 transition active:scale-95">
+                    <i class="fa-solid fa-flask mr-2"></i>Cargar este Caso de Garnachas en el Laboratorio Interactivo
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== LABORATORIO & TOMA DE DECISIONES ==================== -->
+        <section id="sec-lab" class="space-y-5 hidden">
+            <!-- BANNER DEL LAB -->
+            <div
+                class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-purple-950/30 p-5 sm:p-7 border border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div>
+                        <span
+                            class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/10 text-purple-400 rounded-full border border-purple-500/20 uppercase tracking-widest heading-font">
+                            Simulador Interactivo de Decisiones
+                        </span>
+                        <h2 class="text-2xl font-black text-white heading-font mt-2">Laboratorio de Media, Mediana y Moda</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Ingresa tu propio dataset o selecciona un caso de estudio, visualiza el diagrama de frecuencias con marcadores estadísticos y exporta tu informe PDF.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECTOR DE CASOS PREDEFINIDOS -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <i class="fa-solid fa-folder-open text-purple-400 mr-1.5"></i>Casos de Negocio Predefinidos (1-Click para cargar):
+                </label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                    <button onclick="loadPresetCase('garnachas')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-300 transition text-left truncate">
+                        🥟 Garnachas Feria
+                    </button>
+                    <button onclick="loadPresetCase('salarios')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-blue-300 transition text-left truncate">
+                        💼 Salarios & Gerente
+                    </button>
+                    <button onclick="loadPresetCase('clinica')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-300 transition text-left truncate">
+                        🏥 Clínica Médica
+                    </button>
+                    <button onclick="loadPresetCase('cafeteria')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-purple-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 transition text-left truncate">
+                        ⭐ Cafetería UMG
+                    </button>
+                    <button onclick="loadPresetCase('asesores')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-300 transition text-left truncate">
+                        📈 Asesores Ventas
+                    </button>
+                    <button onclick="loadPresetCase('boutique')"
+                        class="px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-pink-500/50 rounded-xl text-xs font-semibold text-slate-300 hover:text-pink-300 transition text-left truncate">
+                        👕 Boutique 6ta Av
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR PRINCIPAL DEL LAB: 2 COLUMNAS -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+                
+                <!-- COLUMNA IZQUIERDA: INPUTS & KPIs (5 Cols) -->
+                <div class="xl:col-span-5 space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Título del Análisis</label>
+                        <input id="lab-title" type="text" value="Ingresos diarios y evaluación de feria patronal — Puesto de Garnachas"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Contexto del Ejercicio</label>
+                        <textarea id="lab-context"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-500 ws-textarea"
+                            placeholder="Describe el contexto empresarial o pregunta de decisión...">Puesto de garnachas tradicional en el interior del país con registro de 10 días de ventas. El día 8 ocurrió la feria patronal con venta atípica de Q1,500. El administrador requiere definir la compra de insumos diarios y evaluar la solvencia para solicitar un crédito de refrigeración.</textarea>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="lab-data-type" class="block text-[11px] font-semibold text-slate-400 mb-1">
+                                    Tipo de dato representado
+                                </label>
+                                <select id="lab-data-type"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-500">
+                                    <option value="currency" selected>Moneda (Q)</option>
+                                    <option value="normal">Números (normal)</option>
+                                    <option value="units">Unidades (u)</option>
+                                    <option value="minutes">Tiempo en Minutos (min)</option>
+                                    <option value="hours">Tiempo en Horas (hrs)</option>
+                                    <option value="seconds">Tiempo en Segundos (s)</option>
+                                    <option value="stars">Calificación / Estrellas (★)</option>
+                                    <option value="decimals">Decimales</option>
+                                    <option value="liters">Litros (L)</option>
+                                    <option value="meters">Metros (m)</option>
+                                </select>
+                            </div>
+                            <div class="text-[11px] text-slate-500 leading-relaxed sm:pt-6">
+                                La máscara formatea los KPIs, la tabla y los ejes del gráfico.
+                            </div>
+                        </div>
+
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider pt-1">
+                            Dataset (valores separados por coma, espacio o salto de línea)
+                        </label>
+                        <textarea id="lab-data-input"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-purple-500 ws-textarea"
+                            style="min-height:140px"
+                            placeholder="Ej.: 240, 245, 250, 250, 255, 260, 260, 1500, 265, 270">240, 245, 250, 250, 255, 260, 260, 1500, 265, 270</textarea>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                            <button onclick="processDataset()"
+                                class="py-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white heading-font active:scale-[0.98] transition shadow-lg shadow-purple-500/15">
+                                <i class="fa-solid fa-calculator mr-1.5"></i>Calcular Estadígrafos
+                            </button>
+                            <button onclick="clearLab()"
+                                class="py-3 rounded-xl text-xs sm:text-sm font-bold bg-red-950/40 border border-red-500/30 text-red-300 hover:bg-red-950/60 active:scale-[0.98] transition">
+                                <i class="fa-solid fa-broom mr-1.5"></i>Limpiar Todo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TARJETAS DE KPIS PRINCIPALES -->
+                    <div id="kpi-cards" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <div class="bg-slate-900 border border-blue-500/40 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider block">Media (x̄)</span>
+                            <span id="kpi-mean" class="text-lg font-black text-white heading-font">—</span>
+                        </div>
+                        <div class="bg-slate-900 border border-emerald-500/40 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block">Mediana (Me)</span>
+                            <span id="kpi-median" class="text-lg font-black text-emerald-400 heading-font">—</span>
+                        </div>
+                        <div class="bg-slate-900 border border-amber-500/40 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider block">Moda (Mo)</span>
+                            <span id="kpi-mode" class="text-lg font-black text-amber-400 heading-font">—</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-slate-500 uppercase tracking-wider block">Muestra (n)</span>
+                            <span id="kpi-n" class="text-base font-bold text-white heading-font">—</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-slate-500 uppercase tracking-wider block">Rango (R)</span>
+                            <span id="kpi-r" class="text-base font-bold text-slate-300 heading-font">—</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                            <span class="text-[10px] text-slate-500 uppercase tracking-wider block">Mín / Máx</span>
+                            <span id="kpi-minmax" class="text-xs font-bold text-slate-400 heading-font">—</span>
+                        </div>
+                    </div>
+
+                    <!-- DIAGNÓSTICO GERENCIAL AUTOMÁTICO -->
+                    <div id="diagnostic-panel" class="bg-slate-900 border border-purple-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider heading-font">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Diagnóstico de Decisiones
+                            </h3>
+                            <span id="skew-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400 uppercase">
+                                Analizando
+                            </span>
+                        </div>
+                        <div id="diagnostic-text" class="text-xs text-slate-300 leading-relaxed space-y-2">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- DESGLOSE PASO A PASO COLAPSABLE -->
+                    <div id="step-breakdown" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider heading-font">
+                                <i class="fa-solid fa-list-check text-blue-400 mr-1.5"></i>Desglose de Fórmulas y Procedimiento
+                            </h3>
+                            <button type="button" onclick="toggleStepBreakdown()" id="btn-toggle-breakdown"
+                                class="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition">
+                                <i class="fa-solid fa-chevron-up text-[10px]" id="icon-toggle-breakdown"></i>
+                                <span id="text-toggle-breakdown">Contraer</span>
+                            </button>
+                        </div>
+                        <div id="step-breakdown-content">
+                            <div id="step-breakdown-body" class="space-y-2 text-xs text-slate-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: GRÁFICO & TABLA (7 Cols) -->
+                <div class="xl:col-span-7 space-y-4">
+                    
+                    <!-- VISTA DEL GRÁFICO CON SELECTOR DE TIPO (HISTOGRAMA / POLÍGONO / OJIVA) -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
+                        <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                            <div>
+                                <h3 id="chart-heading" class="text-sm font-bold text-white heading-font">
+                                    Diagrama de Frecuencia con Marcadores Centrales
+                                </h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">
+                                    Aprende a interpretar la forma de la distribución y los estadígrafos en diferentes vistas gráficas.
+                                </p>
+                            </div>
+                            <span id="chart-type-badge"
+                                class="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                                Histograma
+                            </span>
+                        </div>
+
+                        <!-- BOTONES DE SELECCIÓN DE TIPO DE GRÁFICO -->
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            <button onclick="renderLabChart('hist')" id="btn-chart-hist"
+                                class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:border-blue-400 active:scale-[0.98] transition">
+                                <i class="fa-solid fa-chart-column block text-base mb-1 text-blue-400"></i>Histograma
+                            </button>
+                            <button onclick="renderLabChart('polygon')" id="btn-chart-polygon"
+                                class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-emerald-500/50 active:scale-[0.98] transition">
+                                <i class="fa-solid fa-chart-line block text-base mb-1 text-emerald-400"></i>Polígono
+                            </button>
+                            <button onclick="renderLabChart('ogive')" id="btn-chart-ogive"
+                                class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-amber-500/50 active:scale-[0.98] transition">
+                                <i class="fa-solid fa-timeline block text-base mb-1 text-amber-400"></i>Ojiva
+                            </button>
+                        </div>
+
+                        <!-- LEYENDA RÁPIDA DE MARCADORES -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-xs bg-slate-950 p-2.5 rounded-xl border border-slate-800 mb-3">
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="flex items-center font-semibold text-blue-400">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 mr-1.5 inline-block"></span>Media (x̄)
+                                </span>
+                                <span class="flex items-center font-semibold text-emerald-400">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1.5 inline-block"></span>Mediana (Me)
+                                </span>
+                                <span class="flex items-center font-semibold text-amber-400">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 mr-1.5 inline-block"></span>Moda (Mo)
+                                </span>
+                            </div>
+                            <span class="text-[10px] text-slate-500 italic hidden sm:inline">
+                                Interactúa pasando el cursor sobre las barras o puntos
+                            </span>
+                        </div>
+
+                        <div class="chart-wrap bg-slate-950/70 rounded-xl border border-slate-800 p-2">
+                            <canvas id="main-chart"></canvas>
+                        </div>
+                        
+                        <p id="chart-insight" class="text-xs text-slate-400 mt-3 leading-relaxed">
+                            Procesando datos para visualizar la forma de la campana y la distancia entre los estadígrafos...
+                        </p>
+                    </div>
+
+                    <!-- TABLA DE DISTRIBUCIÓN DE FRECUENCIAS -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 overflow-x-auto">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-bold text-white heading-font">
+                                <i class="fa-solid fa-table-list text-emerald-400 mr-1.5"></i>Tabla de Distribución de Frecuencias
+                            </h3>
+                            <span id="table-type-badge" class="text-[10px] uppercase font-bold text-slate-400 bg-slate-950 px-2 py-1 rounded-md border border-slate-800">
+                                Datos Tabulados
+                            </span>
+                        </div>
+                        <table class="w-full text-xs min-w-[580px]">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800 text-left">
+                                    <th class="py-2.5 pr-2">Categoría / Intervalo</th>
+                                    <th class="py-2.5 pr-2">fi (Absoluta)</th>
+                                    <th class="py-2.5 pr-2">fr (Relativa)</th>
+                                    <th class="py-2.5 pr-2">fp% (Porcentaje)</th>
+                                    <th class="py-2.5 pr-2">fp acum%</th>
+                                    <th class="py-2.5 pr-2">Fa (Acumulada)</th>
+                                    <th class="py-2.5">Xi (Marca)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="freq-table-body" class="text-slate-300">
+                                <tr>
+                                    <td colspan="7" class="py-4 text-slate-500 text-center">Aún no hay datos procesados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA DE TRABAJO / INFORME PDF -->
+            <div class="bg-slate-900 border border-purple-500/30 rounded-3xl p-5 sm:p-7 space-y-5 neon-purple mt-6">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div>
+                        <span
+                            class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/25 uppercase tracking-widest heading-font">
+                            Hoja de Trabajo · Evaluación y Pensamiento Crítico
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white heading-font mt-2">
+                            Informe Ejecutivo de Medidas de Tendencia Central
+                        </h3>
+                        <p class="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                            Completa los campos del análisis gerencial, justifica tu elección de estadígrafos y redacta la recomendación para junta directiva. El PDF incluirá el gráfico con marcadores, la tabla y tus conclusiones.
+                        </p>
+                    </div>
+                    <button type="button" onclick="exportReportPDF()" id="btn-export-pdf"
+                        class="shrink-0 w-full lg:w-auto bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-500 hover:from-purple-400 hover:to-emerald-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-xl text-sm heading-font shadow-lg shadow-purple-500/20 transition active:scale-[0.98]">
+                        <i class="fa-solid fa-file-pdf mr-2 text-slate-950"></i>Exportar Informe a PDF
+                    </button>
+                </div>
+
+                <form id="worksheet-form" class="space-y-6" onsubmit="return false;">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre del Estudiante</label>
+                            <input type="text" id="ws-student-name" class="ws-input" placeholder="Ej.: María López García">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Número de Carné</label>
+                            <input type="text" id="ws-student-carnet" class="ws-input" placeholder="Ej.: 25-12345">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Fecha del Informe</label>
+                            <input type="date" id="ws-fecha" class="ws-input">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Empresa / Organización</label>
+                            <input type="text" id="ws-empresa" class="ws-input" value="Puesto Tradicional de Garnachas (Feria Patronal)">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Variable Analizada</label>
+                            <input type="text" id="ws-variable" class="ws-input" value="Ingreso Diario de Ventas en Quetzales (GTQ)">
+                        </div>
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Sede / Sección</label>
+                            <input type="text" id="ws-seccion" class="ws-input" placeholder="Ej.: Campus Central / Sección A">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">
+                                1. Comparación de Estadígrafos & Análisis de Sesgo
+                            </label>
+                            <textarea id="ws-sesgo" class="ws-input ws-textarea"
+                                placeholder="Describe los valores calculados de Media, Mediana y Moda. ¿Existe algún valor atípico (outlier) o elefante que distorsione el promedio? ¿Qué tipo de sesgo presenta la distribución?">La media calculada es de Q 379.00, mientras que la mediana es de Q 257.50 y la moda presenta bimodalidad en Q 250 y Q 260. Existe un claro sesgo positivo hacia la derecha causado por el ingreso atípico de Q 1,500 durante el día de la feria patronal.</textarea>
+                        </div>
+
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                2. Justificación Metodológica: ¿Qué medida utilizar para cada objetivo?
+                            </label>
+                            <textarea id="ws-justificacion" class="ws-input ws-textarea"
+                                placeholder="Explica por qué no se debe usar la misma medida para todas las decisiones. ¿Cuándo conviene usar la mediana y cuándo la media?">Para la compra operativa de insumos perecederos (masa, carne y repollo) se debe utilizar la Mediana (Q 257.50) para evitar sobrecompras y pérdidas por merma. Para la solicitud de crédito bancario se debe presentar la Media (Q 379.00) que demuestra el potencial económico anual acumulado.</textarea>
+                        </div>
+
+                        <div class="ws-field">
+                            <label class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+                                3. Decisión Gerencial Concreta & Recomendación Ejecutiva
+                            </label>
+                            <textarea id="ws-decision" class="ws-input ws-textarea"
+                                placeholder="Redacta la recomendación final que presentarías a la administración o gerencia general.">Se recomienda mantener el presupuesto diario de compras fijado en el nivel de la Mediana (Q 250-Q 260) y habilitar un fondo extraordinario de aprovisionamiento únicamente durante festividades programadas. Presentar los estados financieros basados en la media ante el banco para respaldar el crédito comercial.</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== LABORATORIO IA (IFRAME INTEGRADO) ==================== -->
+        <section id="sec-ia" class="space-y-6 hidden">
+            <!-- BANNER DEL LABORATORIO IA -->
+            <div
+                class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-purple-950/40 p-5 sm:p-7 border border-purple-500/30 shadow-2xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span
+                                class="px-3 py-1 text-[10px] font-extrabold bg-purple-500/15 text-purple-300 rounded-full border border-purple-500/30 uppercase tracking-widest heading-font">
+                                <i class="fa-solid fa-microchip mr-1.5 text-purple-400"></i>Simulación & Toma de Decisiones Algorítmicas
+                            </span>
+                            <span class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                                <i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse"></i>En Línea
+                            </span>
+                        </div>
+                        <h2 class="text-xl sm:text-3xl font-black text-white heading-font mt-2 leading-tight">
+                            Laboratorio: Media, Mediana, Moda e Inteligencia Artificial
+                        </h2>
+                        <p class="text-slate-300 text-xs sm:text-sm mt-1.5 max-w-3xl leading-relaxed">
+                            Las empresas ya no deciden solo en Excel. Un algoritmo puede fijar un bono, un crédito o un precio. 
+                            Experimenta cómo el <strong class="text-purple-300">System Prompt</strong> y la fórmula estadística seleccionada (<strong class="text-blue-400">Media</strong> vs <strong class="text-emerald-400">Mediana</strong>) condicionan la respuesta ética de un Agente de IA.
+                        </p>
+                    </div>
+
+                    <!-- BOTONES DE CONTROL DEL IFRAME -->
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <button onclick="reloadIaIframe()"
+                            class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 transition flex items-center shadow-md active:scale-95"
+                            title="Recargar el simulador de IA">
+                            <i class="fa-solid fa-rotate-right mr-1.5 text-slate-400"></i>Recargar App
+                        </button>
+                        <a href="https://temporary-instant-apogee-hran4bx.vercel.app/" target="_blank" rel="noopener noreferrer"
+                            class="px-4 py-2 rounded-xl text-xs font-bold bg-purple-600 hover:bg-purple-500 text-white transition flex items-center shadow-lg shadow-purple-600/30 active:scale-95 heading-font">
+                            <i class="fa-solid fa-arrow-up-right-from-square mr-1.5"></i>Abrir en Pantalla Completa
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DEL IFRAME RESPONSIVE -->
+            <div class="bg-slate-900 border border-purple-500/30 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+                <!-- Barra superior simulada de ventana -->
+                <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        <span class="text-slate-400 font-mono text-[11px] ml-2 truncate">
+                            https://temporary-instant-apogee-hran4bx.vercel.app/
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] text-slate-500 hidden sm:inline font-mono">Next.js WebApp · UMG</span>
+                        <button onclick="toggleIframeFullscreen()" class="text-slate-400 hover:text-white p-1" title="Maximizar / Restaurar altura">
+                            <i class="fa-solid fa-expand text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Iframe -->
+                <div id="ia-iframe-container" class="relative w-full bg-slate-950 transition-all duration-300" style="height: 85vh; min-height: 700px;">
+                    <iframe id="ia-iframe"
+                        src="https://temporary-instant-apogee-hran4bx.vercel.app/"
+                        class="w-full h-full border-0 rounded-b-3xl bg-slate-950"
+                        title="Laboratorio IA: Media, Mediana y Moda"
+                        loading="lazy"
+                        allow="clipboard-read; clipboard-write"></iframe>
+                </div>
+            </div>
+
+            <!-- GUÍA DEL CICLO DE 5 PASOS DEL LABORATORIO IA -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-[10px] font-bold text-purple-400 uppercase tracking-wider block">Paso 1</span>
+                    <strong class="text-xs text-white block mt-0.5">Contexto del Negocio</strong>
+                    <p class="text-[11px] text-slate-400 mt-1">Plantea el rol gerencial y la decisión financiera a evaluar.</p>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider block">Paso 2</span>
+                    <strong class="text-xs text-white block mt-0.5">Carga de Datos</strong>
+                    <p class="text-[11px] text-slate-400 mt-1">Ingresa el dataset o selecciona casos empresariales reales.</p>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">Paso 3</span>
+                    <strong class="text-xs text-white block mt-0.5">Estadística Descriptiva</strong>
+                    <p class="text-[11px] text-slate-400 mt-1">Compara Media, Mediana y Moda junto con el sesgo detectado.</p>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">Paso 4</span>
+                    <strong class="text-xs text-white block mt-0.5">System Prompt</strong>
+                    <p class="text-[11px] text-slate-400 mt-1">Configura las directrices y restricciones que obedecerá el modelo.</p>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block">Paso 5</span>
+                    <strong class="text-xs text-white block mt-0.5">Decisión del Agente</strong>
+                    <p class="text-[11px] text-slate-400 mt-1">Audita el veredicto del modelo de IA ante sesgos y outliers.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-slate-950 border-t border-slate-850 py-8 px-4 text-center text-xs text-slate-500 mt-12">
+        <div class="max-w-7xl mx-auto space-y-2">
+            <p class="font-bold text-slate-400 heading-font">
+                Universidad Mariano Gálvez de Guatemala · Facultad de Ciencias de la Administración
+            </p>
+            <p>
+                Curso: Estadística 1 · Licenciatura en Administración de Empresas · Catedrático: <span class="text-purple-400 font-semibold">Ruldin Ayala</span>
+            </p>
+            <p class="text-[11px] text-slate-600">
+                Plataforma Educativa Interactiva · Semana 8: Medidas de Tendencia Central
+            </p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT -->
+    <script>
+        // ==================== ESTADO GLOBAL ====================
+        let currentSection = 'conceptos';
+        let currentChartType = 'hist';
+        let mainChart = null;
+        let lastAnalysis = null;
+
+        const presetCases = {
+            garnachas: {
+                title: 'Ingresos diarios y evaluación de feria patronal — Puesto de Garnachas',
+                context: 'Puesto de garnachas tradicional en el interior del país con registro de 10 días de ventas. El día 8 ocurrió la feria patronal con venta atípica de Q1,500. El administrador requiere definir la compra de insumos diarios y evaluar la solvencia para solicitar un crédito de refrigeración.',
+                dataType: 'currency',
+                data: '240, 245, 250, 250, 255, 260, 260, 1500, 265, 270',
+                empresa: 'Puesto Tradicional de Garnachas (Feria Patronal)',
+                variable: 'Ingreso Diario de Ventas en Quetzales (GTQ)',
+                sesgo: 'La media calculada es de Q 379.00, mientras que la mediana es de Q 257.50 y la moda presenta bimodalidad en Q 250 y Q 260. Existe un claro sesgo positivo hacia la derecha causado por el ingreso atípico de Q 1,500 durante el día de la feria patronal.',
+                justificacion: 'Para la compra operativa de insumos perecederos (masa, carne y repollo) se debe utilizar la Mediana (Q 257.50) para evitar sobrecompras y pérdidas por merma. Para la solicitud de crédito bancario se debe presentar la Media (Q 379.00) que demuestra el potencial económico anual acumulado.',
+                decision: 'Se recomienda mantener el presupuesto diario de compras fijado en el nivel de la Mediana (Q 250-Q 260) y habilitar un fondo extraordinario de aprovisionamiento únicamente durante festividades programadas. Presentar los estados financieros basados en la media ante el banco para respaldar el crédito comercial.'
+            },
+            salarios: {
+                title: 'Auditoría de Equidad Salarial — Empresa de Servicios GuateServicios S.A.',
+                context: 'Evaluación salarial de 11 integrantes de la empresa: 10 colaboradores operativos que devengan Q3,000 mensuales y el Gerente General que devenga Q50,000 mensuales. Se evalúa el impacto de reportar la media vs la mediana ante inversionistas.',
+                dataType: 'currency',
+                data: '3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 50000',
+                empresa: 'GuateServicios S.A. (Zona 10, Guatemala)',
+                variable: 'Salario Mensual por Colaborador (GTQ)',
+                sesgo: 'La media aritmética arroja Q 7,272.73, mientras que la mediana es de Q 3,000.00 y la moda es Q 3,000.00. El salario de Q 50,000 genera una distorsión extrema y asimetría positiva severa.',
+                justificacion: 'Presentar la media de Q 7,272.73 es un maquillaje corporativo engañoso, ya que más del 90% de la nómina gana menos de la mitad de dicho valor. La mediana de Q 3,000.00 refleja la experiencia salarial real y honesta de la organización.',
+                decision: 'Establecer bandas salariales transparentes basadas en la Mediana para contrataciones y revisiones de equidad interna. Auditar la brecha de compensación directiva frente al personal de base.'
+            },
+            clinica: {
+                title: 'Tiempos de Espera de Pacientes — Clínica Privada El Roble',
+                context: 'Registro ordenado de tiempos de espera en sala de recepción para n = 11 pacientes en consulta externa matutina. El gerente de operaciones evalúa el cumplimiento de estándares de triaje y satisfacción.',
+                dataType: 'minutes',
+                data: '36, 37, 38, 39, 41, 42, 42, 43, 44, 44, 45',
+                empresa: 'Clínica Médica El Roble (Quetzaltenango)',
+                variable: 'Tiempo de Espera en Recepción (Minutos)',
+                sesgo: 'La media es de 41.00 min, la mediana es 42.00 min y la moda es bimodal (42 y 44 min). La distribución es bastante homogénea y centrada alrededor de los 41-42 minutos.',
+                justificacion: 'La mediana de 42 minutos confirma que el 50% de los pacientes espera más de 42 minutos para ser atendido. Al ser una variable continua de servicio, la mediana marca el umbral crítico de alerta operativa.',
+                decision: 'Implementar un sistema de pre-triaje digital y escalonar los horarios de citación médica cada 20 minutos para reducir la mediana de espera a menos de 25 minutos.'
+            },
+            cafeteria: {
+                title: 'Encuesta de Satisfacción — Concesionario de Cafetería Universitaria',
+                context: 'Evaluación de satisfacción del almuerzo aplicada a n = 30 estudiantes universitarios con escala de 1 a 5 estrellas. Ocho estudiantes calificaron con 1 estrella debido a un problema con el menú del día.',
+                dataType: 'stars',
+                data: '1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4',
+                empresa: 'Cafetería Universitaria UMG',
+                variable: 'Calificación de Servicio (Escala 1 a 5 Estrellas)',
+                sesgo: 'La media arroja 2.63 estrellas (nivel deficiente/reprobado), pero la mediana es 3.00 estrellas y la moda es 3.00 estrellas (12 calificaciones de 3). Los 8 votos de 1 estrella generaron un sesgo negativo severo.',
+                justificacion: 'La media se vio arrastrada al abismo por el grupo inconforme del platillo específico. La mediana y la moda demuestran que para la mayoría de estudiantes la comida fue aceptable (3 estrellas sólidas).',
+                decision: 'No cancelar el contrato del proveedor de forma precipitada; en su lugar, auditar la receta del platillo causante del descontento y establecer controles de temperatura en el buffet.'
+            },
+            asesores: {
+                title: 'Evaluación de Rendimiento Semanal — Equipo de Asesores Comerciales',
+                context: 'Cantidad de contratos y trámites comerciales cerrados durante la semana por 5 asesores de ventas corporativas.',
+                dataType: 'units',
+                data: '67, 70, 53, 79, 61',
+                empresa: 'Corporación Financiera de Occidente',
+                variable: 'Contratos Cerrados por Asesor (Unidades)',
+                sesgo: 'La media es de 66.00 trámites, la mediana es 67.00 trámites y no hay moda (distribución amodal con datos únicos). La distribución es balanceada.',
+                justificacion: 'Al ser un equipo pequeño sin outliers extremos, la media aritmética de 66 contratos representa perfectamente el centro de gravedad del esfuerzo colectivo semanal.',
+                decision: 'Fijar la cuota meta individual en 66 contratos semanales y otorgar incentivos escalonados a partir del asesor de 70 contratos.'
+            },
+            boutique: {
+                title: 'Historial de Salidas de Inventario — Boutique Urbana Sexta Avenida',
+                context: 'Registro de ventas por tallas numéricas de calzado y prendas urbanas para planificar la orden de compra de fin de mes a los fabricantes.',
+                dataType: 'units',
+                data: '36, 38, 38, 38, 38, 40, 40, 42, 44, 44',
+                empresa: 'Boutique Urbana 6ta Avenida (Centro Histórico)',
+                variable: 'Talla de Calzado Vendida (Tallas)',
+                sesgo: 'La moda dominante es la talla 38 (4 ventas), la mediana es 39 y la media 39.4. En compras de retail la media carece de sentido físico.',
+                justificacion: 'No se puede pedir una talla promedio 39.4 a los proveedores. La moda (talla 38) determina la demanda empírica real de los clientes para evitar acumulación de inventario muerto.',
+                decision: 'Destinar el 60% del capital de reposición a la talla 38, complementando con lotes reducidos de tallas 36, 40 y 44.'
+            }
+        };
+
+        // ==================== NAVEGACIÓN ====================
+        function switchSection(secId) {
+            currentSection = secId;
+            ['conceptos', 'duelo', 'lab', 'ia'].forEach(s => {
+                const secEl = document.getElementById('sec-' + s);
+                const navEl = document.getElementById('nav-' + s);
+                const mobEl = document.getElementById('mob-nav-' + s);
+
+                if (secEl) {
+                    secEl.classList.toggle('hidden', s !== secId);
+                    secEl.classList.toggle('block', s === secId);
+                }
+
+                const activeClass = 'bg-purple-500/20 text-purple-400 border border-purple-500/30';
+                const inactiveClass = 'text-slate-400 hover:bg-slate-900 hover:text-white';
+
+                if (navEl) {
+                    if (s === secId) {
+                        navEl.className = 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition ' + activeClass;
+                    } else {
+                        if (s === 'ia') {
+                            navEl.className = 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition text-purple-300 hover:bg-purple-950/40 hover:text-white border border-purple-500/40 bg-purple-900/20 shadow-sm shadow-purple-500/20';
+                        } else {
+                            navEl.className = 'nav-btn px-3 py-2 rounded-xl text-xs font-bold transition ' + inactiveClass;
+                        }
+                    }
+                }
+
+                if (mobEl) {
+                    if (s === secId) {
+                        mobEl.className = 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold ' + activeClass;
+                    } else {
+                        mobEl.className = 'mob-nav-btn flex-none px-3.5 py-2 rounded-lg text-xs font-bold text-slate-400';
+                    }
+                }
+            });
+
+            if (secId === 'lab') {
+                setTimeout(() => {
+                    if (mainChart) mainChart.resize();
+                    else processDataset();
+                }, 100);
+            }
+        }
+
+        function reloadIaIframe() {
+            const iframe = document.getElementById('ia-iframe');
+            if (iframe) {
+                const currentSrc = iframe.src;
+                iframe.src = '';
+                setTimeout(() => {
+                    iframe.src = currentSrc;
+                }, 50);
+            }
+        }
+
+        function toggleIframeFullscreen() {
+            const container = document.getElementById('ia-iframe-container');
+            if (!container) return;
+            if (container.style.height === '92vh') {
+                container.style.height = '85vh';
+            } else {
+                container.style.height = '92vh';
+            }
+        }
+
+        function loadPresetCase(key) {
+            const c = presetCases[key];
+            if (!c) return;
+
+            document.getElementById('lab-title').value = c.title;
+            document.getElementById('lab-context').value = c.context;
+            document.getElementById('lab-data-type').value = c.dataType;
+            document.getElementById('lab-data-input').value = c.data;
+            document.getElementById('ws-empresa').value = c.empresa;
+            document.getElementById('ws-variable').value = c.variable;
+            document.getElementById('ws-sesgo').value = c.sesgo;
+            document.getElementById('ws-justificacion').value = c.justificacion;
+            document.getElementById('ws-decision').value = c.decision;
+
+            switchSection('lab');
+            processDataset();
+        }
+
+        function clearLab() {
+            document.getElementById('lab-title').value = '';
+            document.getElementById('lab-context').value = '';
+            document.getElementById('lab-data-input').value = '';
+            document.getElementById('ws-empresa').value = '';
+            document.getElementById('ws-variable').value = '';
+            document.getElementById('ws-sesgo').value = '';
+            document.getElementById('ws-justificacion').value = '';
+            document.getElementById('ws-decision').value = '';
+
+            document.getElementById('kpi-mean').textContent = '—';
+            document.getElementById('kpi-median').textContent = '—';
+            document.getElementById('kpi-mode').textContent = '—';
+            document.getElementById('kpi-n').textContent = '—';
+            document.getElementById('kpi-r').textContent = '—';
+            document.getElementById('kpi-minmax').textContent = '—';
+
+            document.getElementById('freq-table-body').innerHTML = `
+                <tr><td colspan="7" class="py-4 text-slate-500 text-center">Laboratorio limpio. Ingresa datos para procesar.</td></tr>
+            `;
+            document.getElementById('step-breakdown-body').innerHTML = '';
+            document.getElementById('diagnostic-text').innerHTML = '<p class="text-slate-500">Ingresa datos y presiona "Calcular Estadígrafos".</p>';
+            
+            if (mainChart) {
+                mainChart.destroy();
+                mainChart = null;
+            }
+        }
+
+        function toggleStepBreakdown() {
+            const content = document.getElementById('step-breakdown-content');
+            const icon = document.getElementById('icon-toggle-breakdown');
+            const text = document.getElementById('text-toggle-breakdown');
+            const isHidden = content.classList.contains('hidden');
+
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.className = 'fa-solid fa-chevron-up text-[10px]';
+                text.textContent = 'Contraer';
+            } else {
+                content.classList.add('hidden');
+                icon.className = 'fa-solid fa-chevron-down text-[10px]';
+                text.textContent = 'Expandir';
+            }
+        }
+
+        // ==================== MÁSCARAS Y FORMATEO ====================
+        function formatDataValue(val, type) {
+            if (val === null || val === undefined || isNaN(val)) return '—';
+            const num = Number(val);
+            const t = type || document.getElementById('lab-data-type')?.value || 'normal';
+
+            switch (t) {
+                case 'currency':
+                    return 'Q ' + num.toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                case 'units':
+                    return (Number.isInteger(num) ? num : num.toFixed(2)) + ' u';
+                case 'minutes':
+                    return num.toFixed(1) + ' min';
+                case 'hours':
+                    return num.toFixed(2) + ' hrs';
+                case 'seconds':
+                    return num.toFixed(1) + ' s';
+                case 'stars':
+                    return num.toFixed(1) + ' ★';
+                case 'decimals':
+                    return num.toFixed(3);
+                case 'liters':
+                    return num.toFixed(1) + ' L';
+                case 'meters':
+                    return num.toFixed(2) + ' m';
+                default:
+                    return Number.isInteger(num) ? String(num) : num.toFixed(2);
+            }
+        }
+
+        // ==================== PROCESAMIENTO ESTADÍSTICO ====================
+        function parseInputData(raw) {
+            if (!raw) return [];
+            return raw
+                .replace(/[^\d.,\s-]/g, ' ')
+                .split(/[\s,;\n\t]+/)
+                .map(s => {
+                    const cleaned = s.replace(',', '.').trim();
+                    return cleaned === '' ? NaN : parseFloat(cleaned);
+                })
+                .filter(n => !isNaN(n));
+        }
+
+        function calculateStatistics(numbers) {
+            if (!numbers || numbers.length === 0) return null;
+            const n = numbers.length;
+            const sorted = [...numbers].sort((a, b) => a - b);
+            const sum = sorted.reduce((acc, v) => acc + v, 0);
+            const min = sorted[0];
+            const max = sorted[n - 1];
+            const range = max - min;
+
+            // Media
+            const mean = sum / n;
+
+            // Mediana
+            let median = 0;
+            let medianDetails = '';
+            if (n % 2 === 1) {
+                const midIdx = Math.floor(n / 2);
+                median = sorted[midIdx];
+                medianDetails = `n es impar (${n}). La posición central es (${n}+1)/2 = Posición ${midIdx + 1}, cuyo valor es <strong>${formatDataValue(median)}</strong>.`;
+            } else {
+                const mid1 = n / 2 - 1;
+                const mid2 = n / 2;
+                median = (sorted[mid1] + sorted[mid2]) / 2;
+                medianDetails = `n es par (${n}). Promedio de posiciones centrales ${mid1 + 1} (${formatDataValue(sorted[mid1])}) y ${mid2 + 1} (${formatDataValue(sorted[mid2])}) = <strong>${formatDataValue(median)}</strong>.`;
+            }
+
+            // Moda y conteo de frecuencias
+            const freqMap = {};
+            sorted.forEach(v => {
+                const key = String(Number(v.toFixed(4)));
+                freqMap[key] = (freqMap[key] || 0) + 1;
+            });
+
+            let maxFreq = 0;
+            for (const key in freqMap) {
+                if (freqMap[key] > maxFreq) maxFreq = freqMap[key];
+            }
+
+            let modes = [];
+            let modeType = 'amodal';
+            if (maxFreq > 1) {
+                for (const key in freqMap) {
+                    if (freqMap[key] === maxFreq) {
+                        modes.push(parseFloat(key));
+                    }
+                }
+                if (modes.length === 1) modeType = 'unimodal';
+                else if (modes.length === 2) modeType = 'bimodal';
+                else modeType = 'multimodal';
+            }
+
+            // Diagnóstico de Sesgo (Skewness)
+            const diff = mean - median;
+            const relDiff = range > 0 ? (diff / range) : 0;
+            let skewness = 'symmetric';
+            let skewLabel = 'Simétrica';
+            let skewColor = 'text-emerald-400';
+            let skewBadgeBg = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+
+            if (Math.abs(relDiff) > 0.04 || Math.abs(diff) > 0.5) {
+                if (diff > 0) {
+                    skewness = 'positive';
+                    skewLabel = 'Sesgo Positivo (Hacia la Derecha)';
+                    skewColor = 'text-amber-400';
+                    skewBadgeBg = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
+                } else {
+                    skewness = 'negative';
+                    skewLabel = 'Sesgo Negativo (Hacia la Izquierda)';
+                    skewColor = 'text-blue-400';
+                    skewBadgeBg = 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
+                }
+            }
+
+            return {
+                n,
+                sorted,
+                sum,
+                min,
+                max,
+                range,
+                mean,
+                median,
+                medianDetails,
+                modes,
+                modeType,
+                maxFreq,
+                freqMap,
+                skewness,
+                skewLabel,
+                skewColor,
+                skewBadgeBg
+            };
+        }
+
+        // ==================== TABLA DE FRECUENCIAS ====================
+        function generateFrequencyTable(numbers, stats) {
+            const n = stats.n;
+            const uniqueVals = Object.keys(stats.freqMap).map(Number).sort((a, b) => a - b);
+            
+            // Si hay 12 o menos valores únicos, mostramos tabla discreta por valor
+            if (uniqueVals.length <= 12) {
+                let cumulativeFa = 0;
+                const rows = uniqueVals.map(val => {
+                    const fi = stats.freqMap[String(val)] || stats.freqMap[String(Number(val.toFixed(4)))];
+                    cumulativeFa += fi;
+                    const fr = fi / n;
+                    const fp = fr * 100;
+                    const fpAcum = (cumulativeFa / n) * 100;
+                    return {
+                        label: formatDataValue(val),
+                        val: val,
+                        fi: fi,
+                        fr: fr,
+                        fp: fp,
+                        fpAcum: fpAcum,
+                        Fa: cumulativeFa,
+                        Xi: val,
+                        isGrouped: false
+                    };
+                });
+
+                return { isGrouped: false, rows };
+            }
+
+            // Para datos más continuos / dispersos, aplicamos agrupación por clases de Sturges
+            const k = Math.max(4, Math.round(1 + 3.322 * Math.log10(n)));
+            const range = stats.range;
+            const rawA = range / k;
+            const A = rawA > 1 ? Math.ceil(rawA) : Number(rawA.toFixed(2));
+
+            const intervals = [];
+            let lower = stats.min;
+            let cumulativeFa = 0;
+
+            for (let i = 0; i < k; i++) {
+                const upper = lower + A;
+                const isLast = (i === k - 1);
+                
+                const count = stats.sorted.filter(v => {
+                    if (isLast) return v >= lower && v <= upper + 0.0001;
+                    return v >= lower && v < upper;
+                }).length;
+
+                cumulativeFa += count;
+                const fr = count / n;
+                const fp = fr * 100;
+                const fpAcum = (cumulativeFa / n) * 100;
+                const Xi = (lower + upper) / 2;
+
+                intervals.push({
+                    lower,
+                    upper,
+                    label: `[${formatDataValue(lower)} − ${formatDataValue(upper)}${isLast ? ']' : ')'}`,
+                    val: Xi,
+                    fi: count,
+                    fr,
+                    fp,
+                    fpAcum,
+                    Fa: cumulativeFa,
+                    Xi,
+                    isGrouped: true
+                });
+
+                lower = upper;
+            }
+
+            return { isGrouped: true, rows: intervals, k, A };
+        }
+
+        // ==================== RENDERIZADO PRINCIPAL ====================
+        function processDataset() {
+            const rawInput = document.getElementById('lab-data-input').value;
+            const numbers = parseInputData(rawInput);
+
+            if (numbers.length < 3) {
+                alert('Ingresa al menos 3 valores numéricos para calcular las medidas de tendencia central.');
+                return;
+            }
+
+            const stats = calculateStatistics(numbers);
+            const tableData = generateFrequencyTable(numbers, stats);
+            lastAnalysis = { stats, tableData };
+
+            // 1. Actualizar KPIs
+            document.getElementById('kpi-mean').textContent = formatDataValue(stats.mean);
+            document.getElementById('kpi-median').textContent = formatDataValue(stats.median);
+            
+            if (stats.modes.length === 0) {
+                document.getElementById('kpi-mode').textContent = 'Amodal (sin repetición)';
+            } else if (stats.modes.length === 1) {
+                document.getElementById('kpi-mode').textContent = formatDataValue(stats.modes[0]);
+            } else if (stats.modes.length === 2) {
+                document.getElementById('kpi-mode').textContent = `${formatDataValue(stats.modes[0])} & ${formatDataValue(stats.modes[1])}`;
+            } else {
+                document.getElementById('kpi-mode').textContent = `Multimodal (${stats.modes.length})`;
+            }
+
+            document.getElementById('kpi-n').textContent = stats.n;
+            document.getElementById('kpi-r').textContent = formatDataValue(stats.range);
+            document.getElementById('kpi-minmax').textContent = `${formatDataValue(stats.min)} / ${formatDataValue(stats.max)}`;
+
+            // 2. Diagnóstico de Decisiones
+            const skewBadge = document.getElementById('skew-badge');
+            skewBadge.textContent = stats.skewLabel;
+            skewBadge.className = `px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${stats.skewBadgeBg}`;
+
+            let diagHtml = '';
+            if (stats.skewness === 'symmetric') {
+                diagHtml = `
+                    <p><strong class="text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Distribución Balanceada:</strong> La Media (${formatDataValue(stats.mean)}) y la Mediana (${formatDataValue(stats.median)}) son prácticamente idénticas. Puedes utilizar la media con total confianza para planificaciones operativas y presupuestos financieros.</p>
+                `;
+            } else if (stats.skewness === 'positive') {
+                diagHtml = `
+                    <p><strong class="text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Alerta de Elefante (Outlier Alto):</strong> La Media (${formatDataValue(stats.mean)}) es notablemente superior a la Mediana (${formatDataValue(stats.median)}). Un valor alto está inflando el promedio.</p>
+                    <p class="text-[11px] text-slate-400">💡 <strong>Recomendación Ejecutiva:</strong> Para compras de inventario o gestión operativa diaria utiliza la <strong class="text-emerald-400">Mediana (${formatDataValue(stats.median)})</strong>. Utiliza la Media únicamente para reportar liquidez total acumulada o solvencia global ante bancos.</p>
+                `;
+            } else {
+                diagHtml = `
+                    <p><strong class="text-blue-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Alerta de Outlier Bajo:</strong> La Media (${formatDataValue(stats.mean)}) es inferior a la Mediana (${formatDataValue(stats.median)}). Valores atípicos bajos están arrastrando el promedio hacia abajo.</p>
+                    <p class="text-[11px] text-slate-400">💡 <strong>Recomendación Ejecutiva:</strong> La <strong class="text-emerald-400">Mediana (${formatDataValue(stats.median)})</strong> refleja la experiencia de la mayoría de clientes. Investiga el origen puntual de los datos bajos antes de tomar medidas drásticas.</p>
+                `;
+            }
+            document.getElementById('diagnostic-text').innerHTML = diagHtml;
+
+            // 3. Desglose Paso a Paso
+            let breakdownHtml = `
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                    <strong class="text-blue-400 block font-bold">1. Media Aritmética (x̄):</strong>
+                    <p class="font-mono text-slate-300">x̄ = Σx / n = ${stats.sum.toFixed(2)} / ${stats.n} = <strong class="text-white">${formatDataValue(stats.mean)}</strong></p>
+                </div>
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                    <strong class="text-emerald-400 block font-bold">2. Mediana (Me):</strong>
+                    <p class="text-slate-300">${stats.medianDetails}</p>
+                    <p class="font-mono text-[11px] text-slate-400 truncate">Datos ordenados: [${stats.sorted.map(v => formatDataValue(v)).join(', ')}]</p>
+                </div>
+                <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                    <strong class="text-amber-400 block font-bold">3. Moda (Mo):</strong>
+                    <p class="text-slate-300">Tipo: <strong class="text-white capitalize">${stats.modeType}</strong> (Frecuencia máxima: ${stats.maxFreq} repeticiones). Valor(es): <strong class="text-amber-300">${stats.modes.length ? stats.modes.map(v => formatDataValue(v)).join(', ') : 'Ninguno (todos únicos)'}</strong>.</p>
+                </div>
+            `;
+            document.getElementById('step-breakdown-body').innerHTML = breakdownHtml;
+
+            // 4. Tabla de Frecuencias
+            const tbody = document.getElementById('freq-table-body');
+            tbody.innerHTML = '';
+            tableData.rows.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-slate-800/60 hover:bg-slate-800/30';
+                tr.innerHTML = `
+                    <td class="py-2 pr-2 font-mono text-slate-200 font-semibold">${r.label}</td>
+                    <td class="py-2 pr-2 text-white font-bold">${r.fi}</td>
+                    <td class="py-2 pr-2 text-slate-400">${r.fr.toFixed(3)}</td>
+                    <td class="py-2 pr-2 text-emerald-400 font-semibold">${r.fp.toFixed(1)}%</td>
+                    <td class="py-2 pr-2 text-blue-400 font-semibold">${r.fpAcum.toFixed(1)}%</td>
+                    <td class="py-2 pr-2 text-slate-300 font-bold">${r.Fa}</td>
+                    <td class="py-2 text-slate-400 font-mono">${formatDataValue(r.Xi)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // 5. Renderizar Gráfico con Marcadores Centrales
+            renderLabChart(currentChartType || 'hist');
+        }
+
+        function setChartButtonsState(activeType) {
+            const btnHist = document.getElementById('btn-chart-hist');
+            const btnPoly = document.getElementById('btn-chart-polygon');
+            const btnOgive = document.getElementById('btn-chart-ogive');
+
+            const inactiveStyle = 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 hover:text-white active:scale-[0.98] transition';
+
+            if (btnHist) {
+                btnHist.className = activeType === 'hist' 
+                    ? 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:border-blue-400 active:scale-[0.98] transition'
+                    : inactiveStyle + ' hover:border-blue-500/50';
+            }
+            if (btnPoly) {
+                btnPoly.className = activeType === 'polygon'
+                    ? 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:border-emerald-400 active:scale-[0.98] transition'
+                    : inactiveStyle + ' hover:border-emerald-500/50';
+            }
+            if (btnOgive) {
+                btnOgive.className = activeType === 'ogive'
+                    ? 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-bold bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:border-amber-400 active:scale-[0.98] transition'
+                    : inactiveStyle + ' hover:border-amber-500/50';
+            }
+        }
+
+        function renderLabChart(type) {
+            if (!lastAnalysis) return;
+            const { stats, tableData } = lastAnalysis;
+            currentChartType = type || 'hist';
+            setChartButtonsState(currentChartType);
+
+            const ctx = document.getElementById('main-chart').getContext('2d');
+            if (mainChart) {
+                mainChart.destroy();
+                mainChart = null;
+            }
+
+            const badge = document.getElementById('chart-type-badge');
+            const insightEl = document.getElementById('chart-insight');
+            const title = document.getElementById('lab-title').value.trim() || 'Medidas de Tendencia Central';
+            document.getElementById('chart-heading').textContent = title;
+
+            if (currentChartType === 'hist') {
+                // ==================== HISTOGRAMA ====================
+                badge.textContent = 'Histograma de Frecuencia';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30';
+
+                const labels = tableData.rows.map(r => r.label);
+                const frequencies = tableData.rows.map(r => r.fi);
+
+                const backgroundColors = tableData.rows.map(r => {
+                    if (!tableData.isGrouped) {
+                        if (stats.modes.includes(r.val)) return 'rgba(245, 158, 11, 0.8)'; // Moda en Ámbar
+                        if (Math.abs(r.val - stats.median) < 0.001) return 'rgba(16, 185, 129, 0.8)'; // Mediana en Verde
+                        return 'rgba(59, 130, 246, 0.65)'; // Azul institucional
+                    } else {
+                        if (stats.modes.some(m => m >= r.lower && m <= r.upper)) return 'rgba(245, 158, 11, 0.8)';
+                        return 'rgba(59, 130, 246, 0.65)';
+                    }
+                });
+                const borderColors = backgroundColors.map(c => c.replace('0.8', '1').replace('0.65', '1'));
+
+                mainChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Frecuencia Absoluta (fi)',
+                                data: frequencies,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 1.5,
+                                borderRadius: 6,
+                                categoryPercentage: 0.95,
+                                barPercentage: 0.95,
+                                datalabels: {
+                                    color: '#ffffff',
+                                    anchor: 'end',
+                                    align: 'top',
+                                    offset: 2,
+                                    font: { weight: 'bold', size: 10 },
+                                    formatter: v => v > 0 ? v : ''
+                                }
+                            }
+                        ]
+                    },
+                    plugins: [ChartDataLabels],
+                    options: baseChartOptions('Categorías / Intervalos de Datos', 'Frecuencia (fi)', stats)
+                });
+
+                insightEl.innerHTML = `
+                    📊 <strong>Interpretación del Histograma:</strong> Muestra la concentración de datos en columnas. Las barras coloreadas destacan la <strong class="text-amber-400">Moda</strong> y la proximidad con la <strong class="text-emerald-400">Mediana (Me = ${formatDataValue(stats.median)})</strong> y la <strong class="text-blue-400">Media (x̄ = ${formatDataValue(stats.mean)})</strong>. Estado: <strong class="${stats.skewColor}">${stats.skewLabel}</strong>.
+                `;
+
+            } else if (currentChartType === 'polygon') {
+                // ==================== POLÍGONO DE FRECUENCIAS ====================
+                badge.textContent = 'Polígono de Frecuencia';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+
+                let polyLabels = [];
+                let polyData = [];
+
+                if (tableData.isGrouped) {
+                    const A = tableData.A || (tableData.rows[1].Xi - tableData.rows[0].Xi);
+                    const leftAnchorXi = tableData.rows[0].Xi - A;
+                    const rightAnchorXi = tableData.rows[tableData.rows.length - 1].Xi + A;
+
+                    polyLabels = [
+                        formatDataValue(leftAnchorXi),
+                        ...tableData.rows.map(r => formatDataValue(r.Xi)),
+                        formatDataValue(rightAnchorXi)
+                    ];
+                    polyData = [0, ...tableData.rows.map(r => r.fi), 0];
+                } else {
+                    const vals = tableData.rows.map(r => r.Xi);
+                    const step = vals.length > 1 ? (vals[1] - vals[0]) : 1;
+                    const leftVal = vals[0] - step;
+                    const rightVal = vals[vals.length - 1] + step;
+
+                    polyLabels = [
+                        formatDataValue(leftVal),
+                        ...vals.map(v => formatDataValue(v)),
+                        formatDataValue(rightVal)
+                    ];
+                    polyData = [0, ...tableData.rows.map(r => r.fi), 0];
+                }
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: polyLabels,
+                        datasets: [
+                            {
+                                label: 'Frecuencia Absoluta (fi) en Marcas de Clase',
+                                data: polyData,
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.16)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#34d399',
+                                pointBorderColor: '#020617',
+                                pointBorderWidth: 2,
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                                tension: 0.25,
+                                fill: true,
+                                datalabels: {
+                                    color: '#ffffff',
+                                    anchor: 'end',
+                                    align: 'top',
+                                    offset: 4,
+                                    font: { weight: 'bold', size: 10 },
+                                    formatter: v => v
+                                }
+                            }
+                        ]
+                    },
+                    plugins: [ChartDataLabels],
+                    options: baseChartOptions('Marca de clase (Xi) / Valor', 'Frecuencia (fi)', stats)
+                });
+
+                insightEl.innerHTML = `
+                    📈 <strong>Interpretación del Polígono:</strong> Une las marcas de clase (Xi) con sus frecuencias absolutas y se ancla a frecuencia cero (0) en los extremos. Permite apreciar la suavidad de la campana y verificar visualmente si la cúspide (<strong class="text-amber-400">Moda</strong>) coincide o se separa del centro de gravedad (<strong class="text-blue-400">Media = ${formatDataValue(stats.mean)}</strong>) y la división del 50% (<strong class="text-emerald-400">Mediana = ${formatDataValue(stats.median)}</strong>).
+                `;
+
+            } else if (currentChartType === 'ogive') {
+                // ==================== OJIVA ACUMULADA ====================
+                badge.textContent = 'Ojiva (Frecuencia Acumulada)';
+                badge.className = 'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30';
+
+                let ogiveLabels = [];
+                let ogiveData = [];
+
+                if (tableData.isGrouped) {
+                    ogiveLabels = [
+                        formatDataValue(tableData.rows[0].lower),
+                        ...tableData.rows.map(r => formatDataValue(r.upper))
+                    ];
+                    ogiveData = [0, ...tableData.rows.map(r => r.Fa)];
+                } else {
+                    const vals = tableData.rows.map(r => r.Xi);
+                    const step = vals.length > 1 ? (vals[1] - vals[0]) : 1;
+                    ogiveLabels = [
+                        formatDataValue(vals[0] - step / 2),
+                        ...vals.map(v => formatDataValue(v))
+                    ];
+                    ogiveData = [0, ...tableData.rows.map(r => r.Fa)];
+                }
+
+                mainChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ogiveLabels,
+                        datasets: [
+                            {
+                                label: 'Frecuencia Acumulada (Fa)',
+                                data: ogiveData,
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#fbbf24',
+                                pointBorderColor: '#020617',
+                                pointBorderWidth: 2,
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                                tension: 0.15,
+                                fill: true,
+                                datalabels: {
+                                    color: '#ffffff',
+                                    anchor: 'end',
+                                    align: 'top',
+                                    offset: 4,
+                                    font: { weight: 'bold', size: 10 },
+                                    formatter: v => v
+                                }
+                            }
+                        ]
+                    },
+                    plugins: [ChartDataLabels],
+                    options: baseChartOptions('Límites / Puntos de Medición', 'Frecuencia Acumulada (Fa)', stats)
+                });
+
+                insightEl.innerHTML = `
+                    🔗 <strong>Interpretación de la Ojiva:</strong> Muestra el crecimiento acumulado de observaciones ($F_a$). Es la herramienta gráfica para responder qué porcentaje de datos está por debajo de un valor y ubicar la <strong class="text-emerald-400">Mediana</strong> en la altura del 50% de la muestra (${stats.n / 2} observaciones).
+                `;
+            }
+        }
+
+        function baseChartOptions(xTitle, yTitle, stats) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 350 },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        borderColor: '#334155',
+                        borderWidth: 1,
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#cbd5e1',
+                        padding: 10,
+                        callbacks: {
+                            label: ctx => `Frecuencia: ${ctx.parsed.y} observaciones (${((ctx.parsed.y / stats.n) * 100).toFixed(1)}%)`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 45 },
+                        grid: { color: 'rgba(148, 163, 184, 0.06)' },
+                        title: { display: true, text: xTitle, color: '#64748b', font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#94a3b8', precision: 0 },
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        title: { display: true, text: yTitle, color: '#64748b', font: { size: 11 } }
+                    }
+                }
+            };
+        }
+
+        // ==================== EXPORTACIÓN A PDF ====================
+        function wsVal(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function formatFechaGT(isoDate) {
+            if (!isoDate) return '—';
+            const [y, m, d] = isoDate.split('-');
+            if (!y || !m || !d) return isoDate;
+            return `${d}/${m}/${y}`;
+        }
+
+        function wrapText(doc, text, x, y, maxWidth, lineHeight) {
+            const lines = doc.splitTextToSize(text || '—', maxWidth);
+            doc.text(lines, x, y);
+            return y + lines.length * lineHeight;
+        }
+
+        function exportReportPDF() {
+            if (typeof window.jspdf === 'undefined') {
+                alert('No se pudo cargar jsPDF. Verifica tu conexión a internet e intenta de nuevo.');
+                return;
+            }
+            if (!mainChart || !lastAnalysis) {
+                alert('Procesa un conjunto de datos antes de exportar el informe.');
+                return;
+            }
+
+            const nombre = wsVal('ws-student-name');
+            const carnet = wsVal('ws-student-carnet');
+            if (!nombre || !carnet) {
+                alert('Completa al menos tu nombre y número de carné en la Hoja de Trabajo para exportar el informe.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const pageW = doc.internal.pageSize.getWidth();
+            const margin = 14;
+            const contentW = pageW - margin * 2;
+            let y = 16;
+
+            const stats = lastAnalysis.stats;
+            const tableData = lastAnalysis.tableData;
+            const title = wsVal('lab-title') || 'Informe Ejecutivo de Medidas de Tendencia Central';
+            const contexto = wsVal('lab-context') || '—';
+            const empresa = wsVal('ws-empresa') || '—';
+            const variable = wsVal('ws-variable') || '—';
+            const seccion = wsVal('ws-seccion') || '—';
+            const fecha = formatFechaGT(wsVal('ws-fecha'));
+            const chartTypeLabel = document.getElementById('chart-type-badge')?.textContent.trim() || 'Histograma';
+
+            // Encabezado institucional UMG
+            doc.setFillColor(15, 23, 42); // Slate 900
+            doc.rect(0, 0, pageW, 28, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text('INFORME EJECUTIVO: MEDIDAS DE TENDENCIA CENTRAL', pageW / 2, 11, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(192, 132, 252); // Purple 400
+            doc.text('Estadística 1 · UMG · Semana 8 · Cátedra Ruldin Ayala', pageW / 2, 17, { align: 'center' });
+            doc.setTextColor(148, 163, 184);
+            doc.text('Universidad Mariano Gálvez de Guatemala — Facultad de Ciencias de la Administración', pageW / 2, 22, { align: 'center' });
+
+            y = 35;
+            doc.setTextColor(30, 41, 59);
+            doc.setFontSize(8.5);
+            
+            // Ficha de datos del alumno
+            doc.setFont('helvetica', 'bold');
+            doc.text('Estudiante:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(nombre, margin + 20, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Carné:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(carnet, pageW / 2 + 18, y);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Empresa:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(empresa, margin + 18, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Sede/Sección:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(seccion, pageW / 2 + 26, y);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Variable:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(variable, margin + 18, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Fecha:', pageW / 2 + 4, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(fecha, pageW / 2 + 18, y);
+            y += 7;
+
+            // Línea divisoria
+            doc.setDrawColor(203, 213, 225);
+            doc.line(margin, y, pageW - margin, y);
+            y += 6;
+
+            // Resumen de Estadígrafos en Caja
+            doc.setFillColor(248, 250, 252);
+            doc.setDrawColor(226, 232, 240);
+            doc.roundedRect(margin, y, contentW, 16, 2, 2, 'FD');
+            
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(37, 99, 235);
+            doc.text(`Media (x̄): ${formatDataValue(stats.mean)}`, margin + 4, y + 6);
+            doc.setTextColor(5, 150, 105);
+            doc.text(`Mediana (Me): ${formatDataValue(stats.median)}`, margin + 50, y + 6);
+            doc.setTextColor(217, 119, 6);
+            doc.text(`Moda (Mo): ${stats.modes.length ? stats.modes.map(v => formatDataValue(v)).join(', ') : 'Amodal'}`, margin + 105, y + 6);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+            doc.text(`Gráfico: ${chartTypeLabel}   ·   n = ${stats.n}   ·   Rango = ${formatDataValue(stats.range)}   ·   Mín = ${formatDataValue(stats.min)}   ·   Máx = ${formatDataValue(stats.max)}   ·   Forma: ${stats.skewLabel}`, margin + 4, y + 12);
+            y += 20;
+
+            // Captura de Gráfica
+            try {
+                const imgData = mainChart.toBase64Image('image/png', 1);
+                const imgW = contentW;
+                const imgH = 65;
+                if (y + imgH > 270) {
+                    doc.addPage();
+                    y = 16;
+                }
+                doc.addImage(imgData, 'PNG', margin, y, imgW, imgH);
+                y += imgH + 6;
+            } catch (e) {
+                doc.setTextColor(220, 38, 38);
+                doc.text('[Gráfico no disponible para exportación directa]', margin, y);
+                y += 8;
+            }
+
+            // Preguntas analíticas
+            const renderSection = (num, heading, body, rgb) => {
+                if (y > 255) { doc.addPage(); y = 16; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+                doc.text(`${num}. ${heading}`, margin, y);
+                y += 4;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(51, 65, 85);
+                y = wrapText(doc, body, margin, y, contentW, 4) + 3;
+            };
+
+            renderSection('1', 'CONTEXTO DEL CASO ANALIZADO', contexto, [79, 70, 229]);
+            renderSection('2', 'ANÁLISIS DE SESGO Y VALORES ATÍPICOS (OUTLIERS)', wsVal('ws-sesgo') || '(Sin redactar)', [37, 99, 235]);
+            renderSection('3', 'JUSTIFICACIÓN METODOLÓGICA (MEDIA VS MEDIANA)', wsVal('ws-justificacion') || '(Sin redactar)', [16, 185, 129]);
+            renderSection('4', 'RECOMENDACIÓN EJECUTIVA Y DECISIÓN GERENCIAL', wsVal('ws-decision') || '(Sin redactar)', [217, 119, 6]);
+
+            // Tabla Anexa de Frecuencias
+            if (tableData.rows.length) {
+                if (y > 230) { doc.addPage(); y = 16; }
+                y += 2;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(71, 85, 105);
+                doc.text('Anexo: Tabla de Distribución de Frecuencias', margin, y);
+                y += 4;
+                doc.setFontSize(7.5);
+                const cols = [margin, margin + 40, margin + 58, margin + 76, margin + 100, margin + 125, margin + 150];
+                doc.setFont('helvetica', 'bold');
+                ['Categoría/Intervalo', 'fi', 'fr', 'fp%', 'fp acum%', 'Fa', 'Xi'].forEach((h, i) => doc.text(h, cols[i], y));
+                y += 3.5;
+                doc.setFont('helvetica', 'normal');
+                tableData.rows.slice(0, 14).forEach((r) => {
+                    if (y > 280) { doc.addPage(); y = 16; }
+                    doc.text(String(r.label), cols[0], y);
+                    doc.text(String(r.fi), cols[1], y);
+                    doc.text(r.fr.toFixed(3), cols[2], y);
+                    doc.text(r.fp.toFixed(1) + '%', cols[3], y);
+                    doc.text(r.fpAcum.toFixed(1) + '%', cols[4], y);
+                    doc.text(String(r.Fa), cols[5], y);
+                    doc.text(formatDataValue(r.Xi), cols[6], y);
+                    y += 3.5;
+                });
+            }
+
+            // Pie de página institucional
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let p = 1; p <= pageCount; p++) {
+                doc.setPage(p);
+                doc.setFontSize(7);
+                doc.setTextColor(148, 163, 184);
+                doc.text('Estadística 1 · UMG · Cátedra Ruldin Ayala', pageW / 2, 290, { align: 'center' });
+                doc.text(`Página ${p} de ${pageCount}`, pageW - margin, 290, { align: 'right' });
+            }
+
+            const safeName = nombre.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ-]/g, '').replace(/\s+/g, '_').substring(0, 30);
+            const fileName = `Informe_TendenciaCentral_${safeName || 'UMG'}.pdf`;
+            doc.save(fileName);
+        }
+
+        // ==================== INICIALIZACIÓN ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().slice(0, 10);
+            const fechaInput = document.getElementById('ws-fecha');
+            if (fechaInput) fechaInput.value = today;
+
+            document.getElementById('lab-data-type')?.addEventListener('change', () => {
+                if (lastAnalysis) processDataset();
+            });
+
+            // Procesar caso por defecto
+            processDataset();
+        });
+    </script>
+</body>
+
+</html>

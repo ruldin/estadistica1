@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CentralTrend — Medidas de Tendencia Central</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.8/index.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #0D9488;
+            --primary-light: #14B8A6;
+            --primary-dark: #0F766E;
+            --accent: #F97316;
+            --accent-light: #FB923C;
+            --accent-warm: #FBBF24;
+            --bg: #FAFAF9;
+            --bg-card: #FFFFFF;
+            --bg-dark: #1C1917;
+            --text: #1C1917;
+            --text-secondary: #57534E;
+            --text-muted: #A8A29E;
+            --border: #E7E5E4;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --gradient-1: linear-gradient(135deg, #0D9488 0%, #06B6D4 100%);
+            --gradient-2: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
+            --gradient-3: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            background: linear-gradient(180deg, #F0FDFA 0%, #FAFAF9 50%, #FFF7ED 100%);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .welcome-container {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .welcome-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .welcome-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+        }
+
+        .welcome-card h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .welcome-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--bg);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-accent {
+            background: var(--gradient-2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .welcome-features {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: #F0FDFA;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Game Screen */
+        .game-screen {
+            background: var(--bg);
+        }
+
+        .game-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.9);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .header-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-score {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            background: #FEF3C7;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #92400E;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: var(--radius-full);
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .game-content {
+            flex: 1;
+            padding: 20px;
+            max-width: 720px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .case-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            animation: slideUp 0.4s ease;
+        }
+
+        .case-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .case-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .cat-alimentacion { background: #FEF3C7; color: #92400E; }
+        .cat-tecnologia { background: #DBEAFE; color: #1E40AF; }
+        .cat-vestuario { background: #FCE7F3; color: #9D174D; }
+        .cat-redes_sociales { background: #EDE9FE; color: #5B21B6; }
+        .cat-otro { background: #F0FDF4; color: #166534; }
+
+        .case-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .case-context {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .case-body {
+            padding: 24px;
+        }
+
+        .data-display {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .data-display-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .data-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .data-chip {
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .data-chip.highlight {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .calc-section {
+            margin-bottom: 20px;
+        }
+
+        .calc-section h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calc-section h3 .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .icon-mean { background: var(--gradient-1); }
+        .icon-median { background: var(--gradient-3); }
+        .icon-mode { background: var(--gradient-2); }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .input-row input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .input-row input.correct {
+            border-color: var(--success);
+            background: #F0FDF4;
+        }
+
+        .input-row input.incorrect {
+            border-color: var(--error);
+            background: #FEF2F2;
+        }
+
+        .input-status {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .input-status.correct {
+            background: #D1FAE5;
+            color: var(--success);
+        }
+
+        .input-status.incorrect {
+            background: #FEE2E2;
+            color: var(--error);
+        }
+
+        .btn-check {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-check:hover {
+            background: var(--primary-dark);
+        }
+
+        .feedback-msg {
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        .feedback-msg.show {
+            display: block;
+        }
+
+        .feedback-msg.success {
+            background: #F0FDF4;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+
+        .feedback-msg.error {
+            background: #FEF2F2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        .feedback-msg.hint {
+            background: #FFFBEB;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        .interpretation-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .interpretation-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .interpretation-section .question {
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            background: #F0FDFA;
+            border-radius: var(--radius);
+            border-left: 3px solid var(--primary);
+        }
+
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        .textarea-wrapper textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.2s;
+        }
+
+        .textarea-wrapper textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .word-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .word-counter.warning {
+            color: var(--warning);
+        }
+
+        .word-counter.ready {
+            color: var(--success);
+        }
+
+        .case-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Qualitative case special UI */
+        .qualitative-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .qual-option {
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .qual-option:hover {
+            border-color: var(--primary-light);
+            background: #F0FDFA;
+        }
+
+        .qual-option.selected {
+            border-color: var(--primary);
+            background: #F0FDFA;
+            color: var(--primary-dark);
+        }
+
+        .qual-option .freq {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Weighted mean UI */
+        .weighted-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .weighted-table th,
+        .weighted-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .weighted-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .weighted-table input {
+            width: 80px;
+            padding: 6px 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .weighted-table input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            background: linear-gradient(180deg, #F0FDFA 0%, #FAFAF9 40%, #FFF7ED 100%);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .results-container {
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .results-trophy {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: bounce 2s infinite;
+        }
+
+        .results-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .medals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .medal-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            animation: scaleIn 0.4s ease;
+        }
+
+        .medal-card.earned {
+            border-color: var(--accent-warm);
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+        }
+
+        .medal-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .medal-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .medal-status {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .medal-status.gold { color: #92400E; }
+        .medal-status.silver { color: #6B7280; }
+
+        .results-score {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 24px;
+        }
+
+        .score-big {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Tooltip / Hint */
+        .hint-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: inherit;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .welcome-logo {
+                font-size: 2rem;
+            }
+
+            .welcome-card {
+                padding: 24px 20px;
+            }
+
+            .game-content {
+                padding: 16px;
+            }
+
+            .case-header {
+                padding: 20px 16px 14px;
+            }
+
+            .case-body {
+                padding: 16px;
+            }
+
+            .case-footer {
+                padding: 12px 16px 20px;
+            }
+
+            .case-title {
+                font-size: 1.15rem;
+            }
+
+            .medals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .qualitative-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Step indicator within a case */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .step-dot.done {
+            background: var(--success);
+        }
+
+        /* Formula display */
+        .formula-box {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Medal animation */
+        .medal-earned-anim {
+            animation: pulse 0.6s ease;
+        }
+
+        /* Quote */
+        .welcome-quote {
+            font-style: italic;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 24px;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="screen active loading-screen">
+        <div class="loader"></div>
+        <p class="loading-text">Cargando casos de negocio...</p>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen welcome-screen">
+        <div class="welcome-container">
+            <div class="welcome-logo">CentralTrend</div>
+            <p class="welcome-subtitle">Media, Mediana y Moda — en contexto real</p>
+            <div class="welcome-card">
+                <h2>¡Bienvenido/a! 👋</h2>
+                <p>Vas a resolver 5 casos de negocio reales usando medidas de tendencia central. Al final descargás tu reporte en PDF.</p>
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="inputNombre" placeholder="Ej: María José López García" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Carnet universitario</label>
+                    <input type="text" id="inputCarnet" placeholder="Ej: 202400123" autocomplete="off">
+                </div>
+                <button class="btn btn-primary btn-full" id="btnComenzar" style="margin-top: 8px;">
+                    🚀 Comenzar actividad
+                </button>
+                <div class="welcome-features">
+                    <span class="feature-tag">📊 5 casos</span>
+                    <span class="feature-tag">⏱ ~45 min</span>
+                    <span class="feature-tag">🏆 Medallas</span>
+                </div>
+            </div>
+            <p class="welcome-quote">"Pensar es el trabajo más difícil que existe, tal vez por ello tan pocos lo hacen." — Henry Ford</p>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen game-screen">
+        <div class="game-header">
+            <div class="header-top">
+                <span class="header-brand">CentralTrend</span>
+                <div class="header-score">
+                    <span class="score-badge" id="scoreBadge">⭐ 0 pts</span>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <span class="progress-text" id="progressText">Caso 1 de 5</span>
+            </div>
+        </div>
+        <div class="game-content" id="gameContent">
+            <!-- Dynamic case content -->
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="screen results-screen">
+        <div class="results-container">
+            <div class="results-trophy" id="resultsEmoji">🏆</div>
+            <h1 class="results-title">¡Actividad completada!</h1>
+            <p class="results-subtitle" id="resultsSubtitle">Aquí está tu resumen de la sesión</p>
+            <div class="results-score">
+                <div class="score-big" id="finalScore">0</div>
+                <div class="score-label">puntos totales</div>
+            </div>
+            <div class="medals-grid" id="medalsGrid">
+                <!-- Dynamic medals -->
+            </div>
+            <div class="results-actions">
+                <button class="btn btn-primary" id="btnDownloadPDF">📄 Descargar reporte PDF</button>
+                <button class="btn btn-secondary" id="btnRestart">🔄 Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ==========================================
+    // STATE
+    // ==========================================
+    const state = {
+        studentName: '',
+        studentCarnet: '',
+        cases: [],
+        currentCaseIndex: 0,
+        score: 0,
+        caseResults: [],
+        attempts: {}
+    };
+
+    // ==========================================
+    // PARSER: casos.txt
+    // ==========================================
+    function parseCasos(text) {
+        const cases = [];
+        const blocks = text.split('###CASO').filter(b => b.trim().length > 0);
+        
+        for (const block of blocks) {
+            const endIdx = block.indexOf('###FIN');
+            if (endIdx === -1) continue;
+            const content = block.substring(0, endIdx).trim();
+            
+            const caseObj = {};
+            const lines = content.split('\n');
+            
+            for (const line of lines) {
+                const colonIdx = line.indexOf(':');
+                if (colonIdx === -1) continue;
+                const key = line.substring(0, colonIdx).trim();
+                const value = line.substring(colonIdx + 1).trim();
+                if (key && value) {
+                    caseObj[key] = value;
+                }
+            }
+            
+            if (caseObj.id) {
+                // Parse data
+                if (caseObj.datos) {
+                    caseObj.datosArray = caseObj.datos.split(',').map(d => d.trim());
+                }
+                if (caseObj.medidas_requeridas) {
+                    caseObj.medidasRequeridas = caseObj.medidas_requeridas.split(',').map(m => m.trim());
+                }
+                // Parse weights if present
+                if (caseObj.pesos) {
+                    caseObj.pesosArray = caseObj.pesos.split(',').map(p => parseFloat(p.trim()));
+                }
+                if (caseObj.valores_ponderados) {
+                    caseObj.valoresPonderados = caseObj.valores_ponderados.split(',').map(v => parseFloat(v.trim()));
+                }
+                cases.push(caseObj);
+            }
+        }
+        
+        return cases;
+    }
+
+    // ==========================================
+    // CALCULATION FUNCTIONS
+    // ==========================================
+    function calcMean(data) {
+        const nums = data.map(d => parseFloat(d));
+        return nums.reduce((a, b) => a + b, 0) / nums.length;
+    }
+
+    function calcMedian(data) {
+        const nums = data.map(d => parseFloat(d)).sort((a, b) => a - b);
+        const mid = Math.floor(nums.length / 2);
+        if (nums.length % 2 === 0) {
+            return (nums[mid - 1] + nums[mid]) / 2;
+        }
+        return nums[mid];
+    }
+
+    function calcMode(data) {
+        const freq = {};
+        data.forEach(d => {
+            const key = d.trim();
+            freq[key] = (freq[key] || 0) + 1;
+        });
+        const maxFreq = Math.max(...Object.values(freq));
+        const modes = Object.keys(freq).filter(k => freq[k] === maxFreq);
+        return { modes, maxFreq, freq };
+    }
+
+    function calcWeightedMean(values, weights) {
+        const sumProduct = values.reduce((acc, v, i) => acc + v * weights[i], 0);
+        const sumWeights = weights.reduce((a, b) => a + b, 0);
+        return sumProduct / sumWeights;
+    }
+
+    function isCorrect(userVal, correctVal, tolerance = 0.01) {
+        const u = parseFloat(userVal);
+        const c = parseFloat(correctVal);
+        if (isNaN(u) || isNaN(c)) return false;
+        return Math.abs(u - c) <= tolerance;
+    }
+
+    // ==========================================
+    // UI RENDERING
+    // ==========================================
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function updateProgress() {
+        const total = state.cases.length;
+        const current = state.currentCaseIndex + 1;
+        const pct = (state.currentCaseIndex / total) * 100;
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressText').textContent = `Caso ${current} de ${total}`;
+        document.getElementById('scoreBadge').textContent = `⭐ ${state.score} pts`;
+    }
+
+    function getCategoryClass(cat) {
+        const map = {
+            'alimentacion': 'cat-alimentacion',
+            'tecnologia': 'cat-tecnologia',
+            'vestuario': 'cat-vestuario',
+            'redes_sociales': 'cat-redes_sociales'
+        };
+        return map[cat] || 'cat-otro';
+    }
+
+    function getCategoryEmoji(cat) {
+        const map = {
+            'alimentacion': '🍽️',
+            'tecnologia': '💻',
+            'vestuario': '👕',
+            'redes_sociales': '📱'
+        };
+        return map[cat] || '📊';
+    }
+
+    function renderCase(caseData, index) {
+        const container = document.getElementById('gameContent');
+        const isQualitative = caseData.tipo_dato === 'cualitativo';
+        const isWeighted = caseData.concepto_objetivo === 'media_ponderada';
+        
+        let html = `<div class="case-card">`;
+        
+        // Header
+        html += `
+            <div class="case-header">
+                <span class="case-category ${getCategoryClass(caseData.categoria)}">
+                    ${getCategoryEmoji(caseData.categoria)} ${caseData.categoria.replace('_', ' ')}
+                </span>
+                <h2 class="case-title">${caseData.titulo}</h2>
+                <p class="case-context">${caseData.contexto}</p>
+            </div>
+        `;
+        
+        html += `<div class="case-body">`;
+        
+        // Data display
+        html += `<div class="data-display">
+            <div class="data-display-label">📋 Datos del caso</div>
+            <div class="data-values">`;
+        
+        if (isWeighted) {
+            // Show weighted table
+            html += `</div></div>`;
+            html += `<div class="data-display" style="margin-bottom:16px">
+                <div class="data-display-label">📊 Tabla de datos ponderados</div>
+                <table class="weighted-table">
+                    <thead><tr><th>Concepto</th><th>Valor (xᵢ)</th><th>Peso (wᵢ)</th></tr></thead>
+                    <tbody>`;
+            const labels = caseData.etiquetas ? caseData.etiquetas.split(',') : caseData.valoresPonderados.map((v, i) => `Dato ${i+1}`);
+            for (let i = 0; i < caseData.valoresPonderados.length; i++) {
+                html += `<tr><td>${labels[i]}</td><td>${caseData.valoresPonderados[i]}</td><td>${caseData.pesosArray[i]}</td></tr>`;
+            }
+            html += `</tbody></table></div>`;
+        } else {
+            caseData.datosArray.forEach(d => {
+                html += `<span class="data-chip">${d}</span>`;
+            });
+            html += `</div></div>`;
+        }
+        
+        // Calculation section
+        if (isQualitative) {
+            html += renderQualitativeCase(caseData);
+        } else if (isWeighted) {
+            html += renderWeightedCase(caseData);
+        } else {
+            html += renderQuantitativeCase(caseData);
+        }
+        
+        // Interpretation
+        html += `
+            <div class="interpretation-section">
+                <h3>💭 Tu análisis gerencial</h3>
+                <div class="question">${caseData.pregunta_guia}</div>
+                <div class="textarea-wrapper">
+                    <textarea id="interpretationText" placeholder="Escribí tu análisis como si fueras el administrador tomando una decisión..." oninput="updateWordCount()"></textarea>
+                </div>
+                <div class="word-counter" id="wordCounter">0 / 30 palabras mínimas</div>
+            </div>
+        `;
+        
+        html += `</div>`; // close case-body
+        
+        // Footer
+        html += `
+            <div class="case-footer">
+                <button class="btn btn-accent" id="btnNextCase" onclick="nextCase()" disabled>
+                    ${index < state.cases.length - 1 ? 'Siguiente caso →' : 'Ver resultados 🏆'}
+                </button>
+            </div>
+        `;
+        
+        html += `</div>`; // close case-card
+        
+        container.innerHTML = html;
+        
+        // Setup validation
+        if (!isQualitative && !isWeighted) {
+            setupQuantitativeValidation(caseData);
+        } else if (isQualitative) {
+            setupQualitativeValidation(caseData);
+        } else if (isWeighted) {
+            setupWeightedValidation(caseData);
+        }
+    }
+
+    function renderQuantitativeCase(caseData) {
+        let html = `<div class="calc-section">
+            <h3><span class="icon icon-mean">x̄</span> Calculá las medidas</h3>`;
+        
+        const medidas = caseData.medidasRequeridas;
+        
+        if (medidas.includes('media')) {
+            html += `
+                <div class="input-row">
+                    <input type="number" step="any" id="inputMedia" placeholder="Media (promedio)">
+                    <div class="input-status" id="statusMedia"></div>
+                </div>
+            `;
+        }
+        if (medidas.includes('mediana')) {
+            html += `
+                <div class="input-row">
+                    <input type="number" step="any" id="inputMediana" placeholder="Mediana (valor central)">
+                    <div class="input-status" id="statusMediana"></div>
+                </div>
+            `;
+        }
+        if (medidas.includes('moda')) {
+            html += `
+                <div class="input-row">
+                    <input type="text" id="inputModa" placeholder="Moda (valor más frecuente)">
+                    <div class="input-status" id="statusModa"></div>
+                </div>
+            `;
+        }
+        
+        html += `
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn-check" onclick="checkCalculations()">✓ Verificar cálculos</button>
+                <button class="hint-btn" onclick="showHint()">💡 Pista</button>
+            </div>
+            <div class="feedback-msg" id="calcFeedback"></div>
+        `;
+        
+        html += `</div>`;
+        return html;
+    }
+
+    function renderQualitativeCase(caseData) {
+        const { freq, maxFreq } = calcMode(caseData.datosArray);
+        
+        let html = `
+            <div class="calc-section">
+                <h3><span class="icon icon-mode">Mo</span> Identificá la moda</h3>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+                    Estos datos son <strong>cualitativos nominales</strong> (categorías, no números). 
+                    Solo podés calcular la <strong>moda</strong> — ¿cuál es la categoría más frecuente?
+                </p>
+                <div class="qualitative-grid" id="qualGrid">
+        `;
+        
+        // Show unique values with frequencies
+        const uniqueVals = [...new Set(caseData.datosArray)];
+        uniqueVals.forEach(val => {
+            const f = freq[val] || 0;
+            html += `<div class="qual-option" data-value="${val}" onclick="selectQualOption(this)">
+                ${val}
+                <span class="freq">f = ${f}</span>
+            </div>`;
+        });
+        
+        html += `</div>
+            <button class="btn-check" onclick="checkQualitative()">✓ Verificar respuesta</button>
+            <button class="hint-btn" onclick="showHint()" style="margin-left:8px;">💡 Pista</button>
+            <div class="feedback-msg" id="calcFeedback"></div>
+            <div class="feedback-msg hint" id="qualExplanation" style="margin-top:8px;">
+                <strong>📝 Nota:</strong> En datos cualitativos nominales NO se puede calcular media ni mediana porque las categorías no tienen un orden numérico ni se pueden sumar. Solo la moda tiene sentido aquí.
+            </div>
+        </div>`;
+        
+        return html;
+    }
+
+    function renderWeightedCase(caseData) {
+        let html = `
+            <div class="calc-section">
+                <h3><span class="icon icon-mean">x̄</span> Calculá la media ponderada</h3>
+                <div class="formula-box">
+                    x̄ = Σ(wᵢ · xᵢ) / Σwᵢ
+                </div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+                    Aplicá la fórmula de media ponderada usando los valores y pesos de la tabla.
+                </p>
+                <div class="input-row">
+                    <input type="number" step="any" id="inputMedia" placeholder="Media ponderada">
+                    <div class="input-status" id="statusMedia"></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                    <button class="btn-check" onclick="checkCalculations()">✓ Verificar cálculo</button>
+                    <button class="hint-btn" onclick="showHint()">💡 Pista</button>
+                </div>
+                <div class="feedback-msg" id="calcFeedback"></div>
+            </div>
+        `;
+        return html;
+    }
+
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+    let caseValidated = false;
+    let calcValidated = false;
+
+    function setupQuantitativeValidation(caseData) {
+        caseValidated = false;
+        calcValidated = false;
+    }
+
+    function setupQualitativeValidation(caseData) {
+        caseValidated = false;
+        calcValidated = false;
+    }
+
+    function setupWeightedValidation(caseData) {
+        caseValidated = false;
+        calcValidated = false;
+    }
+
+    function checkCalculations() {
+        const caseData = state.cases[state.currentCaseIndex];
+        const feedback = document.getElementById('calcFeedback');
+        const isWeighted = caseData.concepto_objetivo === 'media_ponderada';
+        
+        let allCorrect = true;
+        let msgs = [];
+        
+        if (caseData.medidasRequeridas.includes('media') || isWeighted) {
+            const input = document.getElementById('inputMedia');
+            const status = document.getElementById('statusMedia');
+            let correctVal;
+            
+            if (isWeighted) {
+                correctVal = calcWeightedMean(caseData.valoresPonderados, caseData.pesosArray);
+            } else {
+                correctVal = calcMean(caseData.datosArray);
+            }
+            
+            if (isCorrect(input.value, correctVal, 0.1)) {
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+                status.className = 'input-status correct';
+                status.textContent = '✓';
+            } else {
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+                status.className = 'input-status incorrect';
+                status.textContent = '✗';
+                allCorrect = false;
+                msgs.push(`La media no es correcta. Revisá tu suma y división.`);
+            }
+        }
+        
+        if (caseData.medidasRequeridas.includes('mediana')) {
+            const input = document.getElementById('inputMediana');
+            const status = document.getElementById('statusMediana');
+            const correctVal = calcMedian(caseData.datosArray);
+            
+            if (isCorrect(input.value, correctVal, 0.1)) {
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+                status.className = 'input-status correct';
+                status.textContent = '✓';
+            } else {
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+                status.className = 'input-status incorrect';
+                status.textContent = '✗';
+                allCorrect = false;
+                msgs.push(`La mediana no es correcta. Acordate: primero ordená los datos.`);
+            }
+        }
+        
+        if (caseData.medidasRequeridas.includes('moda')) {
+            const input = document.getElementById('inputModa');
+            const status = document.getElementById('statusModa');
+            const { modes } = calcMode(caseData.datosArray);
+            const userAnswer = input.value.trim();
+            
+            // Check if user's answer matches any of the modes
+            const userVals = userAnswer.split(/[,;]+/).map(v => v.trim());
+            const allModesMatch = modes.every(m => userVals.includes(m)) && userVals.every(v => modes.includes(v));
+            
+            if (allModesMatch) {
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+                status.className = 'input-status correct';
+                status.textContent = '✓';
+            } else {
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+                status.className = 'input-status incorrect';
+                status.textContent = '✗';
+                allCorrect = false;
+                msgs.push(`La moda no es correcta. Contá cuántas veces se repite cada valor.`);
+            }
+        }
+        
+        if (allCorrect) {
+            feedback.className = 'feedback-msg show success';
+            feedback.innerHTML = '🎉 <strong>¡Correcto!</strong> Todos los cálculos están bien.';
+            calcValidated = true;
+            
+            // Award points if first attempt
+            const caseId = caseData.id;
+            if (!state.attempts[caseId] || state.attempts[caseId] === 1) {
+                state.score += 20;
+            }
+            updateProgress();
+        } else {
+            feedback.className = 'feedback-msg show error';
+            feedback.innerHTML = `❌ ${msgs[0]}`;
+            
+            // Track attempts
+            const caseId = caseData.id;
+            state.attempts[caseId] = (state.attempts[caseId] || 0) + 1;
+        }
+        
+        checkCaseComplete();
+    }
+
+    function checkQualitative() {
+        const caseData = state.cases[state.currentCaseIndex];
+        const feedback = document.getElementById('calcFeedback');
+        const selected = document.querySelector('.qual-option.selected');
+        
+        if (!selected) {
+            feedback.className = 'feedback-msg show error';
+            feedback.innerHTML = '⚠️ Seleccioná una categoría primero.';
+            return;
+        }
+        
+        const { modes } = calcMode(caseData.datosArray);
+        const userVal = selected.dataset.value;
+        
+        if (modes.includes(userVal)) {
+            feedback.className = 'feedback-msg show success';
+            feedback.innerHTML = `🎉 <strong>¡Correcto!</strong> "${userVal}" es la moda (la categoría más frecuente).`;
+            selected.style.borderColor = 'var(--success)';
+            selected.style.background = '#F0FDF4';
+            calcValidated = true;
+            
+            const caseId = caseData.id;
+            if (!state.attempts[caseId] || state.attempts[caseId] === 1) {
+                state.score += 20;
+            }
+            updateProgress();
+        } else {
+            feedback.className = 'feedback-msg show error';
+            feedback.innerHTML = `❌ Esa no es la categoría más frecuente. Revisá las frecuencias.`;
+            selected.style.borderColor = 'var(--error)';
+            
+            const caseId = caseData.id;
+            state.attempts[caseId] = (state.attempts[caseId] || 0) + 1;
+        }
+        
+        checkCaseComplete();
+    }
+
+    function selectQualOption(el) {
+        document.querySelectorAll('.qual-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function showHint() {
+        const caseData = state.cases[state.currentCaseIndex];
+        const feedback = document.getElementById('calcFeedback');
+        const isWeighted = caseData.concepto_objetivo === 'media_ponderada';
+        const isQualitative = caseData.tipo_dato === 'cualitativo';
+        
+        let hint = '';
+        
+        if (isQualitative) {
+            hint = '💡 <strong>Pista:</strong> Buscá la categoría que aparece más veces en los datos. Esa es la moda.';
+        } else if (isWeighted) {
+            hint = '💡 <strong>Pista:</strong> Multiplicá cada valor por su peso, sumá todos esos productos, y dividí entre la suma de los pesos.';
+        } else {
+            const concept = caseData.concepto_objetivo;
+            if (concept === 'simetrico_sin_atipicos') {
+                hint = '💡 <strong>Pista:</strong> Sumá todos los valores y dividí entre la cantidad de datos para la media. Ordená de menor a mayor para la mediana.';
+            } else if (concept === 'atipico') {
+                hint = '💡 <strong>Pista:</strong> Hay un valor extremo que "jala" la media. La mediana no se afecta por valores atípicos.';
+            } else if (concept === 'bimodal') {
+                hint = '💡 <strong>Pista:</strong> Si dos valores diferentes empatan en frecuencia máxima, la serie es bimodal (tiene dos modas).';
+            }
+        }
+        
+        feedback.className = 'feedback-msg show hint';
+        feedback.innerHTML = hint;
+    }
+
+    function updateWordCount() {
+        const text = document.getElementById('interpretationText').value.trim();
+        const words = text.length === 0 ? 0 : text.split(/\s+/).length;
+        const counter = document.getElementById('wordCounter');
+        counter.textContent = `${words} / 30 palabras mínimas`;
+        
+        if (words >= 30) {
+            counter.className = 'word-counter ready';
+        } else if (words >= 20) {
+            counter.className = 'word-counter warning';
+        } else {
+            counter.className = 'word-counter';
+        }
+        
+        checkCaseComplete();
+    }
+
+    function checkCaseComplete() {
+        const text = document.getElementById('interpretationText').value.trim();
+        const words = text.length === 0 ? 0 : text.split(/\s+/).length;
+        const btn = document.getElementById('btnNextCase');
+        
+        if (calcValidated && words >= 30) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        } else {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        }
+    }
+
+    // ==========================================
+    // NAVIGATION
+    // ==========================================
+    function nextCase() {
+        const caseData = state.cases[state.currentCaseIndex];
+        const interpretation = document.getElementById('interpretationText').value.trim();
+        
+        // Save result
+        state.caseResults.push({
+            caseId: caseData.id,
+            titulo: caseData.titulo,
+            contexto: caseData.contexto,
+            datos: caseData.datos || '',
+            categoria: caseData.categoria,
+            interpretation: interpretation,
+            attempts: state.attempts[caseData.id] || 1,
+            concept: caseData.concepto_objetivo
+        });
+        
+        state.currentCaseIndex++;
+        
+        if (state.currentCaseIndex >= state.cases.length) {
+            showResults();
+        } else {
+            updateProgress();
+            renderCase(state.cases[state.currentCaseIndex], state.currentCaseIndex);
+        }
+    }
+
+    function showResults() {
+        showScreen('resultsScreen');
+        
+        document.getElementById('finalScore').textContent = state.score;
+        
+        // Determine medal for each case
+        const medalsGrid = document.getElementById('medalsGrid');
+        let html = '';
+        
+        state.caseResults.forEach((result, i) => {
+            const isGold = result.attempts === 1;
+            const emoji = getCategoryEmoji(result.categoria);
+            
+            html += `
+                <div class="medal-card ${isGold ? 'earned medal-earned-anim' : ''}" style="animation-delay: ${i * 0.1}s">
+                    <div class="medal-icon">${isGold ? '🥇' : '🥈'}</div>
+                    <div class="medal-label">${emoji} Caso ${i + 1}</div>
+                    <div class="medal-status ${isGold ? 'gold' : 'silver'}">${isGold ? '¡Perfecto!' : 'Completado'}</div>
+                </div>
+            `;
+        });
+        
+        medalsGrid.innerHTML = html;
+        
+        // Set emoji based on score
+        const maxScore = state.cases.length * 20;
+        const pct = state.score / maxScore;
+        if (pct >= 0.9) {
+            document.getElementById('resultsEmoji').textContent = '🏆';
+            document.getElementById('resultsSubtitle').textContent = '¡Excelente dominio! Sos un/a crack en tendencia central.';
+        } else if (pct >= 0.6) {
+            document.getElementById('resultsEmoji').textContent = '🌟';
+            document.getElementById('resultsSubtitle').textContent = '¡Muy bien! Dominás los conceptos clave.';
+        } else {
+            document.getElementById('resultsEmoji').textContent = '💪';
+            document.getElementById('resultsSubtitle').textContent = 'Buen esfuerzo. Repasá los conceptos y volvé a intentar.';
+        }
+    }
+
+    // ==========================================
+    // PDF GENERATION
+    // ==========================================
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 20;
+        const contentWidth = pageWidth - margin * 2;
+        let y = 20;
+        
+        // Helper function to add text with word wrap
+        function addText(text, x, yPos, maxWidth, fontSize, style = 'normal') {
+            doc.setFontSize(fontSize);
+            doc.setFont('helvetica', style);
+            const lines = doc.splitTextToSize(text, maxWidth);
+            lines.forEach(line => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.text(line, x, yPos);
+                yPos += fontSize * 0.45;
+            });
+            return yPos;
+        }
+        
+        // Header
+        doc.setFillColor(13, 148, 136);
+        doc.rect(0, 0, pageWidth, 35, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.setFont('helvetica', 'bold');
+        doc.text('CentralTrend — Reporte de Actividad', margin, 18);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' });
+        doc.text(`Generado: ${dateStr}`, margin, 28);
+        
+        y = 45;
+        doc.setTextColor(0, 0, 0);
+        
+        // Student info
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Datos del Estudiante', margin, y);
+        y += 8;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Nombre: ${state.studentName}`, margin, y);
+        y += 6;
+        doc.text(`Carnet: ${state.studentCarnet}`, margin, y);
+        y += 6;
+        doc.text(`Puntaje total: ${state.score} puntos`, margin, y);
+        y += 12;
+        
+        // Separator
+        doc.setDrawColor(200, 200, 200);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 10;
+        
+        // Cases
+        state.caseResults.forEach((result, i) => {
+            if (y > 230) {
+                doc.addPage();
+                y = 20;
+            }
+            
+            // Case title
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(13, 148, 136);
+            doc.text(`Caso ${i + 1}: ${result.titulo}`, margin, y);
+            y += 7;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            
+            // Context
+            y = addText(result.contexto, margin, y, contentWidth, 9);
+            y += 4;
+            
+            // Data
+            doc.setFont('helvetica', 'bold');
+            doc.text('Datos: ', margin, y);
+            doc.setFont('helvetica', 'normal');
+            const datosText = result.datos || '(ver contexto)';
+            y = addText(datosText, margin + 18, y, contentWidth - 18, 9);
+            y += 4;
+            
+            // Results
+            const caseData = state.cases[i];
+            if (caseData.tipo_dato === 'cuantitativo') {
+                const nums = caseData.datosArray;
+                let resultsText = '';
+                if (caseData.medidasRequeridas.includes('media')) {
+                    resultsText += `Media = ${calcMean(nums).toFixed(2)}  |  `;
+                }
+                if (caseData.medidasRequeridas.includes('mediana')) {
+                    resultsText += `Mediana = ${calcMedian(nums).toFixed(2)}  |  `;
+                }
+                if (caseData.medidasRequeridas.includes('moda')) {
+                    const { modes } = calcMode(nums);
+                    resultsText += `Moda = {${modes.join(', ')}}`;
+                }
+                doc.setFont('helvetica', 'bold');
+                doc.text('Resultados: ', margin, y);
+                doc.setFont('helvetica', 'normal');
+                y = addText(resultsText, margin + 24, y, contentWidth - 24, 9);
+            } else if (caseData.concepto_objetivo === 'media_ponderada') {
+                const wm = calcWeightedMean(caseData.valoresPonderados, caseData.pesosArray);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Resultado: ', margin, y);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Media ponderada = ${wm.toFixed(2)}`, margin + 22, y);
+                y += 6;
+            } else {
+                const { modes } = calcMode(caseData.datosArray);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Resultado: ', margin, y);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Moda = {${modes.join(', ')}}`, margin + 22, y);
+                y += 6;
+            }
+            y += 4;
+            
+            // Interpretation
+            doc.setFont('helvetica', 'bold');
+            doc.text('Interpretación del estudiante:', margin, y);
+            y += 6;
+            y = addText(result.interpretation, margin, y, contentWidth, 9);
+            y += 10;
+            
+            // Separator
+            doc.setDrawColor(230, 230, 230);
+            doc.line(margin, y, pageWidth - margin, y);
+            y += 10;
+        });
+        
+        // Footer
+        if (y > 260) {
+            doc.addPage();
+            y = 20;
+        }
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text('CentralTrend — Actividad de Medidas de Tendencia Central', margin, 285);
+        doc.text(`Estudiante: ${state.studentName} | Carnet: ${state.studentCarnet}`, pageWidth - margin, 285, { align: 'right' });
+        
+        // Save
+        const filename = `Reporte_TendenciaCentral_${state.studentCarnet}.pdf`;
+        doc.save(filename);
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    async function init() {
+        try {
+            const response = await fetch('./casos.txt');
+            if (!response.ok) throw new Error('No se pudo cargar casos.txt');
+            const text = await response.text();
+            state.cases = parseCasos(text);
+            
+            if (state.cases.length === 0) {
+                throw new Error('No se encontraron casos válidos en el archivo');
+            }
+            
+            showScreen('welcomeScreen');
+        } catch (error) {
+            console.error('Error loading cases:', error);
+            // Fallback: use embedded cases
+            state.cases = getFallbackCases();
+            showScreen('welcomeScreen');
+        }
+    }
+
+    function getFallbackCases() {
+        return [
+            {
+                id: '001',
+                categoria: 'alimentacion',
+                titulo: 'Ventas diarias de smoothies en una semana típica',
+                contexto: 'Sos el administrador de un puesto de smoothies en el campus de la universidad. Tu equipo te pasa las ventas de los últimos 7 días (en quetzales). Los datos son consistentes, sin ningún día raro. Necesitás reportar al dueño cuánto vende el puesto "en un día normal".',
+                datos: '180,195,190,185,200,190,185',
+                datosArray: ['180','195','190','185','200','190','185'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media,mediana,moda',
+                medidasRequeridas: ['media','mediana','moda'],
+                concepto_objetivo: 'simetrico_sin_atipicos',
+                pregunta_guia: '¿Qué medida representa mejor las ventas típicas del puesto? Si tuvieras que presupuestar los ingresos de la próxima semana, ¿cuál número usarías y por qué?'
+            },
+            {
+                id: '002',
+                categoria: 'redes_sociales',
+                titulo: 'Views de un reel: cuando uno se vuelve viral',
+                contexto: 'Manejás las redes sociales de una tienda de ropa en Antigua Guatemala. En los últimos 8 días publicaste un reel diario y estos son los views que obtuvo cada uno. Uno de los reels se hizo viral porque lo compartió un influencer local. Tu jefe te pregunta: "¿Cuántos views genera un reel normalmente?"',
+                datos: '320,450,380,510,420,15800,390,470',
+                datosArray: ['320','450','380','510','420','15800','390','470'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media,mediana',
+                medidasRequeridas: ['media','mediana'],
+                concepto_objetivo: 'atipico',
+                pregunta_guia: 'Tu jefe quiere saber cuántos views "normalmente" genera un reel. ¿Le reportás la media o la mediana? ¿Por qué? ¿Qué pasaría si basás tu estrategia de contenido en la media?'
+            },
+            {
+                id: '003',
+                categoria: 'tecnologia',
+                titulo: '¿Qué red social usan más los estudiantes?',
+                contexto: 'La asociación de estudiantes de tu universidad quiere saber cuál es la red social favorita para hacer marketing de eventos. Encuestaron a 20 estudiantes y les preguntaron: "¿Qué red social usás más?" Estos son los resultados. El decano te pide un resumen rápido.',
+                datos: 'TikTok,Instagram,TikTok,WhatsApp,TikTok,Instagram,Facebook,TikTok,Instagram,TikTok,WhatsApp,TikTok,Instagram,TikTok,Facebook,WhatsApp,Instagram,TikTok,WhatsApp,TikTok',
+                datosArray: ['TikTok','Instagram','TikTok','WhatsApp','TikTok','Instagram','Facebook','TikTok','Instagram','TikTok','WhatsApp','TikTok','Instagram','TikTok','Facebook','WhatsApp','Instagram','TikTok','WhatsApp','TikTok'],
+                tipo_dato: 'cualitativo',
+                medidas_requeridas: 'moda',
+                medidasRequeridas: ['moda'],
+                concepto_objetivo: 'cualitativo_moda',
+                pregunta_guia: '¿Por qué NO tiene sentido calcular la media ni la mediana de estos datos? ¿Qué medida sí aplica y qué le recomendás al decano para la estrategia de marketing de eventos?'
+            },
+            {
+                id: '004',
+                categoria: 'vestuario',
+                titulo: 'Tallas de camisetas: dos públicos, dos modas',
+                contexto: 'Tenés una tienda de camisetas con diseño guatemalteco en la zona viva de Xela. Vendiste 14 camisetas esta semana y estas son las tallas. Notás que hay dos grupos de clientes muy diferentes: jóvenes que prefieren tallas pequeñas y adultos que buscan tallas grandes. Necesitás decidir cuántas camisetas de cada talla pedir al proveedor.',
+                datos: 'S,M,S,XL,S,M,XL,M,S,XL,M,S,XL,M,XL',
+                datosArray: ['S','M','S','XL','S','M','XL','M','S','XL','M','S','XL','M'],
+                tipo_dato: 'cualitativo',
+                medidas_requeridas: 'moda',
+                medidasRequeridas: ['moda'],
+                concepto_objetivo: 'bimodal',
+                pregunta_guia: '¿Cuántas modas tiene esta serie de datos? ¿Qué significa esto para tu negocio? Si solo pidieras un tipo de talla al proveedor, ¿qué problema tendrías? ¿Cómo resolvés esta situación como administrador?'
+            },
+            {
+                id: '005',
+                categoria: 'alimentacion',
+                titulo: 'Nota final del curso: no todo vale igual',
+                contexto: 'En tu curso de Estadística, la nota final no es un promedio simple. El examen parcial vale 30%, la zona (tareas) vale 25%, el proyecto final vale 25% y el examen final vale 20%. Un estudiante obtuvo las siguientes calificaciones (escala 0-100): parcial 72, zona 85, proyecto 90, examen final 68. Tu profesor te pide calcular la nota final ponderada.',
+                datos: '72,85,90,68',
+                datosArray: ['72','85','90','68'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media',
+                medidasRequeridas: ['media'],
+                concepto_objetivo: 'media_ponderada',
+                pesos: '30,25,25,20',
+                pesosArray: [30,25,25,20],
+                valores_ponderados: '72,85,90,68',
+                valoresPonderados: [72,85,90,68],
+                etiquetas: 'Examen Parcial,Zona (Tareas),Proyecto Final,Examen Final',
+                pregunta_guia: '¿Cuál es la nota final ponderada del estudiante? ¿Por qué no es justo hacer un promedio simple (sumar y dividir entre 4)? Si fueras el estudiante, ¿en qué componente pondrías más esfuerzo para mejorar tu nota y por qué?'
+            }
+        ];
+    }
+
+    // Event listeners
+    document.getElementById('btnComenzar').addEventListener('click', () => {
+        const nombre = document.getElementById('inputNombre').value.trim();
+        const carnet = document.getElementById('inputCarnet').value.trim();
+        
+        if (!nombre || !carnet) {
+            alert('Por favor completá ambos campos para comenzar.');
+            return;
+        }
+        
+        state.studentName = nombre;
+        state.studentCarnet = carnet;
+        state.currentCaseIndex = 0;
+        state.score = 0;
+        state.caseResults = [];
+        state.attempts = {};
+        
+        showScreen('gameScreen');
+        updateProgress();
+        renderCase(state.cases[0], 0);
+    });
+
+    document.getElementById('btnDownloadPDF').addEventListener('click', generatePDF);
+
+    document.getElementById('btnRestart').addEventListener('click', () => {
+        state.currentCaseIndex = 0;
+        state.score = 0;
+        state.caseResults = [];
+        state.attempts = {};
+        document.getElementById('inputNombre').value = '';
+        document.getElementById('inputCarnet').value = '';
+        showScreen('welcomeScreen');
+    });
+
+    // Start
+    init();
+    </script>
+</body>
+</html>

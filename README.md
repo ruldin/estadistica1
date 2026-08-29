@@ -77,13 +77,22 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
      - **Caso Textil San Lucas S.A.:** Comparativa de turnos matutino vs vespertino en confección de exportación.
      - **Laboratorio Interactivo & Exportación PDF:** Ingreso de datasets simples o comparativos, selector de tipo de dato (Q, u, L, m, decimales) y generación de informe ejecutivo con gráfico en alta resolución y conclusiones gerenciales con jsPDF.
 
-10. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
+10. 📐 **`Estadistica1/sem8_medidas_tendencia_central.html` (Semana 8: Medidas de Tendencia Central — Media, Mediana y Moda):**
+    - Módulo de supervivencia gerencial basado en la guía analítica:
+      - **Fundamentos:** Parámetro $(\mu)$ vs. Estadístico $(\bar{x})$, la Media como centro de gravedad y vulnerabilidad ante outliers (*elefantes en la balanza*), la Mediana como topografía inmune a extremos (reina de salarios y tiempos de espera), y la Moda en retail e inventarios con detección de mercados fracturados (bimodalidad).
+      - **El Gran Duelo Gerencial:** Caso del Puesto de Garnachas en la Feria Patronal (análisis de por qué la mediana salva la compra diaria de insumos perecederos y la media demuestra la capacidad ante el banco para créditos).
+      - **Laboratorio Interactivo de Decisiones:** Ingreso libre de dataset, 6 casos predefinidos (Garnachas, Salarios directivos, Clínica privada, Cafetería UMG, Asesores comerciales y Boutique), máscaras de datos (Q, u, min, hrs, s, ★, decimales, L, m), botón de limpiar, cálculo automático de KPIs con diagnóstico de sesgo y recomendación gerencial.
+      - **Selector Interactivo de Gráficos:** Visualización dinámica en 3 modalidades: **Histograma de Frecuencia** (columnas con destaque de estadígrafos), **Polígono de Frecuencias** (línea continua anclada a cero en marcas de clase $X_i$) y **Ojiva Acumulada** ($F_a$).
+      - **Laboratorio IA Integrado (Next.js en iframe):** Acceso directo y visor integrado a la aplicación web interactiva (`https://temporary-instant-apogee-hran4bx.vercel.app/`) para evaluar el ciclo de 5 pasos: Contexto, Datos, Estadística, System Prompt y Decisión del Agente de IA.
+      - **Tabla de Frecuencias y Exportación PDF:** Generación de informe ejecutivo A4 con captura del gráfico activo, tabla tabulada y respuestas del estudiante con jsPDF.
+
+11. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
     - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
 
-11. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
+12. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
     - Dashboard principal para el curso de **Informática I**, con diseño ejecutivo cian/azul, accesos directos por semana y mapa curricular.
 
-12. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
+13. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
     - Guía interactiva integral sobre Inteligencia Artificial aplicada a la administración:
       - **Glosario & Fundamentos:** Tokens, embeddings, temperatura, KV cache.
       - **Arquitectura Eficiente:** Modelos densos vs. MoE (Mezcla de Expertos) y compresión MLA (-90% memoria).
@@ -92,7 +101,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Agentes ReAct:** Simulador del ciclo cognitivo de automatización (Pensamiento, Acción, Observación, Respuesta).
       - **Gobernanza:** Mitigación de Shadow AI, supervisión humana y marcos normativos.
 
-12. 📦 **`vendor/` (Librerías locales):**
+14. 📦 **`vendor/` (Librerías locales):**
     - `chart.umd.min.js`
     - `chartjs-plugin-datalabels.min.js`
     - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.
@@ -125,8 +134,8 @@ Al ser un sitio web 100% estático, no requiere instalación de dependencias ni 
 ## 📌 Estado del Proyecto y Pruebas
 
 - **Repositorio oficial:** [https://github.com/ruldin/estadistica1](https://github.com/ruldin/estadistica1)
-- **Estado actual:** Módulos habilitados hasta **Semana 5**.
-- **Cobertura funcional:** Simuladores interactivos, KPIs gerenciales, gráficos y exportación PDF en módulos aplicados.
+- **Estado actual:** Módulos habilitados hasta **Semana 8**.
+- **Cobertura funcional:** Simuladores interactivos, KPIs gerenciales, gráficos, laboratorio de IA y exportación PDF en módulos aplicados.
 - **Enfoque vigente:** Aprendizaje estadístico orientado a decisiones empresariales (no memorización aislada de fórmulas).
 
 ---
