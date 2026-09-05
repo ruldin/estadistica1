@@ -92,13 +92,23 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Gamificación:** Sistema de puntuación, medallas por precisión y feedback explicativo inmediato.
       - **Reporte PDF:** Generación automática de constancia de resultados y resolución de ejercicios.
 
-12. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
+12. 📊 **`Estadistica1/sem9_agrupados.html` (Semana 9: Estadígrafos de Tendencia Central para Datos Agrupados & Medidas de Posición):**
+    - Módulo integral de cálculo, interpretación gerencial y hoja de trabajo aplicada:
+      - **Cálculo de Estadígrafos Agrupados:** Media aritmética ponderada por frecuencias ($\bar{x} = \frac{\sum f_i \cdot x_i}{n}$), Mediana ($Me$) utilizando la columna de frecuencia acumulada $F_i$ como GPS ordinal e interpolación de clase, y Moda ($Mo$) a través del diferencial de frecuencias adyacentes ($\Delta_1$ y $\Delta_2$).
+      - **Fórmula Madre de Medidas de Posición:** Interpolación unificada para Cuartiles ($Q_k$), Deciles ($D_k$) y Percentiles ($P_k$) con cálculo de posición ordinal y clase de trabajo.
+      - **Caso Empresarial:** Cooperativa "El Ahorro Pinulteco" para fijación de políticas de crédito (tasa preferencial al percentil 10, fiador obligatorio al cuartil 3 y aprobación gerencial especial al percentil 90).
+      - **Soporte de Datasets:** Entrada por tabla agrupada manual/CSV o datos crudos que se agrupan automáticamente, selector de unidades de medida (Q, US$, pts, min, h, años, kg, cm, und) y carga rápida de casos.
+      - **Visualización Gráfica:** Histograma interactivo con líneas verticales de estadígrafos $(\bar{x}, Me, Mo)$ y Ojiva porcentual acumulada (%Ac).
+      - **Simulador de Políticas:** Deslizadores en tiempo real para evaluar el impacto de requisitos de crédito en la cartera de clientes y gráfico circular de composición.
+      - **Modo Examen & Generación PDF:** Ficha del estudiante, problemas personalizados, autoevaluación con soluciones ocultas y exportación de hoja de trabajo oficial a PDF con jsPDF.
+
+13. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
     - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
 
-13. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
+14. 💻 **`informatica1/index_informatica.html` (Portal de Informática I):**
     - Dashboard principal para el curso de **Informática I**, con diseño ejecutivo cian/azul, accesos directos por semana y mapa curricular.
 
-14. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
+15. 🤖 **`informatica1/Guia_IA_Administradores.html` (Semana 7: IA para la Gestión Empresarial 2026):**
     - Guía interactiva integral sobre Inteligencia Artificial aplicada a la administración:
       - **Glosario & Fundamentos:** Tokens, embeddings, temperatura, KV cache.
       - **Arquitectura Eficiente:** Modelos densos vs. MoE (Mezcla de Expertos) y compresión MLA (-90% memoria).
@@ -107,7 +117,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Agentes ReAct:** Simulador del ciclo cognitivo de automatización (Pensamiento, Acción, Observación, Respuesta).
       - **Gobernanza:** Mitigación de Shadow AI, supervisión humana y marcos normativos.
 
-15. 📦 **`vendor/` (Librerías locales):**
+16. 📦 **`vendor/` (Librerías locales):**
     - `chart.umd.min.js`
     - `chartjs-plugin-datalabels.min.js`
     - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.
@@ -140,7 +150,7 @@ Al ser un sitio web 100% estático, no requiere instalación de dependencias ni 
 ## 📌 Estado del Proyecto y Pruebas
 
 - **Repositorio oficial:** [https://github.com/ruldin/estadistica1](https://github.com/ruldin/estadistica1)
-- **Estado actual:** Módulos habilitados hasta **Semana 8**.
+- **Estado actual:** Módulos habilitados hasta **Semana 9**.
 - **Cobertura funcional:** Simuladores interactivos, KPIs gerenciales, gráficos, laboratorio de IA y exportación PDF en módulos aplicados.
 - **Enfoque vigente:** Aprendizaje estadístico orientado a decisiones empresariales (no memorización aislada de fórmulas).
 

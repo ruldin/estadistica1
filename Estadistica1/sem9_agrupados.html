@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>UMG Estadística I - Semana 9: Tendencia Central y Posición (Datos Agrupados)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter & Space Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js & jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 340px; }
+        }
+        .active-tab {
+            background-color: rgba(20, 184, 166, 0.15) !important;
+            color: #2dd4bf !important;
+            font-weight: 700;
+            border: 1px solid rgba(20, 184, 166, 0.4) !important;
+        }
+        .sticky-source { position: sticky; top: 88px; }
+        .row-highlight-median {
+            background-color: rgba(79, 70, 229, 0.22) !important;
+            box-shadow: inset 3px 0 0 #818cf8;
+        }
+        .row-highlight-modal {
+            background-color: rgba(168, 85, 247, 0.22) !important;
+            box-shadow: inset 3px 0 0 #c084fc;
+        }
+        .row-highlight-pos {
+            background-color: rgba(245, 158, 11, 0.22) !important;
+            box-shadow: inset 3px 0 0 #fbbf24;
+        }
+        .blur-solution { filter: blur(6px); user-select: none; pointer-events: none; }
+        .step-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        input.practice-input {
+            width: 100%;
+            background-color: #020617;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-family: ui-monospace, monospace;
+            color: #f1f5f9;
+        }
+        input.practice-input:focus {
+            outline: 2px solid #0d9488;
+            border-color: #0d9488;
+        }
+        .ok-msg { color: #34d399; font-weight: 700; }
+        .err-msg { color: #f87171; font-weight: 700; }
+    </style>
+</head>
+
+<body class="bg-[#0b0f19] text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-teal-500 selection:text-slate-950">
+
+    <!-- HEADER / NAVEGACIÓN -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+                    <a href="index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0 shadow" title="Regresar al menú de Estadística 1">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-white p-1 rounded-xl shadow-lg shadow-teal-500/15 shrink-0 flex items-center justify-center">
+                        <img src="../cosas/Umg.png" alt="Logo UMG" class="h-8 w-auto object-contain" onerror="this.onerror=null; this.src='../cosas/umg.png';">
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 text-teal-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">
+                            <span>Universidad Mariano Gálvez</span><span>•</span><span>Facultad de Ciencias de la Administración</span>
+                        </div>
+                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight mt-0.5 text-white heading-font truncate">Estadística I — Guía Integral Semana 9</h1>
+                        <p class="text-xs text-slate-400 mt-0.5 truncate">Tendencia Central y Medidas de Posición para Datos Agrupados • <span id="case-name-label" class="text-teal-300 font-semibold">Cooperativa "El Ahorro Pinulteco"</span></p>
+                        <!-- Ruta de aprendizaje -->
+                        <div class="flex flex-wrap items-center gap-1.5 mt-2 text-[10px]">
+                            <span class="text-slate-500 font-bold uppercase">Tu ruta:</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">👤 Ficha</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">1️⃣ Datos</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">2️⃣ Media-Mediana-Moda</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">3️⃣ Posición</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">4️⃣ Gráficos</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">5️⃣ Decisión</span><span class="text-slate-600">→</span>
+                            <span class="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-md">📝 PDF</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 text-right text-xs text-slate-300 hidden sm:block shrink-0 shadow">
+                    <p><strong class="text-teal-400">Curso:</strong> Estadística I (021409)</p>
+                    <p><strong class="text-teal-400">Libro:</strong> Domínguez &amp; Domínguez</p>
+                    <p><strong class="text-teal-400">Zona:</strong> Hoja de Trabajo (1.5 pts)</p>
+                    <label class="flex items-center justify-end gap-2 mt-2 cursor-pointer text-slate-300"><input type="checkbox" id="exam-mode" onchange="toggleExamMode();updatePdfGate()" class="accent-teal-500"> Modo examen (ocultar soluciones)</label>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- KPIs DINÁMICOS -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 w-full">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 shadow-lg backdrop-blur-md">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block heading-font">Media (x̄)</span>
+                <div class="mt-1"><span id="kpi-media" class="text-xl font-black text-white heading-font">—</span></div>
+                <p class="text-[10px] text-slate-500 mt-0.5">Promedio ponderado</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 shadow-lg backdrop-blur-md">
+                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider block heading-font">Mediana (Me)</span>
+                <div class="mt-1"><span id="kpi-mediana" class="text-xl font-black text-indigo-400 heading-font">—</span></div>
+                <p class="text-[10px] text-indigo-300/70 mt-0.5">Centro exacto (50%)</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 shadow-lg backdrop-blur-md">
+                <span class="text-[10px] font-bold text-purple-400 uppercase tracking-wider block heading-font">Moda (Mo)</span>
+                <div class="mt-1"><span id="kpi-moda" class="text-xl font-black text-purple-400 heading-font">—</span></div>
+                <p class="text-[10px] text-purple-300/70 mt-0.5">Monto más frecuente</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 shadow-lg backdrop-blur-md">
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block heading-font">Cuartil 3 (Q3)</span>
+                <div class="mt-1"><span id="kpi-q3" class="text-xl font-black text-amber-400 heading-font">—</span></div>
+                <p class="text-[10px] text-amber-300/70 mt-0.5">Corte superior 75%</p>
+            </div>
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 shadow-lg backdrop-blur-md col-span-2 md:col-span-1">
+                <span class="text-[10px] font-bold text-teal-400 uppercase tracking-wider block heading-font">Percentil 90 (P90)</span>
+                <div class="mt-1"><span id="kpi-p90" class="text-xl font-black text-teal-400 heading-font">—</span></div>
+                <p class="text-[10px] text-teal-300/70 mt-0.5">Aprobación especial</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- LAYOUT PRINCIPAL: FUENTE SIEMPRE VISIBLE + CONTENIDO -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-grow">
+
+        <!-- ============ ASIDE: FUENTE DE DATOS SIEMPRE VISIBLE ============ -->
+        <aside class="lg:col-span-4 sticky-source space-y-4">
+            <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-3xl shadow-xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-bold text-sm text-white heading-font">📌 Fuente de datos (siempre visible)</h2>
+                    <span id="badge-n" class="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2.5 py-0.5 rounded-lg font-bold">n = 50</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Cada fórmula de la derecha usa estos números. Verifica el resaltado: <span class="text-purple-300 font-bold">morado = modal</span>, <span class="text-indigo-300 font-bold">azul = mediana</span>, <span class="text-amber-300 font-bold">amarillo = posición</span>.</p>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                            <tr><th class="px-2 py-2 text-center">Clase</th><th class="px-2 py-2">Intervalo</th><th class="px-2 py-2 text-center">xi</th><th class="px-2 py-2 text-center normal-case">f<sub>i</sub> <span class="text-teal-400 font-bold">(abs.)</span></th><th class="px-2 py-2 text-center normal-case">F<sub>i</sub> <span class="text-amber-400 font-bold">(acum.)</span></th></tr>
+                        </thead>
+                        <tbody id="source-table-body" class="bg-slate-950 text-slate-300 divide-y divide-slate-850"></tbody>
+                        <tfoot class="bg-slate-900 text-slate-100 font-bold text-[11px] border-t border-slate-800">
+                            <tr><td colspan="3" class="px-2 py-2 text-right">∑</td><td id="source-sum-f" class="px-2 py-2 text-center text-teal-400">50</td><td class="px-2 py-2 text-center text-slate-500">—</td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div id="source-formula-hint" class="text-[11px] font-mono bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-teal-300">∑(fi·xi) = Q 173,000 → x̄ = 173,000 / 50</div>
+                <div class="flex flex-wrap gap-1.5 text-[10px]">
+                    <span class="bg-indigo-950/80 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold" id="legend-mediana">Me → Clase 3</span>
+                    <span class="bg-purple-950/80 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-bold" id="legend-moda">Mo → Clase 3</span>
+                    <span class="bg-amber-950/80 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md font-bold" id="legend-pos">Pos → Clase 5</span>
+                </div>
+            </div>
+
+            <!-- Cargar dataset propio -->
+            <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-3xl shadow-xl space-y-3">
+                <h3 class="font-bold text-sm text-white heading-font">📂 Estudia con tus propios datos</h3>
+                <div class="flex gap-1.5 text-[11px] font-bold">
+                    <button onclick="setLoaderMode('agrup')" id="lm-agrup" class="flex-1 px-3 py-2 rounded-xl bg-teal-500 text-slate-950 font-bold transition">A) Tabla agrupada</button>
+                    <button onclick="setLoaderMode('crudos')" id="lm-crudos" class="flex-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 font-bold transition border border-slate-700">B) Datos sueltos</button>
+                </div>
+                <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 space-y-2">
+                    <label class="text-[11px] font-bold text-slate-300 block">📏 Unidad de medida de tus datos</label>
+                    <select id="unit-select" onchange="onUnitChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs font-semibold text-slate-200 focus:border-teal-400 focus:outline-none">
+                        <option value="Q" selected>Q — Quetzales (dinero)</option>
+                        <option value="$">US$ — Dólares (dinero)</option>
+                        <option value="pts">Pts — Notas / puntos (0–100)</option>
+                        <option value="min">min — Minutos (tiempos)</option>
+                        <option value="h">h — Horas</option>
+                        <option value="anios">años — Edades</option>
+                        <option value="kg">kg — Pesos</option>
+                        <option value="cm">cm — Estaturas / longitudes</option>
+                        <option value="und">und — Unidades (genérico)</option>
+                    </select>
+                    <p id="context-label" class="text-[11px] text-teal-300 bg-teal-950/40 border border-teal-500/30 rounded-xl px-2.5 py-1.5">Contexto: montos de crédito (clientes) — lenguaje gerencial.</p>
+                </div>
+                <div id="loader-agrup" class="space-y-2">
+                    <p class="text-[11px] text-slate-400">Una línea por clase: <code class="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-teal-300">min,max,fi</code></p>
+                    <textarea id="csv-input" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none">1000,2000,5
+2000,3000,12
+3000,4000,18
+4000,5000,10
+5000,6000,5</textarea>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="applyCsvDataset()" class="flex-1 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Aplicar mi tabla</button>
+                        <button onclick="resetDataset()" class="bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">Restablecer</button>
+                    </div>
+                    <label class="block mt-2 text-[11px] text-slate-400">…o sube un CSV <input type="file" id="csv-file" accept=".csv,.txt" onchange="loadCsvFile(event)" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[11px] file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-750"></label>
+                </div>
+                <div id="loader-crudos" class="hidden space-y-2">
+                    <p class="text-[11px] text-slate-400">Pega números sueltos (comas, espacios o saltos de línea). Los agrupo automáticamente.</p>
+                    <textarea id="raw-input" rows="4" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none" placeholder="Ej: 1200, 2500, 3100, 3800, 4200, 5100 ...">1500 1800 2200 2400 2600 2800 3100 3200 3300 3400 3500 3600 3700 3900 4100 4300 4600 5200 5600 5900</textarea>
+                    <div class="flex items-center gap-2 text-[11px]">
+                        <label class="text-slate-400">Nº clases:</label>
+                        <input type="number" id="num-classes" value="5" min="3" max="12" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 w-16 text-center font-bold text-white focus:border-indigo-400 focus:outline-none">
+                        <button onclick="applyRawDataset()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Agrupar y aplicar</button>
+                    </div>
+                </div>
+                <p id="loader-msg" class="text-[11px] font-medium"></p>
+                <div class="text-[11px] bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 text-slate-400">
+                    <strong class="text-slate-300">Prueba rápida:</strong>
+                    <button onclick="loadExample('sueldos')" class="underline text-teal-400 hover:text-teal-300 font-semibold ml-1">Sueldos Q</button> •
+                    <button onclick="loadExample('notas')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Notas examen</button> •
+                    <button onclick="loadExample('tiempos')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Tiempos min</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ============ COLUMNA DERECHA: TUTORIAL ============ -->
+        <div class="lg:col-span-8 space-y-4 min-w-0">
+            <nav class="bg-slate-900/80 rounded-2xl shadow-xl border border-slate-800 p-1.5 flex flex-wrap gap-1 text-xs sm:text-sm font-medium backdrop-blur-md">
+                <button onclick="switchTab('tab-datos')" id="btn-tab-datos" class="nav-btn active-tab px-3 py-2 rounded-xl transition-all">👤 0. Mis datos</button>
+                <button onclick="switchTab('tab-caso')" id="btn-tab-caso" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">📋 1. Datos</button>
+                <button onclick="switchTab('tab-tendencia')" id="btn-tab-tendencia" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">🎯 2. Tendencia</button>
+                <button onclick="switchTab('tab-posicion')" id="btn-tab-posicion" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">🧮 3. Posición</button>
+                <button onclick="switchTab('tab-graficos')" id="btn-tab-graficos" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">📈 4. Gráficos</button>
+                <button onclick="switchTab('tab-simulador')" id="btn-tab-simulador" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">💼 5. Decisión</button>
+                <button onclick="switchTab('tab-teoria')" id="btn-tab-teoria" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">📚 Teoría + Quiz</button>
+                <button onclick="switchTab('tab-entrega')" id="btn-tab-entrega" class="nav-btn text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 px-3 py-2 rounded-xl transition-all">📝 Hoja de trabajo (PDF)</button>
+            </nav>
+
+            <main class="space-y-6">
+                <!-- PASO 0: DATOS DEL ESTUDIANTE -->
+                <section id="tab-datos" class="tab-content space-y-4">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">👤 Paso 0 · Ficha del estudiante y problema a resolver</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">Completa tus datos y escribe con tus palabras el <strong>enunciado del problema</strong> que vas a analizar. Todo esto encabezará tu hoja de trabajo en PDF.</p>
+                        <div class="grid sm:grid-cols-2 gap-3 mt-4 text-xs">
+                            <div><label class="font-bold text-slate-300 block mb-1">Nombre completo *</label><input id="stu-nombre" oninput="renderEntregaPreview()" class="practice-input" placeholder="Ej: María Fernanda López"></div>
+                            <div><label class="font-bold text-slate-300 block mb-1">Carnet *</label><input id="stu-carnet" oninput="renderEntregaPreview()" class="practice-input" placeholder="Ej: 2026-00123"></div>
+                        </div>
+                        <div class="mt-3 text-xs"><label class="font-bold text-slate-300 block mb-1">Enunciado del problema a analizar y resolver *</label>
+                            <textarea id="stu-enunciado" rows="4" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:border-teal-400 focus:outline-none" placeholder="Ej: Analizar los montos de 50 microcréditos de la Cooperativa El Ahorro Pinulteco para definir la tasa preferencial (P10), el fiador obligatorio (Q3) y la aprobación especial (P90)..."></textarea></div>
+                        <div class="mt-3 p-3.5 bg-teal-950/40 border border-teal-500/30 rounded-xl text-xs text-teal-200">📝 <strong>Cómo trabajar:</strong> 1) llena esta ficha, 2) resuelve los cálculos en cada paso con el <strong>modo examen activado</strong> (las soluciones se ocultan), 3) escribe tus conclusiones en cada pestaña, 4) genera tu PDF en la última pestaña.</div>
+                    </div>
+                </section>
+
+                <!-- PASO 1 -->
+                <section id="tab-caso" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h2 class="text-xl font-bold text-white heading-font">Paso 1 · Entiende la tabla (tu materia prima)</h2>
+                            <span id="amplitud-label" class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold px-2.5 py-1 rounded-lg">A = Q 1,000</span>
+                        </div>
+                        <p class="text-sm text-slate-400 leading-relaxed">Todo sale de la tabla de la izquierda. Léela por columnas antes de tocar una fórmula.</p>
+                        <div class="overflow-x-auto mt-4 rounded-xl border border-slate-800 bg-slate-950">
+                            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                                <thead class="bg-slate-950 text-slate-300 text-xs uppercase border-b border-slate-800">
+                                    <tr><th class="px-3 py-3 text-center">i</th><th class="px-3 py-3">Intervalo</th><th class="px-3 py-3 text-center">xi</th><th class="px-3 py-3 text-center normal-case">f<sub>i</sub> <span class="text-teal-400 font-bold">(abs.)</span></th><th class="px-3 py-3 text-center normal-case">f<sub>i</sub>·x<sub>i</sub></th><th class="px-3 py-3 text-center normal-case">F<sub>i</sub> <span class="text-amber-400 font-bold">(acum.)</span></th><th class="px-3 py-3 text-center">%Ac</th></tr>
+                                </thead>
+                                <tbody id="full-frequency-table-body" class="divide-y divide-slate-850 bg-slate-950 text-slate-200"></tbody>
+                                <tfoot class="bg-slate-900 font-bold border-t border-slate-800 text-xs text-slate-100">
+                                    <tr><td colspan="3" class="px-4 py-3 text-right">∑</td><td id="full-sum-f" class="px-3 py-3 text-center text-teal-400">50</td><td id="full-sum-fx" class="px-3 py-3 text-center text-indigo-400">—</td><td class="px-3 py-3 text-center text-slate-500">—</td><td class="px-3 py-3 text-center text-slate-400">100%</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="grid sm:grid-cols-3 gap-2 mt-4 text-xs">
+                            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-slate-300"><strong class="text-slate-100">xi = (Linf+Lsup)/2.</strong> Representa a toda la clase.</div>
+                            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-slate-300"><strong class="text-slate-100">fi·xi → media.</strong> Suma esta columna: es tu numerador.</div>
+                            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-slate-300"><strong class="text-slate-100">Fi = GPS.</strong> Te dice en qué clase cae cada posición.</div>
+                        </div>
+                        <div class="mt-3 p-3.5 bg-teal-950/40 border border-teal-500/30 rounded-xl text-xs text-teal-200">✅ <strong>Auto-chequeo:</strong> ¿Puedes decir sin mirar la solución cuánto vale n y cuánto vale ∑(fi·xi)? Escríbelos en un papel y compáralos con el pie de la tabla. Luego pasa a la pestaña 2.</div>
+                        <div class="mt-4 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                            <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones del Paso 1 (piensa críticamente)</label>
+                            <p class="text-[11px] text-slate-400 mt-1">¿Qué te dice la columna Fi sobre dónde se concentran los datos? ¿Qué clase domina y por qué crees que importa para el negocio?</p>
+                            <textarea id="note-caso" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PASO 2: TENDENCIA -->
+                <section id="tab-tendencia" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">Paso 2 · Calcula tú: Media, Mediana y Moda</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">Mira la tabla de la izquierda ⬅ mientras resuelves. Cada tarjeta tiene <strong>guía → solución → práctica</strong>.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4" id="trend-cards">
+                            <!-- MEDIA -->
+                            <div class="bg-slate-950/70 p-5 rounded-2xl border border-slate-800 space-y-3">
+                                <div class="flex items-center gap-2 mb-1"><span class="step-badge bg-slate-800 text-teal-400 border border-slate-700">1</span><h3 class="font-bold text-slate-100 heading-font">Media aritmética (x̄) — la más fácil, empieza aquí</h3></div>
+                                <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                    <div class="solution space-y-2">
+                                        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 font-mono text-slate-200" id="media-steps">—</div>
+                                        <div class="p-2.5 bg-slate-900/70 rounded-lg border border-slate-800/80 text-[11px] text-slate-300" id="media-note"></div>
+                                    </div>
+                                    <div class="p-3.5 bg-slate-900/50 rounded-xl border border-dashed border-slate-700 space-y-1.5">
+                                        <strong class="text-xs text-slate-200">✏️ Practica:</strong>
+                                        <p class="text-[11px] text-slate-400">¿Cuánto vale ∑(fi·xi)? ¿Y x̄ = ∑/n?</p>
+                                        <input id="in-media" class="practice-input mt-1" placeholder="Escribe tu x̄, ej: 3460">
+                                        <div class="flex gap-2 mt-2"><button onclick="checkMedia()" class="bg-teal-500 hover:bg-teal-400 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg transition heading-font">Verificar</button><button onclick="reveal('media-steps')" class="text-[11px] text-slate-400 hover:text-white underline">Ver solución</button></div>
+                                        <p id="msg-media" class="text-[11px] mt-1"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MEDIANA -->
+                            <div class="bg-slate-950/70 p-5 rounded-2xl border border-indigo-500/40 space-y-3">
+                                <div class="flex items-center gap-2 mb-1"><span class="step-badge bg-indigo-600 text-white">2</span><h3 class="font-bold text-indigo-300 heading-font">Mediana (Me) — usa la Fi como GPS</h3></div>
+                                <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                    <div class="solution space-y-2">
+                                        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 font-mono text-slate-200" id="mediana-steps">—</div>
+                                        <div class="p-2.5 bg-indigo-950/30 rounded-lg border border-indigo-500/30 text-[11px] text-indigo-200" id="mediana-note"></div>
+                                    </div>
+                                    <div class="p-3.5 bg-slate-900/50 rounded-xl border border-dashed border-indigo-500/40 space-y-1.5">
+                                        <strong class="text-xs text-slate-200">✏️ Practica:</strong>
+                                        <p class="text-[11px] text-slate-400">Paso A: calcula n/2. Paso B: ¿qué clase cumple Fi ≥ n/2? Escribe su Li.</p>
+                                        <div class="flex gap-2 mt-1"><input id="in-me-pos" class="practice-input" placeholder="n/2 = ?"><input id="in-me-li" class="practice-input" placeholder="Li = ?"></div>
+                                        <input id="in-mediana" class="practice-input mt-2" placeholder="Tu Me, ej: 3444.44">
+                                        <div class="flex gap-2 mt-2"><button onclick="checkMediana()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition heading-font">Verificar</button></div>
+                                        <p id="msg-mediana" class="text-[11px] mt-1"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODA -->
+                            <div class="bg-slate-950/70 p-5 rounded-2xl border border-purple-500/40 space-y-3">
+                                <div class="flex items-center gap-2 mb-1"><span class="step-badge bg-purple-600 text-white">3</span><h3 class="font-bold text-purple-300 heading-font">Moda (Mo) — la clase con mayor fi</h3></div>
+                                <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                    <div class="solution space-y-2">
+                                        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 font-mono text-slate-200" id="moda-steps">—</div>
+                                        <div class="p-2.5 bg-purple-950/30 rounded-lg border border-purple-500/30 text-[11px] text-purple-200" id="moda-note"></div>
+                                    </div>
+                                    <div class="p-3.5 bg-slate-900/50 rounded-xl border border-dashed border-purple-500/40 space-y-1.5">
+                                        <strong class="text-xs text-slate-200">✏️ Practica:</strong>
+                                        <p class="text-[11px] text-slate-400">Calcula Δ₁ = f_modal − f_anterior y Δ₂ = f_modal − f_siguiente.</p>
+                                        <div class="flex gap-2 mt-1"><input id="in-d1" class="practice-input" placeholder="Δ₁ = ?"><input id="in-d2" class="practice-input" placeholder="Δ₂ = ?"></div>
+                                        <input id="in-moda" class="practice-input mt-2" placeholder="Tu Mo, ej: 3428.57">
+                                        <div class="flex gap-2 mt-2"><button onclick="checkModa()" class="bg-purple-600 hover:bg-purple-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition heading-font">Verificar</button></div>
+                                        <p id="msg-moda" class="text-[11px] mt-1"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-slate-950 border border-slate-800 text-white p-5 rounded-2xl space-y-2">
+                            <h3 class="font-bold text-teal-400 text-xs uppercase tracking-wider heading-font">🔍 Diagnóstico de sesgo (se genera solo)</h3>
+                            <div id="skew-box" class="bg-slate-900 border border-slate-800 p-3 rounded-xl font-mono text-center text-teal-300 text-xs mt-2">—</div>
+                            <p id="skew-text" class="text-xs text-slate-400 leading-relaxed"></p>
+                        </div>
+                        <div class="mt-4 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                            <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones del Paso 2 (piensa críticamente)</label>
+                            <p class="text-[11px] text-slate-400 mt-1">Compara tu x̄, Me y Mo: ¿qué indican sobre el sesgo? ¿Cuál de las tres usarías para tomar una decisión administrativa y por qué?</p>
+                            <textarea id="note-tendencia" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PASO 3: POSICION -->
+                <section id="tab-posicion" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">Paso 3 · Medidas de posición (Qk, Dk, Pk)</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">La clase de trabajo se ilumina en amarillo en tu tabla fuente ⬅. Sigue los pasos A → B → C.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+                            <div class="lg:col-span-4 bg-slate-950/70 p-5 rounded-2xl border border-slate-800 space-y-4">
+                                <div class="grid grid-cols-3 gap-1.5 text-xs">
+                                    <button onclick="setPreset('P',10)" class="px-2 py-1.5 bg-slate-900 border border-slate-700 text-slate-200 rounded-lg font-semibold hover:border-teal-400 transition">P₁₀</button>
+                                    <button onclick="setPreset('Q',3)" class="px-2 py-1.5 bg-slate-900 border border-slate-700 text-slate-200 rounded-lg font-semibold hover:border-amber-400 transition">Q₃</button>
+                                    <button onclick="setPreset('P',90)" class="px-2 py-1.5 bg-slate-900 border border-slate-700 text-slate-200 rounded-lg font-semibold hover:border-indigo-400 transition">P₉₀</button>
+                                </div>
+                                <div><label class="text-xs font-bold text-slate-300 block mb-1">Tipo:</label>
+                                    <select id="univ-type-select" onchange="onUnivTypeChange()" class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs font-semibold focus:border-teal-400 focus:outline-none">
+                                        <option value="Q">Cuartiles (÷4)</option><option value="D">Deciles (÷10)</option><option value="P" selected>Percentiles (÷100)</option>
+                                    </select></div>
+                                <div><div class="flex justify-between text-xs mb-1 text-slate-300"><label>Subíndice k:</label><span id="univ-k-display" class="font-bold text-teal-300 bg-teal-500/20 border border-teal-500/30 px-2 rounded">k = 90</span></div>
+                                    <input type="range" id="univ-k-slider" min="1" max="99" value="90" oninput="onUnivSliderInput(this.value)" class="w-full accent-teal-500 cursor-pointer"></div>
+                                <div class="bg-slate-900 border border-slate-800 text-white p-4 rounded-2xl text-center"><span class="text-[10px] uppercase text-slate-400 block tracking-wider heading-font">Valor calculado</span><div id="univ-result-val" class="solution text-3xl font-black text-teal-400 my-1 heading-font">—</div><span id="univ-result-label" class="text-xs text-slate-400 block">—</span></div>
+                                <div class="p-3.5 bg-slate-900/50 rounded-xl border border-dashed border-slate-700 text-xs space-y-1.5"><strong>✏️ Practica:</strong> calcula tú la Pos y escríbela <input id="in-pos" class="practice-input mt-1" placeholder="Pos = ?"><button onclick="checkPos()" class="mt-2 bg-teal-500 hover:bg-teal-400 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg transition heading-font">Verificar mi Pos</button><p id="msg-pos" class="text-[11px] mt-1"></p></div>
+                            </div>
+                            <div class="lg:col-span-8 space-y-3">
+                                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-2xl text-xs space-y-1 solution"><div class="font-bold text-teal-400 heading-font">Paso A · Posición ordinal</div><div class="font-mono bg-slate-900 border border-slate-850 p-2.5 rounded-xl flex justify-between"><span id="univ-pos-formula" class="text-slate-300">—</span><strong id="univ-pos-eval" class="text-teal-400">—</strong></div></div>
+                                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-2xl text-xs solution"><div class="font-bold text-teal-400 heading-font">Paso B · Clase de trabajo (mira el amarillo ⬅)</div><div id="univ-class-info" class="p-2.5 bg-teal-950/40 rounded-xl border border-teal-500/30 mt-1 text-teal-200"></div></div>
+                                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-2xl text-xs space-y-2 solution"><div class="font-bold text-teal-400 heading-font">Paso C · Interpolación: Medida = Li + [(Pos − Fi₋₁)/fi]·A</div><div class="font-mono bg-slate-900 border border-slate-800 text-teal-300 p-3 rounded-xl text-xs" id="univ-expansion-str">—</div></div>
+                                <div class="bg-amber-950/30 border border-amber-500/30 p-4 rounded-2xl"><h4 class="font-bold text-amber-300 text-xs uppercase tracking-wider heading-font">💡 Dictamen gerencial</h4><p id="univ-managerial-dictum" class="text-xs text-slate-200 mt-1 leading-relaxed"></p></div>
+                                <div class="p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                                    <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones del Paso 3 (piensa críticamente)</label>
+                                    <p class="text-[11px] text-slate-400 mt-1">Elige un percentil clave (P10, Q3 o P90), anota el valor que TÚ calculaste y explica qué decisión administrativa justifica.</p>
+                                    <textarea id="note-posicion" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PASO 4 -->
+                <section id="tab-graficos" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">Paso 4 · Mira la forma (Histograma + Ojiva)</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">Se redibujan solos con tus datos. Pregúntate: ¿dónde está la barra más alta? ¿coincide con la Moda?</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                            <div class="bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800"><h3 class="font-bold text-xs uppercase text-slate-300 tracking-wider heading-font">Histograma (fi) + marcas x̄, Me, Mo</h3><div class="chart-container mt-2"><canvas id="mainHistogramChart"></canvas></div><p id="hist-caption" class="text-[11px] text-slate-400 text-center mt-2"></p></div>
+                            <div class="bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800"><h3 class="font-bold text-xs uppercase text-slate-300 tracking-wider heading-font">Ojiva (% acumulado)</h3><div class="chart-container mt-2"><canvas id="mainOjivaChart"></canvas></div><p class="text-[11px] text-slate-400 text-center mt-2">Lee cualquier percentil: sube desde el % del eje Y hasta la curva y baja al eje X.</p></div>
+                        </div>
+                        <div class="mt-4 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                            <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones del Paso 4 (piensa críticamente)</label>
+                            <p class="text-[11px] text-slate-400 mt-1">¿Qué forma tiene la distribución? ¿La barra más alta coincide con la Moda que calculaste? ¿Qué revela la ojiva sobre la concentración de los datos?</p>
+                            <textarea id="note-graficos" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PASO 5 -->
+                <section id="tab-simulador" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                    <h2 id="sim-title" class="text-xl font-bold text-white heading-font">Paso 5 · Decide como gerente (simulador)</h2>
+                    <p id="sim-subtitle" class="text-sm text-slate-400 leading-relaxed">Mueve los percentiles y observa cuántos clientes afecta cada política. Ideal para tu Hoja de Zona.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+                            <div class="lg:col-span-5 bg-slate-950/70 p-5 rounded-2xl border border-slate-800 space-y-4">
+                                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-2"><div class="flex justify-between text-xs"><label id="sim-lbl-tasa" class="font-bold text-teal-400">Tasa preferencial</label><span id="sim-tasa-lbl" class="bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 rounded font-bold">P10</span></div><input type="range" id="sim-tasa-slider" min="5" max="25" value="10" step="5" oninput="runFullSimulation()" class="w-full accent-teal-500 cursor-pointer"></div>
+                                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-2"><div class="flex justify-between text-xs"><label id="sim-lbl-fiador" class="font-bold text-amber-400">Fiador obligatorio</label><span id="sim-fiador-lbl" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 rounded font-bold">P75</span></div><input type="range" id="sim-fiador-slider" min="60" max="85" value="75" step="5" oninput="runFullSimulation()" class="w-full accent-amber-500 cursor-pointer"></div>
+                                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-2"><div class="flex justify-between text-xs"><label id="sim-lbl-aprob" class="font-bold text-indigo-400">Aprobación especial</label><span id="sim-aprob-lbl" class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 rounded font-bold">P90</span></div><input type="range" id="sim-aprob-slider" min="85" max="95" value="90" step="1" oninput="runFullSimulation()" class="w-full accent-indigo-500 cursor-pointer"></div>
+                            </div>
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div class="bg-teal-950/40 p-4 rounded-2xl border border-teal-500/30 text-center text-teal-300"><span id="sim-card-tasa" class="text-[10px] font-bold text-teal-400 uppercase block tracking-wider heading-font">Tasa</span><div id="sim-val-tasa" class="text-lg font-black my-1 text-white heading-font">—</div><span id="sim-cnt-tasa" class="text-xs text-teal-300/80 block">—</span></div>
+                                    <div class="bg-amber-950/40 p-4 rounded-2xl border border-amber-500/30 text-center text-amber-300"><span id="sim-card-fiador" class="text-[10px] font-bold text-amber-400 uppercase block tracking-wider heading-font">Fiador</span><div id="sim-val-fiador" class="text-lg font-black my-1 text-white heading-font">—</div><span id="sim-cnt-fiador" class="text-xs text-amber-300/80 block">—</span></div>
+                                    <div class="bg-indigo-950/40 p-4 rounded-2xl border border-indigo-500/30 text-center text-indigo-300"><span id="sim-card-aprob" class="text-[10px] font-bold text-indigo-400 uppercase block tracking-wider heading-font">Gerencia</span><div id="sim-val-aprob" class="text-lg font-black my-1 text-white heading-font">—</div><span id="sim-cnt-aprob" class="text-xs text-indigo-300/80 block">—</span></div>
+                                </div>
+                                <div class="bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800"><h4 id="sim-pie-title" class="text-xs font-bold uppercase text-slate-300 mb-2 tracking-wider heading-font">Composición de cartera</h4><div class="chart-container" style="height:200px"><canvas id="simPieChart"></canvas></div></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                            <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones del Paso 5 (piensa críticamente)</label>
+                            <p class="text-[11px] text-slate-400 mt-1">Si fueras quien decide: ¿qué política cambiarías (tasa, fiador o aprobación) y qué impacto tendría en los casos? Justifica con números.</p>
+                            <textarea id="note-simulador" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TEORIA + QUIZ -->
+                <section id="tab-teoria" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">Guía académica + auto-quiz</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">Domínguez &amp; Domínguez. Fórmula madre: <code class="bg-slate-950 border border-slate-800 px-2 py-0.5 rounded font-mono text-teal-300 text-xs">Medida = Li + [(Pos − Fi₋₁)/fi]·A</code></p>
+                        <div class="grid md:grid-cols-2 gap-4 mt-4 text-xs">
+                            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-2 text-slate-300"><strong class="text-white">x̄ = ∑(fi·xi)/n</strong><br><strong class="text-indigo-400">Me = Li + [(n/2 − Fi₋₁)/fi]·A</strong><br><strong class="text-purple-400">Mo = Li + [Δ₁/(Δ₁+Δ₂)]·A</strong></div>
+                            <div class="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-2 text-slate-300"><strong class="text-teal-400">Qk: Pos=(k·n)/4</strong><br><strong class="text-teal-400">Dk: Pos=(k·n)/10</strong><br><strong class="text-teal-400">Pk: Pos=(k·n)/100</strong></div>
+                        </div>
+                        <div class="mt-4 p-5 bg-slate-950 border border-teal-500/30 rounded-2xl space-y-4">
+                            <h3 class="font-bold text-sm text-teal-400 heading-font">✅ Ponte a prueba (3 preguntas)</h3>
+                            <div class="space-y-1"><p class="text-xs font-bold text-slate-200">1. Si x̄ &gt; Me &gt; Mo, el sesgo es…</p><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q1" value="der" class="accent-teal-500 mr-1.5"> Positivo (a la derecha)</label><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q1" value="izq" class="accent-teal-500 mr-1.5"> Negativo (a la izquierda)</label></div>
+                            <div class="space-y-1"><p class="text-xs font-bold text-slate-200">2. La mediana agrupada usa la posición…</p><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q2" value="n2" class="accent-teal-500 mr-1.5"> n/2 sobre la Fi</label><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q2" value="max" class="accent-teal-500 mr-1.5"> la fi máxima</label></div>
+                            <div class="space-y-1"><p class="text-xs font-bold text-slate-200">3. Q3 equivale al percentil…</p><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q3" value="75" class="accent-teal-500 mr-1.5"> P75</label><label class="text-xs block text-slate-400 hover:text-white cursor-pointer"><input type="radio" name="q3" value="30" class="accent-teal-500 mr-1.5"> P30</label></div>
+                            <button onclick="checkQuiz()" class="bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-xl transition heading-font">Calificar</button>
+                            <p id="quiz-msg" class="text-xs font-bold text-teal-400"></p>
+                        </div>
+                        <div class="mt-4 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl">
+                            <label class="font-bold text-xs text-amber-300 uppercase tracking-wider block">✍️ Mis conclusiones de la teoría (piensa críticamente)</label>
+                            <p class="text-[11px] text-slate-400 mt-1">Explica con tus palabras: ¿cuándo usarías la mediana en lugar de la media en una decisión administrativa? Da un ejemplo.</p>
+                            <textarea id="note-teoria" rows="3" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Escribe aquí tu análisis..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HOJA DE TRABAJO / ENTREGA PDF -->
+                <section id="tab-entrega" class="tab-content space-y-4 hidden">
+                    <div class="bg-slate-900/80 p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                        <h2 class="text-xl font-bold text-white heading-font">📝 Hoja de trabajo · Revisa y genera tu PDF</h2>
+                        <p class="text-sm text-slate-400 leading-relaxed">Verifica que todo esté completo. El PDF incluye tu ficha, tu enunciado, el dataset usado, <strong>tus cálculos</strong>, tus conclusiones por paso y tu conclusión general. Solo se puede generar con el <strong>modo examen activado</strong>.</p>
+                        <div class="mt-4 p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs space-y-1.5 text-slate-300">
+                            <h3 class="font-bold text-sm text-teal-400 heading-font">👤 Ficha (de la pestaña 0)</h3>
+                            <p><strong class="text-slate-200">Nombre:</strong> <span id="pv-nombre" class="text-slate-400">—</span> · <strong class="text-slate-200">Carnet:</strong> <span id="pv-carnet" class="text-slate-400">—</span></p>
+                            <p><strong class="text-slate-200">Enunciado:</strong> <span id="pv-enunciado" class="text-slate-400">—</span></p>
+                            <p><strong class="text-slate-200">Dataset:</strong> <span id="pv-dataset" class="text-slate-400">—</span></p>
+                        </div>
+                        <div class="mt-3 p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs space-y-2 text-slate-300">
+                            <h3 class="font-bold text-sm text-teal-400 heading-font">🧮 Tus cálculos finales (resuélvelos tú, sin mirar soluciones)</h3>
+                            <div class="grid sm:grid-cols-2 gap-2.5">
+                                <div><label class="font-bold text-slate-400 block mb-0.5">Media (x̄)</label><input id="final-media" oninput="renderEntregaPreview()" class="practice-input" placeholder="Tu x̄"></div>
+                                <div><label class="font-bold text-slate-400 block mb-0.5">Mediana (Me)</label><input id="final-mediana" oninput="renderEntregaPreview()" class="practice-input" placeholder="Tu Me"></div>
+                                <div><label class="font-bold text-slate-400 block mb-0.5">Moda (Mo)</label><input id="final-moda" oninput="renderEntregaPreview()" class="practice-input" placeholder="Tu Mo"></div>
+                                <div><label class="font-bold text-slate-400 block mb-0.5">Cuartil 3 (Q3)</label><input id="final-q3" oninput="renderEntregaPreview()" class="practice-input" placeholder="Tu Q3"></div>
+                                <div><label class="font-bold text-slate-400 block mb-0.5">Percentil 90 (P90)</label><input id="final-p90" oninput="renderEntregaPreview()" class="practice-input" placeholder="Tu P90"></div>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-4 sm:p-5 bg-amber-950/20 border-2 border-dashed border-amber-500/40 rounded-2xl text-xs">
+                            <label class="font-bold text-amber-300 uppercase tracking-wider block">✍️ Conclusiones generales (cierre analítico) *</label>
+                            <p class="text-[11px] text-slate-400 mt-1">Sintetiza: ¿qué encontraste en los datos, qué decisiones recomiendas y por qué? Mínimo 3 líneas.</p>
+                            <textarea id="note-general" rows="4" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl p-3 text-xs text-slate-100 focus:border-amber-400 focus:outline-none mt-2" placeholder="Mis conclusiones generales son..."></textarea>
+                        </div>
+                        <div class="mt-3 p-4 sm:p-5 bg-slate-950 border border-slate-800 rounded-2xl text-xs space-y-3">
+                            <h3 class="font-bold text-sm text-teal-400 heading-font">📋 Lista de verificación</h3>
+                            <ul id="checklist" class="space-y-1 text-slate-300"></ul>
+                            <button id="btn-pdf" onclick="generatePDF()" disabled class="mt-2 w-full font-bold px-4 py-3 rounded-xl text-sm bg-slate-800 border border-slate-700 text-slate-500 cursor-not-allowed transition heading-font">🔒 Activa el modo examen para generar el PDF</button>
+                            <p id="pdf-msg" class="text-[11px] text-slate-400"></p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Plataforma de apoyo docente diseñada por <strong class="text-teal-400 font-bold">Ruldin Ayala</strong>, catedrático | Exclusivamente para el curso de **Estadística I**.<br>
+                Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).
+            </p>
+            <p class="text-[10px] text-slate-600">
+                &copy; 2026 UMG Administración de Empresas • Semana 9: Tendencia Central y Posición para Datos Agrupados.
+            </p>
+        </div>
+    </footer>
+
+<script>
+let dataset = [], totalN = 0, lastPosClassId = null;
+let mainHistogramChart=null, mainOjivaChart=null, simPieChart=null;
+let univType='P', univK=90;
+let stats = {mean:0, median:0, mode:0, medianClass:null, modalClass:null};
+const DEFAULT_CSV = "1000,2000,5\n2000,3000,12\n3000,4000,18\n4000,5000,10\n5000,6000,5";
+/* ===== Sistema de unidades + contexto ===== */
+const UNITS = {
+    Q:    { prefix:"Q ", suffix:"",    variable:"monto",   sujeto:"créditos" },
+    "$":   { prefix:"US$ ", suffix:"",   variable:"ingreso", sujeto:"ventas" },
+    pts:  { prefix:"", suffix:" pts",  variable:"nota",    sujeto:"estudiantes" },
+    min:  { prefix:"", suffix:" min",  variable:"tiempo",  sujeto:"atenciones" },
+    h:    { prefix:"", suffix:" h",    variable:"tiempo",  sujeto:"casos" },
+    anios:{ prefix:"", suffix:" años", variable:"edad",    sujeto:"personas" },
+    kg:   { prefix:"", suffix:" kg",   variable:"peso",    sujeto:"casos" },
+    cm:   { prefix:"", suffix:" cm",   variable:"estatura",sujeto:"personas" },
+    und:  { prefix:"", suffix:" und",  variable:"valor",   sujeto:"casos" }
+};
+const CTXS = {
+    creditos:{ titulo:"montos de crédito (clientes)", rol:"gerencial", simTitulo:"Paso 5 · Decide como gerente (simulador)", simSub:"Mueve los percentiles y observa cuántos clientes afecta cada política. Ideal para tu Hoja de Zona.", tasa:"Tasa preferencial", fiador:"Fiador obligatorio", aprob:"Aprobación especial", pie:"Composición de cartera", dict:"El <strong>PCT%</strong> de los CRÉDITOS es ≤ <strong>VAL</strong> y el <strong>REST%</strong> lo supera." },
+    ventas:{ titulo:"ingresos por venta", rol:"gerencial", simTitulo:"Paso 5 · Decide como gerente (simulador)", simSub:"Mueve los percentiles y observa cuántas ventas cae en cada tramo.", tasa:"Descuento estímulo", fiador:"Revisión comercial", aprob:"Cuenta clave", pie:"Composición de ventas", dict:"El <strong>PCT%</strong> de las VENTAS es ≤ <strong>VAL</strong> y el <strong>REST%</strong> lo supera." },
+    notas:{ titulo:"notas de examen (estudiantes)", rol:"docente", simTitulo:"Paso 5 · Decide como docente (simulador)", simSub:"Mueve los percentiles y observa cuántos estudiantes cae en cada grupo.", tasa:"Refuerzo académico", fiador:"Tutoría", aprob:"Excelencia", pie:"Composición del grupo", dict:"El <strong>PCT%</strong> de los ESTUDIANTES tiene nota ≤ <strong>VAL</strong> y el <strong>REST%</strong> la supera." },
+    tiempos:{ titulo:"tiempos de atención (operaciones)", rol:"operativo", simTitulo:"Paso 5 · Decide como supervisor (simulador)", simSub:"Mueve los percentiles y observa cuántas atenciones cae en cada nivel.", tasa:"Atención prioritaria", fiador:"Supervisión", aprob:"Caso crítico", pie:"Composición de atenciones", dict:"El <strong>PCT%</strong> de las ATENCIONES dura ≤ <strong>VAL</strong> y el <strong>REST%</strong> tarda más." },
+    general:{ titulo:"valores observados", rol:"general", simTitulo:"Paso 5 · Simulador de percentiles", simSub:"Mueve los percentiles y observa cuántos casos cae en cada tramo.", tasa:"Tramo inferior", fiador:"Tramo medio-alto", aprob:"Tramo superior", pie:"Composición de casos", dict:"El <strong>PCT%</strong> de los casos es ≤ <strong>VAL</strong> y el <strong>REST%</strong> lo supera." }
+};
+let unitKey = 'Q', ctxKey = 'creditos';
+const U = () => UNITS[unitKey];
+function fmtV(v){ const n = Number(v).toLocaleString('es-GT',{minimumFractionDigits:2, maximumFractionDigits:2}); return U().prefix + n + U().suffix; }
+function fmtN(v){ return Number(v).toLocaleString('es-GT'); }
+function rangeL(a,b){ return U().prefix + fmtN(a) + U().suffix + " - " + U().prefix + fmtN(b) + U().suffix; }
+function rangeS(a,b){ const p=U().prefix,s=U().suffix; return p+fmtN(a)+s+"–"+p+fmtN(b)+s; }
+function ctxDictum(pct,val){ return CTXS[ctxKey].dict.replace(/CRÉDITOS|VENTAS|ESTUDIANTES|ATENCIONES/, U().sujeto).replace("PCT",pct).replace("REST",(100-pct)).replace("VAL",val); }
+function refreshContextUI(){
+    const c = CTXS[ctxKey];
+    document.getElementById('context-label').textContent = "Contexto: " + c.titulo + " — lenguaje " + c.rol + ".";
+    document.getElementById('sim-title').textContent = c.simTitulo;
+    document.getElementById('sim-subtitle').textContent = c.simSub;
+    document.getElementById('sim-lbl-tasa').textContent = c.tasa;
+    document.getElementById('sim-lbl-fiador').textContent = c.fiador;
+    document.getElementById('sim-lbl-aprob').textContent = c.aprob;
+    document.getElementById('sim-card-tasa').textContent = c.tasa;
+    document.getElementById('sim-card-fiador').textContent = c.fiador;
+    document.getElementById('sim-card-aprob').textContent = c.aprob;
+    document.getElementById('sim-pie-title').textContent = c.pie;
+}
+function onUnitChange(){
+    unitKey = document.getElementById('unit-select').value;
+    ctxKey = (unitKey==='Q') ? 'creditos' : (unitKey==='$') ? 'ventas' : (unitKey==='pts') ? 'notas' : (unitKey==='min'||unitKey==='h') ? 'tiempos' : 'general';
+    refreshContextUI(); renderAll();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    refreshContextUI();
+    buildFromCsv(DEFAULT_CSV);
+    document.getElementById('csv-input').value = DEFAULT_CSV;
+    updatePdfGate();
+});
+
+function parseCsv(text){
+    const rows = text.trim().split(/\n+/).map(l=>l.trim()).filter(Boolean);
+    const out = [];
+    for(const l of rows){
+        const p = l.split(/[;,\t ]+/).map(s=>s.trim()).filter(s=>s!=='');
+        if(p.length < 3) throw new Error("Cada línea debe tener: min,max,fi → " + l);
+        const mn=parseFloat(p[0]), mx=parseFloat(p[1]), f=parseFloat(p[2]);
+        if([mn,mx,f].some(isNaN) || mx<=mn || f<=0) throw new Error("Línea inválida: " + l);
+        out.push({min:mn, max:mx, f:Math.round(f)});
+    }
+    out.sort((a,b)=>a.min-b.min);
+    return out;
+}
+function buildFromClasses(classes){
+    let F=0;
+    dataset = classes.map((c,i)=>{ F+=c.f; return {id:i+1, min:c.min, max:c.max, x_i:(c.min+c.max)/2, f:c.f, F}; });
+    totalN = F;
+    computeStats(); renderAll();
+}
+function buildFromCsv(text){
+    try{ buildFromClasses(parseCsv(text)); setMsg('loader-msg',"✔ Dataset aplicado: n = "+totalN, true); }
+    catch(e){ setMsg('loader-msg',"⚠ "+e.message, false); }
+}
+function setUnitAndCtx(unit,ctx){ unitKey=unit; ctxKey=ctx; document.getElementById('unit-select').value=unit; refreshContextUI(); }
+function applyCsvDataset(){ buildFromCsv(document.getElementById('csv-input').value); }
+function resetDataset(){ document.getElementById('csv-input').value = DEFAULT_CSV; document.getElementById('case-name-label').textContent='Cooperativa "El Ahorro Pinulteco"'; setUnitAndCtx('Q','creditos'); buildFromCsv(DEFAULT_CSV); }
+function loadCsvFile(ev){
+    const f = ev.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = e => { document.getElementById('csv-input').value = e.target.result; buildFromCsv(e.target.result); };
+    r.readAsText(f);
+}
+function applyRawDataset(){
+    const txt = document.getElementById('raw-input').value.trim();
+    const nums = txt.split(/[,;\s\n]+/).map(Number).filter(v=>!isNaN(v));
+    if(nums.length < 5){ setMsg('loader-msg',"⚠ Pega al menos 5 números.", false); return; }
+    let k = parseInt(document.getElementById('num-classes').value)||5;
+    const mn=Math.min(...nums), mx=Math.max(...nums);
+    let A=(mx-mn)/k; if(A===0) A=1;
+    const classes=[];
+    for(let i=0;i<k;i++){ const lo=mn+i*A, hi=(i===k-1)?mx+0.001:mn+(i+1)*A; const f=nums.filter(v=>v>=lo&&v<hi).length; classes.push({min:Math.round(lo*100)/100, max:Math.round((i===k-1?mx:hi)*100)/100, f:Math.max(f,0)}); }
+    if(classes.some(c=>c.f===0)){ setMsg('loader-msg',"⚠ Algunas clases quedaron vacías; prueba con menos clases.", false); }
+    document.getElementById('case-name-label').textContent = "Mi dataset personalizado (n="+nums.length+", "+U().suffix.trim()+" " + U().variable + " de " + U().sujeto + ")";
+    buildFromClasses(classes.filter(c=>c.f>0));
+    document.getElementById('csv-input').value = dataset.map(d=>d.min+","+d.max+","+d.f).join("\n");
+}
+function loadExample(kind){
+    if(kind==='sueldos'){ setUnitAndCtx('Q','creditos'); document.getElementById('csv-input').value="2500,3500,8\n3500,4500,15\n4500,5500,20\n5500,6500,9\n6500,7500,4"; document.getElementById('case-name-label').textContent="Ejemplo: Sueldos mensuales del personal (Q)"; }
+    if(kind==='notas'){ setUnitAndCtx('pts','notas'); document.getElementById('raw-input').value="2\n6\n1\n1\n10\n4\n10\n2\n10\n4\n2\n4\n9\n7\n4\n8\n9\n2\n8\n1\n1\n8\n8\n9\n9\n9\n5\n10\n9\n2"; document.getElementById('num-classes').value=5; setLoaderMode('crudos'); applyRawDataset(); document.getElementById('case-name-label').textContent="Ejemplo: Notas de examen (n=30, escala 1–10 pts)"; return; }
+    if(kind==='tiempos'){ setUnitAndCtx('min','tiempos'); document.getElementById('csv-input').value="5,10,6\n10,15,14\n15,20,18\n20,25,8\n25,30,4"; document.getElementById('case-name-label').textContent="Ejemplo: Tiempos de atención en caja (min)"; }
+    setLoaderMode('agrup'); applyCsvDataset();
+}
+function setLoaderMode(m){
+    const a = m==='agrup';
+    document.getElementById('loader-agrup').classList.toggle('hidden',!a);
+    document.getElementById('loader-crudos').classList.toggle('hidden',a);
+    document.getElementById('lm-agrup').className = "flex-1 px-3 py-2 rounded-xl font-bold transition " + (a ? "bg-teal-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:bg-slate-750 border border-slate-700");
+    document.getElementById('lm-crudos').className = "flex-1 px-3 py-2 rounded-xl font-bold transition " + (!a ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-750 border border-slate-700");
+}
+function setMsg(id,txt,ok){ const e=document.getElementById(id); e.textContent=txt; e.className="text-[11px] font-medium "+(ok?"text-teal-400":"text-red-400"); }
+
+function computeStats(){
+    const sumFX = dataset.reduce((s,d)=>s+d.f*d.x_i,0);
+    stats.mean = sumFX/totalN;
+    const posM = totalN/2;
+    const medC = dataset.find(c=>c.F>=posM) || dataset[dataset.length-1];
+    const prevM = medC.id===1?0:dataset[medC.id-2].F;
+    const Am = medC.max-medC.min;
+    stats.median = medC.min + ((posM-prevM)/medC.f)*Am;
+    stats.medianClass = medC; stats.medianAux={posM,prevM,Am};
+    const modal = dataset.reduce((a,b)=>b.f>a.f?b:a);
+    const fPrev = modal.id>1?dataset[modal.id-2].f:0;
+    const fNext = modal.id<dataset.length?dataset[modal.id].f:0;
+    const d1 = modal.f-fPrev, d2 = modal.f-fNext, Amo = modal.max-modal.min;
+    stats.mode = (d1+d2===0)? modal.min+Amo/2 : modal.min + (d1/(d1+d2))*Amo;
+    stats.modalClass = modal; stats.modeAux={d1,d2,fPrev,fNext,Amo};
+    stats.sumFX = sumFX;
+}
+function computePosition(type,k){
+    const div = type==='Q'?4:type==='D'?10:100;
+    const pos = (k*totalN)/div;
+    let tc = dataset.find(c=>c.F>=pos) || dataset[dataset.length-1];
+    const prevF = tc.id===1?0:dataset[tc.id-2].F;
+    const A = tc.max-tc.min;
+    return {type,k,divisor:div,pos,targetClass:tc,prevF,f_i:tc.f,L_i:tc.min,A,value:tc.min+((pos-prevF)/tc.f)*A};
+}
+
+function renderAll(){ renderSourceTable(); renderFullTable(); renderKPIs(); renderTrendTutorial(); calculateUniversalPosition(); initCharts(); runFullSimulation(); }
+
+function renderSourceTable(){
+    const tb=document.getElementById('source-table-body'); tb.innerHTML='';
+    dataset.forEach(r=>{
+        const tr=document.createElement('tr');
+        let cls="hover:bg-slate-900/50 border-b border-slate-850 ";
+        if(stats.medianClass&&r.id===stats.medianClass.id) cls+="row-highlight-median ";
+        if(stats.modalClass&&r.id===stats.modalClass.id) cls+="row-highlight-modal ";
+        if(lastPosClassId&&r.id===lastPosClassId) cls+="row-highlight-pos ";
+        tr.className=cls;
+        tr.innerHTML='<td class="px-2 py-2 text-center font-bold text-slate-400">'+r.id+'</td><td class="px-2 py-2 font-semibold text-slate-200">'+rangeL(r.min,r.max)+'</td><td class="px-2 py-2 text-center font-mono text-slate-300">'+fmtN(r.x_i)+U().suffix+'</td><td class="px-2 py-2 text-center font-bold text-slate-100">'+r.f+'</td><td class="px-2 py-2 text-center font-bold text-teal-400">'+r.F+'</td>';
+        tb.appendChild(tr);
+    });
+    document.getElementById('source-sum-f').textContent=totalN;
+    document.getElementById('badge-n').textContent="n = "+totalN;
+    document.getElementById('source-formula-hint').textContent="∑(fi·xi) = "+U().prefix+fmtN(stats.sumFX)+U().suffix+" → x̄ = "+fmtN(stats.sumFX)+" / "+totalN+" = "+stats.mean.toFixed(2)+U().suffix;
+    const A0=dataset[0].max-dataset[0].min;
+    const sameA = dataset.every(d=>(d.max-d.min)===A0);
+    document.getElementById('amplitud-label').textContent = sameA?("A = "+U().prefix+fmtN(A0)+U().suffix):"A = variable por clase";
+    document.getElementById('legend-mediana').textContent="Me → Clase "+stats.medianClass.id;
+    document.getElementById('legend-moda').textContent="Mo → Clase "+stats.modalClass.id;
+    document.getElementById('legend-pos').textContent="Pos → Clase "+(lastPosClassId||"—");
+}
+function renderFullTable(){
+    const tb=document.getElementById('full-frequency-table-body'); tb.innerHTML='';
+    dataset.forEach(r=>{
+        const tr=document.createElement('tr'); tr.className="hover:bg-slate-900/50 border-b border-slate-850";
+        tr.innerHTML='<td class="px-3 py-2 text-center font-bold text-slate-400">'+r.id+'</td><td class="px-3 py-2 font-semibold text-slate-200">'+rangeL(r.min,r.max)+'</td><td class="px-3 py-2 text-center font-mono text-slate-300">'+fmtN(r.x_i)+U().suffix+'</td><td class="px-3 py-2 text-center font-bold text-slate-100">'+r.f+'</td><td class="px-3 py-2 text-center font-mono text-indigo-400">'+U().prefix+fmtN(r.f*r.x_i)+U().suffix+'</td><td class="px-3 py-2 text-center font-bold text-teal-400">'+r.F+'</td><td class="px-3 py-2 text-center text-slate-400">'+((r.F/totalN)*100).toFixed(1)+'%</td>';
+        tb.appendChild(tr);
+    });
+    document.getElementById('full-sum-f').textContent=totalN;
+    document.getElementById('full-sum-fx').textContent=U().prefix+fmtN(stats.sumFX)+U().suffix;
+}
+function renderKPIs(){
+    document.getElementById('kpi-media').textContent=fmtV(stats.mean);
+    document.getElementById('kpi-mediana').textContent=fmtV(stats.median);
+    document.getElementById('kpi-moda').textContent=fmtV(stats.mode);
+    document.getElementById('kpi-q3').textContent=fmtV(computePosition('Q',3).value);
+    document.getElementById('kpi-p90').textContent=fmtV(computePosition('P',90).value);
+}
+function renderTrendTutorial(){
+    const m=stats.medianAux, mo=stats.modeAux, mc=stats.medianClass, mdc=stats.modalClass;
+    document.getElementById('media-steps').innerHTML="x̄ = ∑(fi·xi) / n<br><strong class='text-teal-400'>x̄ = "+fmtN(stats.sumFX)+U().suffix+" / "+totalN+" = "+fmtV(stats.mean)+"</strong>";
+    document.getElementById('media-note').innerHTML="<strong>Idea:</strong> reparte el total ("+U().prefix+fmtN(stats.sumFX)+U().suffix+") entre los "+totalN+" "+U().sujeto+".";
+    document.getElementById('mediana-steps').innerHTML="<div class='bg-indigo-600 text-white font-bold p-1.5 rounded-lg text-center mb-1'>Me = L<sub>i</sub> + [ (n/2 − F<sub>i₋₁</sub>) / f<sub>i</sub> ] · A</div>n/2 = "+totalN+"/2 = <strong>"+m.posM.toFixed(1)+"</strong> → F<sub>i</sub> ≥ "+m.posM.toFixed(1)+" es la <strong>Clase "+mc.id+" ("+rangeS(mc.min,mc.max)+")</strong><br>Me = "+fmtN(mc.min)+" + [("+m.posM.toFixed(1)+" − "+m.prevM+")/"+mc.f+"]·"+fmtN(m.Am)+U().suffix+"<br><strong class='text-indigo-400'>Me = "+fmtV(stats.median)+"</strong>";
+    document.getElementById('mediana-note').innerHTML="<strong>GPS:</strong> la Fi de la tabla izquierda te dice la clase. Li="+fmtN(mc.min)+U().suffix+", Fi₋₁="+m.prevM+", fi="+mc.f+".";
+    document.getElementById('moda-steps').innerHTML="<div class='bg-purple-600 text-white font-bold p-1.5 rounded-lg text-center mb-1'>Mo = L<sub>i</sub> + [ Δ₁ / (Δ₁ + Δ₂) ] · A</div>Clase modal = <strong>Clase "+mdc.id+" (f="+mdc.f+")</strong><br>Δ₁ = f<sub>modal</sub> − f<sub>ant</sub> = "+mdc.f+" − "+mo.fPrev+" = "+mo.d1+" ; Δ₂ = f<sub>modal</sub> − f<sub>sig</sub> = "+mdc.f+" − "+mo.fNext+" = "+mo.d2+"<br>Mo = "+fmtN(mdc.min)+" + ["+mo.d1+"/("+mo.d1+"+"+mo.d2+")]·"+fmtN(mo.Amo)+U().suffix+"<br><strong class='text-purple-400'>Mo = "+fmtV(stats.mode)+"</strong>";
+    document.getElementById('moda-note').innerHTML="<strong>Truco:</strong> la moda siempre cae dentro de la barra más alta del histograma.";
+    const box=document.getElementById('skew-box');
+    box.textContent="Mo ("+fmtV(stats.mode)+")  vs  Me ("+fmtV(stats.median)+")  vs  x̄ ("+fmtV(stats.mean)+")";
+    let t="";
+    if(Math.abs(stats.mean-stats.median)<0.01) t="Distribución aprox. simétrica: media ≈ mediana. No hay arrastre de extremos.";
+    else if(stats.mean>stats.median) t="Sesgo positivo (a la derecha): x̄ > Me. Hay "+U().sujeto+" con "+U().variable+" alto que jalan el promedio. Revisa esos casos atípicos.";
+    else t="Sesgo negativo (a la izquierda): x̄ < Me. Hay "+U().sujeto+" con "+U().variable+" bajo que jalan el promedio.";
+    document.getElementById('skew-text').textContent=t;
+    document.getElementById('hist-caption').textContent="La clase "+mdc.id+" concentra "+mdc.f+" casos (la barra más alta).";
+}
+
+/* Tabs + exam mode */
+function switchTab(id){
+    document.querySelectorAll('.tab-content').forEach(e=>e.classList.add('hidden'));
+    document.querySelectorAll('.nav-btn').forEach(b=>{
+        b.classList.remove('active-tab');
+        b.classList.add('text-slate-400');
+    });
+    document.getElementById(id).classList.remove('hidden');
+    const btn=document.getElementById('btn-'+id);
+    if(btn){
+        btn.classList.add('active-tab');
+        btn.classList.remove('text-slate-400');
+    }
+    setTimeout(()=>{ if(mainHistogramChart)mainHistogramChart.resize(); if(mainOjivaChart)mainOjivaChart.resize(); if(simPieChart)simPieChart.resize(); },80);
+    if(id==='tab-entrega'){ renderEntregaPreview(); }
+}
+function toggleExamMode(){
+    const on=document.getElementById('exam-mode').checked;
+    document.querySelectorAll('.solution').forEach(e=>e.classList.toggle('blur-solution',on));
+}
+function reveal(){ document.getElementById('exam-mode').checked=false; toggleExamMode(); updatePdfGate(); }
+
+/* Prácticas con tolerancia */
+function num(v){ const n=parseFloat(String(v).replace(/[^0-9.\-]/g,'')); return isNaN(n)?null:n; }
+function close(a,b,tol){ return Math.abs(a-b) <= tol; }
+function checkMedia(){
+    const v=num(document.getElementById('in-media').value), e=document.getElementById('msg-media');
+    if(v===null){e.innerHTML='<span class="err-msg">Escribe un número.</span>';return;}
+    e.innerHTML = close(v,stats.mean,Math.max(1,stats.mean*0.01))?'<span class="ok-msg">✔ Correcto: '+fmtV(stats.mean)+'.</span>':'<span class="err-msg">✘ Revisa: ∑(fi·xi)='+fmtN(stats.sumFX)+U().suffix+' ÷ n='+totalN+'.</span>';
+}
+function checkMediana(){
+    const p=num(document.getElementById('in-me-pos').value), li=num(document.getElementById('in-me-li').value), me=num(document.getElementById('in-mediana').value);
+    const e=document.getElementById('msg-mediana'); let out=[];
+    out.push(p!==null&&close(p,stats.medianAux.posM,0.51)?"✔ n/2 bien.":"✘ n/2 = "+stats.medianAux.posM.toFixed(1)+".");
+    out.push(li!==null&&close(li,stats.medianClass.min,0.01)?"✔ Li bien.":"✘ Li = "+stats.medianClass.min+".");
+    out.push(me!==null&&close(me,stats.median,Math.max(1,stats.median*0.01))?"✔ Me = "+fmtV(stats.median)+".":"✘ Revisa la sustitución (mira el Paso C de la tarjeta).");
+    e.innerHTML=out.join("<br>");
+}
+function checkModa(){
+    const d1=num(document.getElementById('in-d1').value), d2=num(document.getElementById('in-d2').value), mo=num(document.getElementById('in-moda').value);
+    const e=document.getElementById('msg-moda');
+    e.innerHTML=(d1!==null&&close(d1,stats.modeAux.d1,0.51)?"✔ Δ₁ bien. ":"✘ Δ₁="+stats.modeAux.d1+". ")+(d2!==null&&close(d2,stats.modeAux.d2,0.51)?"✔ Δ₂ bien. ":"✘ Δ₂="+stats.modeAux.d2+". ")+(mo!==null&&close(mo,stats.mode,Math.max(1,stats.mode*0.01))?"✔ Mo="+fmtV(stats.mode)+".":"✘ Sustituye Δ₁/(Δ₁+Δ₂).");
+}
+
+/* Posición universal */
+function setPreset(t,k){ univType=t; univK=k; document.getElementById('univ-type-select').value=t; updateLimits(); document.getElementById('univ-k-slider').value=k; calculateUniversalPosition(); }
+function onUnivTypeChange(){ univType=document.getElementById('univ-type-select').value; updateLimits(); univK=1; document.getElementById('univ-k-slider').value=1; calculateUniversalPosition(); }
+function updateLimits(){ const s=document.getElementById('univ-k-slider'); if(univType==='Q'){s.min=1;s.max=3;} else if(univType==='D'){s.min=1;s.max=9;} else{s.min=1;s.max=99;} }
+function onUnivSliderInput(v){ univK=parseInt(v); calculateUniversalPosition(); }
+function calculateUniversalPosition(){
+    const r=computePosition(univType,univK);
+    lastPosClassId=r.targetClass.id; renderSourceTable();
+    document.getElementById('univ-k-display').textContent="k = "+r.k;
+    const label = r.type==='Q'?("Cuartil "+r.k+" (Q"+r.k+")"):r.type==='D'?("Decil "+r.k+" (D"+r.k+")"):("Percentil "+r.k+" (P"+r.k+")");
+    document.getElementById('univ-result-label').textContent=label;
+    document.getElementById('univ-result-val').textContent=fmtV(r.value);
+    document.getElementById('univ-pos-formula').textContent="Pos = (k·n)/"+r.divisor;
+    document.getElementById('univ-pos-eval').textContent="Pos = ("+r.k+"·"+totalN+")/"+r.divisor+" = "+r.pos.toFixed(1);
+    document.getElementById('univ-class-info').innerHTML="📌 <strong>Clase "+r.targetClass.id+" ("+rangeL(r.targetClass.min,r.targetClass.max)+"):</strong> su Fi="+r.targetClass.F+" es la primera que alcanza Pos="+r.pos.toFixed(1)+". Li="+fmtN(r.L_i)+", Fi₋₁="+r.prevF+", fi="+r.f_i+", A="+fmtN(r.A)+U().suffix+".";
+    document.getElementById('univ-expansion-str').textContent=label+" = "+fmtN(r.L_i)+" + [("+r.pos.toFixed(1)+" − "+r.prevF+")/"+r.f_i+"]·"+fmtN(r.A)+" = "+fmtV(r.value);
+    let pct=r.k; if(r.type==='Q')pct=r.k*25; if(r.type==='D')pct=r.k*10;
+    document.getElementById('univ-managerial-dictum').innerHTML=ctxDictum(pct,fmtV(r.value));
+    document.getElementById('legend-pos').textContent="Pos → Clase "+r.targetClass.id;
+    window._lastPos=r;
+}
+function checkPos(){
+    const v=num(document.getElementById('in-pos').value), e=document.getElementById('msg-pos');
+    if(!window._lastPos||v===null){e.innerHTML='<span class="err-msg">Escribe tu Pos.</span>';return;}
+    e.innerHTML=close(v,window._lastPos.pos,0.51)?'<span class="ok-msg">✔ Correcto: Pos='+window._lastPos.pos.toFixed(1)+'.</span>':'<span class="err-msg">✘ Recuerda: Pos=(k·n)/divisor = '+window._lastPos.pos.toFixed(1)+'.</span>';
+}
+
+/* Charts */
+function initCharts(){
+    if(mainHistogramChart)mainHistogramChart.destroy();
+    if(mainOjivaChart)mainOjivaChart.destroy();
+    const modalId=stats.modalClass.id;
+    mainHistogramChart=new Chart(document.getElementById('mainHistogramChart'),{
+        type:'bar',
+        data:{
+            labels:dataset.map(d=>rangeS(d.min,d.max)),
+            datasets:[{
+                label:U().sujeto+' (fi)',
+                data:dataset.map(d=>d.f),
+                backgroundColor:dataset.map(d=>d.id===modalId?'rgba(20,184,166,0.85)':'rgba(51,65,85,0.75)'),
+                borderColor:dataset.map(d=>d.id===modalId?'#14b8a6':'#64748b'),
+                borderWidth:1.5,
+                borderRadius:6
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{display:false},
+                tooltip:{callbacks:{afterBody:(c)=>{const d=dataset[c[0].dataIndex];return "xi="+d.x_i+" · Fi="+d.F;}}}
+            },
+            scales:{
+                x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},
+                y:{beginAtZero:true,ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}
+            }
+        }
+    });
+    const bounds=[dataset[0].min,...dataset.map(d=>d.max)];
+    const cum=[0,...dataset.map(d=>+(d.F/totalN*100).toFixed(1))];
+    mainOjivaChart=new Chart(document.getElementById('mainOjivaChart'),{
+        type:'line',
+        data:{
+            labels:bounds.map(b=>U().prefix+fmtN(Number(b))+U().suffix),
+            datasets:[{
+                label:'% acumulado',
+                data:cum,
+                borderColor:'#14b8a6',
+                backgroundColor:'rgba(20,184,166,0.18)',
+                pointBackgroundColor:'#14b8a6',
+                pointBorderColor:'#0b0f19',
+                fill:true,
+                tension:0.25,
+                pointRadius:5
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            scales:{
+                x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},
+                y:{max:100,ticks:{color:'#94a3b8',callback:v=>v+'%'},grid:{color:'rgba(51,65,85,0.3)'}}
+            }
+        }
+    });
+}
+function runFullSimulation(){
+    const tk=parseInt(document.getElementById('sim-tasa-slider').value), fk=parseInt(document.getElementById('sim-fiador-slider').value), ak=parseInt(document.getElementById('sim-aprob-slider').value);
+    const tr=computePosition('P',tk), fr=computePosition('P',fk), ar=computePosition('P',ak);
+    document.getElementById('sim-tasa-lbl').textContent="P"+tk; document.getElementById('sim-fiador-lbl').textContent="P"+fk; document.getElementById('sim-aprob-lbl').textContent="P"+ak;
+    document.getElementById('sim-val-tasa').textContent=fmtV(tr.value); document.getElementById('sim-val-fiador').textContent=fmtV(fr.value); document.getElementById('sim-val-aprob').textContent=fmtV(ar.value);
+    const cT=Math.round(tk/100*totalN), cA=Math.round((100-ak)/100*totalN), cF=Math.max(0,Math.round((ak-fk)/100*totalN)), cE=Math.max(0,totalN-cT-cF-cA);
+    document.getElementById('sim-cnt-tasa').textContent=cT+" "+U().sujeto+" ("+tk+"%)";
+    document.getElementById('sim-cnt-fiador').textContent=cF+" "+U().sujeto+" ("+(ak-fk)+"%)";
+    document.getElementById('sim-cnt-aprob').textContent=cA+" "+U().sujeto+" ("+(100-ak)+"%)";
+    if(simPieChart)simPieChart.destroy();
+    const sc=CTXS[ctxKey];
+    simPieChart=new Chart(document.getElementById('simPieChart'),{
+        type:'doughnut',
+        data:{
+            labels:[sc.tasa,'Intermedio',sc.fiador,sc.aprob],
+            datasets:[{data:[cT,cE,cF,cA],backgroundColor:['#14b8a6','#475569','#f59e0b','#6366f1'],borderColor:'#0b0f19',borderWidth:2}]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{
+                    position:'bottom',
+                    labels:{color:'#cbd5e1',boxWidth:12,font:{size:11}}
+                }
+            }
+        }
+    });
+}
+function checkQuiz(){
+    const g=n=>{const e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:null;};
+    let s=0; if(g('q1')==='der')s++; if(g('q2')==='n2')s++; if(g('q3')==='75')s++;
+    document.getElementById('quiz-msg').textContent=s+"/3 — "+(s===3?"¡Excelente! Lista tu hoja de zona.":s===2?"Bien, repasa la que fallaste.":"Relee la pestaña 2 y la fórmula madre.");
+}
+
+/* ===== Hoja de trabajo: compuerta, vista previa y PDF ===== */
+const NOTE_IDS = [['note-caso','Paso 1 · Datos'],['note-tendencia','Paso 2 · Tendencia central'],['note-posicion','Paso 3 · Posición'],['note-graficos','Paso 4 · Gráficos'],['note-simulador','Paso 5 · Decisión'],['note-teoria','Teoría']];
+const val = id => (document.getElementById(id).value||'').trim();
+
+function updatePdfGate(){
+    const on = document.getElementById('exam-mode').checked;
+    const btn = document.getElementById('btn-pdf');
+    btn.disabled = !on;
+    btn.className = "mt-2 w-full font-bold px-4 py-3 rounded-xl text-sm transition heading-font " + (on ? "bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-slate-950 font-extrabold shadow-lg shadow-teal-500/20 cursor-pointer" : "bg-slate-800 border border-slate-700 text-slate-500 cursor-not-allowed");
+    btn.textContent = on ? "📄 Generar mi hoja de trabajo (PDF)" : "🔒 Activa el modo examen para generar el PDF";
+    renderEntregaPreview();
+}
+function worksheetStatus(){
+    return [
+        ['Nombre del estudiante', val('stu-nombre').length>1],
+        ['Carnet', val('stu-carnet').length>1],
+        ['Enunciado del problema', val('stu-enunciado').length>20],
+        ['Mi media (x̄) en el Paso 2', val('in-media')!==''],
+        ['Mi mediana (Me) en el Paso 2', val('in-mediana')!==''],
+        ['Mi moda (Mo) en el Paso 2', val('in-moda')!==''],
+        ['Cálculos finales (5 valores)', ['final-media','final-mediana','final-moda','final-q3','final-p90'].every(i=>val(i)!=='')],
+        ['Conclusiones por paso (6)', NOTE_IDS.every(([i])=>val(i).length>0)],
+        ['Conclusiones generales', val('note-general').length>30]
+    ];
+}
+function renderEntregaPreview(){
+    if(!document.getElementById('pv-nombre')) return;
+    document.getElementById('pv-nombre').textContent = val('stu-nombre')||'—';
+    document.getElementById('pv-carnet').textContent = val('stu-carnet')||'—';
+    const en = val('stu-enunciado');
+    document.getElementById('pv-enunciado').textContent = en ? (en.length>160? en.slice(0,160)+'…' : en) : '—';
+    document.getElementById('pv-dataset').textContent = (document.getElementById('case-name-label').textContent||'') + ' · n=' + totalN + ' · ' + dataset.length + ' clases (' + U().variable+' en '+U().suffix.trim()+')';
+    const ul = document.getElementById('checklist'); ul.innerHTML='';
+    worksheetStatus().forEach(([t,ok])=>{
+        const li=document.createElement('li'); li.textContent=(ok?'✅ ':'⬜ ')+t; if(!ok)li.className='text-slate-500'; ul.appendChild(li);
+    });
+}
+function generatePDF(){
+    const msg = document.getElementById('pdf-msg');
+    if(!document.getElementById('exam-mode').checked){ msg.textContent='⚠ Debes activar el modo examen para generar el PDF.'; return; }
+    if(!window.jspdf){ msg.textContent='⚠ No se pudo cargar el generador PDF (sin conexión). Usa Imprimir → Guardar como PDF.'; window.print(); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({unit:'mm', format:'letter'});
+    const W = 216, M = 15, maxW = W-2*M; let y = 0;
+    const need = h => { if(y+h > 265){ doc.addPage(); y = 18; } };
+    const title = (t,size=13) => { need(10); doc.setFont('helvetica','bold'); doc.setFontSize(size); doc.text(t, M, y); y += 7; };
+    const body = t => { doc.setFont('helvetica','normal'); doc.setFontSize(10); const L = doc.splitTextToSize(t||'—', maxW); need(L.length*5+2); doc.text(L, M, y); y += L.length*5+2; };
+    const line = () => { need(4); doc.setDrawColor(13,148,136); doc.line(M, y, W-M, y); y += 5; };
+    // Encabezado
+    y = 16; doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('UMG — Estadistica I (021409) · Semana 9', M, y); y += 7;
+    doc.setFontSize(11); doc.text('Hoja de trabajo: Tendencia central y posicion (datos agrupados)', M, y); y += 5;
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.text('Fecha: '+new Date().toLocaleString('es-GT'), M, y); y += 6; line();
+    title('1. Estudiante y problema'); body('Nombre: '+val('stu-nombre')); body('Carnet: '+val('stu-carnet')); body('Enunciado: '+val('stu-enunciado')); line();
+    title('2. Dataset analizado'); body('Caso: '+(document.getElementById('case-name-label').textContent||'')); body('Unidad: '+U().variable+' ('+(U().prefix+U().suffix).trim()+') · n='+totalN);
+    dataset.forEach(d=>body('Clase '+d.id+': '+fmtN(d.min)+' - '+fmtN(d.max)+' | xi='+fmtN(d.x_i)+' | fi='+d.f+' | Fi='+d.F)); line();
+    title('3. Mis calculos (resueltos por el estudiante)');
+    body('Media x-bar (Paso 2): '+val('in-media')); body('n/2 = '+val('in-me-pos')+' · Li = '+val('in-me-li')+' · Me = '+val('in-mediana'));
+    body('Delta1 = '+val('in-d1')+' · Delta2 = '+val('in-d2')+' · Mo = '+val('in-moda')); body('Posicion P/Q/D practicada: Pos = '+val('in-pos'));
+    body('Finales -> x-bar: '+val('final-media')+' | Me: '+val('final-mediana')+' | Mo: '+val('final-moda')+' | Q3: '+val('final-q3')+' | P90: '+val('final-p90')); line();
+    title('4. Mis conclusiones por paso');
+    NOTE_IDS.forEach(([i,t])=>{ doc.setFont('helvetica','bold'); doc.setFontSize(10); need(7); doc.text(t+':', M, y); y += 5; body(val(i)); });
+    line(); title('5. Conclusiones generales'); body(val('note-general')); line();
+    body('Declaro que resolvi estos calculos por mi cuenta con el modo examen activado. Firma: ____________________');
+    const carnet = val('stu-carnet').replace(/[^\w\-]+/g,'') || 'estudiante';
+    doc.save('HojaTrabajo_Semana9_'+carnet+'.pdf');
+    msg.textContent='✔ PDF generado. Revisa tu carpeta de descargas.';
+}
+</script>
+</body>
+</html>
