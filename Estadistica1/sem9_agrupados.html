@@ -51,7 +51,25 @@
             font-weight: 700;
             border: 1px solid rgba(20, 184, 166, 0.4) !important;
         }
-        .sticky-source { position: sticky; top: 88px; }
+        @media (min-width: 1024px) {
+            .sticky-source {
+                position: sticky;
+                top: 88px;
+                max-height: calc(100vh - 104px);
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+        }
+        @media (max-width: 1023px) {
+            .sticky-source {
+                position: static !important;
+                top: auto !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                width: 100% !important;
+                z-index: 1;
+            }
+        }
         .row-highlight-median {
             background-color: rgba(79, 70, 229, 0.22) !important;
             box-shadow: inset 3px 0 0 #818cf8;
@@ -199,57 +217,62 @@
             </div>
 
             <!-- Cargar dataset propio -->
-            <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-3xl shadow-xl space-y-3">
-                <h3 class="font-bold text-sm text-white heading-font">📂 Estudia con tus propios datos</h3>
-                <div class="flex gap-1.5 text-[11px] font-bold">
-                    <button onclick="setLoaderMode('agrup')" id="lm-agrup" class="flex-1 px-3 py-2 rounded-xl bg-teal-500 text-slate-950 font-bold transition">A) Tabla agrupada</button>
-                    <button onclick="setLoaderMode('crudos')" id="lm-crudos" class="flex-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 font-bold transition border border-slate-700">B) Datos sueltos</button>
-                </div>
-                <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 space-y-2">
-                    <label class="text-[11px] font-bold text-slate-300 block">📏 Unidad de medida de tus datos</label>
-                    <select id="unit-select" onchange="onUnitChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs font-semibold text-slate-200 focus:border-teal-400 focus:outline-none">
-                        <option value="Q" selected>Q — Quetzales (dinero)</option>
-                        <option value="$">US$ — Dólares (dinero)</option>
-                        <option value="pts">Pts — Notas / puntos (0–100)</option>
-                        <option value="min">min — Minutos (tiempos)</option>
-                        <option value="h">h — Horas</option>
-                        <option value="anios">años — Edades</option>
-                        <option value="kg">kg — Pesos</option>
-                        <option value="cm">cm — Estaturas / longitudes</option>
-                        <option value="und">und — Unidades (genérico)</option>
-                    </select>
-                    <p id="context-label" class="text-[11px] text-teal-300 bg-teal-950/40 border border-teal-500/30 rounded-xl px-2.5 py-1.5">Contexto: montos de crédito (clientes) — lenguaje gerencial.</p>
-                </div>
-                <div id="loader-agrup" class="space-y-2">
-                    <p class="text-[11px] text-slate-400">Una línea por clase: <code class="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-teal-300">min,max,fi</code></p>
-                    <textarea id="csv-input" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none">1000,2000,5
+            <details class="bg-slate-900/80 border border-slate-800 rounded-3xl shadow-xl p-5 group space-y-3" open>
+                <summary class="flex items-center justify-between cursor-pointer list-none font-bold text-sm text-white heading-font select-none">
+                    <span class="flex items-center gap-2">📂 Estudia con tus propios datos</span>
+                    <span class="text-xs text-slate-400 group-open:rotate-180 transition-transform duration-200"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="space-y-3 pt-2">
+                    <div class="flex gap-1.5 text-[11px] font-bold">
+                        <button onclick="setLoaderMode('agrup')" id="lm-agrup" class="flex-1 px-3 py-2 rounded-xl bg-teal-500 text-slate-950 font-bold transition">A) Tabla agrupada</button>
+                        <button onclick="setLoaderMode('crudos')" id="lm-crudos" class="flex-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 font-bold transition border border-slate-700">B) Datos sueltos</button>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 space-y-2">
+                        <label class="text-[11px] font-bold text-slate-300 block">📏 Unidad de medida de tus datos</label>
+                        <select id="unit-select" onchange="onUnitChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs font-semibold text-slate-200 focus:border-teal-400 focus:outline-none">
+                            <option value="Q" selected>Q — Quetzales (dinero)</option>
+                            <option value="$">US$ — Dólares (dinero)</option>
+                            <option value="pts">Pts — Notas / puntos (0–100)</option>
+                            <option value="min">min — Minutos (tiempos)</option>
+                            <option value="h">h — Horas</option>
+                            <option value="anios">años — Edades</option>
+                            <option value="kg">kg — Pesos</option>
+                            <option value="cm">cm — Estaturas / longitudes</option>
+                            <option value="und">und — Unidades (genérico)</option>
+                        </select>
+                        <p id="context-label" class="text-[11px] text-teal-300 bg-teal-950/40 border border-teal-500/30 rounded-xl px-2.5 py-1.5">Contexto: montos de crédito (clientes) — lenguaje gerencial.</p>
+                    </div>
+                    <div id="loader-agrup" class="space-y-2">
+                        <p class="text-[11px] text-slate-400">Una línea por clase: <code class="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-teal-300">min,max,fi</code></p>
+                        <textarea id="csv-input" rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none">1000,2000,5
 2000,3000,12
 3000,4000,18
 4000,5000,10
 5000,6000,5</textarea>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="applyCsvDataset()" class="flex-1 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Aplicar mi tabla</button>
-                        <button onclick="resetDataset()" class="bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">Restablecer</button>
+                        <div class="flex gap-2 pt-1">
+                            <button onclick="applyCsvDataset()" class="flex-1 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Aplicar mi tabla</button>
+                            <button onclick="resetDataset()" class="bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">Restablecer</button>
+                        </div>
+                        <label class="block mt-2 text-[11px] text-slate-400">…o sube un CSV <input type="file" id="csv-file" accept=".csv,.txt" onchange="loadCsvFile(event)" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[11px] file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-750"></label>
                     </div>
-                    <label class="block mt-2 text-[11px] text-slate-400">…o sube un CSV <input type="file" id="csv-file" accept=".csv,.txt" onchange="loadCsvFile(event)" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[11px] file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-750"></label>
-                </div>
-                <div id="loader-crudos" class="hidden space-y-2">
-                    <p class="text-[11px] text-slate-400">Pega números sueltos (comas, espacios o saltos de línea). Los agrupo automáticamente.</p>
-                    <textarea id="raw-input" rows="4" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none" placeholder="Ej: 1200, 2500, 3100, 3800, 4200, 5100 ...">1500 1800 2200 2400 2600 2800 3100 3200 3300 3400 3500 3600 3700 3900 4100 4300 4600 5200 5600 5900</textarea>
-                    <div class="flex items-center gap-2 text-[11px]">
-                        <label class="text-slate-400">Nº clases:</label>
-                        <input type="number" id="num-classes" value="5" min="3" max="12" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 w-16 text-center font-bold text-white focus:border-indigo-400 focus:outline-none">
-                        <button onclick="applyRawDataset()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Agrupar y aplicar</button>
+                    <div id="loader-crudos" class="hidden space-y-2">
+                        <p class="text-[11px] text-slate-400">Pega números sueltos (comas, espacios o saltos de línea). Los agrupo automáticamente.</p>
+                        <textarea id="raw-input" rows="4" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-[11px] font-mono text-slate-200 focus:border-teal-400 focus:outline-none" placeholder="Ej: 1200, 2500, 3100, 3800, 4200, 5100 ...">1500 1800 2200 2400 2600 2800 3100 3200 3300 3400 3500 3600 3700 3900 4100 4300 4600 5200 5600 5900</textarea>
+                        <div class="flex items-center gap-2 text-[11px]">
+                            <label class="text-slate-400">Nº clases:</label>
+                            <input type="number" id="num-classes" value="5" min="3" max="12" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 w-16 text-center font-bold text-white focus:border-indigo-400 focus:outline-none">
+                            <button onclick="applyRawDataset()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition heading-font">Agrupar y aplicar</button>
+                        </div>
+                    </div>
+                    <p id="loader-msg" class="text-[11px] font-medium"></p>
+                    <div class="text-[11px] bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 text-slate-400">
+                        <strong class="text-slate-300">Prueba rápida:</strong>
+                        <button onclick="loadExample('sueldos')" class="underline text-teal-400 hover:text-teal-300 font-semibold ml-1">Sueldos Q</button> •
+                        <button onclick="loadExample('notas')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Notas examen</button> •
+                        <button onclick="loadExample('tiempos')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Tiempos min</button>
                     </div>
                 </div>
-                <p id="loader-msg" class="text-[11px] font-medium"></p>
-                <div class="text-[11px] bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 text-slate-400">
-                    <strong class="text-slate-300">Prueba rápida:</strong>
-                    <button onclick="loadExample('sueldos')" class="underline text-teal-400 hover:text-teal-300 font-semibold ml-1">Sueldos Q</button> •
-                    <button onclick="loadExample('notas')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Notas examen</button> •
-                    <button onclick="loadExample('tiempos')" class="underline text-teal-400 hover:text-teal-300 font-semibold">Tiempos min</button>
-                </div>
-            </div>
+            </details>
         </aside>
 
         <!-- ============ COLUMNA DERECHA: TUTORIAL ============ -->
@@ -531,6 +554,47 @@
         </div>
     </div>
 
+    <!-- BOTÓN FLOTANTE MÓVIL: CONSULTAR TABLA FUENTE -->
+    <button id="btn-mobile-table" onclick="toggleMobileTableModal(true)" class="lg:hidden fixed bottom-5 right-4 z-40 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-slate-950 font-extrabold px-3.5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs border border-teal-300/40 backdrop-blur-md transition-transform active:scale-95 heading-font">
+        <i class="fa-solid fa-table-list text-sm"></i>
+        <span>Ver Tabla</span>
+        <span class="bg-slate-950/80 text-teal-300 px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold" id="mobile-badge-n">n=50</span>
+    </button>
+
+    <!-- MODAL / BOTTOM SHEET MÓVIL: TABLA FUENTE -->
+    <div id="mobile-table-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 flex items-end sm:items-center justify-center transition-opacity duration-300" onclick="if(event.target===this) toggleMobileTableModal(false)">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 max-w-lg w-full max-h-[85vh] overflow-y-auto space-y-3 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-sm text-white heading-font">📌 Tabla de Frecuencias (Móvil)</h3>
+                    <span id="modal-badge-n" class="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2.5 py-0.5 rounded-lg font-bold">n = 50</span>
+                </div>
+                <button onclick="toggleMobileTableModal(false)" class="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-800/80 transition" title="Cerrar">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-400">Consulta los datos para responder el ejercicio sin perder tu avance:</p>
+            <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                        <tr><th class="px-2 py-2 text-center">Clase</th><th class="px-2 py-2">Intervalo</th><th class="px-2 py-2 text-center">xi</th><th class="px-2 py-2 text-center normal-case">f<sub>i</sub></th><th class="px-2 py-2 text-center normal-case">F<sub>i</sub></th></tr>
+                    </thead>
+                    <tbody id="modal-source-table-body" class="bg-slate-950 text-slate-300 divide-y divide-slate-850"></tbody>
+                    <tfoot class="bg-slate-900 text-slate-100 font-bold text-[11px] border-t border-slate-800">
+                        <tr><td colspan="3" class="px-2 py-2 text-right">∑</td><td id="modal-source-sum-f" class="px-2 py-2 text-center text-teal-400">50</td><td class="px-2 py-2 text-center text-slate-500">—</td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div id="modal-source-hint" class="text-[11px] font-mono bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-teal-300"></div>
+            <div class="flex flex-wrap gap-1.5 text-[10px]">
+                <span class="bg-indigo-950/80 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-md font-bold" id="modal-legend-mediana">Me</span>
+                <span class="bg-purple-950/80 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-bold" id="modal-legend-moda">Mo</span>
+                <span class="bg-amber-950/80 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md font-bold" id="modal-legend-pos">Pos</span>
+            </div>
+            <button onclick="toggleMobileTableModal(false)" class="w-full bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition heading-font mt-2">Continuar con mis cálculos</button>
+        </div>
+    </div>
+
     <!-- FOOTER INSTITUCIONAL -->
     <footer class="bg-slate-950 border-t border-slate-900 py-8 mt-12">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
@@ -693,6 +757,7 @@ function renderAll(){ renderSourceTable(); renderFullTable(); renderKPIs(); rend
 
 function renderSourceTable(){
     const tb=document.getElementById('source-table-body'); tb.innerHTML='';
+    const mtb=document.getElementById('modal-source-table-body'); if(mtb) mtb.innerHTML='';
     dataset.forEach(r=>{
         const tr=document.createElement('tr');
         let cls="hover:bg-slate-900/50 border-b border-slate-850 ";
@@ -702,16 +767,40 @@ function renderSourceTable(){
         tr.className=cls;
         tr.innerHTML='<td class="px-2 py-2 text-center font-bold text-slate-400">'+r.id+'</td><td class="px-2 py-2 font-semibold text-slate-200">'+rangeL(r.min,r.max)+'</td><td class="px-2 py-2 text-center font-mono text-slate-300">'+fmtN(r.x_i)+U().suffix+'</td><td class="px-2 py-2 text-center font-bold text-slate-100">'+r.f+'</td><td class="px-2 py-2 text-center font-bold text-teal-400">'+r.F+'</td>';
         tb.appendChild(tr);
+        if(mtb) mtb.appendChild(tr.cloneNode(true));
     });
     document.getElementById('source-sum-f').textContent=totalN;
     document.getElementById('badge-n').textContent="n = "+totalN;
-    document.getElementById('source-formula-hint').textContent="∑(fi·xi) = "+U().prefix+fmtN(stats.sumFX)+U().suffix+" → x̄ = "+fmtN(stats.sumFX)+" / "+totalN+" = "+stats.mean.toFixed(2)+U().suffix;
+    const mbN = document.getElementById('mobile-badge-n'); if(mbN) mbN.textContent="n = "+totalN;
+    const mModN = document.getElementById('modal-badge-n'); if(mModN) mModN.textContent="n = "+totalN;
+    const mSumF = document.getElementById('modal-source-sum-f'); if(mSumF) mSumF.textContent=totalN;
+    const hintText = "∑(fi·xi) = "+U().prefix+fmtN(stats.sumFX)+U().suffix+" → x̄ = "+fmtN(stats.sumFX)+" / "+totalN+" = "+stats.mean.toFixed(2)+U().suffix;
+    document.getElementById('source-formula-hint').textContent=hintText;
+    const mHint = document.getElementById('modal-source-hint'); if(mHint) mHint.textContent=hintText;
     const A0=dataset[0].max-dataset[0].min;
     const sameA = dataset.every(d=>(d.max-d.min)===A0);
     document.getElementById('amplitud-label').textContent = sameA?("A = "+U().prefix+fmtN(A0)+U().suffix):"A = variable por clase";
-    document.getElementById('legend-mediana').textContent="Me → Clase "+stats.medianClass.id;
-    document.getElementById('legend-moda').textContent="Mo → Clase "+stats.modalClass.id;
-    document.getElementById('legend-pos').textContent="Pos → Clase "+(lastPosClassId||"—");
+    const meTxt = "Me → Clase "+stats.medianClass.id;
+    const moTxt = "Mo → Clase "+stats.modalClass.id;
+    const posTxt = "Pos → Clase "+(lastPosClassId||"—");
+    document.getElementById('legend-mediana').textContent=meTxt;
+    document.getElementById('legend-moda').textContent=moTxt;
+    document.getElementById('legend-pos').textContent=posTxt;
+    const mMe = document.getElementById('modal-legend-mediana'); if(mMe) mMe.textContent=meTxt;
+    const mMo = document.getElementById('modal-legend-moda'); if(mMo) mMo.textContent=moTxt;
+    const mPos = document.getElementById('modal-legend-pos'); if(mPos) mPos.textContent=posTxt;
+}
+
+function toggleMobileTableModal(show){
+    const modal = document.getElementById('mobile-table-modal');
+    if(!modal) return;
+    if(show){
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    } else {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 }
 function renderFullTable(){
     const tb=document.getElementById('full-frequency-table-body'); tb.innerHTML='';

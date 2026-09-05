@@ -100,6 +100,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Soporte de Datasets:** Entrada por tabla agrupada manual/CSV o datos crudos que se agrupan automáticamente, selector de unidades de medida (Q, US$, pts, min, h, años, kg, cm, und) y carga rápida de casos.
       - **Visualización Gráfica:** Histograma interactivo con líneas verticales de estadígrafos $(\bar{x}, Me, Mo)$ y Ojiva porcentual acumulada (%Ac).
       - **Simulador de Políticas:** Deslizadores en tiempo real para evaluar el impacto de requisitos de crédito en la cartera de clientes y gráfico circular de composición.
+      - **Diseño Responsive & Modal Móvil:** Barra lateral con `.sticky-source` optimizada para computadoras y estática en pantallas móviles (evitando solapamientos), botón flotante `Ver Tabla` y ventana modal para consultar la tabla de frecuencias sin perder la posición en los ejercicios.
       - **Modo Examen & Generación PDF:** Ficha del estudiante, problemas personalizados, autoevaluación con soluciones ocultas y exportación de hoja de trabajo oficial a PDF con jsPDF.
 
 13. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
