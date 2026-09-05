@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redes y Telecomunicaciones GT | Informática I - UMG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="../index_informatica.html" class="btn-back-menu">← Menú</a>
+    <div class="logo">🌐 <span>NetChapín</span> <small>UMG · Admón</small></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#lanwan">LAN vs WAN</a>
+      <a href="#medios">Medios</a>
+      <a href="#arma">Arma tu Red</a>
+      <a href="#lab">Laboratorio</a>
+      <a href="#compara">Compara</a>
+      <a href="#guate">Guatemala</a>
+      <a href="#reto">Reto Nebaj</a>
+      <a href="#ejercicio">📝 Ejercicio Clase</a>
+      <a href="#quiz">Quiz</a>
+    </div>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="badge">🎓 UMG • Facultad de Ciencias de la Administración • Semana 7</div>
+    <h1>Redes y <span class="hl">Telecomunicaciones</span> 🇬🇹</h1>
+    <p class="subtitle">Módulo II: Infraestructura y Redes — Aprende como <strong>gerente</strong>, no como ingeniero. Decide, cotiza y conecta tu empresa.</p>
+    <div class="hero-stats">
+      <div class="hstat"><b id="statExp">0</b><span>XP Gerencial</span></div>
+      <div class="hstat"><b>9</b><span>Misiones</span></div>
+      <div class="hstat"><b>Q</b><span>Presupuesto real</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#lanwan" class="btn primary">🚀 Empezar misión 1</a>
+      <a href="#reto" class="btn ghost">💊 Ir al Caso Farmacia Nebaj</a>
+    </div>
+    <div class="hero-tip">💡 <b>¿Cómo usar?</b> Avanza por misiones, gana XP, arma una red, cotiza en quetzales y gradúate con el quiz. Todo es clickeable.</div>
+  </div>
+  <div class="hero-card">
+    <div class="terminal">
+      <div class="term-head"><span></span><span></span><span></span> sucursal.exe — Nebaj, Quiché</div>
+      <div class="term-body" id="terminal">
+        <div>> conectando a SAT FEL... <span class="ok">OK ✓</span></div>
+        <div>> inventario central... <span class="ok">sincronizado ✓</span></div>
+        <div>> POS tarjeta... <span class="warn">¡sin internet! ✗</span></div>
+        <div class="blink">> TU MISIÓN: evitar ese ✗ _</div>
+      </div>
+      <button class="btn small primary" onclick="document.getElementById('lanwan').scrollIntoView({behavior:'smooth'})">Entendido, ¡a aprender!</button>
+    </div>
+  </div>
+</header>
+
+<!-- MISIÓN 1 LAN WAN -->
+<section id="lanwan" class="section">
+  <div class="mision">MISIÓN 1 · El idioma del gerente</div>
+  <h2>LAN vs WAN: ¿Tu tienda o tu cadena? 🏪 ↔️ 🏬</h2>
+  <p class="lead">Si solo recuerdas una cosa: <strong>LAN = dentro del local. WAN = entre sucursales.</strong> Muévelo y míralo.</p>
+  <div class="lanwan-grid">
+    <div class="card control-card">
+      <h3>🎛️ Consola de red</h3>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btnLAN" onclick="setModo('LAN')">🏠 LAN</button>
+        <button class="toggle-btn" id="btnWAN" onclick="setModo('WAN')">🌎 WAN</button>
+      </div>
+      <label>Dispositivos conectados: <b id="devVal">6</b></label>
+      <input type="range" id="devices" min="2" max="20" value="6" oninput="updateSim()">
+      <label>¿ERP pesado + cámaras? <input type="checkbox" id="heavy" onchange="updateSim()"></label>
+      <div class="sim-result" id="simResult"></div>
+      <div class="analogy" id="analogy">💬 <b>Analogía chapina:</b> La LAN es como el mercado dentro de tu local — todos se gritan rápido. La WAN es como mandar un camión de Guate a Xela — más lejos, más lento.</div>
+    </div>
+    <div class="card net-stage">
+      <div class="net-canvas" id="netCanvas"><div class="packet" id="p1"></div><div class="packet p2" id="p2"></div><div class="packet p3" id="p3"></div></div>
+      <div class="net-info">
+        <div><small>Tipo</small><b id="infoTipo">LAN — Oficina</b></div>
+        <div><small>Velocidad</small><b id="infoVel">1 - 10 Gbps</b></div>
+        <div><small>Latencia</small><b id="infoLat">&lt; 5 ms ⚡</b></div>
+      </div>
+      <div class="vs-cards">
+        <div class="vs lan"><b>LAN</b><span>1 edificio · 1-10 Gbps · Impresoras, POS, servidor local</span></div>
+        <div class="vs wan"><b>WAN</b><span>Ciudades/países · depende del ISP · Une ERPs y bases de datos</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISIÓN 2 MEDIOS -->
+<section id="medios" class="section alt">
+  <div class="mision">MISIÓN 2 · Los 4 caminos del internet</div>
+  <h2>Medios de Transmisión 📡</h2>
+  <p class="lead">En Guatemala no todos los caminos llegan a todos lados. Toca cada tarjeta para ver cuándo conviene — y cuándo te deja vendido.</p>
+  <div class="medios-grid">
+    <div class="medio-card" onclick="openMedio('fibra')">
+      <div class="micon">🔆</div><h3>Fibra Óptica</h3><p>Luz pura. Rapidísima y estable.</p><span class="tag">Ideal: Zona 10, Cayalá</span><button>Ver ficha →</button>
+    </div>
+    <div class="medio-card" onclick="openMedio('micro')">
+      <div class="micon">📻</div><h3>Microondas</h3><p>Antena a antena, sin cables.</p><span class="tag">Ideal: Bodegas cercanas</span><button>Ver ficha →</button>
+    </div>
+    <div class="medio-card" onclick="openMedio('movil')">
+      <div class="micon">📱</div><h3>4G / 5G</h3><p>La de tu cel. Llega a casi todo.</p><span class="tag">Ideal: Rutas y POS móvil</span><button>Ver ficha →</button>
+    </div>
+    <div class="medio-card" onclick="openMedio('satelite')">
+      <div class="micon">🛰️</div><h3>Satelital LEO Starlink</h3><p>Del cielo a la finca.</p><span class="tag">Ideal: Huehue, Petén, Nebaj</span><button>Ver ficha →</button>
+    </div>
+  </div>
+  <div class="modal" id="medioModal"><div class="modal-box"><button class="close" onclick="closeMedio()">✕</button><div id="medioContent"></div></div></div>
+  <div class="mini-game card">
+    <h3>🎯 Mini-reto: ¿Qué contratarías?</h3>
+    <p id="miniQ">Una finca cafetalera en Huehuetenango, entre montañas, sin fibra cercana. ¿Qué eliges?</p>
+    <div class="opts" id="miniOpts">
+      <button onclick="miniCheck(this,false)">Fibra óptica</button>
+      <button onclick="miniCheck(this,true)">Satelital LEO 🛰️</button>
+      <button onclick="miniCheck(this,false)">Solo switch sin internet</button>
+    </div>
+    <div id="miniFb"></div>
+  </div>
+</section>
+
+<!-- MISIÓN 3 ARMA TU RED -->
+<section id="arma" class="section">
+  <div class="mision">MISIÓN 3 · Manos a la obra</div>
+  <h2>Arma tu Sucursal 🧩 <small>Haz clic para instalar</small></h2>
+  <p class="lead">Una farmacia no vende sin red. Instala los 4 piezas clave. Si olvidas una, el sistema FEL te lo cobrará.</p>
+  <div class="builder-grid">
+    <div class="parts">
+      <div class="part" id="part-router" onclick="togglePart('router')"><div class="picon">📦</div><b>Módem / Router</b><span>Puerta a internet (Tigo/Claro)</span><i>+ Q450</i></div>
+      <div class="part" id="part-switch" onclick="togglePart('switch')"><div class="picon">🔀</div><b>Switch</b><span>Conecta PCs, impresora, servidor</span><i>+ Q350</i></div>
+      <div class="part" id="part-ap" onclick="togglePart('ap')"><div class="picon">📶</div><b>Punto de Acceso Wi-Fi</b><span>Laptops, tablets, POS</span><i>+ Q600</i></div>
+      <div class="part" id="part-ups" onclick="togglePart('ups')"><div class="picon">🔋</div><b>UPS</b><span>Contra apagones de Guate</span><i>+ Q850</i></div>
+      <div class="card outage">
+        <b>⚡ Simulador de apagón</b>
+        <p>En Nebaj se va la luz a cada rato...</p>
+        <button class="btn small danger" onclick="blackout()">¡Simular corte de luz!</button>
+        <div id="blackoutMsg">Red estable ✅</div>
+      </div>
+    </div>
+    <div class="card diagram">
+      <h3 id="healthTitle">Salud de la red: 0% 😵</h3>
+      <div class="healthbar"><div id="healthFill"></div></div>
+      <svg viewBox="0 0 400 260" class="topo">
+        <line x1="200" y1="60" x2="100" y2="150" class="wire" id="w-router-switch"/>
+        <line x1="200" y1="60" x2="300" y2="150" class="wire" id="w-router-ap"/>
+        <line x1="100" y1="150" x2="100" y2="220" class="wire" id="w-switch-pc"/>
+        <text x1="200" y1="30" text-anchor="middle" class="tlabel">☁️ Internet / ISP</text>
+        <g id="n-router" class="node off"><rect x="160" y="40" width="80" height="40" rx="10"/><text x="200" y="64" text-anchor="middle">Router</text></g>
+        <g id="n-switch" class="node off"><rect x="60" y="140" width="80" height="40" rx="10"/><text x="100" y="164" text-anchor="middle">Switch</text></g>
+        <g id="n-ap" class="node off"><rect x="260" y="140" width="80" height="40" rx="10"/><text x="300" y="164" text-anchor="middle">Wi-Fi AP</text></g>
+        <g id="n-pc" class="node off"><rect x="50" y="210" width="100" height="32" rx="8"/><text x="100" y="230" text-anchor="middle">💻🖨️ POS</text></g>
+        <g id="n-ups" class="node off"><rect x="250" y="210" width="100" height="32" rx="8"/><text x="300" y="230" text-anchor="middle">🔋 UPS</text></g>
+      </svg>
+      <ul class="checklist" id="checklist">
+        <li id="c-router">❌ Router: sin puerta a internet</li>
+        <li id="c-switch">❌ Switch: PCs e impresoras sueltas</li>
+        <li id="c-ap">❌ AP: sin Wi-Fi para POS móvil</li>
+        <li id="c-ups">❌ UPS: un apagón te cierra la venta</li>
+      </ul>
+      <div class="fel" id="felBox">🧾 SAT FEL: 🔴 BLOQUEADO — sin conexión continua no hay factura</div>
+    </div>
+  </div>
+</section>
+
+<!-- MISIÓN 4 LAB -->
+<section id="lab" class="section alt">
+  <div class="mision">MISIÓN 4 · Habla como gerente TI</div>
+  <h2>Laboratorio de Métricas 🧪</h2>
+  <p class="lead">Tres palabras te harán sonar profesional: <strong>Ancho de banda</strong> (qué tanto cabe), <strong>Latencia</strong> (qué tan rápido responde) y <strong>SLA</strong> (cuánto promete el proveedor).</p>
+  <div class="lab-grid">
+    <div class="card">
+      <label>📥 Ancho de banda: <b id="bwVal">100</b> Mbps</label>
+      <input type="range" id="bw" min="5" max="500" value="100" oninput="labCalc()">
+      <label>⏱️ Latencia: <b id="latVal">40</b> ms</label>
+      <input type="range" id="lat" min="5" max="150" value="40" oninput="labCalc()">
+      <label>📅 Disponibilidad SLA: <b id="slaVal">99.5</b>%</label>
+      <input type="range" id="sla" min="95" max="99.99" step="0.01" value="99.5" oninput="labCalc()">
+      <label>👥 Dispositivos: <b id="usersVal">12</b></label>
+      <input type="range" id="users" min="2" max="60" value="12" oninput="labCalc()">
+    </div>
+    <div class="card">
+      <h3>¿Tu sucursal aguanta?</h3>
+      <div class="meters">
+        <div class="meter"><span>FEL + POS tarjeta</span><div class="mbar"><div id="mFel"></div></div><b id="mFelT"></b></div>
+        <div class="meter"><span>ERP + inventario central</span><div class="mbar"><div id="mErp"></div></div><b id="mErpT"></b></div>
+        <div class="meter"><span>Videollamadas gerencia</span><div class="mbar"><div id="mVid"></div></div><b id="mVidT"></b></div>
+      </div>
+      <div class="verdict" id="verdict"></div>
+      <p class="small">💡 Regla UMG: <b>100 Mbps mínimos por sucursal.</b> 99.5% SLA = hasta 44 horas caído al año. ¡Exige 99.9% si facturas todo el día!</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVA -->
+<section id="compara" class="section">
+  <div class="mision">MISIÓN 5 · El cuadro que sale en el examen</div>
+  <h2>Comparativa de Tecnologías 📊</h2>
+  <p class="lead">Toca los encabezados para ordenar. El botón resalta la mejor opción rural.</p>
+  <div class="table-wrap card">
+    <div class="table-btns">
+      <button class="btn small" onclick="highlightRural()">🌾 Resaltar mejor rural</button>
+      <button class="btn small" onclick="highlightSpeed()">⚡ Resaltar más rápida</button>
+      <button class="btn small ghost" onclick="resetTable()">Limpiar</button>
+    </div>
+    <table id="techTable">
+      <thead><tr><th onclick="sortTable(0)">Tecnología ⬍</th><th onclick="sortTable(1)">Velocidad ⬍</th><th onclick="sortTable(2)">Latencia ⬍</th><th>Disponib. rural</th><th>Costo</th></tr></thead>
+      <tbody>
+        <tr data-vel="275" data-rural="1"><td><b>🔆 Fibra Óptica</b></td><td>50-500 Mbps</td><td>&lt;15 ms</td><td>Baja</td><td>Medio</td></tr>
+        <tr data-vel="30" data-rural="3"><td><b>📱 Móvil 4G LTE</b></td><td>10-50 Mbps</td><td>30-70 ms</td><td>Alta</td><td>Bajo</td></tr>
+        <tr data-vel="125" data-rural="4"><td><b>🛰️ Satelital LEO</b></td><td>50-200 Mbps</td><td>25-50 ms</td><td>Total (100%)</td><td>Alto (equipo)</td></tr>
+        <tr data-vel="60" data-rural="2"><td><b>📻 Microondas</b></td><td>20-100 Mbps</td><td>15-30 ms</td><td>Media</td><td>Alto (instalación)</td></tr>
+      </tbody>
+    </table>
+    <div class="bars" id="speedBars"></div>
+  </div>
+</section>
+
+<!-- GUATEMALA -->
+<section id="guate" class="section alt">
+  <div class="mision">MISIÓN 6 · Piensa en chapín</div>
+  <h2>Telecom en Guatemala 🇬🇹</h2>
+  <div class="guate-grid">
+    <div class="card">
+      <h3>Panorama nacional</h3>
+      <ul class="bullets">
+        <li>📡 <b>Tigo y Claro</b> concentran fibra y torres.</li>
+        <li>⛰️ <b>Geografía montañosa</b> = baches de banda ancha en el interior.</li>
+        <li>🛰️ <b>Starlink LEO</b> ya conecta fincas y aldeas alejadas.</li>
+        <li>🌧️ <b>Lluvia + apagones</b> tumban microondas y routers sin UPS.</li>
+        <li>🔒 <b>VPN obligatoria</b> para datos financieros entre sucursales.</li>
+        <li>🧾 <b>SAT FEL</b> exige internet continuo o no facturas.</li>
+      </ul>
+      <h4>📍 Toca tu zona:</h4>
+      <div class="zonas">
+        <button onclick="zona('metro')">Ciudad / Zona 10</button>
+        <button onclick="zona('huehue')">Huehuetenango ☕</button>
+        <button onclick="zona('nebaj')">Nebaj, Quiché 💊</button>
+        <button onclick="zona('ruta')">Ruta logística 🚚</button>
+        <button onclick="zona('peten')">Petén / rural 🌴</button>
+      </div>
+    </div>
+    <div class="card zona-card" id="zonaCard"><h3>Elige una zona 👆</h3><p>Te diré qué conexión le conviene a ese negocio y por qué.</p></div>
+  </div>
+  <h3 style="margin-top:2rem">Casos por sector 💼</h3>
+  <div class="tabs">
+    <button class="tab active" onclick="tabSector(0,this)">☕ Agro</button>
+    <button class="tab" onclick="tabSector(1,this)">🚚 Logística</button>
+    <button class="tab" onclick="tabSector(2,this)">🏪 Retail</button>
+  </div>
+  <div class="card" id="sectorCard"></div>
+</section>
+
+<!-- RETOS -->
+<section class="section">
+  <div class="mision">MISIÓN 7 · Lo que mata ventas</div>
+  <h2>Retos Operativos ⚠️ <small>voltea las tarjetas</small></h2>
+  <div class="retos-grid">
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">⚡<b>Cortes de luz</b><span>toca para ver solución</span></div><div class="flip-back"><b>Solución: UPS + regulador</b><p>Sin UPS, módem y router mueren. Q850 te salvan el día de ventas y el FEL.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🌧️<b>Lluvias</b><span>toca para ver solución</span></div><div class="flip-back"><b>Solución: enlace respaldo</b><p>La lluvia degrada microondas. Ten backup 4G o satelital en invierno.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🔓<b>Robo de datos</b><span>toca para ver solución</span></div><div class="flip-back"><b>Solución: VPN</b><p>Túnel privado entre sucursales. Nadie espía tus cobros ni tu ERP.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🧾<b>SAT FEL caído</b><span>toca para ver solución</span></div><div class="flip-back"><b>Solución: doble enlace</b><p>Sin internet no hay factura electrónica. Principal + backup = venta continua.</p></div></div></div>
+  </div>
+</section>
+
+<!-- RETO NEBAJ -->
+<section id="reto" class="section alt">
+  <div class="mision">MISIÓN FINAL · 2 puntos de zona</div>
+  <h2>💊 El Gran Reto: Farmacia en Nebaj, Quiché</h2>
+  <p class="lead">Eres el gerente. Abres sucursal en Nebaj: necesitas inventario central, cobro con tarjeta y FEL a la SAT, con cortes de luz constantes. <strong>Arma tu propuesta en 3 pasos y genera tu cotización.</strong></p>
+  <div class="wizard card">
+    <div class="steps"><span class="step active" id="s1">1. Conexión</span><span class="step" id="s2">2. Hardware</span><span class="step" id="s3">3. Presupuesto</span></div>
+    <div class="wbody">
+      <div class="wpage" id="w1">
+        <h3>Paso 1: Elige enlace principal y respaldo</h3>
+        <div class="choice-grid">
+          <label>Principal<select id="selPrincipal"><option value="satelite">🛰️ Satelital LEO — Q450/mes + equipo Q3,500</option><option value="movil">📱 4G LTE — Q250/mes</option><option value="fibra">🔆 Fibra 100Mb — Q350/mes (si llegara)</option><option value="micro">📻 Microondas — Q800/mes + inst. Q8,000</option></select></label>
+          <label>Respaldo (backup)<select id="selBackup"><option value="movil">📱 4G LTE — Q199/mes</option><option value="satelite">🛰️ Satelital — Q450/mes</option><option value="ninguno">❌ Sin respaldo — Q0</option></select></label>
+        </div>
+        <button class="btn primary" onclick="wizard(2)">Siguiente →</button>
+      </div>
+      <div class="wpage hidden" id="w2">
+        <h3>Paso 2: Hardware obligatorio</h3>
+        <label class="chk"><input type="checkbox" id="hwRouter" checked> Módem/Router — Q450</label>
+        <label class="chk"><input type="checkbox" id="hwSwitch" checked> Switch 8 puertos — Q350</label>
+        <label class="chk"><input type="checkbox" id="hwAP" checked> Punto de acceso Wi-Fi — Q600</label>
+        <label class="chk"><input type="checkbox" id="hwUPS" checked> UPS + regulador — Q850 <b>(¡crítico en Nebaj!)</b></label>
+        <label class="chk"><input type="checkbox" id="hwVPN" checked> VPN mensual — Q100/mes</label>
+        <div><button class="btn ghost" onclick="wizard(1)">← Atrás</button> <button class="btn primary" onclick="wizard(3);cotizar()">Ver mi cotización →</button></div>
+      </div>
+      <div class="wpage hidden" id="w3">
+        <h3>Paso 3: Tu propuesta gerencial</h3>
+        <div id="cotiza"></div>
+        <div class="score"><div>Nota de gerente: <b id="scoreVal">0</b>/100</div><div class="healthbar"><div id="scoreFill"></div></div><p id="scoreMsg"></p></div>
+        <div><button class="btn ghost" onclick="wizard(2)">← Editar</button> <button class="btn primary" onclick="window.print()">🖨️ Imprimir propuesta</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EJERCICIO EN CLASE EN PAREJAS -->
+<section id="ejercicio" class="section">
+  <div class="mision">TRABAJO EN CLASE · 2º AÑO ADMÓN UMG · EN PAREJAS (PILOTO + COPILOTO)</div>
+  <h2>📝 Ejercicio en Clase: Gerentes en Pareja</h2>
+  <p class="lead">Uno es el <strong>🧑‍✈️ Piloto</strong> (propone y decide) y el otro es el <strong>🧭 Copiloto</strong> (cuestiona con la guía, debate y valida la factibilidad económica). Debatan cada caso, llenen todo y al final generen el <strong>PDF para subir a Canvas UMG</strong>.</p>
+
+  <div class="card rules">
+    <b>📋 Instrucciones (léanlas juntos, 2 min):</b>
+    <ol>
+      <li>Ingresen <b>nombres + carnets</b> y asignen roles. Pueden alternar rol por caso.</li>
+      <li>Resuelvan los <b>4 casos</b>: el Piloto propone, el Copiloto abre la <b>“Guía del copiloto”</b> y debate.</li>
+      <li>En cada caso justifiquen <b>por qué</b> (técnico) y <b>factibilidad económica</b> (Q/mes + instalación).</li>
+      <li>Solo cuando los 4 estén ✅ se habilita el botón <b>Generar PDF para Canvas</b>.</li>
+    </ol>
+  </div>
+
+  <!-- PASO 0: DATOS -->
+  <div class="card" id="datosPareja">
+    <h3>Paso 0 · Datos de la pareja 👥</h3>
+    <div class="pair-grid">
+      <label>🧑‍✈️ Piloto — Nombre completo<input id="nombrePiloto" placeholder="Ej. María Fernanda López" autocomplete="off"></label>
+      <label>🎫 Carnet Piloto<input id="carnetPiloto" placeholder="Ej. 1490-22-1234" autocomplete="off"></label>
+      <label>🧭 Copiloto — Nombre completo<input id="copilotoNombre" placeholder="Ej. Carlos Andrés Pérez" autocomplete="off"></label>
+      <label>🎫 Carnet Copiloto<input id="carnetCopiloto" placeholder="Ej. 1490-22-5678" autocomplete="off"></label>
+      <label>🏫 Sección / Jornada<select id="seccion"><option value="">Seleccione...</option><option>Sección A - Matutina</option><option>Sección B - Vespertina</option><option>Sección C - Nocturna</option><option>Sección D - Fin de semana</option></select></label>
+      <label>📅 Fecha<input id="fechaClase" type="date"></label>
+    </div>
+    <div class="role-swap">
+      <span>🔄 ¿Quieren alternar roles por caso? Recomendado:</span>
+      <label><input type="checkbox" id="alternar" checked> Sí, alternaremos (Caso 1 y 3 lidera Piloto, 2 y 4 lidera Copiloto)</label>
+    </div>
+    <div id="datosMsg" class="form-msg"></div>
+  </div>
+
+  <!-- SELECTOR DE CASOS -->
+  <div class="case-nav" id="caseNav">
+    <button class="cnav active" data-case="0" onclick="irCaso(0)">A · Zona 10</button>
+    <button class="cnav" data-case="1" onclick="irCaso(1)">B · Huehue ☕</button>
+    <button class="cnav" data-case="2" onclick="irCaso(2)">C · Flota 🚚</button>
+    <button class="cnav" data-case="3" onclick="irCaso(3)">D · Nebaj 💊</button>
+  </div>
+  <div id="casoBox"></div>
+
+  <!-- CIERRE -->
+  <div class="card" id="cierreBox">
+    <h3>Paso final · Debate general + PDF 📤</h3>
+    <label>💬 Opinión conjunta: ¿qué aprendieron como administradores sobre decidir conectividad? (mín. 50 caracteres)<textarea id="opinionFinal" rows="3" placeholder="Ej. Aprendimos que el gerente no elige lo más rápido sino lo que garantiza FEL continuo dentro del presupuesto..."></textarea></label>
+    <label>⚠️ Principal riesgo detectado en Guatemala según ustedes<select id="riesgoFinal"><option value="">Seleccione...</option><option>Cortes de energía (UPS obligatorio)</option><option>Lluvias que degradan enlaces inalámbricos</option><option>Falta de fibra en el interior</option><option>Falta de VPN / seguridad de datos</option><option>FEL caído = ventas paradas</option></select></label>
+    <label class="chk"><input type="checkbox" id="declaro"> Declaramos que ambos debatimos cada caso y las respuestas son de nuestra autoría para subir a Canvas UMG.</label>
+    <div class="progress-cases"><div id="casesFill"></div><span id="casesTxt">0/4 casos completos</span></div>
+    <div id="cierreMsg" class="form-msg"></div>
+    <div class="cierre-btns">
+      <button class="btn ghost" onclick="vistaPrevia()">👁️ Vista previa del reporte</button>
+      <button class="btn primary" id="btnPDF" onclick="generarPDF()" disabled>📄 Generar PDF para Canvas</button>
+    </div>
+    <p class="small">📎 Al generar el PDF: en el diálogo de impresión elijan <b>“Guardar como PDF”</b>. Nómbrelo así: <b>Apellidos_Carnets_Redes.pdf</b> y súbanlo a Canvas → Tarea “Ejercicio Redes en Pareja”.</p>
+  </div>
+
+  <!-- REPORTE IMPRIMIBLE -->
+  <div id="reporteFinal" class="reporte"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="section">
+  <div class="mision">GRADUACIÓN · Demuestra que eres gerente de redes</div>
+  <h2>Quiz Final 🎓 <small id="quizScore">XP: 0</small></h2>
+  <div class="card" id="quizBox"></div>
+  <div class="card hidden" id="diploma"><h3>🏆 ¡Felicidades, Gerente de Conectividad!</h3><p id="dipText"></p><button class="btn primary" onclick="location.reload()">🔄 Reiniciar curso</button></div>
+</section>
+
+<!-- GLOSARIO -->
+<section class="section alt">
+  <h2>Glosario exprés 📖</h2>
+  <input class="search" id="glosSearch" placeholder="🔍 Busca: latencia, SLA, VPN, FEL..." oninput="filterGlos()">
+  <div class="glos" id="glos"></div>
+  <footer>Hecho con 💙 pedagógico por Ruldin Ayala, Informática I · UMG · Módulo II · 2026 · Precios en Quetzales (Q) estimados con fines didácticos.</footer>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
