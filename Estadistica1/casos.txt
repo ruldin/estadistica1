@@ -1,0 +1,155 @@
+###CASO
+id: 001
+categoria: alimentacion
+titulo: Ventas diarias de smoothies en una semana típica
+contexto: Sos el administrador de un puesto de smoothies en el campus de la universidad. Tu equipo te pasa las ventas de los últimos 7 días (en quetzales GTQ). Los datos son consistentes, sin ningún día anómalo. Necesitás reportar al dueño cuánto vende el puesto "en un día normal".
+datos: 180, 195, 190, 185, 200, 190, 185
+tipo_dato: cuantitativo
+medidas_requeridas: media,mediana,moda
+concepto_objetivo: simetrico_sin_atipicos
+pista: Sumá los 7 días y dividí entre 7 para la media. Ordená los 7 valores y tomá el valor central (posición 4) para la mediana. La moda es el valor que más se repite.
+pregunta_guia: ¿Qué medida representa mejor las ventas típicas del puesto? Si tuvieras que presupuestar los ingresos de la próxima semana, ¿cuál número usarías y por qué?
+system_prompt: Eres un profesor de Estadística y consultor de negocios en Guatemala para estudiantes de Administración de Empresas de la Universidad Mariano Gálvez. Tu labor es evaluar el análisis gerencial del alumno con tono pedagógico, cordial y formativo. En este caso 001, las ventas de smoothies (180, 195, 190, 185, 200, 190, 185) son simétricas y homogéneas (Media ≈ Q189.29, Mediana = Q190, Modas = Q185 y Q190). Evalúa si el alumno comprende que, ante ausencia de valores atípicos, tanto la Media (Q189.29) como la Mediana (Q190) son excelentes estimadores para presupuestar la semana. Si el alumno recomienda usar la Media o Mediana justificando la simetría y estabilidad, valida su respuesta. Si el alumno comete errores conceptuales (ej. confunde atípicos que no existen o ignora la cercanía entre media y mediana), explícale cuál es el enfoque correcto, por qué en distribuciones simétricas la media aprovecha el 100% de la información y dale una recomendación ejecutiva concreta.
+solucion_docente: Al ser una serie simétrica sin valores extremos (mínimo Q180, máximo Q200), la Media (Q189.29) es el mejor estimador para presupuestar los ingresos semanales (Q189.29 x 7 = Q1,325 aprox.), complementada con la Mediana (Q190). La homogeneidad de las ventas permite planificar compras de fruta e insumos con bajo riesgo de desabastecimiento o desperdicio.
+###FIN
+
+###CASO
+id: 002
+categoria: redes_sociales
+titulo: Views de un reel: cuando uno se vuelve viral
+contexto: Manejás las redes sociales de una tienda de ropa en Antigua Guatemala. En los últimos 8 días publicaste un reel diario y estos son los views obtenidos. Uno de los reels se hizo viral porque lo compartió un influencer local. Tu jefe te pregunta: "¿Cuántos views genera un reel normalmente?"
+datos: 320, 450, 380, 510, 420, 15800, 390, 470
+tipo_dato: cuantitativo
+medidas_requeridas: media,mediana
+concepto_objetivo: atipico
+pista: Sumá los 8 valores y dividí entre 8 para la media. Notá el valor atípico de 15,800 views que distorsiona el promedio. Para la mediana, ordená los números y promediá los dos del centro.
+pregunta_guia: Tu jefe quiere saber cuántos views "normalmente" genera un reel. ¿Le reportás la media o la mediana? ¿Por qué? ¿Qué pasaría si basás tu estrategia de contenido en la media?
+system_prompt: Eres un profesor de Estadística y consultor de marketing digital para administradores de empresas en Guatemala. Tu misión es evaluar la respuesta gerencial del alumno. En este caso 002, 7 reels obtuvieron entre 320 y 510 views, pero uno fue viral con 15,800 views. La Media es 2,342.5 views (gravemente distorsionada por el outlier hacia la derecha), mientras que la Mediana es 435 views (el promedio entre 420 y 450). Evalúa si el alumno identifica claramente que debe reportarse la MEDIANA (435 views) como el rendimiento operativo normal. Si el alumno sugiere basar la estrategia en la media, adviértele sobre el grave peligro financiero y de expectativas: proyectar 2,342 views por reel llevaría a presupuestos irreales, frustración del equipo y cobros inflados a patrocinadores que no se cumplirán. Si acertó, elógialo y añade una guía ejecutiva de cómo tratar el reel viral como un evento de excepción para estudiar qué funcionó.
+solucion_docente: Debe reportarse la Mediana (435 views). La Media (2,342.5 views) está inflada por un solo dato atípico (15,800). Si la tienda presupuesta ventas o compromisos comerciales basados en la media, creará una expectativa inalcanzable para el 87.5% de sus publicaciones normales. El caso viral debe aislarse como estudio de caso y no como norma cotidiana.
+###FIN
+
+###CASO
+id: 003
+categoria: tecnologia
+titulo: ¿Qué red social usan más los estudiantes?
+contexto: La asociación de estudiantes de tu universidad quiere saber cuál es la red social favorita para promover eventos. Encuestaron a 20 estudiantes y les preguntaron: "¿Qué red social usás más?" El decano te pide un resumen ejecutivo rápido.
+datos: TikTok, Instagram, TikTok, WhatsApp, TikTok, Instagram, Facebook, TikTok, Instagram, TikTok, WhatsApp, TikTok, Instagram, TikTok, Facebook, WhatsApp, Instagram, TikTok, WhatsApp, TikTok
+tipo_dato: cualitativo
+medidas_requeridas: moda
+concepto_objetivo: cualitativo_moda
+pista: Contá las menciones de cada red social en las opciones. La red social con mayor frecuencia acumulada es la moda.
+pregunta_guia: ¿Por qué NO tiene sentido calcular la media ni la mediana de estos datos? ¿Qué medida sí aplica y qué le recomendás al decano para la estrategia de marketing de eventos?
+system_prompt: Eres un docente de estadística empresarial en la Universidad Mariano Gálvez. Evalúa la respuesta gerencial del estudiante. En este caso 003, la variable es cualitativa nominal (nombres de redes sociales: TikTok=9, Instagram=5, WhatsApp=4, Facebook=2). La Media no tiene sentido porque no se pueden sumar palabras ni promediar conceptos ('WhatsApp + TikTok / 2' no existe algebraicamente). La Mediana tampoco aplica porque no existe un orden jerárquico natural en escala nominal. La única medida válida es la MODA (TikTok con 9 menciones = 45%). Evalúa si el alumno explica esta imposibilidad matemática y si recomienda al decano concentrar la pauta publicitaria y videos cortos del evento universitario en TikTok e Instagram (que juntos suman el 70% de la audiencia). Si el alumno responde correctamente, felicítalo; si comete imprecisiones, explícale con claridad pedagógica.
+solucion_docente: Al ser una variable cualitativa nominal, no existen operaciones aritméticas ni orden posicional jerárquico, por lo que la media y la mediana son conceptualmente imposibles. La única medida válida es la Moda, que corresponde a TikTok (9 de 20 votos, 45%). Se recomienda al decano asignar el 70-80% del presupuesto de comunicación a TikTok y reforzar en Instagram (5 votos, 25%), descartando Facebook como canal prioritario para este segmento estudiantil.
+###FIN
+
+###CASO
+id: 004
+categoria: vestuario
+titulo: Tallas de camisetas: dos públicos, dos modas
+contexto: Tenés una tienda de camisetas con diseño guatemalteco en la zona viva de Xela. Vendiste 14 camisetas esta semana y estas son las tallas. Notás que hay dos grupos de clientes muy diferentes: jóvenes que prefieren tallas pequeñas y adultos que buscan tallas grandes. Necesitás decidir cuántas camisetas de cada talla pedir al proveedor.
+datos: S, M, S, XL, S, M, XL, M, S, XL, M, S, XL, M
+tipo_dato: cualitativo
+medidas_requeridas: moda
+concepto_objetivo: bimodal
+pista: Contá la frecuencia de cada talla. Observarás que hay dos opciones que empatan con la mayor frecuencia (distribución bimodal).
+pregunta_guia: ¿Cuántas modas tiene esta serie de datos? ¿Qué significa esto para tu negocio? Si solo pidieras un tipo de talla al proveedor, ¿qué problema tendrías? ¿Cómo resolvés esta situación como administrador?
+system_prompt: Eres un profesor de Estadística y experto en gestión de inventarios para administradores de empresas de la UMG. En este caso 004, las frecuencias son: S = 5, M = 5, XL = 4. Es una distribución BIMODAL con dos modas: Talla S y Talla M (ambas con frecuencia máxima de 5). Evalúa si el alumno detecta la bimodalidad y comprende el trasfondo administrativo: el mercado está segmentado en dos nichos (jóvenes y público de complexión mediana). Si el administrador solo pidiera una talla (ej. solo M o calculara un 'promedio' ficticio), dejaría sin atender a la mitad de sus compradores, sufriendo quiebres de stock y pérdida de ventas. Evalúa si propone un pedido balanceado (por ejemplo 40% S, 40% M y 20% XL). Bríndale feedback constructivo y empresarial.
+solucion_docente: La distribución es bimodal con dos modas: S (5 ventas) y M (5 ventas), seguidas muy de cerca por XL (4 ventas). Para el negocio significa que conviven dos perfiles demográficos claros de consumidores. Si el administrador comete el error de concentrar su compra en una sola talla, perderá la mitad de las ventas. La decisión correcta es aplicar inventario segmentado: abastecer pedidos proporcionales (aprox. 36% S, 36% M y 28% XL) para evitar pérdida de clientes.
+###FIN
+
+###CASO
+id: 005
+categoria: alimentacion
+titulo: Nota final del curso: no todo vale igual
+contexto: En tu curso de Estadística, la nota final no es un promedio simple. El examen parcial vale 30%, la zona (tareas) vale 25%, el proyecto final vale 25% y el examen final vale 20%. Un estudiante obtuvo las siguientes calificaciones (escala 0-100): parcial 72, zona 85, proyecto 90, examen final 68. Tu profesor te pide calcular la nota final ponderada.
+datos: 72, 85, 90, 68
+tipo_dato: cuantitativo
+medidas_requeridas: media
+concepto_objetivo: media_ponderada
+pesos: 30, 25, 25, 20
+valores_ponderados: 72, 85, 90, 68
+etiquetas: Examen Parcial,Zona (Tareas),Proyecto Final,Examen Final
+pista: Multiplicá cada calificación por su ponderación (72*30 + 85*25 + 90*25 + 68*20) y dividí entre la suma total de ponderaciones (100).
+pregunta_guia: ¿Cuál es la nota final ponderada del estudiante? ¿Por qué no es justo hacer un promedio simple (sumar y dividir entre 4)? Si fueras el estudiante, ¿en qué componente pondrías más esfuerzo para mejorar tu nota y por qué?
+system_prompt: Eres un profesor de Estadística 1 en la Universidad Mariano Gálvez de Guatemala. Evalúa la respuesta gerencial y académica del alumno. En este caso 005, el cálculo arroja: (72*30 + 85*25 + 90*25 + 68*20)/100 = (2160 + 2125 + 2250 + 1360)/100 = 7895 / 100 = 78.95 puntos. El promedio simple daría (72+85+90+68)/4 = 78.75 puntos. Evalúa si el alumno explica por qué un promedio simple distorsiona la realidad cuando los componentes tienen distinta importancia o carga relativa (el parcial pondera 30% vs el examen final que vale 20%). Desde el punto de vista de optimización del esfuerzo, el estudiante debe priorizar los rubros de mayor peso (Examen Parcial 30% y Zona/Proyecto 25% c/u) donde cada punto ganado impacta más en el resultado final. Valida si el análisis del estudiante es estratégico y pedagógicamente sólido.
+solucion_docente: La nota final ponderada es 78.95 puntos. El promedio simple (78.75) es metodológicamente incorrecto porque asume que todas las evaluaciones tienen el mismo peso (25% cada una), ignorando que el parcial representa el 30% y el examen final solo el 20%. Estratégicamente, el estudiante debe enfocar su mayor esfuerzo en las actividades de mayor ponderación (Parcial con 30% y acumulación continua de Zona y Proyecto con 50% combinado), ya que maximizan el retorno sobre el tiempo invertido de estudio.
+###FIN
+
+###CASO
+id: 006
+categoria: logistica
+titulo: Tiempos de entrega en Calzada Roosevelt: el impacto del tráfico
+contexto: Sos el jefe de logística de una cadena de farmacias en la Ciudad de Guatemala. Durante la hora pico en la Calzada Roosevelt, registrás los tiempos de entrega (en minutos) de 9 pedidos motorizados. Ocho motoristas tardaron entre 18 y 28 minutos, pero un motorista se quedó varado por un pinchazo y bloqueo vial, tardando 90 minutos. La gerencia te pide fijar una "Garantía de Entrega de X Minutos o es gratis" para los clientes.
+datos: 20, 22, 18, 25, 24, 28, 22, 21, 90
+tipo_dato: cuantitativo
+medidas_requeridas: media,mediana,moda
+concepto_objetivo: atipico_derecha
+pista: Sumá los 9 tiempos y dividí entre 9 para la media (notarás cómo el 90 eleva el promedio a 30). Para la mediana, ordená de menor a mayor y tomá la posición central 5 (22 min). La moda es el tiempo que más se repite.
+pregunta_guia: Si la gerencia quiere prometer una garantía de tiempo realista sin arriesgarse a regalar pedidos por culpa de accidentes viales aislados, ¿qué medida (Media de 30 min o Mediana de 22 min) representa la verdadera operación típica y por qué? ¿Qué riesgo financiero asumiría la empresa si usa la media?
+system_prompt: Eres un director de operaciones y catedrático de estadística gerencial en Guatemala. Evalúa la respuesta del alumno. En este caso 006, la Media es de 30.0 minutos (sesgada hacia arriba por el outlier de 90 min), la Mediana es de 22.0 minutos y la Moda es 22 minutos. Evalúa si el estudiante entiende que la Mediana (22 min) refleja la verdadera capacidad operativa habitual del 88.8% de las entregas. Sin embargo, para una promesa comercial del tipo 'o es gratis', fijar la garantía en 22 minutos causaría pérdidas al penalizar pedidos que tardan 24-28 minutos (que son normales en hora pico). Prometer 30 minutos (la media) da un colchón innecesariamente amplio frente a la competencia o bien esconde el riesgo de que eventos extraordinarios (como 90 min) quiebren la política si no tienen cláusulas de fuerza mayor. Una recomendación gerencial experta utiliza la mediana más un margen de seguridad (ej. 30 o 35 min con excepciones por clima/bloqueos). Si el estudiante razona sobre estos riesgos operativos, califícalo excelente y enséñale cómo vincular la mediana con SLAs logísticos.
+solucion_docente: La Mediana (22 min) y la Moda (22 min) describen con exactitud la experiencia típica del cliente. La Media (30 min) está artificialmente inflada por un único evento atípico de fuerza mayor (90 min). Para la política comercial de garantía, la empresa debe basar su tiempo estándar en la mediana (22 min) más una tolerancia operativa controlada (ej. promesa de entrega en 35 minutos), agregando cláusulas de excepción por desastres viales o clima, evitando así regalar producto injustificadamente.
+###FIN
+
+###CASO
+id: 007
+categoria: finanzas
+titulo: Sueldos en un Call Center de Zona 10: el efecto del director
+contexto: Como gerente de talento humano en un Call Center en Zona 10 de la capital, revisás los sueldos mensuales (en Quetzales GTQ) de un equipo de 8 personas. Siete agentes ganan entre Q5,500 y Q6,200, pero la nómina incluye al Director de Cuentas que devenga Q44,800. En el anuncio de reclutamiento de LinkedIn, el área de mercadeo quiere publicar: "¡Sueldo promedio de nuestro equipo: Q10,750!".
+datos: 5500, 6000, 5800, 6200, 6000, 5600, 6100, 44800
+tipo_dato: cuantitativo
+medidas_requeridas: media,mediana
+concepto_objetivo: sesgo_salarios
+pista: Sumá los 8 salarios y dividí entre 8 para la media (86,000 / 8 = 10,750). Para la mediana, ordená los salarios y promediá los dos valores centrales (posiciones 4 y 5: 6000 y 6000).
+pregunta_guia: ¿Por qué publicar la Media de Q10,750 en la oferta laboral genera un dilema ético y falsas expectativas en los aspirantes? ¿Qué medida (Q6,000 vs Q10,750) describe fielmente la realidad del 87.5% de los puestos operativos y qué decisión estratégica recomendás?
+system_prompt: Eres un profesor de Administración y Ética Empresarial en la Universidad Mariano Gálvez de Guatemala. Tu objetivo es retroalimentar al estudiante sobre el uso responsable de estadígrafos en Recursos Humanos. En este caso 007, la Media es de Q10,750, pero 7 de los 8 colaboradores ganan entre Q5,500 y Q6,200, siendo la Mediana exactamente Q6,000. Evalúa si el alumno identifica el dilema ético: promocionar una media de Q10,750 es una manipulación estadística (publicidad engañosa) porque ningún agente operativo gana esa cifra (el salario está inflado por el salario gerencial de Q44,800). Esto generará deserción temprana, frustración y daño reputacional a la marca empleadora en Glassdoor y LinkedIn. La medida correcta que describe la realidad de la plaza es la Mediana (Q6,000) o un rango salarial transparente (Q5,500 - Q6,200). Valora la madurez ética y gerencial de la respuesta del estudiante.
+solucion_docente: Publicar la Media (Q10,750) constituye un engaño estadístico que vulnera la ética corporativa: el 87.5% del equipo devenga entre Q5,500 y Q6,200, y solo un directivo percibe Q44,800. La Mediana de Q6,000 representa con total honestidad el salario del colaborador típico. Estratégicamente, se recomienda publicar una banda salarial transparente (Q5,800 a Q6,200 más bonos de productividad), lo que atraerá talento calificado sin generar falsas expectativas ni rotación costosa.
+###FIN
+
+###CASO
+id: 008
+categoria: comercio
+titulo: Método de cobro preferido en La Terminal Z.4 y Mercado Central
+contexto: Una fintech guatemalteca busca introducir datáfonos y cobro con código QR en los puestos mayoristas del Mercado La Terminal (Zona 4) y el Mercado Central de Guatemala. Se consultó a 18 comerciantes sobre su método de pago principal: Efectivo, Transferencia, Tarjeta o QR. Necesitás presentar a la junta directiva cuál es la forma de cobro dominante para diseñar la estrategia de afiliación.
+datos: Efectivo, Transferencia, Efectivo, Efectivo, Tarjeta, Efectivo, Transferencia, Efectivo, QR, Efectivo, Transferencia, Efectivo, Efectivo, Tarjeta, Efectivo, Transferencia, Efectivo, QR
+tipo_dato: cualitativo
+medidas_requeridas: moda
+concepto_objetivo: cualitativo_mercado
+pista: Contá las frecuencias de cada opción de cobro en la cuadrícula. La categoría con mayor número de respuestas es la moda.
+pregunta_guia: ¿Por qué en variables cualitativas nominales carece de sentido matemático calcular una media o mediana? Al ser el Efectivo la moda contundente (f=10 de 18), ¿qué barrera cultural detectás y qué estrategia de incentivos debe plantear la fintech para convencer a los comerciantes?
+system_prompt: Eres un consultor en inclusión financiera y catedrático de estadística de la UMG en Guatemala. Evalúa el análisis del estudiante sobre variables nominales y adopción tecnológica en economías populares. En este caso 008, las frecuencias son: Efectivo = 10 (55.6%), Transferencia = 4 (22.2%), Tarjeta = 2 (11.1%) y QR = 2 (11.1%). La única medida aplicable es la Moda (Efectivo con 55.6%). La media y la mediana son conceptualmente imposibles en datos cualitativos nominales. Evalúa si el alumno reconoce que el efectivo domina por desconfianza fiscal, costumbre cultural, inmediatez de liquidez para compras en la madrugada y falta de bancarización. Para transformar este mercado, la fintech no debe imponer la tecnología, sino crear incentivos tangibles: cero comisión durante los primeros 6 meses, anticipo inmediato de fondos, microseguros de salud asociados o capacitación en el propio puesto comercial. Valora el análisis cualitativo y estratégico del estudiante.
+solucion_docente: Al ser una variable cualitativa nominal, no existen distancias numéricas ni jerarquías, haciendo imposible el cálculo de media o mediana; la Moda es el Efectivo (10 de 18 comerciantes, 55.6%). La barrera cultural radica en la preferencia por liquidez inmediata y temor a retenciones o complejidad tecnológica. La estrategia de la fintech debe basarse en afiliar mediante incentivos de adopción (cero comisión inicial, liquidación inmediata en cuenta de ahorro y microcréditos para capital de trabajo).
+###FIN
+
+###CASO
+id: 009
+categoria: comercio
+titulo: Ticket de consumo en cafetería de especialidad en Cobán
+contexto: Sos el administrador de una cafetería de café de altura en Cobán, Alta Verapaz. Para planificar compras de insumos y analizar el gasto por mesa, registrás el valor del ticket (en Quetzales GTQ) de 10 clientes consecutivos en un fin de semana. Todos consumieron combos tradicionales de café y repostería artesanal sin consumos anómalos.
+datos: 45, 50, 48, 52, 45, 55, 48, 50, 52, 45
+tipo_dato: cuantitativo
+medidas_requeridas: media,mediana,moda
+concepto_objetivo: simetrico_retail
+pista: Sumá los 10 consumos y dividí entre 10 para la media. Para la mediana, ordená los 10 valores y promediá los dos del centro (posiciones 5 y 6: 48 y 50). Para la moda, identificá el valor que más se repite.
+pregunta_guia: Observá que la Media (Q49) y la Mediana (Q49) coinciden casi exactamente. ¿Qué indica esta simetría sobre la homogeneidad y predictibilidad de tus clientes? Si la moda es Q45, ¿qué estrategia comercial propondrías para subir el ticket promedio hacia los Q60?
+system_prompt: Eres un profesor de Estadística y consultor de negocios de retail y gastronomía en Guatemala. Evalúa la respuesta gerencial del alumno. En este caso 009, la Media es Q49.00, la Mediana es Q49.00 (promedio de 48 y 50) y la Moda es Q45.00 (f=3). Evalúa si el alumno reconoce que la perfecta coincidencia entre Media y Mediana (ambas en Q49) revela una distribución simétrica, estable y altamente predecible: el cliente estándar de la cafetería gasta de forma homogénea alrededor de Q49. Sin embargo, la Moda de Q45 indica que la compra más frecuente es el ticket básico (ej. café + pan dulce). Para incrementar el ticket medio a Q60, el alumno debe proponer tácticas de venta sugerida (up-selling o cross-selling), tales como combos de especialidad con café de origen exportación, postres gourmet maridados, o venta de café en grano para llevar. Valida su visión comercial e interpretación estadística.
+solucion_docente: La igualdad entre Media (Q49.00) y Mediana (Q49.00) confirma una distribución perfectamente simétrica y predecible, indicando un flujo de clientes muy homogéneo. La Moda de Q45.00 refleja el consumo base recurrente. Para elevar el ticket medio a Q60, la administración debe implementar técnicas de venta cruzada (cross-selling), como ofrecer degustaciones de café de microlotes por Q12 adicionales o combos ejecutivos que incluyan bolsa de café molido de Cobán para llevar.
+###FIN
+
+###CASO
+id: 010
+categoria: comercio
+titulo: Costo promedio ponderado de compra de café en Sacatepéquez
+contexto: Una exportadora de café en Antigua Guatemala compra granos a tres cooperativas de Sacatepéquez con diferentes calidades y volúmenes: Cooperativa San Miguel (30% del volumen a Q850/quintal), Cooperativa Ciudad Vieja (45% del volumen a Q920/quintal) y Cooperativa Alotenango (25% del volumen a Q780/quintal). Para cotizar un embarque a Europa sin perder margen, necesitás calcular el costo medio ponderado por quintal.
+datos: 850, 920, 780
+tipo_dato: cuantitativo
+medidas_requeridas: media
+concepto_objetivo: media_ponderada
+pesos: 30, 45, 25
+valores_ponderados: 850, 920, 780
+etiquetas: Coop. San Miguel (30%),Coop. Ciudad Vieja (45%),Coop. Alotenango (25%)
+pista: Multiplicá cada precio por su porcentaje de volumen: (850*30 + 920*45 + 780*25) y dividí entre la suma de pesos (100). El resultado exacto es Q864.00.
+pregunta_guia: ¿Por qué sería un grave error financiero calcular un promedio simple (850+920+780)/3 = Q850? ¿Qué pérdida de margen sufriría la exportadora si cotiza con Q850 en vez del costo real ponderado de Q864? ¿Cómo pesa el volumen mayoritario de Ciudad Vieja?
+system_prompt: Eres un profesor de Finanzas y Estadística Empresarial en la Universidad Mariano Gálvez de Guatemala. Evalúa la respuesta gerencial del alumno. En este caso 010, la Media Ponderada real es: (850*30 + 920*45 + 780*25)/100 = (25,500 + 41,400 + 19,500)/100 = Q86,400 / 100 = Q864.00 por quintal. El promedio simple erróneo daría (850 + 920 + 780)/3 = Q850.00. Evalúa si el alumno explica que el promedio simple subestima el costo real en Q14 por quintal porque ignora que el café más caro (Ciudad Vieja a Q920) concentra casi la mitad del volumen (45%). Si la exportadora vende 1,000 o 5,000 quintales presupuestando un costo de Q850 en lugar de Q864, sufrirá una pérdida directa de Q14,000 a Q70,000 en su utilidad neta. Valora si el alumno comprende el impacto de las ponderaciones en la fijación de precios (pricing) y rentabilidad corporativa.
+solucion_docente: Utilizar un promedio simple de Q850.00 sería una falla financiera grave: subestima el costo real en Q14.00 por quintal, ya que el proveedor más costoso (Ciudad Vieja a Q920) representa el 45% del volumen total. En un contenedor de 275 quintales, este error significaría una pérdida no prevista de Q3,850 en el margen, y en un lote exportado de 2,000 quintales la pérdida ascendería a Q28,000. La Media Ponderada (Q864.00) es el único estadígrafo técnicamente válido para costeo y fijación de precios de exportación.
+###FIN

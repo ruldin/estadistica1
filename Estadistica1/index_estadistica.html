@@ -60,7 +60,15 @@
                 </div>
 
                 <!-- AUTOR & ESTADO -->
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <button onclick="openModal('api-config-modal')" id="btn-header-api" class="bg-gradient-to-r from-purple-950/70 to-indigo-950/70 hover:from-purple-900/90 hover:to-indigo-900/90 text-purple-300 border border-purple-500/40 text-xs font-semibold px-3 py-2 rounded-xl transition duration-200 flex items-center shadow-sm shadow-purple-500/10 cursor-pointer" title="Configuración de API de Inteligencia Artificial (OpenRouter)">
+                        <i class="fa-solid fa-robot mr-1.5 text-purple-400"></i>
+                        <span class="hidden sm:inline">Configuración API</span>
+                        <span class="sm:hidden">API IA</span>
+                        <span id="header-api-status-badge" class="ml-2 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Pendiente
+                        </span>
+                    </button>
                     <a href="../index.html" class="hidden sm:flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-full text-xs transition duration-200" title="Portal Académico General">
                         <i class="fa-solid fa-house text-emerald-400"></i>
                         <span>Portal General</span>
@@ -118,6 +126,67 @@
 
             <!-- DECORACIÓN VIRTUAL -->
             <div class="absolute right-8 bottom-0 top-0 w-1/3 opacity-15 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-400 via-slate-900 to-transparent hidden lg:block pointer-events-none"></div>
+        </section>
+
+        <!-- PANEL DE INTEGRACIÓN CON IA (OPENROUTER) -->
+        <section class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-950 to-purple-950/40 border border-slate-800/90 p-6 sm:p-7 shadow-2xl space-y-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="space-y-1.5 max-w-2xl">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-2.5 py-0.5 text-[10px] font-bold bg-purple-500/10 text-purple-400 rounded-full border border-purple-500/20 uppercase tracking-widest heading-font">
+                            <i class="fa-solid fa-robot mr-1"></i> Inteligencia Artificial Aplicada (OpenRouter)
+                        </span>
+                        <span id="hero-api-status-pill" class="px-2.5 py-0.5 text-[10px] font-bold rounded-full border"></span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white heading-font">
+                        Servicio de Inteligencia Artificial para el Estudiante
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Conecta tu propia API Key de <strong class="text-purple-300">OpenRouter</strong> para que los simuladores de la cátedra consulten modelos de lenguaje, analicen sesgos algorítmicos y brinden retroalimentación gerencial sobre tus decisiones de negocio.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
+                    <button onclick="openModal('api-config-modal')" class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs px-5 py-3 rounded-xl transition duration-200 flex items-center shadow-lg shadow-purple-500/20 heading-font cursor-pointer active:scale-95">
+                        <i class="fa-solid fa-key mr-2 text-sm"></i>
+                        <span>Configurar API Key</span>
+                    </button>
+                    <a href="sem8_medidas_tendencia_central.html" class="bg-slate-900 hover:bg-slate-850 text-slate-300 hover:text-white border border-slate-800 text-xs font-semibold px-4 py-3 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-flask text-purple-400"></i>
+                        <span>Ir a Laboratorio IA</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RESUMEN DE ESTADO Y SEGURIDAD -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                <div class="bg-slate-950/80 border border-slate-850 p-3.5 rounded-2xl flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[10px] text-slate-500 block uppercase font-bold tracking-wider">Modelo por Defecto</span>
+                        <span id="summary-model-display" class="font-semibold text-slate-200 truncate block font-mono text-[11px]">inclusionai/ling-3.0-flash-fin:free</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/80 border border-slate-850 p-3.5 rounded-2xl flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[10px] text-slate-500 block uppercase font-bold tracking-wider">Control y Seguridad</span>
+                        <span class="font-semibold text-slate-200 block truncate">100% Local en tu navegador (Sin servidor)</span>
+                    </div>
+                </div>
+                <div class="bg-slate-950/80 border border-slate-850 p-3.5 rounded-2xl flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[10px] text-slate-500 block uppercase font-bold tracking-wider">Estado en este Dispositivo</span>
+                        <span id="summary-key-status" class="font-semibold text-amber-400 block truncate">No configurada</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ACCESO RÁPIDO A HERRAMIENTAS ACTIVAS -->
@@ -673,6 +742,156 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIGURACIÓN API DE IA (OPENROUTER) -->
+    <div id="api-config-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-400 flex items-center justify-center font-bold text-lg shadow-sm shadow-purple-500/10">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg sm:text-xl font-bold text-white heading-font">Servicio de IA (Parametrizable)</h4>
+                        <p class="text-xs text-slate-400">Configuración de API Key de OpenRouter para prácticas de Estadística 1</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('api-config-modal')" class="text-slate-400 hover:text-white transition text-lg p-2 rounded-xl hover:bg-slate-800 cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Guía Paso a Paso (Exacta como en Vercel) -->
+            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-purple-300 uppercase tracking-wider heading-font flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-question text-purple-400"></i> ¿Cómo obtener tu API Key gratis en OpenRouter?
+                    </span>
+                    <span class="text-[10px] text-slate-400">100% Gratuito</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    La clave se guarda <strong>exclusivamente en este navegador</strong> (`localStorage`). Sigue estos sencillos pasos:
+                </p>
+                <ol class="text-xs text-slate-300 space-y-2 list-decimal pl-5">
+                    <li>
+                        Entra a <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline font-semibold inline-flex items-center gap-1">openrouter.ai <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a> y crea una cuenta con Google o GitHub.
+                    </li>
+                    <li>
+                        Ve a <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline font-semibold inline-flex items-center gap-1">Keys en el menú lateral <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>.
+                    </li>
+                    <li>
+                        Pulsa <strong class="text-white font-bold">Create key</strong>, asígnale un nombre (por ejemplo, <em class="text-purple-300">bias-lab</em> o <em class="text-purple-300">umg-estadistica</em>) y confirma.
+                    </li>
+                    <li>
+                        Copia la clave (empieza con <code class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-purple-300 font-mono">sk-or-v1-</code>) y pégala en el campo de abajo. OpenRouter regala créditos de bienvenida y la plataforma usa un modelo gratuito por defecto.
+                    </li>
+                </ol>
+                <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-400 text-sm shrink-0"></i>
+                    <span><strong>Medida de Seguridad:</strong> No compartas tu clave con nadie ni la dejes guardada si estás usando una computadora de los laboratorios públicos de la universidad.</span>
+                </div>
+            </div>
+
+            <!-- Formulario de Configuración -->
+            <form onsubmit="event.preventDefault(); saveApiSettings();" class="space-y-4">
+                
+                <!-- API Key -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label for="cfg-api-key" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                            API Key de OpenRouter
+                        </label>
+                        <span id="cfg-key-indicator" class="text-[11px] font-semibold text-slate-500"></span>
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="cfg-api-key" autocomplete="off" placeholder="Pega aquí tu clave de OpenRouter (sk-or-v1-...)"
+                            class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-4 pr-11 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 font-mono transition">
+                        <button type="button" onclick="toggleApiKeyVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white transition cursor-pointer" title="Mostrar/Ocultar clave">
+                            <i id="toggle-key-icon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-400">
+                        La clave permanece protegida en pantalla para resguardar tu privacidad en el aula.
+                    </p>
+                </div>
+
+                <!-- URL del Servicio -->
+                <div class="space-y-1.5">
+                    <label for="cfg-api-url" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                        URL del Servicio (Endpoint)
+                    </label>
+                    <input type="url" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions"
+                        class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono transition">
+                </div>
+
+                <!-- Modelo -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="cfg-api-model" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                            Modelo de IA
+                        </label>
+                        <span class="text-[11px] text-slate-400">Elige o escribe tu modelo favorito</span>
+                    </div>
+
+                    <!-- Preset Selector Dropdown -->
+                    <div class="relative">
+                        <select id="cfg-model-select" onchange="onModelPresetChange(this.value)"
+                            class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition cursor-pointer">
+                            <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Por Defecto · Gratuito & Especializado en Finanzas)</option>
+                            <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Google Gemini 2.0 Flash · Gratuito y Rápido)</option>
+                            <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Llama 3.3 70B · Gratuito)</option>
+                            <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (DeepSeek R1 Razonamiento · Gratuito)</option>
+                            <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct (Qwen 2.5 72B · Gran rendimiento numérico)</option>
+                            <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini (GPT-4o Mini · Económico y Confiable)</option>
+                            <option value="custom">✏️ Personalizado (Escribir manualmente abajo)</option>
+                        </select>
+                    </div>
+
+                    <input type="text" id="cfg-api-model" value="inclusionai/ling-3.0-flash-fin:free" placeholder="Nombre o ID del modelo en OpenRouter"
+                        class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono transition">
+                    
+                    <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                        <span>Por defecto: <code class="text-purple-300 font-mono">inclusionai/ling-3.0-flash-fin:free</code> (barato en tokens para el aula).</span>
+                        <button type="button" onclick="resetDefaultModel()" class="text-purple-400 hover:text-purple-300 underline font-semibold text-[11px] cursor-pointer">Restablecer</button>
+                    </div>
+                </div>
+
+                <!-- Test Connection Feedback Message -->
+                <div id="cfg-test-feedback" class="hidden p-3.5 rounded-xl text-xs font-semibold"></div>
+
+                <!-- Footer Buttons -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="testApiConnection()" id="btn-test-conn"
+                            class="bg-slate-950 hover:bg-slate-800 text-purple-300 border border-purple-500/30 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 flex items-center gap-1.5 cursor-pointer heading-font">
+                            <i class="fa-solid fa-vial"></i>
+                            <span>Probar Conexión</span>
+                        </button>
+                        <button type="button" onclick="purgeApiKey()"
+                            class="bg-slate-950 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 border border-slate-800 hover:border-rose-500/40 text-xs font-semibold px-3 py-2.5 rounded-xl transition duration-200 flex items-center gap-1.5 cursor-pointer"
+                            title="Borra la API Key de este navegador (recomendado al salir de computadoras compartidas)">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                            <span>Olvidar Clave</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeModal('api-config-modal')"
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer">
+                            Cerrar
+                        </button>
+                        <button type="submit"
+                            class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-500/25 flex items-center gap-1.5 cursor-pointer heading-font">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Guardar Configuración</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // ==================== QUICK CHALLENGE LOGIC ====================
@@ -691,12 +910,273 @@
 
         // ==================== MODAL ACTIONS ====================
         function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
+            const el = document.getElementById(modalId);
+            if (el) el.classList.remove('hidden');
         }
 
         function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+            const el = document.getElementById(modalId);
+            if (el) el.classList.add('hidden');
         }
+
+        // ==================== OPENROUTER API SETTINGS LOGIC ====================
+        const API_STORAGE_KEY_BIAS = 'bias-lab-settings';
+        const API_STORAGE_KEY_GLOBAL = 'openrouter_settings';
+        const DEFAULT_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        const DEFAULT_MODEL = 'inclusionai/ling-3.0-flash-fin:free';
+
+        function getStoredApiSettings() {
+            try {
+                const raw = localStorage.getItem(API_STORAGE_KEY_BIAS) || localStorage.getItem(API_STORAGE_KEY_GLOBAL);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    return {
+                        apiKey: parsed.apiKey || '',
+                        apiUrl: parsed.apiUrl || DEFAULT_API_URL,
+                        model: parsed.model || DEFAULT_MODEL
+                    };
+                }
+            } catch (e) {
+                console.warn('Error reading stored API settings:', e);
+            }
+            return {
+                apiKey: '',
+                apiUrl: DEFAULT_API_URL,
+                model: DEFAULT_MODEL
+            };
+        }
+
+        function syncApiUi() {
+            const settings = getStoredApiSettings();
+            
+            // Populate inputs
+            const keyInput = document.getElementById('cfg-api-key');
+            const urlInput = document.getElementById('cfg-api-url');
+            const modelInput = document.getElementById('cfg-api-model');
+            const modelSelect = document.getElementById('cfg-model-select');
+            
+            if (keyInput) keyInput.value = settings.apiKey;
+            if (urlInput) urlInput.value = settings.apiUrl;
+            if (modelInput) modelInput.value = settings.model;
+            
+            if (modelSelect) {
+                const options = Array.from(modelSelect.options).map(o => o.value);
+                if (options.includes(settings.model)) {
+                    modelSelect.value = settings.model;
+                } else {
+                    modelSelect.value = 'custom';
+                }
+            }
+
+            // Status badges
+            const isConfigured = !!(settings.apiKey && settings.apiKey.trim().length > 0);
+            
+            // Header status badge
+            const headerBadge = document.getElementById('header-api-status-badge');
+            if (headerBadge) {
+                if (isConfigured) {
+                    headerBadge.className = 'ml-2 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold';
+                    headerBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Conectada';
+                } else {
+                    headerBadge.className = 'ml-2 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold';
+                    headerBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Pendiente';
+                }
+            }
+
+            // Hero status pill
+            const heroPill = document.getElementById('hero-api-status-pill');
+            if (heroPill) {
+                if (isConfigured) {
+                    heroPill.className = 'px-2.5 py-0.5 text-[10px] font-bold rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30 flex items-center gap-1';
+                    heroPill.innerHTML = '<i class="fa-solid fa-circle-check text-xs"></i> Clave Configurada ✓';
+                } else {
+                    heroPill.className = 'px-2.5 py-0.5 text-[10px] font-bold rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/30 flex items-center gap-1';
+                    heroPill.innerHTML = '<i class="fa-solid fa-circle-exclamation text-xs"></i> Clave no ingresada';
+                }
+            }
+
+            // Summary model and key status
+            const summaryModel = document.getElementById('summary-model-display');
+            if (summaryModel) summaryModel.textContent = settings.model || DEFAULT_MODEL;
+
+            const summaryStatus = document.getElementById('summary-key-status');
+            if (summaryStatus) {
+                if (isConfigured) {
+                    summaryStatus.className = 'font-semibold text-emerald-400 block truncate';
+                    const masked = settings.apiKey.length > 12 
+                        ? settings.apiKey.slice(0, 8) + '••••••••' + settings.apiKey.slice(-4)
+                        : '••••••••';
+                    summaryStatus.textContent = `Configurada (${masked})`;
+                } else {
+                    summaryStatus.className = 'font-semibold text-amber-400 block truncate';
+                    summaryStatus.textContent = 'No configurada (Haz clic para ingresar)';
+                }
+            }
+
+            // Modal indicator
+            const keyIndicator = document.getElementById('cfg-key-indicator');
+            if (keyIndicator) {
+                if (isConfigured) {
+                    keyIndicator.className = 'text-[11px] font-semibold text-emerald-400 flex items-center gap-1';
+                    keyIndicator.innerHTML = '<i class="fa-solid fa-check"></i> Clave guardada localmente';
+                } else {
+                    keyIndicator.className = 'text-[11px] font-semibold text-slate-500';
+                    keyIndicator.textContent = 'Sin clave guardada';
+                }
+            }
+        }
+
+        function saveApiSettings() {
+            const keyInput = document.getElementById('cfg-api-key');
+            const urlInput = document.getElementById('cfg-api-url');
+            const modelInput = document.getElementById('cfg-api-model');
+            const feedback = document.getElementById('cfg-test-feedback');
+
+            const apiKey = (keyInput ? keyInput.value : '').trim();
+            const apiUrl = (urlInput ? urlInput.value : '').trim() || DEFAULT_API_URL;
+            const model = (modelInput ? modelInput.value : '').trim() || DEFAULT_MODEL;
+
+            const payload = { apiKey, apiUrl, model };
+
+            try {
+                localStorage.setItem(API_STORAGE_KEY_BIAS, JSON.stringify(payload));
+                localStorage.setItem(API_STORAGE_KEY_GLOBAL, JSON.stringify(payload));
+            } catch (err) {
+                alert('No se pudo guardar en localStorage: ' + err.message);
+                return;
+            }
+
+            syncApiUi();
+
+            if (feedback) {
+                feedback.classList.remove('hidden');
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span>¡Configuración guardada exitosamente en este navegador!</span>';
+                setTimeout(() => feedback.classList.add('hidden'), 4000);
+            }
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('cfg-api-key');
+            const icon = document.getElementById('toggle-key-icon');
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash text-sm';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye text-sm';
+            }
+        }
+
+        function onModelPresetChange(val) {
+            const modelInput = document.getElementById('cfg-api-model');
+            if (!modelInput) return;
+            if (val !== 'custom') {
+                modelInput.value = val;
+            }
+        }
+
+        function resetDefaultModel() {
+            const modelInput = document.getElementById('cfg-api-model');
+            const modelSelect = document.getElementById('cfg-model-select');
+            if (modelInput) modelInput.value = DEFAULT_MODEL;
+            if (modelSelect) modelSelect.value = DEFAULT_MODEL;
+        }
+
+        function purgeApiKey() {
+            if (!confirm('¿Deseas olvidar y eliminar tu API Key de este navegador?\n\nRecomendado si estás usando una computadora del laboratorio universitario.')) {
+                return;
+            }
+            try {
+                const current = getStoredApiSettings();
+                current.apiKey = '';
+                localStorage.setItem(API_STORAGE_KEY_BIAS, JSON.stringify(current));
+                localStorage.setItem(API_STORAGE_KEY_GLOBAL, JSON.stringify(current));
+            } catch (e) {
+                console.error(e);
+            }
+
+            const keyInput = document.getElementById('cfg-api-key');
+            if (keyInput) keyInput.value = '';
+
+            const feedback = document.getElementById('cfg-test-feedback');
+            if (feedback) {
+                feedback.classList.remove('hidden');
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-blue-950/80 border border-blue-700 text-blue-300 flex items-center gap-2';
+                feedback.innerHTML = '<i class="fa-solid fa-circle-info text-blue-400 text-sm"></i> <span>Clave borrada de la memoria de este equipo.</span>';
+                setTimeout(() => feedback.classList.add('hidden'), 4000);
+            }
+
+            syncApiUi();
+        }
+
+        async function testApiConnection() {
+            const keyInput = document.getElementById('cfg-api-key');
+            const urlInput = document.getElementById('cfg-api-url');
+            const modelInput = document.getElementById('cfg-api-model');
+            const feedback = document.getElementById('cfg-test-feedback');
+            const btn = document.getElementById('btn-test-conn');
+
+            const apiKey = (keyInput ? keyInput.value : '').trim();
+            const apiUrl = (urlInput ? urlInput.value : '').trim() || DEFAULT_API_URL;
+            const model = (modelInput ? modelInput.value : '').trim() || DEFAULT_MODEL;
+
+            if (!apiKey) {
+                feedback.classList.remove('hidden');
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-amber-950/80 border border-amber-700 text-amber-300 flex items-center gap-2';
+                feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm"></i> <span>Ingresa primero tu API Key para probar la conexión.</span>';
+                return;
+            }
+
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-purple-400 text-sm"></i> <span>Contactando con OpenRouter (' + model + ')...</span>';
+            
+            if (btn) btn.disabled = true;
+
+            const start = performance.now();
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': window.location.origin || 'http://localhost',
+                        'X-Title': 'UMG Estadistica 1'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        max_tokens: 10,
+                        messages: [
+                            { role: 'user', content: 'Di la palabra OK en una sola palabra' }
+                        ]
+                    })
+                });
+
+                const elapsed = Math.round(performance.now() - start);
+                const data = await response.json();
+
+                if (response.ok && data.choices && data.choices.length > 0) {
+                    feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span><strong>¡Conexión Exitosa!</strong> El modelo respondió en ${elapsed} ms. Puedes guardar tu configuración con tranquilidad.</span>`;
+                } else {
+                    const errDetail = (data && data.error && data.error.message) ? data.error.message : response.statusText;
+                    feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-sm"></i> <span><strong>Error de conexión (${response.status}):</strong> ${errDetail}</span>`;
+                }
+            } catch (err) {
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-sm"></i> <span><strong>Error de red:</strong> ${err.message}. Verifica tu conexión o posibles bloqueos.</span>`;
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            syncApiUi();
+        });
     </script>
 </body>
 </html>

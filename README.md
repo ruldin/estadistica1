@@ -36,8 +36,8 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 
 2. 📊 **`Estadistica1/index_estadistica.html` (Dashboard de Estadística I):**
    - Acceso rápido a simuladores por semana.
-   - Barra de acceso directo con herramientas activas (Clasificador, Business Lab, Tabulador, Pareto, Sturges y Parcial 1).
-   - Centro de navegación principal para módulos cuantitativos.
+   - Barra de acceso directo con herramientas activas (Clasificador, Business Lab, Tabulador, Pareto, Sturges, Parcial 1 y Estadígrafos).
+   - **Centro de Configuración de API OpenRouter para el Alumno:** Panel interactivo y modal seguro para que cada estudiante gestione su propia API Key almacenada localmente en su navegador (`localStorage`), con el modelo por defecto `inclusionai/ling-3.0-flash-fin:free`, selector de modelos, prueba de conexión en vivo con telemetría de latencia (ms) y purga de seguridad para computadoras de laboratorios compartidos.
 
 3. 📊 **`Estadistica1/sem2_clasifica_variables.html` (Clasificación de Variables):**
    - Entrenamiento interactivo para clasificar variables cualitativas, cuantitativas, nominales, ordinales, de intervalo y de razón.
@@ -86,11 +86,12 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Laboratorio IA Integrado (Next.js en iframe):** Acceso directo y visor integrado a la aplicación web interactiva (`https://temporary-instant-apogee-hran4bx.vercel.app/`) para evaluar el ciclo de 5 pasos: Contexto, Datos, Estadística, System Prompt y Decisión del Agente de IA.
       - **Tabla de Frecuencias y Exportación PDF:** Generación de informe ejecutivo A4 con captura del gráfico activo, tabla tabulada y respuestas del estudiante con jsPDF.
 
-11. 🎮 **`Estadistica1/sem8_ejercicio.html` (Semana 8: CentralTrend — Ejercicios Prácticos y Gamificación):**
-    - Aplicación interactiva de práctica aplicada con 5 casos de estudio reales:
-      - **Casos de Negocio:** Farmacias La Salud (Media ponderada), Tiempos de atención al cliente (Mediana vs Outliers), Demanda de tallas de calzado (Moda en retail), etc.
-      - **Gamificación:** Sistema de puntuación, medallas por precisión y feedback explicativo inmediato.
-      - **Reporte PDF:** Generación automática de constancia de resultados y resolución de ejercicios.
+11. 🎮 **`Estadistica1/sem8_ejercicio.html` (Semana 8: CentralTrend — Casos Prácticos y Gamificación Empresarial):**
+    - Simulador interactivo gamificado con diseño oscuro ejecutivo (`#0b0f19`), encabezado institucional UMG y 10 casos de estudio de mercado guatemalteco:
+      - **Casos Empresariales:** Ventas de smoothies en campus universitario (distribución simétrica), views de reels virales en Antigua GT (outliers y sesgo positivo), redes sociales predilectas en mercadeo estudiantil (moda en datos cualitativos), tallas de camisetas típicas en Xela (bimodalidad y segmentación), promedio ponderado de calificaciones universitarias, tiempos de entrega motorizada en Calzada Roosevelt (impacto de bloqueos viales en la media vs mediana), sueldos en Call Center bilingüe de Zona 10 (dilema ético por sueldo del director regional), medios de cobro preferidos en La Terminal Z.4 y Mercado Central (Efectivo vs fintech/QR), ticket promedio de cafetería de café de altura en Cobán, y costo medio ponderado de acopio de quintales de café en Sacatepéquez.
+      - **Evaluación y Guía Formativa con IA (OpenRouter):** Botón `Evaluación IA` al lado de `Siguiente caso` que envía el enunciado, las respuestas numéricas y el análisis gerencial del alumno a la API de OpenRouter (`bias-lab-settings` / `openrouter_settings`). Cuenta con un **enfoque pedagógico de Mentor Amigo** (tratamiento directo y cálido de "tú", proactivo y alentador, sin calificativos punitivos como "incorrecto" y comenzando directamente con el contenido sin saludos redundantes), **panel de reevaluación colapsable tipo acordeón** para probar puntualmente otros modelos (Gemini 2.0 Flash, Llama 3.3 70B, DeepSeek R1, Qwen 2.5, GPT-4o Mini) sin alterar la configuración principal guardada en el navegador, sanitización de etiquetas `<think>` y 3 apartados claros de consejo gerencial.
+      - **Gamificación y Retroalimentación:** Sistema de puntajes (`pts`), verificación inmediata de cálculos (Media, Mediana, Moda y Media Ponderada), pistas contextuales por caso, cuadrícula dinámica de 10 medallas de honor (oro y plata), y contador de palabras para el análisis gerencial crítico.
+      - **Reporte Oficial en PDF con IA:** Generación y descarga directa con jsPDF del informe ejecutivo de resultados con identidad UMG, incluyendo el análisis original del estudiante, la retroalimentación de la IA y el criterio técnico docente oficial bajo la firma de cátedra del **Prof. Ruldin Ayala**.
 
 12. 📊 **`Estadistica1/sem9_agrupados.html` (Semana 9: Estadígrafos de Tendencia Central para Datos Agrupados & Medidas de Posición):**
     - Módulo integral de cálculo, interpretación gerencial y hoja de trabajo aplicada:

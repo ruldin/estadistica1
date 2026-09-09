@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CentralTrend — Medidas de Tendencia Central</title>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.0.8/index.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>CentralTrend — Ejercicios y Casos Prácticos · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root {
-            --primary: #0D9488;
-            --primary-light: #14B8A6;
-            --primary-dark: #0F766E;
-            --accent: #F97316;
-            --accent-light: #FB923C;
-            --accent-warm: #FBBF24;
-            --bg: #FAFAF9;
-            --bg-card: #FFFFFF;
-            --bg-dark: #1C1917;
-            --text: #1C1917;
-            --text-secondary: #57534E;
-            --text-muted: #A8A29E;
-            --border: #E7E5E4;
-            --success: #10B981;
-            --error: #EF4444;
-            --warning: #F59E0B;
-            --gradient-1: linear-gradient(135deg, #0D9488 0%, #06B6D4 100%);
-            --gradient-2: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
-            --gradient-3: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
-            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
-            --radius: 12px;
-            --radius-lg: 20px;
-            --radius-full: 9999px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .neon-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.18);
+        }
+
+        .neon-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.16);
+        }
+
+        .neon-amber {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.16);
+        }
+
+        .neon-purple {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.18);
         }
 
         .screen {
             display: none;
-            min-height: 100vh;
+            min-height: calc(100vh - 5rem);
             animation: fadeIn 0.4s ease;
         }
 
@@ -65,772 +64,186 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes confetti {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        /* Welcome Screen */
-        .welcome-screen {
-            background: linear-gradient(180deg, #F0FDFA 0%, #FAFAF9 50%, #FFF7ED 100%);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .welcome-container {
-            max-width: 480px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .welcome-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .welcome-subtitle {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            font-weight: 400;
-        }
-
-        .welcome-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 32px 24px;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid var(--border);
-        }
-
-        .welcome-card h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .welcome-card p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.2s;
-            background: var(--bg);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: var(--bg);
-            color: var(--text);
-            border: 2px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-accent {
-            background: var(--gradient-2);
-            color: white;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-        }
-
-        .btn-accent:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
-        }
-
-        .btn-full {
-            width: 100%;
-        }
-
-        .welcome-features {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .feature-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background: #F0FDFA;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            color: var(--primary-dark);
-            font-weight: 500;
-        }
-
-        /* Game Screen */
-        .game-screen {
-            background: var(--bg);
-        }
-
-        .game-header {
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.9);
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .header-brand {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header-score {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .score-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            background: #FEF3C7;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #92400E;
-        }
-
-        .progress-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 6px;
-            background: var(--border);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient-1);
-            border-radius: var(--radius-full);
-            transition: width 0.5s ease;
-        }
-
-        .progress-text {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-
-        .game-content {
-            flex: 1;
-            padding: 20px;
-            max-width: 720px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .case-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            animation: slideUp 0.4s ease;
-        }
-
-        .case-header {
-            padding: 24px 24px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .case-category {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .cat-alimentacion { background: #FEF3C7; color: #92400E; }
-        .cat-tecnologia { background: #DBEAFE; color: #1E40AF; }
-        .cat-vestuario { background: #FCE7F3; color: #9D174D; }
-        .cat-redes_sociales { background: #EDE9FE; color: #5B21B6; }
-        .cat-otro { background: #F0FDF4; color: #166534; }
-
-        .case-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        .case-context {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .case-body {
-            padding: 24px;
-        }
-
-        .data-display {
-            background: #F8FAFC;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .data-display-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .data-values {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .data-chip {
-            padding: 4px 10px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .data-chip.highlight {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .calc-section {
-            margin-bottom: 20px;
-        }
-
-        .calc-section h3 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .calc-section h3 .icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .icon-mean { background: var(--gradient-1); }
-        .icon-median { background: var(--gradient-3); }
-        .icon-mode { background: var(--gradient-2); }
-
-        .input-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .input-row input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .input-row input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-        }
-
-        .input-row input.correct {
-            border-color: var(--success);
-            background: #F0FDF4;
-        }
-
-        .input-row input.incorrect {
-            border-color: var(--error);
-            background: #FEF2F2;
-        }
-
-        .input-status {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-
-        .input-status.correct {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .input-status.incorrect {
-            background: #FEE2E2;
-            color: var(--error);
-        }
-
-        .btn-check {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .btn-check:hover {
-            background: var(--primary-dark);
-        }
-
-        .feedback-msg {
-            padding: 10px 14px;
-            border-radius: var(--radius);
-            font-size: 0.8rem;
-            margin-top: 8px;
-            display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        .feedback-msg.show {
-            display: block;
-        }
-
-        .feedback-msg.success {
-            background: #F0FDF4;
-            color: #166534;
-            border: 1px solid #BBF7D0;
-        }
-
-        .feedback-msg.error {
-            background: #FEF2F2;
-            color: #991B1B;
-            border: 1px solid #FECACA;
-        }
-
-        .feedback-msg.hint {
-            background: #FFFBEB;
-            color: #92400E;
-            border: 1px solid #FDE68A;
-        }
-
-        .interpretation-section {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
-
-        .interpretation-section h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .interpretation-section .question {
-            font-size: 0.9rem;
-            color: var(--primary-dark);
-            font-weight: 500;
-            margin-bottom: 12px;
-            padding: 10px 14px;
-            background: #F0FDFA;
-            border-radius: var(--radius);
-            border-left: 3px solid var(--primary);
-        }
-
-        .textarea-wrapper {
-            position: relative;
-        }
-
-        .textarea-wrapper textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-            font-family: inherit;
-            line-height: 1.6;
-            resize: vertical;
-            transition: all 0.2s;
-        }
-
-        .textarea-wrapper textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-        }
-
-        .word-counter {
-            text-align: right;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-            font-weight: 500;
-        }
-
-        .word-counter.warning {
-            color: var(--warning);
-        }
-
-        .word-counter.ready {
-            color: var(--success);
-        }
-
-        .case-footer {
-            padding: 16px 24px 24px;
-            display: flex;
-            justify-content: flex-end;
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* Qualitative case special UI */
         .qualitative-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
             margin-bottom: 16px;
         }
 
         .qual-option {
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
+            padding: 12px;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 0.85rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #f1f5f9;
         }
 
         .qual-option:hover {
-            border-color: var(--primary-light);
-            background: #F0FDFA;
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
         }
 
         .qual-option.selected {
-            border-color: var(--primary);
-            background: #F0FDFA;
-            color: var(--primary-dark);
+            border: 2px solid #a855f7;
+            background: rgba(168, 85, 247, 0.2);
+            color: #e9d5ff;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
         }
 
         .qual-option .freq {
             display: block;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-top: 2px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 4px;
+            font-weight: normal;
         }
 
         /* Weighted mean UI */
         .weighted-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-bottom: 16px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid #1e293b;
         }
 
         .weighted-table th,
         .weighted-table td {
-            padding: 10px 12px;
+            padding: 10px 14px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #1e293b;
             font-size: 0.85rem;
         }
 
         .weighted-table th {
-            font-weight: 600;
-            color: var(--text-secondary);
+            font-weight: 700;
+            background: #020617;
+            color: #94a3b8;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .weighted-table input {
-            width: 80px;
-            padding: 6px 10px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            text-align: center;
-        }
-
-        .weighted-table input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Results Screen */
-        .results-screen {
-            background: linear-gradient(180deg, #F0FDFA 0%, #FAFAF9 40%, #FFF7ED 100%);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .results-container {
-            max-width: 560px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .results-trophy {
-            font-size: 4rem;
-            margin-bottom: 16px;
-            animation: bounce 2s infinite;
-        }
-
-        .results-title {
+            letter-spacing: 0.05em;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
         }
 
-        .results-subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 32px;
+        .weighted-table tr:last-child td {
+            border-bottom: none;
         }
 
-        .medals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 32px;
+        .weighted-table td {
+            background: #0f172a;
+            color: #f1f5f9;
         }
 
-        .medal-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 16px 12px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            animation: scaleIn 0.4s ease;
-        }
-
-        .medal-card.earned {
-            border-color: var(--accent-warm);
-            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
-        }
-
-        .medal-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .medal-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .medal-status {
-            font-size: 0.7rem;
-            margin-top: 4px;
-            font-weight: 500;
-        }
-
-        .medal-status.gold { color: #92400E; }
-        .medal-status.silver { color: #6B7280; }
-
-        .results-score {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 24px;
-        }
-
-        .score-big {
+        /* Formula box */
+        .formula-box {
+            background: #020617;
+            border: 1px solid #1e3a8a;
+            border-radius: 0.85rem;
+            padding: 0.85rem 1.15rem;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 3rem;
+            color: #93c5fd;
             font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: 0.01em;
+            overflow-x: auto;
+            margin-bottom: 1rem;
         }
 
-        .score-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .results-actions {
+        /* Status icons */
+        .input-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        /* Loading screen */
-        .loading-screen {
             align-items: center;
             justify-content: center;
-            background: var(--bg);
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            flex-shrink: 0;
         }
 
+        .input-status.correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .input-status.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        /* Category badges */
+        .cat-alimentacion { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .cat-tecnologia { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .cat-vestuario { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .cat-redes_sociales { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .cat-logistica { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
+        .cat-finanzas { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .cat-comercio { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+        .cat-otro { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loader */
         .loader {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
+            width: 44px;
+            height: 44px;
+            border: 3px solid #1e293b;
+            border-top-color: #a855f7;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -838,213 +251,545 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .loading-text {
-            margin-top: 16px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Tooltip / Hint */
-        .hint-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-weight: 500;
-            text-decoration: underline;
-            font-family: inherit;
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .welcome-logo {
-                font-size: 2rem;
-            }
-
-            .welcome-card {
-                padding: 24px 20px;
-            }
-
-            .game-content {
-                padding: 16px;
-            }
-
-            .case-header {
-                padding: 20px 16px 14px;
-            }
-
-            .case-body {
-                padding: 16px;
-            }
-
-            .case-footer {
-                padding: 12px 16px 20px;
-            }
-
-            .case-title {
-                font-size: 1.15rem;
-            }
-
-            .medals-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .results-title {
-                font-size: 1.5rem;
-            }
-
-            .qualitative-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Step indicator within a case */
-        .step-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .step-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s;
-        }
-
-        .step-dot.active {
-            background: var(--primary);
-            width: 24px;
-            border-radius: 4px;
-        }
-
-        .step-dot.done {
-            background: var(--success);
-        }
-
-        /* Formula display */
-        .formula-box {
-            background: #F8FAFC;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-family: 'Courier New', monospace;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Medal animation */
-        .medal-earned-anim {
-            animation: pulse 0.6s ease;
-        }
-
-        /* Quote */
-        .welcome-quote {
-            font-style: italic;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 24px;
-            padding: 0 20px;
-        }
     </style>
 </head>
-<body>
 
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="screen active loading-screen">
-        <div class="loader"></div>
-        <p class="loading-text">Cargando casos de negocio...</p>
-    </div>
+<body class="min-h-screen flex flex-col custom-scrollbar">
 
-    <!-- Welcome Screen -->
-    <div id="welcomeScreen" class="screen welcome-screen">
-        <div class="welcome-container">
-            <div style="text-align: left; margin-bottom: 14px;">
-                <a href="sem8_medidas_tendencia_central.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-full); background: #FFFFFF; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: all 0.2s;">
-                    ← Volver a Semana 8
-                </a>
-            </div>
-            <div class="welcome-logo">CentralTrend</div>
-            <p class="welcome-subtitle">Media, Mediana y Moda — en contexto real</p>
-            <div class="welcome-card">
-                <h2>¡Bienvenido/a! 👋</h2>
-                <p>Vas a resolver 5 casos de negocio reales usando medidas de tendencia central. Al final descargás tu reporte en PDF.</p>
-                <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" id="inputNombre" placeholder="Ej: María José López García" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>Carnet universitario</label>
-                    <input type="text" id="inputCarnet" placeholder="Ej: 202400123" autocomplete="off">
-                </div>
-                <button class="btn btn-primary btn-full" id="btnComenzar" style="margin-top: 8px;">
-                    🚀 Comenzar actividad
-                </button>
-                <div class="welcome-features">
-                    <span class="feature-tag">📊 5 casos</span>
-                    <span class="feature-tag">⏱ ~45 min</span>
-                    <span class="feature-tag">🏆 Medallas</span>
-                </div>
-            </div>
-            <p class="welcome-quote">"Pensar es el trabajo más difícil que existe, tal vez por ello tan pocos lo hacen." — Henry Ford</p>
-        </div>
-    </div>
-
-    <!-- Game Screen -->
-    <div id="gameScreen" class="screen game-screen">
-        <div class="game-header">
-            <div class="header-top">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <a href="sem8_medidas_tendencia_central.html" title="Regresar a Semana 8" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); display: inline-flex; align-items: center; gap: 4px;">
-                        ← Salir
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <a href="sem8_medidas_tendencia_central.html"
+                        class="bg-slate-900 hover:bg-slate-800 text-slate-300 p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0"
+                        title="Regresar a Semana 8: Medidas de Tendencia Central">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
                     </a>
-                    <span class="header-brand">CentralTrend</span>
+                    <div class="bg-white p-1 rounded-xl shadow-lg shadow-purple-500/15 shrink-0 flex items-center justify-center">
+                        <img src="../cosas/Umg.png" alt="Logo UMG" class="h-8 w-auto object-contain"
+                            onerror="this.onerror=null; this.src='../cosas/umg.png';">
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-xs font-semibold tracking-widest text-purple-400 uppercase block heading-font">Módulo I · Semana 8</span>
+                        <h1 class="text-sm sm:text-lg font-bold text-white leading-tight heading-font truncate">
+                            CentralTrend <span class="text-xs text-slate-400 font-normal">| Ejercicios y Casos Prácticos</span>
+                        </h1>
+                    </div>
                 </div>
-                <div class="header-score">
-                    <span class="score-badge" id="scoreBadge">⭐ 0 pts</span>
-                </div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-                <span class="progress-text" id="progressText">Caso 1 de 5</span>
+                <nav class="hidden sm:flex items-center space-x-2 shrink-0">
+                    <a href="sem8_medidas_tendencia_central.html"
+                        class="px-3.5 py-2 rounded-xl text-xs font-bold transition text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-purple-400"></i>
+                        <span>Laboratorio y Guía</span>
+                    </a>
+                    <button onclick="openModal('api-config-modal')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition text-purple-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-purple-500/30 flex items-center gap-2 cursor-pointer heading-font" title="Configurar API Key de OpenRouter">
+                        <i class="fa-solid fa-key text-purple-400"></i>
+                        <span>API IA</span>
+                        <span id="header-api-status-badge" class="ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full font-bold"></span>
+                    </button>
+                    <div id="headerScoreBadge" class="hidden px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1.5 shadow-sm shadow-amber-500/10">
+                        <i class="fa-solid fa-trophy text-amber-400"></i>
+                        <span id="headerScoreVal">0</span> pts
+                    </div>
+                </nav>
             </div>
         </div>
-        <div class="game-content" id="gameContent">
-            <!-- Dynamic case content -->
+    </header>
+
+    <main class="flex-grow w-full flex flex-col justify-center">
+
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="screen active flex-col items-center justify-center py-20">
+            <div class="loader mb-4"></div>
+            <p class="text-slate-400 text-sm font-semibold heading-font">Cargando casos de negocio...</p>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="screen items-center justify-center py-10 px-4">
+            <div class="max-w-xl w-full mx-auto space-y-6 text-center">
+                
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold heading-font">
+                    <i class="fa-solid fa-gamepad text-purple-400"></i>
+                    <span>Simulador Gamificado de Casos de Estudio</span>
+                </div>
+
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-white heading-font tracking-tight">
+                        CentralTrend
+                    </h1>
+                    <p class="text-slate-400 text-sm sm:text-base mt-2">
+                        Media, Mediana y Moda — Aplicadas a la Toma de Decisiones Empresariales
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md text-left space-y-5">
+                    <div class="space-y-1">
+                        <h2 class="text-lg font-bold text-white heading-font flex items-center gap-2">
+                            <span>¡Bienvenido/a!</span>
+                            <span class="text-xl">👋</span>
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Vas a resolver 10 casos de negocio reales contextualizados en el mercado guatemalteco (retail, logística, call centers, comercio mayorista y agroexportación). Al finalizar, generarás y descargarás tu reporte ejecutivo oficial en PDF.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider heading-font">
+                                Nombre completo del estudiante
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i class="fa-solid fa-user text-xs"></i>
+                                </div>
+                                <input type="text" id="inputNombre" placeholder="Ej: María José López García" autocomplete="off"
+                                    class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider heading-font">
+                                Carnet universitario UMG
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i class="fa-solid fa-id-card text-xs"></i>
+                                </div>
+                                <input type="text" id="inputCarnet" placeholder="Ej: 202400123" autocomplete="off"
+                                    class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition">
+                            </div>
+                        </div>
+
+                        <button id="btnComenzar"
+                            class="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2 heading-font cursor-pointer">
+                            <i class="fa-solid fa-rocket"></i>
+                            <span>Comenzar actividad de casos</span>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 pt-2 justify-center">
+                        <span class="px-3 py-1 bg-slate-950 border border-slate-800 text-slate-400 text-xs rounded-full font-medium">
+                            <i class="fa-solid fa-chart-pie mr-1 text-purple-400"></i>10 casos empresariales
+                        </span>
+                        <span class="px-3 py-1 bg-slate-950 border border-slate-800 text-slate-400 text-xs rounded-full font-medium">
+                            <i class="fa-solid fa-clock mr-1 text-emerald-400"></i>~60-75 min estimado
+                        </span>
+                        <span class="px-3 py-1 bg-slate-950 border border-slate-800 text-slate-400 text-xs rounded-full font-medium">
+                            <i class="fa-solid fa-medal mr-1 text-amber-400"></i>Sistema de medallas
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-500 italic px-4">
+                    "Pensar es el trabajo más difícil que existe, tal vez por ello tan pocos lo hacen." — Henry Ford
+                </p>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen py-6 px-4">
+            <div class="max-w-3xl w-full mx-auto space-y-4">
+
+                <!-- Dynamic Top Game Control Bar -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <a href="sem8_medidas_tendencia_central.html"
+                                class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white bg-slate-950 border border-slate-800 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Salir</span>
+                            </a>
+                            <span class="text-xs font-extrabold text-purple-400 heading-font uppercase tracking-wider">
+                                CentralTrend
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="scoreBadge" class="px-3 py-1 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1.5">
+                                <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                                <span>0 pts</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-xs text-slate-400 font-semibold heading-font">
+                            <span>Progreso de Casos</span>
+                            <span id="progressText">Caso 1 de 5</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-950 border border-slate-800 rounded-full overflow-hidden p-0.5">
+                            <div id="progressFill" class="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Content Container -->
+                <div id="gameContent">
+                    <!-- Dynamic case content rendered via JS -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="screen items-center justify-center py-10 px-4">
+            <div class="max-w-2xl w-full mx-auto text-center space-y-6">
+
+                <div class="text-6xl animate-bounce" id="resultsEmoji">🏆</div>
+
+                <div class="space-y-2">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-white heading-font">
+                        ¡Actividad completada!
+                    </h1>
+                    <p id="resultsSubtitle" class="text-slate-400 text-sm sm:text-base">
+                        Aquí está tu resumen de desempeño y logros en la sesión
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+                    <div class="space-y-1">
+                        <div id="finalScore" class="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-emerald-400 heading-font">
+                            0
+                        </div>
+                        <div class="text-xs uppercase tracking-widest text-slate-400 font-bold heading-font">
+                            Puntos Totales Obtenidos
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-left">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider heading-font text-center">
+                            Medallas de Casos Completados
+                        </h3>
+                        <div id="medalsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                            <!-- Dynamic Medals rendered via JS -->
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 justify-center pt-2">
+                        <button id="btnDownloadPDF"
+                            class="px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer heading-font">
+                            <i class="fa-solid fa-file-pdf text-base"></i>
+                            <span>Descargar Reporte PDF</span>
+                        </button>
+                        <button id="btnRestart"
+                            class="px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-300 bg-slate-950 hover:bg-slate-800 border border-slate-800 transition active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer heading-font">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Reiniciar</span>
+                        </button>
+                        <a href="sem8_medidas_tendencia_central.html"
+                            class="px-6 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-300 bg-slate-950 hover:bg-slate-800 border border-slate-800 transition active:scale-[0.99] flex items-center justify-center gap-2 heading-font">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Volver a Semana 8</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE CONFIGURACIÓN API DE IA (OPENROUTER) -->
+    <div id="api-config-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-400 flex items-center justify-center font-bold text-lg shadow-sm shadow-purple-500/10">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg sm:text-xl font-bold text-white heading-font">Servicio de IA (OpenRouter)</h4>
+                        <p class="text-xs text-slate-400">Configuración de API Key para retroalimentación gerencial interactiva</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('api-config-modal')" class="text-slate-400 hover:text-white transition text-lg p-2 rounded-xl hover:bg-slate-800 cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Guía Paso a Paso -->
+            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-purple-300 uppercase tracking-wider heading-font flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-question text-purple-400"></i> ¿Cómo obtener tu API Key gratis en OpenRouter?
+                    </span>
+                    <span class="text-[10px] text-slate-400">100% Gratuito</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    La clave se guarda <strong>exclusivamente en este navegador</strong> (`localStorage`). Sigue estos sencillos pasos:
+                </p>
+                <ol class="text-xs text-slate-300 space-y-2 list-decimal pl-5">
+                    <li>
+                        Entra a <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline font-semibold inline-flex items-center gap-1">openrouter.ai <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a> y crea una cuenta con Google o GitHub.
+                    </li>
+                    <li>
+                        Ve a <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline font-semibold inline-flex items-center gap-1">Keys en el menú lateral <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>.
+                    </li>
+                    <li>
+                        Pulsa <strong class="text-white font-bold">Create key</strong>, dale nombre (ej. <em class="text-purple-300">umg-estadistica</em>) y confirma.
+                    </li>
+                    <li>
+                        Copia la clave (comienza con <code class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-purple-300 font-mono">sk-or-v1-</code>) y pégala abajo.
+                    </li>
+                </ol>
+                <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-400 text-sm shrink-0"></i>
+                    <span><strong>Seguridad:</strong> La clave nunca viaja a ningún servidor externo aparte de OpenRouter. Al salir de una computadora de laboratorio, usa "Olvidar Clave".</span>
+                </div>
+            </div>
+
+            <!-- Formulario de Configuración -->
+            <form onsubmit="event.preventDefault(); saveApiSettings();" class="space-y-4">
+                <!-- API Key -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label for="cfg-api-key" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                            API Key de OpenRouter
+                        </label>
+                        <span id="cfg-key-indicator" class="text-[11px] font-semibold text-slate-500"></span>
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="cfg-api-key" autocomplete="off" placeholder="Pega aquí tu clave de OpenRouter (sk-or-v1-...)"
+                            class="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-4 pr-11 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 font-mono transition">
+                        <button type="button" onclick="toggleApiKeyVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white transition cursor-pointer" title="Mostrar/Ocultar clave">
+                            <i id="toggle-key-icon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- URL del Servicio -->
+                <div class="space-y-1.5">
+                    <label for="cfg-api-url" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                        URL del Servicio (Endpoint)
+                    </label>
+                    <input type="url" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions"
+                        class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono transition">
+                </div>
+
+                <!-- Modelo -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="cfg-api-model" class="block text-xs font-bold text-slate-300 uppercase tracking-wider heading-font">
+                            Modelo de IA
+                        </label>
+                        <span class="text-[11px] text-slate-400">Elige o escribe tu modelo favorito</span>
+                    </div>
+
+                    <div class="relative">
+                        <select id="cfg-model-select" onchange="onModelPresetChange(this.value)"
+                            class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition cursor-pointer">
+                            <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Por Defecto · Gratuito & Finanzas)</option>
+                            <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Google Gemini 2.0 Flash · Gratuito)</option>
+                            <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Llama 3.3 70B · Gratuito)</option>
+                            <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (DeepSeek R1 Razonamiento · Gratuito)</option>
+                            <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct (Qwen 2.5 72B · Gran rendimiento)</option>
+                            <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini (GPT-4o Mini · Confiable)</option>
+                            <option value="custom">✏️ Personalizado (Escribir manualmente abajo)</option>
+                        </select>
+                    </div>
+
+                    <input type="text" id="cfg-api-model" value="inclusionai/ling-3.0-flash-fin:free" placeholder="Nombre o ID del modelo en OpenRouter"
+                        class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono transition">
+                    
+                    <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                        <span>Por defecto: <code class="text-purple-300 font-mono">inclusionai/ling-3.0-flash-fin:free</code>.</span>
+                        <button type="button" onclick="resetDefaultModel()" class="text-purple-400 hover:text-purple-300 underline font-semibold text-[11px] cursor-pointer">Restablecer</button>
+                    </div>
+                </div>
+
+                <!-- Test Feedback -->
+                <div id="cfg-test-feedback" class="hidden p-3.5 rounded-xl text-xs font-semibold"></div>
+
+                <!-- Footer Buttons -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="testApiConnection()" id="btn-test-conn"
+                            class="bg-slate-950 hover:bg-slate-800 text-purple-300 border border-purple-500/30 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 flex items-center gap-1.5 cursor-pointer heading-font">
+                            <i class="fa-solid fa-vial"></i>
+                            <span>Probar Conexión</span>
+                        </button>
+                        <button type="button" onclick="purgeApiKey()"
+                            class="bg-slate-950 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 border border-slate-800 hover:border-rose-500/40 text-xs font-semibold px-3 py-2.5 rounded-xl transition duration-200 flex items-center gap-1.5 cursor-pointer"
+                            title="Borra la API Key de este navegador">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                            <span>Olvidar Clave</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeModal('api-config-modal')"
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition cursor-pointer">
+                            Cerrar
+                        </button>
+                        <button type="submit"
+                            class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-500/25 flex items-center gap-1.5 cursor-pointer heading-font">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Guardar Configuración</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Results Screen -->
-    <div id="resultsScreen" class="screen results-screen">
-        <div class="results-container">
-            <div class="results-trophy" id="resultsEmoji">🏆</div>
-            <h1 class="results-title">¡Actividad completada!</h1>
-            <p class="results-subtitle" id="resultsSubtitle">Aquí está tu resumen de la sesión</p>
-            <div class="results-score">
-                <div class="score-big" id="finalScore">0</div>
-                <div class="score-label">puntos totales</div>
+    <!-- MODAL DE EVALUACIÓN IA DOCENTE -->
+    <div id="modal-ia-evaluacion" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-slate-900 border border-purple-500/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-5 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl shadow-purple-500/20">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-purple-500/30">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-lg sm:text-xl font-bold text-white heading-font">Evaluación y Guía con IA</h4>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase">Feedback Pedagógico</span>
+                        </div>
+                        <p id="modal-ia-case-title" class="text-xs text-slate-400 font-medium"></p>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-ia-evaluacion')" class="text-slate-400 hover:text-white transition text-lg p-2 rounded-xl hover:bg-slate-800 cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
-            <div class="medals-grid" id="medalsGrid">
-                <!-- Dynamic medals -->
+
+            <!-- Loader Estado IA -->
+            <div id="ia-eval-loading" class="py-12 flex flex-col items-center justify-center space-y-4">
+                <div class="loader"></div>
+                <div class="text-center space-y-1">
+                    <p class="text-sm font-bold text-white heading-font">Analizando tu respuesta gerencial...</p>
+                    <p class="text-xs text-slate-400">Consultando a la IA con el rol docente y criterios del caso.</p>
+                </div>
             </div>
-            <div class="results-actions">
-                <button class="btn btn-primary" id="btnDownloadPDF">📄 Descargar reporte PDF</button>
-                <button class="btn btn-secondary" id="btnRestart">🔄 Reiniciar</button>
-                <a href="sem8_medidas_tendencia_central.html" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center;">🏠 Volver a Semana 8</a>
+
+            <!-- Contenido de Retroalimentación de la IA -->
+            <div id="ia-eval-content" class="space-y-4 hidden">
+                <!-- Tarjeta: Lo que redactó el alumno -->
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-pen text-purple-400"></i> Tu Análisis Gerencial Registrado:
+                    </span>
+                    <p id="modal-ia-user-text" class="text-xs sm:text-sm text-slate-200 italic leading-relaxed"></p>
+                </div>
+
+                <!-- Tarjeta: Veredicto y Guía de la IA -->
+                <div class="p-5 rounded-2xl bg-purple-950/30 border border-purple-500/40 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5 heading-font">
+                            <i class="fa-solid fa-user-graduate text-purple-400 text-sm"></i> Retroalimentación y Consejo del Mentor IA:
+                        </span>
+                        <span id="modal-ia-model-badge" class="text-[10px] font-mono px-2 py-0.5 bg-slate-950 border border-slate-800 rounded-lg text-slate-400"></span>
+                    </div>
+                    <div id="modal-ia-response-text" class="text-xs sm:text-sm text-slate-100 leading-relaxed space-y-2 whitespace-pre-line font-medium"></div>
+                </div>
+
+                <!-- Tarjeta: Criterio Docente / Solución de Referencia -->
+                <div class="p-4 rounded-2xl bg-slate-950/90 border border-slate-800/90 space-y-1.5">
+                    <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider flex items-center gap-1.5 heading-font">
+                        <i class="fa-solid fa-bullseye text-emerald-400"></i> Criterio Técnico y Decisión Óptima:
+                    </span>
+                    <p id="modal-ia-solution-text" class="text-xs text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <!-- Banner Informativo PDF -->
+                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm shrink-0"></i>
+                    <span><strong>¡Listo para el PDF!</strong> Este consejo del mentor IA y tu análisis original se guardaron para tu informe oficial de entrega.</span>
+                </div>
+
+                <!-- Acordeón para Reevaluar con otro Modelo (Colapsado por defecto) -->
+                <div class="border border-purple-500/30 bg-purple-950/20 rounded-2xl overflow-hidden transition-all duration-300">
+                    <button type="button" onclick="toggleReevalAccordion()" id="btn-toggle-reeval"
+                        class="w-full px-4 py-3 text-left flex items-center justify-between text-xs font-semibold text-purple-300 hover:text-purple-200 hover:bg-purple-900/30 transition cursor-pointer heading-font">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-arrows-rotate text-purple-400"></i>
+                            <span>¿Deseas probar con otro modelo de IA o reevaluar?</span>
+                        </span>
+                        <span class="flex items-center gap-1.5 text-[11px] text-purple-400 font-bold">
+                            <span id="reeval-accordion-label">Cambiar modelo</span>
+                            <i id="reeval-accordion-icon" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                        </span>
+                    </button>
+                    
+                    <div id="reeval-accordion-content" class="hidden p-4 border-t border-purple-500/20 bg-slate-950/80 space-y-3">
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            Puedes probar la respuesta de otro modelo como prueba puntual para este caso (esta prueba no alterará tu modelo principal configurado):
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                            <div class="relative flex-1">
+                                <select id="modal-ia-quick-model"
+                                    class="w-full bg-slate-950 border border-purple-500/40 text-purple-200 text-xs rounded-xl px-3 py-2.5 font-medium focus:outline-none focus:border-purple-400 transition cursor-pointer">
+                                    <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Finanzas · Gratuito)</option>
+                                    <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Gemini 2.0 Flash · Gratuito)</option>
+                                    <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Llama 3.3 70B · Pedagógico)</option>
+                                    <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (DeepSeek R1 · Razonamiento Gratuito)</option>
+                                    <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct (Qwen 2.5 72B · Potente)</option>
+                                    <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini (GPT-4o Mini · Confiable)</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="triggerReevaluateFromAccordion()" id="btn-re-eval-ia"
+                                class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-500/20 transition active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer heading-font shrink-0">
+                                <i class="fa-solid fa-rotate-right text-xs"></i>
+                                <span>Reevaluar con este modelo</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error de API con atajo a Configuración -->
+            <div id="ia-eval-error" class="hidden p-5 rounded-2xl bg-rose-950/40 border border-rose-500/40 space-y-3 text-left">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg shrink-0 mt-0.5"></i>
+                    <div class="space-y-1">
+                        <h5 class="text-xs font-bold text-rose-300 uppercase tracking-wider heading-font">No se pudo consultar el servicio de IA</h5>
+                        <p id="ia-eval-error-msg" class="text-xs text-rose-200 leading-relaxed"></p>
+                    </div>
+                </div>
+                <div class="pt-2 flex flex-wrap items-center gap-2">
+                    <button onclick="closeModal('modal-ia-evaluacion'); openModal('api-config-modal');" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition cursor-pointer heading-font flex items-center gap-1.5">
+                        <i class="fa-solid fa-key"></i>
+                        <span>Configurar / Verificar API Key</span>
+                    </button>
+                    <button onclick="evaluateWithAI()" class="bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition border border-slate-700 cursor-pointer">
+                        Reintentar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Modal Limpio: Amplio, Cómodo y sin Desbordes -->
+            <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-800">
+                <button type="button" onclick="toggleReevalAccordion()"
+                    class="text-xs text-purple-300 hover:text-purple-200 font-semibold flex items-center gap-1.5 transition cursor-pointer">
+                    <i class="fa-solid fa-sliders text-purple-400 text-xs"></i>
+                    <span class="hidden sm:inline">Modelo activo:</span>
+                    <span id="modal-ia-active-model-text" class="text-purple-300 font-mono text-[11px] underline decoration-purple-500/40"></span>
+                </button>
+
+                <div class="flex items-center justify-end gap-2 shrink-0">
+                    <button type="button" onclick="closeModal('modal-ia-evaluacion')"
+                        class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer heading-font">
+                        Entendido, Continuar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-1">
+            <p class="text-xs text-slate-400 heading-font">
+                Estadística 1 · Licenciatura en Administración de Empresas · Universidad Mariano Gálvez de Guatemala (UMG)
+            </p>
+            <p class="text-[11px] text-slate-500">
+                Cátedra y Desarrollo Pedagógico: <span class="text-slate-300 font-semibold">Prof. Ruldin Ayala</span>
+            </p>
+        </div>
+    </footer>
 
     <script>
     // ==========================================
@@ -1086,14 +831,12 @@
             }
             
             if (caseObj.id) {
-                // Parse data
                 if (caseObj.datos) {
                     caseObj.datosArray = caseObj.datos.split(',').map(d => d.trim());
                 }
                 if (caseObj.medidas_requeridas) {
                     caseObj.medidasRequeridas = caseObj.medidas_requeridas.split(',').map(m => m.trim());
                 }
-                // Parse weights if present
                 if (caseObj.pesos) {
                     caseObj.pesosArray = caseObj.pesos.split(',').map(p => parseFloat(p.trim()));
                 }
@@ -1105,6 +848,599 @@
         }
         
         return cases;
+    }
+
+    // ==========================================
+    // OPENROUTER API SETTINGS & EVALUACIÓN IA
+    // ==========================================
+    const API_STORAGE_KEY_BIAS = 'bias-lab-settings';
+    const API_STORAGE_KEY_GLOBAL = 'openrouter_settings';
+    const DEFAULT_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+    const DEFAULT_MODEL = 'inclusionai/ling-3.0-flash-fin:free';
+
+    function getStoredApiSettings() {
+        try {
+            const raw = localStorage.getItem(API_STORAGE_KEY_BIAS) || localStorage.getItem(API_STORAGE_KEY_GLOBAL);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                return {
+                    apiKey: parsed.apiKey || '',
+                    apiUrl: parsed.apiUrl || DEFAULT_API_URL,
+                    model: parsed.model || DEFAULT_MODEL
+                };
+            }
+        } catch (e) {
+            console.warn('Error reading stored API settings:', e);
+        }
+        return {
+            apiKey: '',
+            apiUrl: DEFAULT_API_URL,
+            model: DEFAULT_MODEL
+        };
+    }
+
+    function syncApiUi() {
+        const settings = getStoredApiSettings();
+        const keyInput = document.getElementById('cfg-api-key');
+        const urlInput = document.getElementById('cfg-api-url');
+        const modelInput = document.getElementById('cfg-api-model');
+        const modelSelect = document.getElementById('cfg-model-select');
+
+        if (keyInput) keyInput.value = settings.apiKey;
+        if (urlInput) urlInput.value = settings.apiUrl;
+        if (modelInput) modelInput.value = settings.model;
+
+        if (modelSelect) {
+            const options = Array.from(modelSelect.options).map(o => o.value);
+            if (options.includes(settings.model)) {
+                modelSelect.value = settings.model;
+            } else {
+                modelSelect.value = 'custom';
+            }
+        }
+
+        // Sincronizar selector rápido de modelo en el modal de evaluación
+        const quickModelSelect = document.getElementById('modal-ia-quick-model');
+        if (quickModelSelect && settings.model) {
+            const opts = Array.from(quickModelSelect.options).map(o => o.value);
+            if (opts.includes(settings.model)) {
+                quickModelSelect.value = settings.model;
+            } else {
+                let customOpt = quickModelSelect.querySelector('option[data-custom="true"]');
+                if (!customOpt) {
+                    customOpt = document.createElement('option');
+                    customOpt.setAttribute('data-custom', 'true');
+                    quickModelSelect.appendChild(customOpt);
+                }
+                customOpt.value = settings.model;
+                customOpt.textContent = `${settings.model} (Personalizado)`;
+                quickModelSelect.value = settings.model;
+            }
+        }
+
+        const activeModelTextEl = document.getElementById('modal-ia-active-model-text');
+        if (activeModelTextEl) activeModelTextEl.textContent = settings.model;
+
+        const isConfigured = !!(settings.apiKey && settings.apiKey.trim().length > 0);
+
+        // Header status badge
+        const headerBadge = document.getElementById('header-api-status-badge');
+        if (headerBadge) {
+            if (isConfigured) {
+                headerBadge.className = 'ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold';
+                headerBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Conectada';
+            } else {
+                headerBadge.className = 'ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold';
+                headerBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Pendiente';
+            }
+        }
+
+        // Modal indicator
+        const keyIndicator = document.getElementById('cfg-key-indicator');
+        if (keyIndicator) {
+            if (isConfigured) {
+                keyIndicator.className = 'text-[11px] font-semibold text-emerald-400 flex items-center gap-1';
+                keyIndicator.innerHTML = '<i class="fa-solid fa-check"></i> Clave guardada localmente';
+            } else {
+                keyIndicator.className = 'text-[11px] font-semibold text-slate-500';
+                keyIndicator.textContent = 'Sin clave guardada';
+            }
+        }
+
+        // Case button hint
+        const iaHint = document.getElementById('ia-status-hint');
+        if (iaHint) {
+            if (isConfigured) {
+                iaHint.innerHTML = '<span class="text-emerald-400 font-semibold text-[11px]"><i class="fa-solid fa-circle-check mr-1"></i>IA Lista (' + (settings.model.split('/')[1] || settings.model) + ')</span>';
+            } else {
+                iaHint.innerHTML = '<span class="text-amber-400 font-semibold text-[11px]"><i class="fa-solid fa-triangle-exclamation mr-1"></i>API sin configurar</span>';
+            }
+        }
+    }
+
+    function saveApiSettings() {
+        const keyInput = document.getElementById('cfg-api-key');
+        const urlInput = document.getElementById('cfg-api-url');
+        const modelInput = document.getElementById('cfg-api-model');
+        const feedback = document.getElementById('cfg-test-feedback');
+
+        const apiKey = (keyInput ? keyInput.value : '').trim();
+        const apiUrl = (urlInput ? urlInput.value : '').trim() || DEFAULT_API_URL;
+        const model = (modelInput ? modelInput.value : '').trim() || DEFAULT_MODEL;
+
+        const payload = { apiKey, apiUrl, model };
+
+        try {
+            localStorage.setItem(API_STORAGE_KEY_BIAS, JSON.stringify(payload));
+            localStorage.setItem(API_STORAGE_KEY_GLOBAL, JSON.stringify(payload));
+        } catch (err) {
+            alert('No se pudo guardar en localStorage: ' + err.message);
+            return;
+        }
+
+        syncApiUi();
+
+        if (feedback) {
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span>¡Configuración guardada exitosamente en este navegador!</span>';
+            setTimeout(() => feedback.classList.add('hidden'), 4000);
+        }
+    }
+
+    function toggleApiKeyVisibility() {
+        const input = document.getElementById('cfg-api-key');
+        const icon = document.getElementById('toggle-key-icon');
+        if (!input || !icon) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fa-solid fa-eye-slash text-sm';
+        } else {
+            input.type = 'password';
+            icon.className = 'fa-solid fa-eye text-sm';
+        }
+    }
+
+    function onModelPresetChange(val) {
+        const modelInput = document.getElementById('cfg-api-model');
+        if (!modelInput) return;
+        if (val !== 'custom') {
+            modelInput.value = val;
+        }
+    }
+
+    function resetDefaultModel() {
+        const modelInput = document.getElementById('cfg-api-model');
+        const modelSelect = document.getElementById('cfg-model-select');
+        if (modelInput) modelInput.value = DEFAULT_MODEL;
+        if (modelSelect) modelSelect.value = DEFAULT_MODEL;
+    }
+
+    function onQuickModelChange(val) {
+        if (!val) return;
+        // Prueba puntual con otro modelo: NO guardar en localStorage
+        evaluateWithAI(val);
+    }
+
+    function toggleReevalAccordion(forceState) {
+        const content = document.getElementById('reeval-accordion-content');
+        const icon = document.getElementById('reeval-accordion-icon');
+        const label = document.getElementById('reeval-accordion-label');
+        if (!content) return;
+
+        const shouldOpen = (forceState !== undefined) ? forceState : content.classList.contains('hidden');
+        if (shouldOpen) {
+            content.classList.remove('hidden');
+            if (icon) icon.className = 'fa-solid fa-chevron-up text-[10px] transition-transform duration-200';
+            if (label) label.textContent = 'Ocultar panel';
+        } else {
+            content.classList.add('hidden');
+            if (icon) icon.className = 'fa-solid fa-chevron-down text-[10px] transition-transform duration-200';
+            if (label) label.textContent = 'Cambiar modelo';
+        }
+    }
+
+    function triggerReevaluateFromAccordion() {
+        const select = document.getElementById('modal-ia-quick-model');
+        const chosenModel = (select && select.value) ? select.value : '';
+        toggleReevalAccordion(false);
+        // Prueba puntual para este caso: NO guardar en localStorage
+        evaluateWithAI(chosenModel);
+    }
+
+    function purgeApiKey() {
+        if (!confirm('¿Deseas olvidar y eliminar tu API Key de este navegador?\n\nRecomendado si estás usando una computadora del laboratorio universitario.')) {
+            return;
+        }
+        try {
+            const current = getStoredApiSettings();
+            current.apiKey = '';
+            localStorage.setItem(API_STORAGE_KEY_BIAS, JSON.stringify(current));
+            localStorage.setItem(API_STORAGE_KEY_GLOBAL, JSON.stringify(current));
+        } catch (e) {
+            console.error(e);
+        }
+
+        const keyInput = document.getElementById('cfg-api-key');
+        if (keyInput) keyInput.value = '';
+        const feedback = document.getElementById('cfg-test-feedback');
+        if (feedback) {
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-trash text-rose-400 text-sm"></i> <span>Clave borrada del navegador por seguridad.</span>';
+            setTimeout(() => feedback.classList.add('hidden'), 4000);
+        }
+        syncApiUi();
+    }
+
+    async function testApiConnection() {
+        const keyInput = document.getElementById('cfg-api-key');
+        const urlInput = document.getElementById('cfg-api-url');
+        const modelInput = document.getElementById('cfg-api-model');
+        const feedback = document.getElementById('cfg-test-feedback');
+        const btn = document.getElementById('btn-test-conn');
+
+        const apiKey = (keyInput ? keyInput.value : '').trim();
+        const apiUrl = (urlInput ? urlInput.value : '').trim() || DEFAULT_API_URL;
+        const model = (modelInput ? modelInput.value : '').trim() || DEFAULT_MODEL;
+
+        if (!apiKey) {
+            feedback.classList.remove('hidden');
+            feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-amber-950/80 border border-amber-700 text-amber-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm"></i> <span>Ingresa primero tu API Key para probar la conexión.</span>';
+            return;
+        }
+
+        feedback.classList.remove('hidden');
+        feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-slate-950 border border-slate-800 text-slate-300 flex items-center gap-2';
+        feedback.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-purple-400 text-sm"></i> <span>Contactando con OpenRouter (' + model + ')...</span>';
+        
+        if (btn) btn.disabled = true;
+
+        const start = performance.now();
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': window.location.origin || 'http://localhost',
+                    'X-Title': 'UMG CentralTrend Estadistica 1'
+                },
+                body: JSON.stringify({
+                    model: model,
+                    max_tokens: 15,
+                    messages: [
+                        { role: 'user', content: 'Di OK' }
+                    ]
+                })
+            });
+
+            const elapsed = Math.round(performance.now() - start);
+            const data = await response.json();
+
+            if (response.ok && data.choices && data.choices.length > 0) {
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span><strong>¡Conexión Exitosa!</strong> El modelo respondió en ${elapsed} ms. Puedes guardar tu configuración con tranquilidad.</span>`;
+            } else {
+                const errDetail = (data && data.error && data.error.message) ? data.error.message : response.statusText;
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-sm"></i> <span><strong>Error de conexión (${response.status}):</strong> ${errDetail}</span>`;
+            }
+        } catch (err) {
+            feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+            feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-sm"></i> <span><strong>Error de red:</strong> ${err.message}. Verifica tu conexión.</span>`;
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    function openModal(modalId) {
+        const el = document.getElementById(modalId);
+        if (el) {
+            el.classList.remove('hidden');
+            if (modalId === 'api-config-modal' || modalId === 'modal-ia-evaluacion') {
+                syncApiUi();
+            }
+            if (modalId === 'modal-ia-evaluacion') {
+                toggleReevalAccordion(false);
+            }
+        }
+    }
+
+    function closeModal(modalId) {
+        const el = document.getElementById(modalId);
+        if (el) el.classList.add('hidden');
+    }
+
+    // ==========================================
+    // EVALUACIÓN IA: SANITIZACIÓN Y FORMATO
+    // ==========================================
+    function sanitizeAiResponse(raw) {
+        if (!raw) return '';
+        let text = raw;
+        // 1. Eliminar bloques completos <think>...</think>
+        text = text.replace(/<think>[\s\S]*?<\/think>/gi, '');
+        // 2. Si el modelo cortó los tokens antes de cerrar </think>
+        text = text.replace(/<think>[\s\S]*/gi, '');
+        // 3. Eliminar etiquetas de cierre huérfanas
+        text = text.replace(/<\/think>/gi, '');
+        // 4. Eliminar encabezados o prefijos de monólogo interno
+        text = text.replace(/^(\*\*|\#\#)?\s*(Pensamiento|Razonamiento|Reasoning|Chain of Thought|Thought|Análisis interno):\s*[\s\S]*?(?=(\*\*|\#\#)?\s*(🎯|🧭|💼|1\.|Consejo|Veredicto|Evaluación|Retroalimentación|Comentario|Estimado|Hola|Tu análisis|El análisis|La respuesta))/i, '');
+        // 5. Eliminar saludos o preámbulos iniciales como "¡Hola!...", "Revisemos juntos tu análisis...", etc.
+        text = text.replace(/^[\s\n]*(\*\*|\#\#)?\s*(¡?\s*Hola\b|Estimad[oa]\b|Saludos\b|Buen día\b)[^\n]*(\n|\r\n)?/i, '');
+        text = text.replace(/^[\s\n]*(\*\*|\#\#)?\s*Revisemos juntos\b[^\n]*(\n|\r\n)?/i, '');
+        return text.trim();
+    }
+
+    function formatAiFeedbackHtml(text) {
+        if (!text) return '';
+        // Escapar caracteres html básicos
+        let safe = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        // Formatear negritas **texto**
+        safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+        safe = safe.replace(/__(.*?)__/g, '<strong class="text-white font-bold">$1</strong>');
+
+        // Procesar párrafos y listas
+        const lines = safe.split('\n');
+        let html = '';
+        let inList = false;
+
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (!trimmed) {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                html += '<div class="h-1.5"></div>';
+                return;
+            }
+
+            const isBullet = /^[-*•]\s+(.*)/.test(trimmed);
+            const isNumbered = /^(\d+[\.\)])\s+(.*)/.test(trimmed);
+
+            if (isBullet || isNumbered) {
+                if (!inList) {
+                    html += '<ul class="space-y-1.5 pl-1 my-2">';
+                    inList = true;
+                }
+                const content = trimmed.replace(/^([-*•]|\d+[\.\)])\s+/, '');
+                html += `<li class="flex items-start gap-2 text-slate-200"><span class="text-purple-400 font-bold shrink-0 mt-0.5">•</span><span>${content}</span></li>`;
+            } else {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                if (trimmed.startsWith('&lt;strong') || /^(🎯|🧭|💼|✅|⚠️|❌|📌)/.test(trimmed)) {
+                    html += `<div class="mt-2 mb-1 text-slate-100 font-semibold flex items-start gap-1.5">${trimmed}</div>`;
+                } else {
+                    html += `<p class="text-slate-200/90 leading-relaxed">${trimmed}</p>`;
+                }
+            }
+        });
+
+        if (inList) {
+            html += '</ul>';
+        }
+
+        return html;
+    }
+
+    // ==========================================
+    // EVALUACIÓN IA: LLAMADA A OPENROUTER
+    // ==========================================
+    async function evaluateWithAI(temporaryModel) {
+        const caseData = state.cases[state.currentCaseIndex];
+        const textArea = document.getElementById('interpretationText');
+        const userInterpretation = textArea ? textArea.value.trim() : '';
+
+        // Validar que el alumno haya escrito antes de pedir evaluación
+        const words = userInterpretation.length === 0 ? 0 : userInterpretation.split(/\s+/).length;
+        if (words < 10) {
+            alert('Por favor redacta primero tu análisis gerencial y recomendación (al menos 15-20 palabras) para que la IA tenga material que evaluar y retroalimentar.');
+            if (textArea) textArea.focus();
+            return;
+        }
+
+        const settings = getStoredApiSettings();
+        if (!settings.apiKey || settings.apiKey.trim().length === 0) {
+            openModal('api-config-modal');
+            return;
+        }
+
+        // Modelo activo: si se pasa un modelo temporal de reevaluación se usa ese; sino el de configuración (sin alterar localStorage)
+        const quickSelect = document.getElementById('modal-ia-quick-model');
+        const isTemporary = !!(temporaryModel && temporaryModel.trim().length > 0);
+        const activeModel = isTemporary ? temporaryModel.trim() : (settings.model || DEFAULT_MODEL);
+
+        // Abrir modal de evaluación y poner estado loading
+        openModal('modal-ia-evaluacion');
+        const loadingEl = document.getElementById('ia-eval-loading');
+        const contentEl = document.getElementById('ia-eval-content');
+        const errorEl = document.getElementById('ia-eval-error');
+        const caseTitleEl = document.getElementById('modal-ia-case-title');
+        const userTextEl = document.getElementById('modal-ia-user-text');
+        const responseTextEl = document.getElementById('modal-ia-response-text');
+        const solutionTextEl = document.getElementById('modal-ia-solution-text');
+        const modelBadgeEl = document.getElementById('modal-ia-model-badge');
+
+        caseTitleEl.textContent = `Caso ${state.currentCaseIndex + 1}: ${caseData.titulo}`;
+        userTextEl.textContent = `"${userInterpretation}"`;
+        solutionTextEl.textContent = caseData.solucion_docente || 'Se evaluará el criterio administrativo óptimo frente a la simetría o atípicos de los datos.';
+        if (modelBadgeEl) modelBadgeEl.textContent = activeModel + (isTemporary ? ' (Prueba)' : '');
+        const activeModelTextEl = document.getElementById('modal-ia-active-model-text');
+        if (activeModelTextEl) {
+            activeModelTextEl.textContent = activeModel + (isTemporary ? ' (Prueba puntual)' : '');
+        }
+        if (quickSelect && quickSelect.value !== activeModel) quickSelect.value = activeModel;
+
+        loadingEl.classList.remove('hidden');
+        contentEl.classList.add('hidden');
+        errorEl.classList.add('hidden');
+
+        // Construcción de respuestas calculadas para dar contexto pleno a la IA
+        let calculatedSummary = '';
+        if (caseData.tipo_dato === 'cuantitativo') {
+            const nums = caseData.datosArray;
+            if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('media')) {
+                calculatedSummary += `Media calculada = ${calcMean(nums).toFixed(2)}; `;
+            }
+            if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('mediana')) {
+                calculatedSummary += `Mediana calculada = ${calcMedian(nums).toFixed(2)}; `;
+            }
+            if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('moda')) {
+                const { modes } = calcMode(nums);
+                calculatedSummary += `Moda = {${modes.join(', ')}}; `;
+            }
+        } else if (caseData.concepto_objetivo === 'media_ponderada') {
+            const wm = calcWeightedMean(caseData.valoresPonderados, caseData.pesosArray);
+            calculatedSummary = `Media Ponderada calculada = ${wm.toFixed(2)}; `;
+        } else {
+            const { modes } = calcMode(caseData.datosArray);
+            calculatedSummary = `Moda (cualitativa) = {${modes.join(', ')}}; `;
+        }
+
+        // Base del system prompt por caso
+        const baseSystem = caseData.system_prompt || `Eres un mentor y consultor de negocios en Guatemala para estudiantes de Administración de Empresas de la Universidad Mariano Gálvez (UMG).`;
+
+        const systemPrompt = `${baseSystem}
+
+ROL Y TONO PEDAGÓGICO OBLIGATORIO (MENTOR AMIGO Y CERCANO):
+- Actúa como un mentor amigo, cercano, comprensivo y constructivo. Trata SIEMPRE al estudiante directamente de "TÚ" (nunca hables de él en tercera persona como "el estudiante", "el alumno" ni "el usuario").
+- NUNCA uses etiquetas frías, punitivas ni desmotivadoras como "Incorrecto", "Incompleto" o "Cometes errores graves". El objetivo es motivarlo y enseñarle con empatía.
+- Si su respuesta tiene puntos que corregir o le faltó precisión, sé proactivo y amable:
+  * Por ejemplo: "¡Buen intento! Tu respuesta tiene muy buena intención, pero analicemos juntos un par de detalles importantes: afirmas que... sin embargo, fíjate que en los datos..."
+  * O bien: "Tu análisis tiene un rumbo interesante, aunque hay un aspecto clave que debemos ajustar juntos..."
+- Si acertó, felicítalo con calidez y destaca su agudeza de visión gerencial.
+
+ESTRUCTURA OBLIGATORIA EN 3 APARTADOS DIRECTOS:
+1. 🎯 Consejo del Mentor sobre tu Análisis:
+   Háblale de tú sobre lo que redactó. Resalta lo positivo de su intento y explícale con empatía qué aspectos específicos conviene reenfocar o afinar.
+2. 🧭 Orientación y Justificación Práctica:
+   Explícale amablemente cuál es la decisión o medida estadística óptima en el mercado guatemalteco y por qué le servirá para tomar mejores decisiones como administrador.
+3. 💼 Recomendación para tu Gestión:
+   Dale 1 o 2 consejos prácticos aplicados a la toma de decisiones empresariales.
+
+REGLAS CRÍTICAS DE SALIDA:
+- NO expongas monólogo interno, reflexiones previas ni etiquetas <think>.
+- NO incluyas saludos ni frases de cortesía iniciales como "¡Hola!", "Revisemos juntos tu análisis:", "Estimado estudiante" ni preámbulos.
+- Comienza DIRECTAMENTE con el encabezado del primer apartado:
+  🎯 Consejo del Mentor sobre tu Análisis:
+- Mantén una extensión concisa (140 a 200 palabras), motivadora y constructiva.`;
+
+        // Prompt de usuario con enunciado, cálculos y respuesta del alumno
+        const userPrompt = `
+CASO EMPRESARIAL:
+Título: ${caseData.titulo}
+Contexto: ${caseData.contexto}
+Datos analizados: ${caseData.datos}
+Resultados numéricos calculados: ${calculatedSummary}
+Pregunta guía: ${caseData.pregunta_guia}
+
+CRITERIO DOCENTE DE REFERENCIA:
+${caseData.solucion_docente || 'Identificar si los datos tienen atípicos o simetría y elegir la medida de tendencia central adecuada para la decisión gerencial.'}
+
+ANÁLISIS GERENCIAL REDACTADO POR EL ESTUDIANTE A EVALUAR:
+"${userInterpretation}"
+
+EVALUACIÓN PEDAGÓGICA SOLICITADA:
+Respóndele de "tú" como su mentor amigo de confianza, con tono cálido y alentador (sin etiquetas <think>, sin tercera persona y SIN saludos como "¡Hola!"), comenzando DIRECTAMENTE con:
+1. 🎯 Consejo del Mentor sobre tu Análisis: (háblale de tú sobre su redacción, de forma proactiva y constructiva, sin desmotivarlo)
+2. 🧭 Orientación y Justificación Práctica: (por qué esa medida es la mejor para esta empresa en Guatemala)
+3. 💼 Recomendación para tu Gestión: (1 o 2 acciones prácticas)
+`;
+
+        try {
+            const response = await fetch(settings.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${settings.apiKey}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': window.location.origin || 'http://localhost',
+                    'X-Title': 'UMG CentralTrend Evaluador IA'
+                },
+                body: JSON.stringify({
+                    model: activeModel,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userPrompt }
+                    ],
+                    temperature: 0.3,
+                    max_tokens: 1200
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.choices && data.choices.length > 0) {
+                const choice = data.choices[0];
+                let rawFeedback = '';
+                
+                if (choice.message) {
+                    if (typeof choice.message.content === 'string' && choice.message.content.trim()) {
+                        rawFeedback = choice.message.content.trim();
+                    } else if (typeof choice.message.reasoning === 'string' && choice.message.reasoning.trim()) {
+                        rawFeedback = choice.message.reasoning.trim();
+                    }
+                } else if (typeof choice.text === 'string' && choice.text.trim()) {
+                    rawFeedback = choice.text.trim();
+                }
+
+                // Si no hay respuesta directa pero hubo rechazo
+                if (!rawFeedback && choice.message && choice.message.refusal) {
+                    rawFeedback = `La IA no pudo responder: ${choice.message.refusal}`;
+                }
+
+                // Limpiar razonamiento o etiquetas <think>
+                let aiFeedback = sanitizeAiResponse(rawFeedback);
+
+                // Si quedó vacío por agotar tokens de razonamiento
+                if (!aiFeedback) {
+                    if (choice.finish_reason === 'length') {
+                        throw new Error(`El modelo "${activeModel}" agotó sus tokens en razonamiento preliminar antes de redactar el veredicto final. Te sugerimos cambiar en el selector rápido al modelo "google/gemini-2.0-flash-exp:free" o "meta-llama/llama-3.3-70b-instruct:free" y pulsar "Reevaluar".`);
+                    }
+                    if (rawFeedback && rawFeedback.length > 0) {
+                        aiFeedback = rawFeedback.replace(/<\/?think>/gi, '').trim();
+                    }
+                }
+
+                if (!aiFeedback) {
+                    throw new Error('El modelo de OpenRouter no devolvió un veredicto. Prueba seleccionando otro modelo en el menú rápido inferior.');
+                }
+
+                // Renderizar HTML enriquecido en el modal
+                responseTextEl.innerHTML = formatAiFeedbackHtml(aiFeedback);
+
+                // Guardar la retroalimentación limpia de la IA para este caso (se incluirá en el PDF)
+                caseData.aiEvaluation = {
+                    feedback: aiFeedback,
+                    model: activeModel,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Actualizar badge del botón en la interfaz principal
+                const btnIaBadge = document.getElementById('btn-ia-badge');
+                if (btnIaBadge) {
+                    btnIaBadge.className = 'ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold';
+                    btnIaBadge.innerHTML = '✓ Evaluado';
+                }
+
+                loadingEl.classList.add('hidden');
+                contentEl.classList.remove('hidden');
+            } else {
+                const errDetail = (data && data.error && data.error.message) ? data.error.message : (response.statusText || 'Respuesta inválida');
+                throw new Error(`(${response.status}) ${errDetail}`);
+            }
+        } catch (err) {
+            loadingEl.classList.add('hidden');
+            errorEl.classList.remove('hidden');
+            document.getElementById('ia-eval-error-msg').textContent = `${err.message}`;
+        }
     }
 
     // ==========================================
@@ -1141,7 +1477,7 @@
         return sumProduct / sumWeights;
     }
 
-    function isCorrect(userVal, correctVal, tolerance = 0.01) {
+    function isCorrect(userVal, correctVal, tolerance = 0.1) {
         const u = parseFloat(userVal);
         const c = parseFloat(correctVal);
         if (isNaN(u) || isNaN(c)) return false;
@@ -1162,7 +1498,14 @@
         const pct = (state.currentCaseIndex / total) * 100;
         document.getElementById('progressFill').style.width = pct + '%';
         document.getElementById('progressText').textContent = `Caso ${current} de ${total}`;
-        document.getElementById('scoreBadge').textContent = `⭐ ${state.score} pts`;
+        document.getElementById('scoreBadge').innerHTML = `<i class="fa-solid fa-star text-amber-400 text-xs"></i> <span>${state.score} pts</span>`;
+        
+        const headerBadge = document.getElementById('headerScoreBadge');
+        const headerScoreVal = document.getElementById('headerScoreVal');
+        if (headerBadge && headerScoreVal) {
+            headerBadge.classList.remove('hidden');
+            headerScoreVal.textContent = state.score;
+        }
     }
 
     function getCategoryClass(cat) {
@@ -1170,7 +1513,10 @@
             'alimentacion': 'cat-alimentacion',
             'tecnologia': 'cat-tecnologia',
             'vestuario': 'cat-vestuario',
-            'redes_sociales': 'cat-redes_sociales'
+            'redes_sociales': 'cat-redes_sociales',
+            'logistica': 'cat-logistica',
+            'finanzas': 'cat-finanzas',
+            'comercio': 'cat-comercio'
         };
         return map[cat] || 'cat-otro';
     }
@@ -1180,7 +1526,10 @@
             'alimentacion': '🍽️',
             'tecnologia': '💻',
             'vestuario': '👕',
-            'redes_sociales': '📱'
+            'redes_sociales': '📱',
+            'logistica': '🚚',
+            'finanzas': '💰',
+            'comercio': '🏬'
         };
         return map[cat] || '📊';
     }
@@ -1190,42 +1539,47 @@
         const isQualitative = caseData.tipo_dato === 'cualitativo';
         const isWeighted = caseData.concepto_objetivo === 'media_ponderada';
         
-        let html = `<div class="case-card">`;
+        let html = `<div class="bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-md space-y-0">`;
         
         // Header
         html += `
-            <div class="case-header">
-                <span class="case-category ${getCategoryClass(caseData.categoria)}">
+            <div class="p-6 sm:p-8 border-b border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 space-y-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getCategoryClass(caseData.categoria)} heading-font">
                     ${getCategoryEmoji(caseData.categoria)} ${caseData.categoria.replace('_', ' ')}
                 </span>
-                <h2 class="case-title">${caseData.titulo}</h2>
-                <p class="case-context">${caseData.contexto}</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-white heading-font leading-tight">${caseData.titulo}</h2>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">${caseData.contexto}</p>
             </div>
         `;
         
-        html += `<div class="case-body">`;
+        html += `<div class="p-6 sm:p-8 space-y-6">`;
         
         // Data display
-        html += `<div class="data-display">
-            <div class="data-display-label">📋 Datos del caso</div>
-            <div class="data-values">`;
+        html += `<div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-purple-400 heading-font flex items-center gap-1.5">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Datos del Caso</span>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">`;
         
         if (isWeighted) {
-            // Show weighted table
             html += `</div></div>`;
-            html += `<div class="data-display" style="margin-bottom:16px">
-                <div class="data-display-label">📊 Tabla de datos ponderados</div>
+            html += `<div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                <div class="text-xs font-bold uppercase tracking-wider text-purple-400 heading-font flex items-center gap-1.5">
+                    <i class="fa-solid fa-table"></i>
+                    <span>Tabla de Datos Ponderados</span>
+                </div>
                 <table class="weighted-table">
                     <thead><tr><th>Concepto</th><th>Valor (xᵢ)</th><th>Peso (wᵢ)</th></tr></thead>
                     <tbody>`;
             const labels = caseData.etiquetas ? caseData.etiquetas.split(',') : caseData.valoresPonderados.map((v, i) => `Dato ${i+1}`);
             for (let i = 0; i < caseData.valoresPonderados.length; i++) {
-                html += `<tr><td>${labels[i]}</td><td>${caseData.valoresPonderados[i]}</td><td>${caseData.pesosArray[i]}</td></tr>`;
+                html += `<tr><td class="font-medium">${labels[i]}</td><td class="font-bold text-purple-300">${caseData.valoresPonderados[i]}</td><td class="font-bold text-emerald-300">${caseData.pesosArray[i]}%</td></tr>`;
             }
             html += `</tbody></table></div>`;
         } else {
             caseData.datosArray.forEach(d => {
-                html += `<span class="data-chip">${d}</span>`;
+                html += `<span class="px-3 py-1.5 bg-slate-900 border border-slate-700/80 text-slate-200 rounded-xl text-xs sm:text-sm font-semibold shadow-sm">${d}</span>`;
             });
             html += `</div></div>`;
         }
@@ -1241,28 +1595,44 @@
         
         // Interpretation
         html += `
-            <div class="interpretation-section">
-                <h3>💭 Tu análisis gerencial</h3>
-                <div class="question">${caseData.pregunta_guia}</div>
-                <div class="textarea-wrapper">
-                    <textarea id="interpretationText" placeholder="Escribí tu análisis como si fueras el administrador tomando una decisión..." oninput="updateWordCount()"></textarea>
+            <div class="pt-4 border-t border-slate-800/80 space-y-3">
+                <h3 class="text-sm sm:text-base font-bold text-white heading-font flex items-center gap-2">
+                    <i class="fa-solid fa-brain text-purple-400"></i>
+                    <span>Tu Análisis Gerencial y Recomendación</span>
+                </h3>
+                <div class="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/30 text-purple-200 text-xs sm:text-sm leading-relaxed font-medium">
+                    ${caseData.pregunta_guia}
                 </div>
-                <div class="word-counter" id="wordCounter">0 / 30 palabras mínimas</div>
+                <div class="relative">
+                    <textarea id="interpretationText" placeholder="Escribí tu análisis como si fueras el administrador tomando una decisión..." oninput="updateWordCount()"
+                        class="w-full min-h-[110px] bg-slate-950 border border-slate-700/80 rounded-2xl p-4 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition leading-relaxed"></textarea>
+                </div>
+                <div class="text-right text-xs font-semibold text-slate-500" id="wordCounter">0 / 30 palabras mínimas</div>
             </div>
         `;
         
         html += `</div>`; // close case-body
         
-        // Footer
+        // Footer con Evaluación IA y Siguiente Caso
         html += `
-            <div class="case-footer">
-                <button class="btn btn-accent" id="btnNextCase" onclick="nextCase()" disabled>
-                    ${index < state.cases.length - 1 ? 'Siguiente caso →' : 'Ver resultados 🏆'}
+            <div class="p-6 border-t border-slate-800/80 bg-slate-950/50 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <button type="button" id="btnIaEval" onclick="evaluateWithAI()"
+                        class="px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 hover:border-purple-400 shadow-lg shadow-purple-500/10 transition active:scale-[0.99] flex items-center gap-2 heading-font cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-robot text-purple-400 text-sm"></i>
+                        <span>Evaluación IA</span>
+                        <span id="btn-ia-badge" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-normal">Feedback</span>
+                    </button>
+                    <span id="ia-status-hint" class="text-[11px] text-slate-400 hidden sm:inline-block"></span>
+                </div>
+                <button class="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-2 heading-font" id="btnNextCase" onclick="nextCase()" disabled>
+                    <span>${index < state.cases.length - 1 ? 'Siguiente caso' : 'Ver resultados final'}</span>
+                    <i class="fa-solid ${index < state.cases.length - 1 ? 'fa-arrow-right' : 'fa-trophy'}"></i>
                 </button>
             </div>
         `;
         
-        html += `</div>`; // close case-card
+        html += `</div>`; // close case card
         
         container.innerHTML = html;
         
@@ -1274,45 +1644,67 @@
         } else if (isWeighted) {
             setupWeightedValidation(caseData);
         }
+
+        // Sincronizar estado visual de API e IA para este caso
+        syncApiUi();
+        if (caseData.aiEvaluation) {
+            const btnIaBadge = document.getElementById('btn-ia-badge');
+            if (btnIaBadge) {
+                btnIaBadge.className = 'ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold';
+                btnIaBadge.innerHTML = '✓ Evaluado';
+            }
+        }
     }
 
     function renderQuantitativeCase(caseData) {
-        let html = `<div class="calc-section">
-            <h3><span class="icon icon-mean">x̄</span> Calculá las medidas</h3>`;
+        let html = `<div class="space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2 heading-font">
+                <span class="w-6 h-6 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold">x̄</span>
+                <span>Calculá las medidas de tendencia central</span>
+            </h3>`;
         
         const medidas = caseData.medidasRequeridas;
         
         if (medidas.includes('media')) {
             html += `
-                <div class="input-row">
-                    <input type="number" step="any" id="inputMedia" placeholder="Media (promedio)">
+                <div class="flex items-center gap-3">
+                    <input type="number" step="any" id="inputMedia" placeholder="Media (promedio)"
+                        class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition font-mono">
                     <div class="input-status" id="statusMedia"></div>
                 </div>
             `;
         }
         if (medidas.includes('mediana')) {
             html += `
-                <div class="input-row">
-                    <input type="number" step="any" id="inputMediana" placeholder="Mediana (valor central)">
+                <div class="flex items-center gap-3">
+                    <input type="number" step="any" id="inputMediana" placeholder="Mediana (valor central)"
+                        class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition font-mono">
                     <div class="input-status" id="statusMediana"></div>
                 </div>
             `;
         }
         if (medidas.includes('moda')) {
             html += `
-                <div class="input-row">
-                    <input type="text" id="inputModa" placeholder="Moda (valor más frecuente)">
+                <div class="flex items-center gap-3">
+                    <input type="text" id="inputModa" placeholder="Moda (valor más frecuente)"
+                        class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition">
                     <div class="input-status" id="statusModa"></div>
                 </div>
             `;
         }
         
         html += `
-            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-                <button class="btn-check" onclick="checkCalculations()">✓ Verificar cálculos</button>
-                <button class="hint-btn" onclick="showHint()">💡 Pista</button>
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+                <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-purple-600 hover:bg-purple-500 transition shadow-sm shadow-purple-500/20 flex items-center gap-1.5 cursor-pointer heading-font" onclick="checkCalculations()">
+                    <i class="fa-solid fa-check text-xs"></i>
+                    <span>Verificar cálculos</span>
+                </button>
+                <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer heading-font" onclick="showHint()">
+                    <i class="fa-solid fa-lightbulb text-xs"></i>
+                    <span>Pista</span>
+                </button>
             </div>
-            <div class="feedback-msg" id="calcFeedback"></div>
+            <div class="p-3.5 rounded-xl text-xs font-semibold hidden transition-all" id="calcFeedback"></div>
         `;
         
         html += `</div>`;
@@ -1323,16 +1715,17 @@
         const { freq, maxFreq } = calcMode(caseData.datosArray);
         
         let html = `
-            <div class="calc-section">
-                <h3><span class="icon icon-mode">Mo</span> Identificá la moda</h3>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-                    Estos datos son <strong>cualitativos nominales</strong> (categorías, no números). 
-                    Solo podés calcular la <strong>moda</strong> — ¿cuál es la categoría más frecuente?
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2 heading-font">
+                    <span class="w-6 h-6 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold">Mo</span>
+                    <span>Identificá la Moda</span>
+                </h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Estos datos son <strong>cualitativos nominales</strong> (categorías sin valor numérico). Solo se puede determinar la <strong>moda</strong> — ¿cuál es la categoría dominante?
                 </p>
                 <div class="qualitative-grid" id="qualGrid">
         `;
         
-        // Show unique values with frequencies
         const uniqueVals = [...new Set(caseData.datosArray)];
         uniqueVals.forEach(val => {
             const f = freq[val] || 0;
@@ -1343,11 +1736,20 @@
         });
         
         html += `</div>
-            <button class="btn-check" onclick="checkQualitative()">✓ Verificar respuesta</button>
-            <button class="hint-btn" onclick="showHint()" style="margin-left:8px;">💡 Pista</button>
-            <div class="feedback-msg" id="calcFeedback"></div>
-            <div class="feedback-msg hint" id="qualExplanation" style="margin-top:8px;">
-                <strong>📝 Nota:</strong> En datos cualitativos nominales NO se puede calcular media ni mediana porque las categorías no tienen un orden numérico ni se pueden sumar. Solo la moda tiene sentido aquí.
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+                <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-purple-600 hover:bg-purple-500 transition shadow-sm shadow-purple-500/20 flex items-center gap-1.5 cursor-pointer heading-font" onclick="checkQualitative()">
+                    <i class="fa-solid fa-check text-xs"></i>
+                    <span>Verificar respuesta</span>
+                </button>
+                <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer heading-font" onclick="showHint()">
+                    <i class="fa-solid fa-lightbulb text-xs"></i>
+                    <span>Pista</span>
+                </button>
+            </div>
+            <div class="p-3.5 rounded-xl text-xs font-semibold hidden transition-all" id="calcFeedback"></div>
+            <div class="p-3.5 rounded-xl text-xs text-slate-300 bg-slate-950 border border-slate-800 space-y-1">
+                <strong class="text-purple-400 font-bold block">📝 Nota Conceptual:</strong> 
+                En datos cualitativos nominales NO se puede calcular media ni mediana porque las categorías no se pueden sumar ni ordenar numéricamente. Solo la moda aplica.
             </div>
         </div>`;
         
@@ -1356,23 +1758,33 @@
 
     function renderWeightedCase(caseData) {
         let html = `
-            <div class="calc-section">
-                <h3><span class="icon icon-mean">x̄</span> Calculá la media ponderada</h3>
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2 heading-font">
+                    <span class="w-6 h-6 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white flex items-center justify-center text-xs font-extrabold">x̄w</span>
+                    <span>Calculá la Media Ponderada</span>
+                </h3>
                 <div class="formula-box">
-                    x̄ = Σ(wᵢ · xᵢ) / Σwᵢ
+                    x̄w = Σ(wᵢ · xᵢ) / Σwᵢ
                 </div>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-                    Aplicá la fórmula de media ponderada usando los valores y pesos de la tabla.
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Aplicá la fórmula de media ponderada multiplicando cada calificación por su ponderación porcentual correspondiente.
                 </p>
-                <div class="input-row">
-                    <input type="number" step="any" id="inputMedia" placeholder="Media ponderada">
+                <div class="flex items-center gap-3">
+                    <input type="number" step="any" id="inputMedia" placeholder="Media ponderada"
+                        class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition font-mono">
                     <div class="input-status" id="statusMedia"></div>
                 </div>
-                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-                    <button class="btn-check" onclick="checkCalculations()">✓ Verificar cálculo</button>
-                    <button class="hint-btn" onclick="showHint()">💡 Pista</button>
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                    <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-purple-600 hover:bg-purple-500 transition shadow-sm shadow-purple-500/20 flex items-center gap-1.5 cursor-pointer heading-font" onclick="checkCalculations()">
+                        <i class="fa-solid fa-check text-xs"></i>
+                        <span>Verificar cálculo</span>
+                    </button>
+                    <button class="px-4 py-2.5 rounded-xl font-bold text-xs text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer heading-font" onclick="showHint()">
+                        <i class="fa-solid fa-lightbulb text-xs"></i>
+                        <span>Pista</span>
+                    </button>
                 </div>
-                <div class="feedback-msg" id="calcFeedback"></div>
+                <div class="p-3.5 rounded-xl text-xs font-semibold hidden transition-all" id="calcFeedback"></div>
             </div>
         `;
         return html;
@@ -1419,13 +1831,13 @@
             }
             
             if (isCorrect(input.value, correctVal, 0.1)) {
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
+                input.classList.remove('border-rose-500');
+                input.classList.add('border-emerald-500');
                 status.className = 'input-status correct';
                 status.textContent = '✓';
             } else {
-                input.classList.remove('correct');
-                input.classList.add('incorrect');
+                input.classList.remove('border-emerald-500');
+                input.classList.add('border-rose-500');
                 status.className = 'input-status incorrect';
                 status.textContent = '✗';
                 allCorrect = false;
@@ -1439,13 +1851,13 @@
             const correctVal = calcMedian(caseData.datosArray);
             
             if (isCorrect(input.value, correctVal, 0.1)) {
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
+                input.classList.remove('border-rose-500');
+                input.classList.add('border-emerald-500');
                 status.className = 'input-status correct';
                 status.textContent = '✓';
             } else {
-                input.classList.remove('correct');
-                input.classList.add('incorrect');
+                input.classList.remove('border-emerald-500');
+                input.classList.add('border-rose-500');
                 status.className = 'input-status incorrect';
                 status.textContent = '✗';
                 allCorrect = false;
@@ -1459,18 +1871,17 @@
             const { modes } = calcMode(caseData.datosArray);
             const userAnswer = input.value.trim();
             
-            // Check if user's answer matches any of the modes
             const userVals = userAnswer.split(/[,;]+/).map(v => v.trim());
             const allModesMatch = modes.every(m => userVals.includes(m)) && userVals.every(v => modes.includes(v));
             
-            if (allModesMatch) {
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
+            if (allModesMatch && userAnswer !== '') {
+                input.classList.remove('border-rose-500');
+                input.classList.add('border-emerald-500');
                 status.className = 'input-status correct';
                 status.textContent = '✓';
             } else {
-                input.classList.remove('correct');
-                input.classList.add('incorrect');
+                input.classList.remove('border-emerald-500');
+                input.classList.add('border-rose-500');
                 status.className = 'input-status incorrect';
                 status.textContent = '✗';
                 allCorrect = false;
@@ -1478,22 +1889,21 @@
             }
         }
         
+        feedback.classList.remove('hidden');
         if (allCorrect) {
-            feedback.className = 'feedback-msg show success';
-            feedback.innerHTML = '🎉 <strong>¡Correcto!</strong> Todos los cálculos están bien.';
+            feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span><strong>¡Excelente!</strong> Todos los cálculos están correctos.</span>';
             calcValidated = true;
             
-            // Award points if first attempt
             const caseId = caseData.id;
             if (!state.attempts[caseId] || state.attempts[caseId] === 1) {
                 state.score += 20;
             }
             updateProgress();
         } else {
-            feedback.className = 'feedback-msg show error';
-            feedback.innerHTML = `❌ ${msgs[0]}`;
+            feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+            feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400 text-sm"></i> <span>${msgs[0]}</span>`;
             
-            // Track attempts
             const caseId = caseData.id;
             state.attempts[caseId] = (state.attempts[caseId] || 0) + 1;
         }
@@ -1506,9 +1916,11 @@
         const feedback = document.getElementById('calcFeedback');
         const selected = document.querySelector('.qual-option.selected');
         
+        feedback.classList.remove('hidden');
+
         if (!selected) {
-            feedback.className = 'feedback-msg show error';
-            feedback.innerHTML = '⚠️ Seleccioná una categoría primero.';
+            feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+            feedback.innerHTML = '<i class="fa-solid fa-circle-info text-rose-400 text-sm"></i> <span>Seleccioná una categoría primero.</span>';
             return;
         }
         
@@ -1516,10 +1928,8 @@
         const userVal = selected.dataset.value;
         
         if (modes.includes(userVal)) {
-            feedback.className = 'feedback-msg show success';
-            feedback.innerHTML = `🎉 <strong>¡Correcto!</strong> "${userVal}" es la moda (la categoría más frecuente).`;
-            selected.style.borderColor = 'var(--success)';
-            selected.style.background = '#F0FDF4';
+            feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-700 text-emerald-300 flex items-center gap-2';
+            feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span><strong>¡Correcto!</strong> "${userVal}" es la moda (la categoría de mayor frecuencia).</span>`;
             calcValidated = true;
             
             const caseId = caseData.id;
@@ -1528,9 +1938,8 @@
             }
             updateProgress();
         } else {
-            feedback.className = 'feedback-msg show error';
-            feedback.innerHTML = `❌ Esa no es la categoría más frecuente. Revisá las frecuencias.`;
-            selected.style.borderColor = 'var(--error)';
+            feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-rose-950/80 border border-rose-700 text-rose-300 flex items-center gap-2';
+            feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 text-sm"></i> <span>Esa no es la categoría más frecuente. Contá las frecuencias e intentá de nuevo.</span>`;
             
             const caseId = caseData.id;
             state.attempts[caseId] = (state.attempts[caseId] || 0) + 1;
@@ -1552,22 +1961,25 @@
         
         let hint = '';
         
-        if (isQualitative) {
-            hint = '💡 <strong>Pista:</strong> Buscá la categoría que aparece más veces en los datos. Esa es la moda.';
+        if (caseData.pista) {
+            hint = `💡 <strong>Pista:</strong> ${caseData.pista}`;
+        } else if (isQualitative) {
+            hint = '💡 <strong>Pista:</strong> Buscá la categoría que se repite más veces en los datos. Esa es la moda.';
         } else if (isWeighted) {
-            hint = '💡 <strong>Pista:</strong> Multiplicá cada valor por su peso, sumá todos esos productos, y dividí entre la suma de los pesos.';
+            hint = '💡 <strong>Pista:</strong> Multiplicá cada valor por su ponderación, sumá todos los productos y dividí dentro del total de ponderaciones.';
         } else {
             const concept = caseData.concepto_objetivo;
-            if (concept === 'simetrico_sin_atipicos') {
-                hint = '💡 <strong>Pista:</strong> Sumá todos los valores y dividí entre la cantidad de datos para la media. Ordená de menor a mayor para la mediana.';
-            } else if (concept === 'atipico') {
-                hint = '💡 <strong>Pista:</strong> Hay un valor extremo que "jala" la media. La mediana no se afecta por valores atípicos.';
+            if (concept === 'simetrico_sin_atipicos' || concept === 'simetrico_retail') {
+                hint = '💡 <strong>Pista:</strong> Sumá todos los datos y dividí entre n para la media. Ordenalos de menor a mayor para ubicar la mediana.';
+            } else if (concept === 'atipico' || concept === 'atipico_derecha' || concept === 'sesgo_salarios') {
+                hint = '💡 <strong>Pista:</strong> Observá el dato atípico (extremo) que distorsiona la media hacia arriba. La mediana es robusta y no se deja alterar.';
             } else if (concept === 'bimodal') {
-                hint = '💡 <strong>Pista:</strong> Si dos valores diferentes empatan en frecuencia máxima, la serie es bimodal (tiene dos modas).';
+                hint = '💡 <strong>Pista:</strong> Si dos opciones empatan en frecuencia máxima, la distribución posee dos modas (bimodal).';
             }
         }
         
-        feedback.className = 'feedback-msg show hint';
+        feedback.classList.remove('hidden');
+        feedback.className = 'p-3.5 rounded-xl text-xs font-semibold bg-amber-950/80 border border-amber-700 text-amber-300 flex items-center gap-2';
         feedback.innerHTML = hint;
     }
 
@@ -1578,11 +1990,11 @@
         counter.textContent = `${words} / 30 palabras mínimas`;
         
         if (words >= 30) {
-            counter.className = 'word-counter ready';
+            counter.className = 'text-right text-xs font-semibold text-emerald-400';
         } else if (words >= 20) {
-            counter.className = 'word-counter warning';
+            counter.className = 'text-right text-xs font-semibold text-amber-400';
         } else {
-            counter.className = 'word-counter';
+            counter.className = 'text-right text-xs font-semibold text-slate-500';
         }
         
         checkCaseComplete();
@@ -1595,10 +2007,8 @@
         
         if (calcValidated && words >= 30) {
             btn.disabled = false;
-            btn.style.opacity = '1';
         } else {
             btn.disabled = true;
-            btn.style.opacity = '0.5';
         }
     }
 
@@ -1609,7 +2019,6 @@
         const caseData = state.cases[state.currentCaseIndex];
         const interpretation = document.getElementById('interpretationText').value.trim();
         
-        // Save result
         state.caseResults.push({
             caseId: caseData.id,
             titulo: caseData.titulo,
@@ -1618,7 +2027,9 @@
             categoria: caseData.categoria,
             interpretation: interpretation,
             attempts: state.attempts[caseData.id] || 1,
-            concept: caseData.concepto_objetivo
+            concept: caseData.concepto_objetivo,
+            aiEvaluation: caseData.aiEvaluation ? { ...caseData.aiEvaluation } : null,
+            solucion_docente: caseData.solucion_docente || ''
         });
         
         state.currentCaseIndex++;
@@ -1636,7 +2047,6 @@
         
         document.getElementById('finalScore').textContent = state.score;
         
-        // Determine medal for each case
         const medalsGrid = document.getElementById('medalsGrid');
         let html = '';
         
@@ -1645,28 +2055,27 @@
             const emoji = getCategoryEmoji(result.categoria);
             
             html += `
-                <div class="medal-card ${isGold ? 'earned medal-earned-anim' : ''}" style="animation-delay: ${i * 0.1}s">
-                    <div class="medal-icon">${isGold ? '🥇' : '🥈'}</div>
-                    <div class="medal-label">${emoji} Caso ${i + 1}</div>
-                    <div class="medal-status ${isGold ? 'gold' : 'silver'}">${isGold ? '¡Perfecto!' : 'Completado'}</div>
+                <div class="bg-slate-950 border ${isGold ? 'border-amber-500/40 bg-gradient-to-b from-slate-900 to-amber-950/20' : 'border-slate-800'} rounded-2xl p-4 shadow-lg text-center space-y-1">
+                    <div class="text-3xl mb-1">${isGold ? '🥇' : '🥈'}</div>
+                    <div class="text-xs font-bold text-slate-200 heading-font">${emoji} Caso ${i + 1}</div>
+                    <div class="text-[11px] font-semibold ${isGold ? 'text-amber-400' : 'text-slate-400'}">${isGold ? '¡Perfecto!' : 'Completado'}</div>
                 </div>
             `;
         });
         
         medalsGrid.innerHTML = html;
         
-        // Set emoji based on score
         const maxScore = state.cases.length * 20;
         const pct = state.score / maxScore;
         if (pct >= 0.9) {
             document.getElementById('resultsEmoji').textContent = '🏆';
-            document.getElementById('resultsSubtitle').textContent = '¡Excelente dominio! Sos un/a crack en tendencia central.';
+            document.getElementById('resultsSubtitle').textContent = '¡Excelente dominio! Sos un/a experto/a en tendencia central y toma de decisiones.';
         } else if (pct >= 0.6) {
             document.getElementById('resultsEmoji').textContent = '🌟';
-            document.getElementById('resultsSubtitle').textContent = '¡Muy bien! Dominás los conceptos clave.';
+            document.getElementById('resultsSubtitle').textContent = '¡Muy buen trabajo! Dominás los conceptos clave aplicados a la empresa.';
         } else {
             document.getElementById('resultsEmoji').textContent = '💪';
-            document.getElementById('resultsSubtitle').textContent = 'Buen esfuerzo. Repasá los conceptos y volvé a intentar.';
+            document.getElementById('resultsSubtitle').textContent = 'Buen esfuerzo. Te recomendamos repasar los conceptos y volver a intentar.';
         }
     }
 
@@ -1682,7 +2091,6 @@
         const contentWidth = pageWidth - margin * 2;
         let y = 20;
         
-        // Helper function to add text with word wrap
         function addText(text, x, yPos, maxWidth, fontSize, style = 'normal') {
             doc.setFontSize(fontSize);
             doc.setFont('helvetica', style);
@@ -1698,132 +2106,159 @@
             return yPos;
         }
         
-        // Header
-        doc.setFillColor(13, 148, 136);
-        doc.rect(0, 0, pageWidth, 35, 'F');
+        // Encabezado institucional PDF
+        doc.setFillColor(15, 23, 42); // slate-900
+        doc.rect(0, 0, pageWidth, 38, 'F');
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(18);
+        doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text('CentralTrend — Reporte de Actividad', margin, 18);
-        doc.setFontSize(10);
+        doc.text('CentralTrend — Reporte de Actividad Ejecutiva', margin, 18);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
+        doc.setTextColor(203, 213, 225);
+        doc.text('Estadística 1 · Universidad Mariano Gálvez de Guatemala (UMG)', margin, 26);
         const today = new Date();
         const dateStr = today.toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' });
-        doc.text(`Generado: ${dateStr}`, margin, 28);
+        doc.text(`Fecha de emisión: ${dateStr}`, margin, 32);
         
-        y = 45;
-        doc.setTextColor(0, 0, 0);
+        y = 48;
+        doc.setTextColor(15, 23, 42);
         
-        // Student info
-        doc.setFontSize(12);
+        // Estudiante info box
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(margin, y, contentWidth, 26, 3, 3, 'FD');
+        
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.text('Datos del Estudiante', margin, y);
-        y += 8;
-        doc.setFontSize(10);
+        doc.text('Datos del Estudiante', margin + 6, y + 8);
+        doc.setFontSize(9.5);
         doc.setFont('helvetica', 'normal');
-        doc.text(`Nombre: ${state.studentName}`, margin, y);
-        y += 6;
-        doc.text(`Carnet: ${state.studentCarnet}`, margin, y);
-        y += 6;
-        doc.text(`Puntaje total: ${state.score} puntos`, margin, y);
-        y += 12;
+        doc.text(`Nombre: ${state.studentName}`, margin + 6, y + 15);
+        doc.text(`Carnet: ${state.studentCarnet}`, margin + 6, y + 21);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(109, 40, 217);
+        doc.text(`Puntaje obtenido: ${state.score} pts`, margin + 110, y + 15);
         
-        // Separator
-        doc.setDrawColor(200, 200, 200);
-        doc.line(margin, y, pageWidth - margin, y);
-        y += 10;
+        y += 36;
+        doc.setTextColor(15, 23, 42);
         
-        // Cases
+        // Casos
         state.caseResults.forEach((result, i) => {
-            if (y > 230) {
+            if (y > 220) {
                 doc.addPage();
                 y = 20;
             }
             
-            // Case title
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setFont('helvetica', 'bold');
-            doc.setTextColor(13, 148, 136);
+            doc.setTextColor(109, 40, 217);
             doc.text(`Caso ${i + 1}: ${result.titulo}`, margin, y);
-            y += 7;
+            y += 6;
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(9);
+            doc.setTextColor(51, 65, 85);
+            doc.setFontSize(8.5);
             doc.setFont('helvetica', 'normal');
             
-            // Context
-            y = addText(result.contexto, margin, y, contentWidth, 9);
-            y += 4;
+            y = addText(result.contexto, margin, y, contentWidth, 8.5);
+            y += 3;
             
-            // Data
             doc.setFont('helvetica', 'bold');
-            doc.text('Datos: ', margin, y);
+            doc.setTextColor(15, 23, 42);
+            doc.text('Datos del caso: ', margin, y);
             doc.setFont('helvetica', 'normal');
             const datosText = result.datos || '(ver contexto)';
-            y = addText(datosText, margin + 18, y, contentWidth - 18, 9);
-            y += 4;
+            y = addText(datosText, margin + 24, y, contentWidth - 24, 8.5);
+            y += 3;
             
-            // Results
             const caseData = state.cases[i];
+            let resultsText = '';
             if (caseData.tipo_dato === 'cuantitativo') {
                 const nums = caseData.datosArray;
-                let resultsText = '';
-                if (caseData.medidasRequeridas.includes('media')) {
+                if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('media')) {
                     resultsText += `Media = ${calcMean(nums).toFixed(2)}  |  `;
                 }
-                if (caseData.medidasRequeridas.includes('mediana')) {
+                if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('mediana')) {
                     resultsText += `Mediana = ${calcMedian(nums).toFixed(2)}  |  `;
                 }
-                if (caseData.medidasRequeridas.includes('moda')) {
+                if (caseData.medidasRequeridas && caseData.medidasRequeridas.includes('moda')) {
                     const { modes } = calcMode(nums);
                     resultsText += `Moda = {${modes.join(', ')}}`;
                 }
-                doc.setFont('helvetica', 'bold');
-                doc.text('Resultados: ', margin, y);
-                doc.setFont('helvetica', 'normal');
-                y = addText(resultsText, margin + 24, y, contentWidth - 24, 9);
             } else if (caseData.concepto_objetivo === 'media_ponderada') {
                 const wm = calcWeightedMean(caseData.valoresPonderados, caseData.pesosArray);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Resultado: ', margin, y);
-                doc.setFont('helvetica', 'normal');
-                doc.text(`Media ponderada = ${wm.toFixed(2)}`, margin + 22, y);
-                y += 6;
+                resultsText = `Media ponderada = ${wm.toFixed(2)}`;
             } else {
                 const { modes } = calcMode(caseData.datosArray);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Resultado: ', margin, y);
-                doc.setFont('helvetica', 'normal');
-                doc.text(`Moda = {${modes.join(', ')}}`, margin + 22, y);
-                y += 6;
+                resultsText = `Moda = {${modes.join(', ')}}`;
             }
-            y += 4;
-            
-            // Interpretation
+
             doc.setFont('helvetica', 'bold');
-            doc.text('Interpretación del estudiante:', margin, y);
-            y += 6;
-            y = addText(result.interpretation, margin, y, contentWidth, 9);
-            y += 10;
+            doc.text('Resultados calculados: ', margin, y);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(109, 40, 217);
+            y = addText(resultsText, margin + 35, y, contentWidth - 35, 8.5, 'bold');
+            y += 3;
+            doc.setTextColor(15, 23, 42);
             
-            // Separator
-            doc.setDrawColor(230, 230, 230);
+            // Análisis original del estudiante
+            doc.setFont('helvetica', 'bold');
+            doc.text('Análisis e Interpretación Gerencial (Estudiante):', margin, y);
+            y += 5;
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(30, 41, 59);
+            y = addText(`"${result.interpretation}"`, margin + 4, y, contentWidth - 4, 8.5);
+            y += 4;
+
+            // Retroalimentación y Guía de la IA (si fue consultada)
+            if (result.aiEvaluation && result.aiEvaluation.feedback) {
+                if (y > 230) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(109, 40, 217);
+                doc.text(`Evaluación y Guía de IA (${result.aiEvaluation.model || 'OpenRouter'}):`, margin, y);
+                y += 5;
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(51, 65, 85);
+                y = addText(result.aiEvaluation.feedback, margin + 4, y, contentWidth - 4, 8.5);
+                y += 4;
+            }
+
+            // Solución / Criterio Docente de Referencia
+            if (result.solucion_docente) {
+                if (y > 240) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(5, 150, 105); // emerald-600
+                doc.text('Criterio Técnico y Decisión Óptima (Docente):', margin, y);
+                y += 5;
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(71, 85, 105);
+                y = addText(result.solucion_docente, margin + 4, y, contentWidth - 4, 8.2);
+                y += 5;
+            }
+            
+            doc.setDrawColor(226, 232, 240);
             doc.line(margin, y, pageWidth - margin, y);
-            y += 10;
+            y += 8;
         });
         
-        // Footer
-        if (y > 260) {
-            doc.addPage();
-            y = 20;
+        // Footer de páginas en PDF
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let p = 1; p <= pageCount; p++) {
+            doc.setPage(p);
+            doc.setFontSize(7.5);
+            doc.setTextColor(148, 163, 184);
+            doc.text('CentralTrend · Estadística 1 · UMG · Cátedra Prof. Ruldin Ayala', pageWidth / 2, 288, { align: 'center' });
+            doc.text(`Página ${p} de ${pageCount}`, pageWidth - margin, 288, { align: 'right' });
         }
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text('CentralTrend — Actividad de Medidas de Tendencia Central', margin, 285);
-        doc.text(`Estudiante: ${state.studentName} | Carnet: ${state.studentCarnet}`, pageWidth - margin, 285, { align: 'right' });
         
-        // Save
-        const filename = `Reporte_TendenciaCentral_${state.studentCarnet}.pdf`;
+        const safeCarnet = state.studentCarnet.replace(/[^\w-]/g, '');
+        const filename = `Reporte_CentralTrend_${safeCarnet || 'UMG'}.pdf`;
         doc.save(filename);
     }
 
@@ -1844,7 +2279,6 @@
             showScreen('welcomeScreen');
         } catch (error) {
             console.error('Error loading cases:', error);
-            // Fallback: use embedded cases
             state.cases = getFallbackCases();
             showScreen('welcomeScreen');
         }
@@ -1856,60 +2290,72 @@
                 id: '001',
                 categoria: 'alimentacion',
                 titulo: 'Ventas diarias de smoothies en una semana típica',
-                contexto: 'Sos el administrador de un puesto de smoothies en el campus de la universidad. Tu equipo te pasa las ventas de los últimos 7 días (en quetzales). Los datos son consistentes, sin ningún día raro. Necesitás reportar al dueño cuánto vende el puesto "en un día normal".',
-                datos: '180,195,190,185,200,190,185',
+                contexto: 'Sos el administrador de un puesto de smoothies en el campus de la universidad. Tu equipo te pasa las ventas de los últimos 7 días (en quetzales GTQ). Los datos son consistentes, sin ningún día anómalo. Necesitás reportar al dueño cuánto vende el puesto "en un día normal".',
+                datos: '180, 195, 190, 185, 200, 190, 185',
                 datosArray: ['180','195','190','185','200','190','185'],
                 tipo_dato: 'cuantitativo',
                 medidas_requeridas: 'media,mediana,moda',
                 medidasRequeridas: ['media','mediana','moda'],
                 concepto_objetivo: 'simetrico_sin_atipicos',
-                pregunta_guia: '¿Qué medida representa mejor las ventas típicas del puesto? Si tuvieras que presupuestar los ingresos de la próxima semana, ¿cuál número usarías y por qué?'
+                pista: 'Sumá los 7 días y dividí entre 7 para la media. Ordená los 7 valores y tomá el valor central (posición 4) para la mediana. La moda es el valor que más se repite.',
+                pregunta_guia: '¿Qué medida representa mejor las ventas típicas del puesto? Si tuvieras que presupuestar los ingresos de la próxima semana, ¿cuál número usarías y por qué?',
+                system_prompt: 'Eres un profesor de Estadística y consultor de negocios en Guatemala para estudiantes de la UMG. En el caso 001, las ventas son simétricas y homogéneas (Media ≈ Q189.29, Mediana = Q190). Evalúa si el alumno comprende que, ante ausencia de valores atípicos, tanto la Media como la Mediana son excelentes estimadores.',
+                solucion_docente: 'Al ser una serie simétrica sin valores extremos (Q180 a Q200), la Media (Q189.29) y la Mediana (Q190) son excelentes estimadores para presupuestar los ingresos semanales (Q1,325 aprox.).'
             },
             {
                 id: '002',
                 categoria: 'redes_sociales',
                 titulo: 'Views de un reel: cuando uno se vuelve viral',
-                contexto: 'Manejás las redes sociales de una tienda de ropa en Antigua Guatemala. En los últimos 8 días publicaste un reel diario y estos son los views que obtuvo cada uno. Uno de los reels se hizo viral porque lo compartió un influencer local. Tu jefe te pregunta: "¿Cuántos views genera un reel normalmente?"',
-                datos: '320,450,380,510,420,15800,390,470',
+                contexto: 'Manejás las redes sociales de una tienda de ropa en Antigua Guatemala. En los últimos 8 días publicaste un reel diario y estos son los views obtenidos. Uno de los reels se hizo viral porque lo compartió un influencer local. Tu jefe te pregunta: "¿Cuántos views genera un reel normalmente?"',
+                datos: '320, 450, 380, 510, 420, 15800, 390, 470',
                 datosArray: ['320','450','380','510','420','15800','390','470'],
                 tipo_dato: 'cuantitativo',
                 medidas_requeridas: 'media,mediana',
                 medidasRequeridas: ['media','mediana'],
                 concepto_objetivo: 'atipico',
-                pregunta_guia: 'Tu jefe quiere saber cuántos views "normalmente" genera un reel. ¿Le reportás la media o la mediana? ¿Por qué? ¿Qué pasaría si basás tu estrategia de contenido en la media?'
+                pista: 'Sumá los 8 valores y dividí entre 8 para la media. Notá el valor atípico de 15,800 views que distorsiona el promedio. Para la mediana, ordená los números y promediá los dos del centro.',
+                pregunta_guia: 'Tu jefe quiere saber cuántos views "normalmente" genera un reel. ¿Le reportás la media o la mediana? ¿Por qué? ¿Qué pasaría si basás tu estrategia de contenido en la media?',
+                system_prompt: 'Eres un profesor de Estadística y marketing digital de la UMG. En el caso 002, 7 reels obtuvieron entre 320 y 510 views, pero uno fue viral con 15,800. La Media es 2,342.5 (distorsionada por el outlier), mientras que la Mediana es 435 views. Evalúa si el alumno identifica que debe reportarse la MEDIANA.',
+                solucion_docente: 'Debe reportarse la Mediana (435 views). La Media (2,342.5 views) está inflada por un solo dato atípico (15,800). Si la tienda presupuesta ventas basadas en la media, creará una expectativa inalcanzable para el 87.5% de sus publicaciones normales.'
             },
             {
                 id: '003',
                 categoria: 'tecnologia',
                 titulo: '¿Qué red social usan más los estudiantes?',
-                contexto: 'La asociación de estudiantes de tu universidad quiere saber cuál es la red social favorita para hacer marketing de eventos. Encuestaron a 20 estudiantes y les preguntaron: "¿Qué red social usás más?" Estos son los resultados. El decano te pide un resumen rápido.',
-                datos: 'TikTok,Instagram,TikTok,WhatsApp,TikTok,Instagram,Facebook,TikTok,Instagram,TikTok,WhatsApp,TikTok,Instagram,TikTok,Facebook,WhatsApp,Instagram,TikTok,WhatsApp,TikTok',
+                contexto: 'La asociación de estudiantes de tu universidad quiere saber cuál es la red social favorita para promover eventos. Encuestaron a 20 estudiantes y les preguntaron: "¿Qué red social usás más?" El decano te pide un resumen ejecutivo rápido.',
+                datos: 'TikTok, Instagram, TikTok, WhatsApp, TikTok, Instagram, Facebook, TikTok, Instagram, TikTok, WhatsApp, TikTok, Instagram, TikTok, Facebook, WhatsApp, Instagram, TikTok, WhatsApp, TikTok',
                 datosArray: ['TikTok','Instagram','TikTok','WhatsApp','TikTok','Instagram','Facebook','TikTok','Instagram','TikTok','WhatsApp','TikTok','Instagram','TikTok','Facebook','WhatsApp','Instagram','TikTok','WhatsApp','TikTok'],
                 tipo_dato: 'cualitativo',
                 medidas_requeridas: 'moda',
                 medidasRequeridas: ['moda'],
                 concepto_objetivo: 'cualitativo_moda',
-                pregunta_guia: '¿Por qué NO tiene sentido calcular la media ni la mediana de estos datos? ¿Qué medida sí aplica y qué le recomendás al decano para la estrategia de marketing de eventos?'
+                pista: 'Contá las menciones de cada red social en las opciones. La red social con mayor frecuencia acumulada es la moda.',
+                pregunta_guia: '¿Por qué NO tiene sentido calcular la media ni la mediana de estos datos? ¿Qué medida sí aplica y qué le recomendás al decano para la estrategia de marketing de eventos?',
+                system_prompt: 'Eres un profesor de Estadística de la UMG. En el caso 003, la variable es cualitativa nominal. No se pueden sumar palabras ni promediar conceptos. La única medida válida es la MODA (TikTok con 9 menciones = 45%).',
+                solucion_docente: 'Al ser una variable cualitativa nominal, no existen distancias numéricas ni jerarquías, haciendo imposible el cálculo de media o mediana; la Moda es TikTok (9 de 20 votos, 45%). Se recomienda enfocar pauta en TikTok e Instagram.'
             },
             {
                 id: '004',
                 categoria: 'vestuario',
                 titulo: 'Tallas de camisetas: dos públicos, dos modas',
                 contexto: 'Tenés una tienda de camisetas con diseño guatemalteco en la zona viva de Xela. Vendiste 14 camisetas esta semana y estas son las tallas. Notás que hay dos grupos de clientes muy diferentes: jóvenes que prefieren tallas pequeñas y adultos que buscan tallas grandes. Necesitás decidir cuántas camisetas de cada talla pedir al proveedor.',
-                datos: 'S,M,S,XL,S,M,XL,M,S,XL,M,S,XL,M,XL',
+                datos: 'S, M, S, XL, S, M, XL, M, S, XL, M, S, XL, M',
                 datosArray: ['S','M','S','XL','S','M','XL','M','S','XL','M','S','XL','M'],
                 tipo_dato: 'cualitativo',
                 medidas_requeridas: 'moda',
                 medidasRequeridas: ['moda'],
                 concepto_objetivo: 'bimodal',
-                pregunta_guia: '¿Cuántas modas tiene esta serie de datos? ¿Qué significa esto para tu negocio? Si solo pidieras un tipo de talla al proveedor, ¿qué problema tendrías? ¿Cómo resolvés esta situación como administrador?'
+                pista: 'Contá la frecuencia de cada talla. Observarás que hay dos opciones que empatan con la mayor frecuencia (distribución bimodal).',
+                pregunta_guia: '¿Cuántas modas tiene esta serie de datos? ¿Qué significa esto para tu negocio? Si solo pidieras un tipo de talla al proveedor, ¿qué problema tendrías? ¿Cómo resolvés esta situación como administrador?',
+                system_prompt: 'Eres un docente de la UMG. En el caso 004, las frecuencias son: S = 5, M = 5, XL = 4. Es una distribución BIMODAL con dos modas: S y M. Evalúa si el alumno propone abastecer un pedido segmentado proporcional.',
+                solucion_docente: 'La distribución es bimodal con dos modas: S (5 ventas) y M (5 ventas). Para el negocio significa que conviven dos perfiles demográficos claros. Pedir una sola talla causaría desabastecimiento; la solución es un inventario segmentado.'
             },
             {
                 id: '005',
                 categoria: 'alimentacion',
                 titulo: 'Nota final del curso: no todo vale igual',
                 contexto: 'En tu curso de Estadística, la nota final no es un promedio simple. El examen parcial vale 30%, la zona (tareas) vale 25%, el proyecto final vale 25% y el examen final vale 20%. Un estudiante obtuvo las siguientes calificaciones (escala 0-100): parcial 72, zona 85, proyecto 90, examen final 68. Tu profesor te pide calcular la nota final ponderada.',
-                datos: '72,85,90,68',
+                datos: '72, 85, 90, 68',
                 datosArray: ['72','85','90','68'],
                 tipo_dato: 'cuantitativo',
                 medidas_requeridas: 'media',
@@ -1920,7 +2366,95 @@
                 valores_ponderados: '72,85,90,68',
                 valoresPonderados: [72,85,90,68],
                 etiquetas: 'Examen Parcial,Zona (Tareas),Proyecto Final,Examen Final',
-                pregunta_guia: '¿Cuál es la nota final ponderada del estudiante? ¿Por qué no es justo hacer un promedio simple (sumar y dividir entre 4)? Si fueras el estudiante, ¿en qué componente pondrías más esfuerzo para mejorar tu nota y por qué?'
+                pista: 'Multiplicá cada calificación por su ponderación (72*30 + 85*25 + 90*25 + 68*20) y dividí entre la suma total de ponderaciones (100).',
+                pregunta_guia: '¿Cuál es la nota final ponderada del estudiante? ¿Por qué no es justo hacer un promedio simple (sumar y dividir entre 4)? Si fueras el estudiante, ¿en qué componente pondrías más esfuerzo para mejorar tu nota y por qué?',
+                system_prompt: 'Eres un profesor de Estadística 1 en la UMG. En el caso 005, la nota ponderada es 78.95 puntos. El promedio simple daría 78.75. Evalúa si el alumno explica por qué el promedio simple distorsiona la ponderación relativa.',
+                solucion_docente: 'La nota final ponderada es 78.95 puntos. El promedio simple (78.75) es metodológicamente incorrecto porque asume que todas las evaluaciones tienen el mismo peso. Se debe priorizar el examen parcial (30%) y zona/proyecto (50%).'
+            },
+            {
+                id: '006',
+                categoria: 'logistica',
+                titulo: 'Tiempos de entrega en Calzada Roosevelt: el impacto del tráfico',
+                contexto: 'Sos el jefe de logística de una cadena de farmacias en la Ciudad de Guatemala. Durante la hora pico en la Calzada Roosevelt, registrás los tiempos de entrega (en minutos) de 9 pedidos motorizados. Ocho motoristas tardaron entre 18 y 28 minutos, pero un motorista se quedó varado por un pinchazo y bloqueo vial, tardando 90 minutos. La gerencia te pide fijar una "Garantía de Entrega de X Minutos o es gratis" para los clientes.',
+                datos: '20, 22, 18, 25, 24, 28, 22, 21, 90',
+                datosArray: ['20','22','18','25','24','28','22','21','90'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media,mediana,moda',
+                medidasRequeridas: ['media','mediana','moda'],
+                concepto_objetivo: 'atipico_derecha',
+                pista: 'Sumá los 9 tiempos y dividí entre 9 para la media (notarás cómo el 90 eleva el promedio a 30). Para la mediana, ordená de menor a mayor y tomá la posición central 5 (22 min). La moda es el tiempo que más se repite.',
+                pregunta_guia: 'Si la gerencia quiere prometer una garantía de tiempo realista sin arriesgarse a regalar pedidos por culpa de accidentes viales aislados, ¿qué medida (Media de 30 min o Mediana de 22 min) representa la verdadera operación típica y por qué? ¿Qué riesgo financiero asumiría la empresa si usa la media?',
+                system_prompt: 'Eres un director de operaciones y catedrático de estadística de la UMG. La Media es 30.0 min (sesgada por 90 min), la Mediana es 22.0 min y la Moda es 22 min. Evalúa si el alumno reconoce que la mediana refleja la operación típica y que la garantía comercial debe basarse en la mediana más un margen de tolerancia.',
+                solucion_docente: 'La Mediana (22 min) y Moda (22 min) describen con exactitud la experiencia típica. La Media (30 min) está inflada por un outlier (90 min). La garantía debe basarse en la mediana más una tolerancia operativa (ej. 35 min con excepciones por clima/bloqueos).'
+            },
+            {
+                id: '007',
+                categoria: 'finanzas',
+                titulo: 'Sueldos en un Call Center de Zona 10: el efecto del director',
+                contexto: 'Como gerente de talento humano en un Call Center en Zona 10 de la capital, revisás los sueldos mensuales (en Quetzales GTQ) de un equipo de 8 personas. Siete agentes ganan entre Q5,500 y Q6,200, pero la nómina incluye al Director de Cuentas que devenga Q44,800. En el anuncio de reclutamiento de LinkedIn, el área de mercadeo quiere publicar: "¡Sueldo promedio de nuestro equipo: Q10,750!".',
+                datos: '5500, 6000, 5800, 6200, 6000, 5600, 6100, 44800',
+                datosArray: ['5500','6000','5800','6200','6000','5600','6100','44800'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media,mediana',
+                medidasRequeridas: ['media','mediana'],
+                concepto_objetivo: 'sesgo_salarios',
+                pista: 'Sumá los 8 salarios y dividí entre 8 para la media (86,000 / 8 = 10,750). Para la mediana, ordená los salarios y promediá los dos valores centrales (posiciones 4 y 5: 6000 y 6000).',
+                pregunta_guia: '¿Por qué publicar la Media de Q10,750 en la oferta laboral genera un dilema ético y falsas expectativas en los aspirantes? ¿Qué medida (Q6,000 vs Q10,750) describe fielmente la realidad del 87.5% de los puestos operativos y qué decisión estratégica recomendás?',
+                system_prompt: 'Eres un profesor de Administración y Ética Empresarial en la UMG. La Media es Q10,750, pero 7 de los 8 colaboradores ganan entre Q5,500 y Q6,200, con Mediana de Q6,000. Evalúa si el alumno identifica el dilema ético y recomienda publicar la mediana o un rango salarial transparente.',
+                solucion_docente: 'Publicar la Media (Q10,750) constituye un engaño estadístico que vulnera la ética corporativa: el 87.5% devenga entre Q5,500 y Q6,200. La Mediana de Q6,000 representa con total honestidad el salario del colaborador típico. Se recomienda publicar un rango salarial transparente.'
+            },
+            {
+                id: '008',
+                categoria: 'comercio',
+                titulo: 'Método de cobro preferido en La Terminal Z.4 y Mercado Central',
+                contexto: 'Una fintech guatemalteca busca introducir datáfonos y cobro con código QR en los puestos mayoristas del Mercado La Terminal (Zona 4) y el Mercado Central de Guatemala. Se consultó a 18 comerciantes sobre su método de pago principal: Efectivo, Transferencia, Tarjeta o QR. Necesitás presentar a la junta directiva cuál es la forma de cobro dominante para diseñar la estrategia de afiliación.',
+                datos: 'Efectivo, Transferencia, Efectivo, Efectivo, Tarjeta, Efectivo, Transferencia, Efectivo, QR, Efectivo, Transferencia, Efectivo, Efectivo, Tarjeta, Efectivo, Transferencia, Efectivo, QR',
+                datosArray: ['Efectivo','Transferencia','Efectivo','Efectivo','Tarjeta','Efectivo','Transferencia','Efectivo','QR','Efectivo','Transferencia','Efectivo','Efectivo','Tarjeta','Efectivo','Transferencia','Efectivo','QR'],
+                tipo_dato: 'cualitativo',
+                medidas_requeridas: 'moda',
+                medidasRequeridas: ['moda'],
+                concepto_objetivo: 'cualitativo_mercado',
+                pista: 'Contá las frecuencias de cada opción de cobro en la cuadrícula. La categoría con mayor número de respuestas es la moda.',
+                pregunta_guia: '¿Por qué en variables cualitativas nominales carece de sentido matemático calcular una media o mediana? Al ser el Efectivo la moda contundente (f=10 de 18), ¿qué barrera cultural detectás y qué estrategia de incentivos debe plantear la fintech para convencer a los comerciantes?',
+                system_prompt: 'Eres un consultor en inclusión financiera y docente de la UMG. Las frecuencias son: Efectivo = 10 (55.6%), Transferencia = 4 (22.2%), Tarjeta = 2 y QR = 2. La única medida aplicable es la Moda. Evalúa si el alumno reconoce barreras de efectivo y propone incentivos de adopción.',
+                solucion_docente: 'Al ser cualitativa nominal, no existen operaciones aritméticas ni orden posicional; la Moda es el Efectivo (55.6%). La barrera radica en la preferencia por liquidez inmediata y desconfianza. La estrategia debe basarse en incentivos: cero comisión inicial y microcréditos.'
+            },
+            {
+                id: '009',
+                categoria: 'comercio',
+                titulo: 'Ticket de consumo en cafetería de especialidad en Cobán',
+                contexto: 'Sos el administrador de una cafetería de café de altura en Cobán, Alta Verapaz. Para planificar compras de insumos y analizar el gasto por mesa, registrás el valor del ticket (en Quetzales GTQ) de 10 clientes consecutivos en un fin de semana. Todos consumieron combos tradicionales de café y repostería artesanal sin consumos anómalos.',
+                datos: '45, 50, 48, 52, 45, 55, 48, 50, 52, 45',
+                datosArray: ['45','50','48','52','45','55','48','50','52','45'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media,mediana,moda',
+                medidasRequeridas: ['media','mediana','moda'],
+                concepto_objetivo: 'simetrico_retail',
+                pista: 'Sumá los 10 consumos y dividí entre 10 para la media. Para la mediana, ordená los 10 valores y promediá los dos del centro (posiciones 5 y 6: 48 y 50). Para la moda, identificá el valor que más se repite.',
+                pregunta_guia: 'Observá que la Media (Q49) y la Mediana (Q49) coinciden casi exactamente. ¿Qué indica esta simetría sobre la homogeneidad y predictibilidad de tus clientes? Si la moda es Q45, ¿qué estrategia comercial propondrías para subir el ticket promedio hacia los Q60?',
+                system_prompt: 'Eres un profesor de Estadística y consultor gastronómico en Guatemala. La Media es Q49.00, la Mediana es Q49.00 y la Moda es Q45.00. Evalúa si el alumno reconoce la simetría y predictibilidad del público y si propone tácticas de venta sugerida (cross-selling).',
+                solucion_docente: 'La igualdad entre Media (Q49) y Mediana (Q49) confirma una distribución simétrica y predecible. La Moda de Q45 refleja el consumo base recurrente. Para elevar el ticket a Q60, se deben implementar técnicas de venta cruzada (combos de especialidad y café en grano para llevar).'
+            },
+            {
+                id: '010',
+                categoria: 'comercio',
+                titulo: 'Costo promedio ponderado de compra de café en Sacatepéquez',
+                contexto: 'Una exportadora de café en Antigua Guatemala compra granos a tres cooperativas de Sacatepéquez con diferentes calidades y volúmenes: Cooperativa San Miguel (30% del volumen a Q850/quintal), Cooperativa Ciudad Vieja (45% del volumen a Q920/quintal) y Cooperativa Alotenango (25% del volumen a Q780/quintal). Para cotizar un embarque a Europa sin perder margen, necesitás calcular el costo medio ponderado por quintal.',
+                datos: '850, 920, 780',
+                datosArray: ['850','920','780'],
+                tipo_dato: 'cuantitativo',
+                medidas_requeridas: 'media',
+                medidasRequeridas: ['media'],
+                concepto_objetivo: 'media_ponderada',
+                pesos: '30, 45, 25',
+                pesosArray: [30, 45, 25],
+                valores_ponderados: '850, 920, 780',
+                valoresPonderados: [850, 920, 780],
+                etiquetas: 'Coop. San Miguel (30%),Coop. Ciudad Vieja (45%),Coop. Alotenango (25%)',
+                pista: 'Multiplicá cada precio por su porcentaje de volumen: (850*30 + 920*45 + 780*25) y dividí entre la suma de pesos (100). El resultado exacto es Q864.00.',
+                pregunta_guia: '¿Por qué sería un grave error financiero calcular un promedio simple (850+920+780)/3 = Q850? ¿Qué pérdida de margen sufriría la exportadora si cotiza con Q850 en vez del costo real ponderado de Q864? ¿Cómo pesa el volumen mayoritario de Ciudad Vieja?',
+                system_prompt: 'Eres un profesor de Finanzas y Estadística de la UMG. La Media Ponderada real es Q864.00 por quintal. El promedio simple erróneo daría Q850.00. Evalúa si el alumno explica que subestimar el costo en Q14 genera pérdidas directas por contenedor.',
+                solucion_docente: 'El promedio simple de Q850.00 subestima el costo real en Q14.00 por quintal porque el proveedor más caro (Ciudad Vieja a Q920) concentra el 45% del volumen. En un lote de 2,000 quintales la pérdida sería de Q28,000. La Media Ponderada (Q864.00) es obligatoria.'
             }
         ];
     }
@@ -1959,8 +2493,13 @@
         showScreen('welcomeScreen');
     });
 
-    // Start
+    // Start & Sync UI
+    window.addEventListener('DOMContentLoaded', () => {
+        syncApiUi();
+    });
+
     init();
     </script>
 </body>
+
 </html>
