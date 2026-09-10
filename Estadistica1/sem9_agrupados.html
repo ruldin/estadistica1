@@ -1801,11 +1801,67 @@ function showToast(msg){
     setTimeout(()=>{ toast.classList.add('opacity-0', 'pointer-events-none'); }, 3000);
 }
 
-function sanitizeAiResponse(text){
+function sanitizeAiResponse(raw){
+    if(!raw) return '';
+    let text = raw;
+    // 1. Eliminar bloques completos <think>...</think>
+    text = text.replace(/<think>[\s\S]*?<\/think>/gi, '');
+    // 2. Si el modelo cortó los tokens antes de cerrar </think>
+    text = text.replace(/<think>[\s\S]*/gi, '');
+    // 3. Eliminar etiquetas huérfanas
+    text = text.replace(/<\/think>/gi, '');
+    // 4. Eliminar prefijos de monólogo interno
+    text = text.replace(/^(\*\*|\#\#)?\s*(Pensamiento|Razonamiento|Reasoning|Chain of Thought|Thought|Análisis interno):\s*[\s\S]*?(?=(\*\*|\#\#)?\s*(🎯|🧭|💼|1\.|Consejo|Veredicto|Evaluación|Retroalimentación|Comentario|Estimado|Hola|Tu análisis|El análisis|La respuesta))/i, '');
+    // 5. Eliminar saludos o preámbulos iniciales redundantes
+    text = text.replace(/^[\s\n]*(\*\*|\#\#)?\s*(¡?\s*Hola\b|Estimad[oa]\b|Saludos\b|Buen día\b)[^\n]*(\n|\r\n)?/i, '');
+    text = text.replace(/^[\s\n]*(\*\*|\#\#)?\s*Revisemos juntos\b[^\n]*(\n|\r\n)?/i, '');
+    text = text.replace(/^#+\s+/gm, ''); 
+    return text.trim();
+}
+
+function formatAiFeedbackHtml(text){
     if(!text) return '';
-    let clean = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
-    clean = clean.replace(/^#+\s+/gm, ''); 
-    return clean;
+    let safe = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+    safe = safe.replace(/__(.*?)__/g, '<strong class="text-white font-bold">$1</strong>');
+
+    const lines = safe.split('\n');
+    let html = '';
+    let inList = false;
+
+    lines.forEach(line => {
+        const trimmed = line.trim();
+        if(!trimmed){
+            if(inList){ html += '</ul>'; inList = false; }
+            html += '<div class="h-1.5"></div>';
+            return;
+        }
+
+        const isBullet = /^[-*•]\s+(.*)/.test(trimmed);
+        const isNumbered = /^(\d+[\.\)])\s+(.*)/.test(trimmed);
+
+        if(isBullet || isNumbered){
+            if(!inList){
+                html += '<ul class="space-y-1.5 pl-1 my-2">';
+                inList = true;
+            }
+            const content = trimmed.replace(/^([-*•]|\d+[\.\)])\s+/, '');
+            html += `<li class="flex items-start gap-2 text-slate-200"><span class="text-purple-400 font-bold shrink-0 mt-0.5">•</span><span>${content}</span></li>`;
+        } else {
+            if(inList){ html += '</ul>'; inList = false; }
+            if(trimmed.startsWith('&lt;strong') || /^(🎯|🧭|💼|✅|⚠️|❌|📌)/.test(trimmed)){
+                html += `<div class="mt-2 mb-1 text-slate-100 font-semibold flex items-start gap-1.5">${trimmed}</div>`;
+            } else {
+                html += `<p class="leading-relaxed mb-1.5 text-slate-200 text-xs">${trimmed}</p>`;
+            }
+        }
+    });
+    if(inList) html += '</ul>';
+    return html;
 }
 
 async function evaluarPasoConIA(textareaId, stepTitle){
@@ -1856,23 +1912,25 @@ async function evaluarPasoConIA(textareaId, stepTitle){
         </div>`;
 
     const currentCase = CASES_CATALOG[currentCaseId] || CASES_CATALOG['caso1'];
+    const activeModel = settings.model || DEFAULT_MODEL;
+
     const systemPrompt = `Eres el "Mentor Amigo" y profesor de Estadística I para estudiantes de Licenciatura en Administración de Empresas de la Universidad Mariano Gálvez de Guatemala (UMG).
 Tu rol pedagógico:
 - Eres cercano, empático, constructivo, alentador y profesional. Tratas al estudiante siempre de "tú".
-- NO utilices calificativos punitivos ni regaños. Si el estudiante cometió una inconsistencia de cálculo o interpretación, indícaselo con amabilidad y muéstrale el camino correcto.
-- PROHIBIDO empezar con saludos ceremoniales o redundantes. Comienza DIRECTAMENTE con tu análisis y valoración pedagógica.
+- NUNCA uses calificativos punitivos ni regaños. Si el estudiante cometió una inconsistencia de cálculo o interpretación, indícaselo con amabilidad y muéstrale el camino correcto.
+- PROHIBIDO empezar con saludos ceremoniales o redundantes como "¡Hola! Como tu mentor amigo...", "Estimado estudiante...". Comienza DIRECTAMENTE con tu valoración y análisis pedagógico.
 - Evalúa con pensamiento crítico:
   1. Si las cifras o conceptos que menciona guardan coherencia con la tabla de datos agrupados del caso.
   2. Si su conclusión aporta valor gerencial real (toma de decisiones, mitigación de riesgos, fijación de políticas) y no solo repite números mecánicos.
   3. Dale un consejo conciso o un elogio a su agudeza de futuro Administrador de Empresas.
-- Tu respuesta debe ser concisa, altamente profesional y motivadora (máximo 2 a 3 párrafos breves).`;
+- Mantén tu respuesta estructurada, motivadora y profesional (150 a 250 palabras).`;
 
     const userPrompt = `CASO DE ESTUDIO:
 Título: ${currentCase.title} (${currentCase.location})
 Problema: ${currentCase.context}
 Unidad de medida: ${U().variable} (${U().prefix}${U().suffix.trim()})
 Muestra total: n = ${totalN}
-Cálculos del sistema:
+Cálculos estadísticos de referencia:
 - Media (x̄): ${fmtV(stats.mean)}
 - Mediana (Me): ${fmtV(stats.median)} (Clase ${stats.medianClass?.id})
 - Moda (Mo): ${fmtV(stats.mode)} (Clase ${stats.modalClass?.id})
@@ -1882,7 +1940,7 @@ Cálculos del sistema:
 FASE / PASO EVALUADO:
 ${stepTitle}
 
-CONCLUSIÓN Y ANÁLISIS REDACTADO POR EL ESTUDIANTE:
+CONCLUSIÓN Y ANÁLISIS REDACTADO POR EL ESTUDIANTE A EVALUAR:
 "${studentNote}"
 
 Proporciona tu retroalimentación formativa como Mentor Amigo directamente al estudiante.`;
@@ -1893,17 +1951,17 @@ Proporciona tu retroalimentación formativa como Mentor Amigo directamente al es
             headers: {
                 'Authorization': `Bearer ${settings.apiKey}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.href,
+                'HTTP-Referer': (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'https://estadistica-umg.edu.gt',
                 'X-Title': 'UMG Estadistica 1 Semana 9 - Mentor Amigo'
             },
             body: JSON.stringify({
-                model: settings.model || DEFAULT_MODEL,
+                model: activeModel,
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt }
                 ],
-                max_tokens: 450,
-                temperature: 0.6
+                max_tokens: 1200,
+                temperature: 0.3
             })
         });
 
@@ -1913,12 +1971,45 @@ Proporciona tu retroalimentación formativa como Mentor Amigo directamente al es
         }
 
         const data = await resp.json();
-        const rawContent = data.choices?.[0]?.message?.content || 'No se recibió respuesta.';
-        const cleanFeedback = sanitizeAiResponse(rawContent);
+        const choice = (data.choices && data.choices.length > 0) ? data.choices[0] : null;
+        let rawFeedback = '';
+
+        if(choice){
+            if(choice.message){
+                if(typeof choice.message.content === 'string' && choice.message.content.trim()){
+                    rawFeedback = choice.message.content.trim();
+                } else if(typeof choice.message.reasoning === 'string' && choice.message.reasoning.trim()){
+                    rawFeedback = choice.message.reasoning.trim();
+                } else if(typeof choice.message.reasoning_content === 'string' && choice.message.reasoning_content.trim()){
+                    rawFeedback = choice.message.reasoning_content.trim();
+                }
+            } else if(typeof choice.text === 'string' && choice.text.trim()){
+                rawFeedback = choice.text.trim();
+            }
+
+            if(!rawFeedback && choice.message && choice.message.refusal){
+                rawFeedback = `El modelo no pudo generar la respuesta: ${choice.message.refusal}`;
+            }
+        }
+
+        let cleanFeedback = sanitizeAiResponse(rawFeedback);
+
+        // Si quedó vacío porque el modelo consumió tokens en razonamiento interno
+        if(!cleanFeedback){
+            if(choice && choice.finish_reason === 'length'){
+                throw new Error(`El modelo "${activeModel}" agotó sus tokens de respuesta durante el razonamiento. Te sugerimos cambiar en el modal al modelo "google/gemini-2.0-flash-lite-001" o "meta-llama/llama-3.3-70b-instruct:free" y pulsar "Reevaluar".`);
+            }
+            if(rawFeedback && rawFeedback.length > 0){
+                cleanFeedback = rawFeedback.replace(/<\/?think>/gi, '').trim();
+            }
+        }
+
+        if(!cleanFeedback){
+            throw new Error(`El modelo "${activeModel}" devolvió una respuesta en blanco. Intenta nuevamente o selecciona otro modelo en el modal de configuración.`);
+        }
 
         stepAiFeedback[textareaId] = cleanFeedback;
-
-        const formattedHtml = cleanFeedback.split(/\n\n+/).map(p => `<p class="leading-relaxed mb-2">${p}</p>`).join('');
+        const formattedHtml = formatAiFeedbackHtml(cleanFeedback);
 
         feedbackBox.innerHTML = `
             <div class="p-4 bg-slate-900/95 border border-purple-500/40 rounded-2xl shadow-xl space-y-2.5">
@@ -1929,7 +2020,7 @@ Proporciona tu retroalimentación formativa como Mentor Amigo directamente al es
                         </div>
                         <strong class="text-xs font-bold text-purple-300 heading-font">Dictamen del Mentor IA · ${stepTitle}</strong>
                     </div>
-                    <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-mono">${(settings.model||DEFAULT_MODEL).split('/')[1]||'IA'}</span>
+                    <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-mono">${activeModel.split('/')[1]||activeModel}</span>
                 </div>
                 <div class="text-xs text-slate-200">
                     ${formattedHtml}
