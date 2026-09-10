@@ -73,8 +73,8 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
      - **Histograma de frecuencias:** Identificación de modas, concentración y sesgo.
      - **Polígono de frecuencias:** Conexión de marcas de clase $(X_i)$ y anclaje en extremos a frecuencia cero $(X_1 - A, 0)$ y $(X_k + A, 0)$.
      - **Ojivas Acumuladas:** Ojiva "Menor que" (ascendente $F_a$) y Ojiva "Mayor que" (descendente), cálculo visual de la mediana ($Me$) e interpolación de percentiles.
-     - **Superposición Mixta y Comparativa:** Superposición de Histograma + Polígono de una misma serie, y superposición de Polígonos u Ojivas entre dos series independientes (**Serie A vs Serie B**) para análisis de turnos, sucursales y periodos.
-     - **Flexibilidad en Selección de Clases ($k$):** Selector de cálculo de clases entre la **Regla de Sturges (automática por defecto)** y **Definición Manual/Libre ($k$ personalizado)**, actualizando dinámicamente el desglose paso a paso (Paso 2 y Paso 4) y la amplitud de intervalos $A$.
+     - **Superposición Mixta y Comparativa:** Superposición de Histograma + Polígono de una misma serie, y superposición de Polígonos u Ojivas entre dos series independientes (**Serie A vs Serie B**) para análisis de turnos, sucursales y periodos, utilizando la muestra total ($N = n_A + n_B$) y el rango global para estandarizar los intervalos y marcas de clase de ambas series.
+     - **Flexibilidad en Selección de Clases ($k$):** Selector de cálculo de clases entre la **Regla de Sturges (automática por defecto con $N$ total en comparativas)** y **Definición Manual/Libre ($k$ personalizado)**, actualizando dinámicamente el desglose paso a paso (Paso 2 y Paso 4) y la amplitud de intervalos $A$.
      - **Caso Textil San Lucas S.A.:** Comparativa de turnos matutino vs vespertino en confección de exportación.
      - **Laboratorio Interactivo & Exportación PDF:** Ingreso de datasets simples o comparativos, selector de tipo de dato (Q, u, L, m, decimales) y generación de informe ejecutivo con gráfico en alta resolución y conclusiones gerenciales con jsPDF.
 
@@ -98,7 +98,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
     - Módulo integral de cálculo, interpretación gerencial y hoja de trabajo aplicada:
       - **Cálculo de Estadígrafos Agrupados:** Media aritmética ponderada por frecuencias ($\bar{x} = \frac{\sum f_i \cdot x_i}{n}$), Mediana ($Me$) utilizando la columna de frecuencia acumulada $F_i$ como GPS ordinal e interpolación de clase, y Moda ($Mo$) a través del diferencial de frecuencias adyacentes ($\Delta_1$ y $\Delta_2$).
       - **Fórmula Madre de Medidas de Posición:** Interpolación unificada para Cuartiles ($Q_k$), Deciles ($D_k$) y Percentiles ($P_k$) con cálculo de posición ordinal y clase de trabajo.
-      - **Caso Empresarial:** Cooperativa "El Ahorro Pinulteco" para fijación de políticas de crédito (tasa preferencial al percentil 10, fiador obligatorio al cuartil 3 y aprobación gerencial especial al percentil 90).
+      - **Caso Empresarial & Contexto Gerencial:** Banner ejecutivo colapsable con el caso de la Cooperativa "El Ahorro Pinulteco" (San José Pinula: 50 microcréditos para microempresarios, cálculo guiado de Media, Q3 y P90 para políticas de riesgo y carga asistida a la ficha del estudiante).
       - **Soporte de Datasets:** Entrada por tabla agrupada manual/CSV o datos crudos que se agrupan automáticamente, selector de unidades de medida (Q, US$, pts, min, h, años, kg, cm, und) y carga rápida de casos.
       - **Visualización Gráfica:** Histograma interactivo con líneas verticales de estadígrafos $(\bar{x}, Me, Mo)$ y Ojiva porcentual acumulada (%Ac).
       - **Simulador de Políticas:** Deslizadores en tiempo real para evaluar el impacto de requisitos de crédito en la cartera de clientes y gráfico circular de composición.

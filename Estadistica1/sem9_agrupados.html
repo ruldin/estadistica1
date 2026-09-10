@@ -186,6 +186,129 @@
         </div>
     </section>
 
+    <!-- CASO PRÁCTICO GERENCIAL: COOPERATIVA EL AHORRO PINULTECO (COLAPSABLE / NO INVASIVO) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+        <details id="case-briefing-details" class="group bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-950 border border-teal-500/30 rounded-3xl p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all duration-300" open>
+            <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="p-2.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center shrink-0 shadow-inner">
+                        <i class="fa-solid fa-building-columns text-base"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-400 heading-font bg-teal-950/60 px-2 py-0.5 rounded-md border border-teal-500/20">Caso Práctico Gerencial</span>
+                            <span class="text-xs text-slate-500 hidden sm:inline">•</span>
+                            <span class="text-xs text-slate-400 hidden sm:inline"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i>San José Pinula, Guatemala</span>
+                        </div>
+                        <h2 class="text-sm sm:text-base font-extrabold text-white heading-font mt-0.5 flex items-center gap-2">
+                            <span>Cooperativa "El Ahorro Pinulteco"</span>
+                            <span class="text-[11px] font-semibold text-teal-300 bg-teal-500/10 px-2 py-0.2 rounded-full border border-teal-500/20">50 microcréditos</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="text-[11px] text-slate-400 group-open:hidden hidden md:inline">Ver detalles del problema</span>
+                    <span class="text-[11px] text-teal-400 hidden group-open:inline md:inline font-medium">Ocultar / Colapsar</span>
+                    <div class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 group-hover:text-white transition">
+                        <i class="fa-solid fa-chevron-down text-xs group-open:rotate-180 transition-transform duration-300"></i>
+                    </div>
+                </div>
+            </summary>
+
+            <!-- CONTENIDO EXPANDIBLE DEL CASO -->
+            <div class="mt-4 pt-4 border-t border-slate-800/80 space-y-4 text-xs sm:text-sm">
+                <!-- NARRATIVA DEL PROBLEMA -->
+                <div class="bg-slate-950/60 border border-slate-800/90 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 items-start">
+                    <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl shrink-0 hidden sm:flex items-center justify-center">
+                        <i class="fa-solid fa-user-tie text-xl"></i>
+                    </div>
+                    <div class="space-y-2 leading-relaxed">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-400 heading-font">El Problema</span>
+                        </div>
+                        <p class="text-slate-300 text-xs sm:text-[13px] leading-relaxed">
+                            Imagina que eres el nuevo <strong class="text-white font-semibold">Gerente de Riesgos</strong> de una cooperativa en el centro de <strong class="text-teal-300 font-semibold">San José Pinula</strong>. 
+                            Este mes, otorgaron <strong class="text-teal-300 font-semibold">50 microcréditos</strong> a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos).
+                        </p>
+                        <p class="text-slate-400 text-xs sm:text-[13px] leading-relaxed">
+                            El <strong class="text-slate-200">Gerente General</strong> te pide los siguientes <strong class="text-amber-300">3 indicadores urgentes</strong> para establecer políticas financieras:
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3 PREGUNTAS GERENCIALES VINCULADAS A LA ESTADÍSTICA -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <!-- Pregunta 1: Media -->
+                    <div class="bg-slate-950/70 border border-teal-500/25 rounded-2xl p-3.5 sm:p-4 relative hover:border-teal-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="step-badge bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[11px]">1</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-400 heading-font">Media Aritmética (x̄)</span>
+                        </div>
+                        <p class="text-slate-200 font-medium text-xs sm:text-sm leading-snug">
+                            «¿Cuál es el promedio general de los créditos otorgados?»
+                        </p>
+                        <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Resuélvelo en:</span>
+                            <button type="button" onclick="switchTab('tab-tendencia')" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-1">
+                                <span>Paso 2 · Tendencia</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2: Q3 -->
+                    <div class="bg-slate-950/70 border border-amber-500/25 rounded-2xl p-3.5 sm:p-4 relative hover:border-amber-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="step-badge bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px]">2</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 heading-font">Tercer Cuartil (Q3)</span>
+                        </div>
+                        <p class="text-slate-200 font-medium text-xs sm:text-sm leading-snug">
+                            «¿A partir de qué monto consideramos que un crédito está en el 25% más alto para exigirle un fiador?»
+                        </p>
+                        <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Resuélvelo en:</span>
+                            <button type="button" onclick="setPreset('Q',3); switchTab('tab-posicion')" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+                                <span>Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3: P90 -->
+                    <div class="bg-slate-950/70 border border-indigo-500/25 rounded-2xl p-3.5 sm:p-4 relative hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="step-badge bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px]">3</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-400 heading-font">Percentil 90 (P90)</span>
+                        </div>
+                        <p class="text-slate-200 font-medium text-xs sm:text-sm leading-snug">
+                            «¿Cuál es el monto umbral para el 10% de los créditos más grandes, los cuales requerirán mi firma directa para evitar riesgos de morosidad?»
+                        </p>
+                        <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                            <span>Resuélvelo en:</span>
+                            <button type="button" onclick="setPreset('P',90); switchTab('tab-posicion')" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+                                <span>Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GUÍA PASO A PASO & ACCIÓN -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-gradient-to-r from-teal-950/50 to-slate-950 border border-teal-500/30 rounded-2xl">
+                    <div class="flex items-center gap-2.5 text-xs text-teal-200">
+                        <i class="fa-solid fa-circle-check text-teal-400 text-base shrink-0"></i>
+                        <span class="leading-relaxed">
+                            <strong>¡No te preocupes!</strong> Esta plataforma <strong>te guiará paso a paso de cómo resolver</strong> cada indicador usando tus datos agrupados y fórmulas gerenciales.
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="cargarEnunciadoOficial(true)" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 heading-font shadow-lg shadow-teal-500/20">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <span>Cargar enunciado a mi Ficha</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </section>
+
     <!-- LAYOUT PRINCIPAL: FUENTE SIEMPRE VISIBLE + CONTENIDO -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-grow">
 
@@ -298,8 +421,15 @@
                             <div><label class="font-bold text-slate-300 block mb-1">Nombre completo *</label><input id="stu-nombre" oninput="renderEntregaPreview()" class="practice-input" placeholder="Ej: María Fernanda López"></div>
                             <div><label class="font-bold text-slate-300 block mb-1">Carnet *</label><input id="stu-carnet" oninput="renderEntregaPreview()" class="practice-input" placeholder="Ej: 2026-00123"></div>
                         </div>
-                        <div class="mt-3 text-xs"><label class="font-bold text-slate-300 block mb-1">Enunciado del problema a analizar y resolver *</label>
-                            <textarea id="stu-enunciado" rows="4" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:border-teal-400 focus:outline-none" placeholder="Ej: Analizar los montos de 50 microcréditos de la Cooperativa El Ahorro Pinulteco para definir la tasa preferencial (P10), el fiador obligatorio (Q3) y la aprobación especial (P90)..."></textarea></div>
+                        <div class="mt-3 text-xs space-y-1.5">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
+                                <label class="font-bold text-slate-300 block">Enunciado del problema a analizar y resolver *</label>
+                                <button type="button" onclick="cargarEnunciadoOficial(false)" class="text-[11px] text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-1 bg-teal-950/50 border border-teal-500/30 px-2.5 py-1 rounded-lg transition">
+                                    <i class="fa-solid fa-file-import text-[10px]"></i> Cargar enunciado oficial del caso
+                                </button>
+                            </div>
+                            <textarea id="stu-enunciado" rows="4" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:border-teal-400 focus:outline-none" placeholder="Ej: Analizar los montos de 50 microcréditos de la Cooperativa El Ahorro Pinulteco para definir la tasa preferencial (P10), el fiador obligatorio (Q3) y la aprobación especial (P90)..."></textarea>
+                        </div>
                         <div class="mt-3 p-3.5 bg-teal-950/40 border border-teal-500/30 rounded-xl text-xs text-teal-200">📝 <strong>Cómo trabajar:</strong> 1) llena esta ficha, 2) resuelve los cálculos en cada paso con el <strong>modo examen activado</strong> (las soluciones se ocultan), 3) escribe tus conclusiones en cada pestaña, 4) genera tu PDF en la última pestaña.</div>
                     </div>
                 </section>
@@ -659,10 +789,35 @@ function onUnitChange(){
     refreshContextUI(); renderAll();
 }
 
+const ENUNCIADO_PINULTECO = `Caso Práctico Gerencial: Cooperativa "El Ahorro Pinulteco" (San José Pinula).
+El Problema:
+Como nuevo Gerente de Riesgos de una cooperativa en el centro de San José Pinula, analizo 50 microcréditos otorgados este mes a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos) para responder con urgencia al Gerente General con 3 indicadores clave:
+1. Promedio general de los créditos otorgados (Media Aritmética, x̄).
+2. Monto a partir del cual un crédito está en el 25% más alto para exigirle un fiador (Tercer Cuartil, Q3).
+3. Monto umbral para el 10% de los créditos más grandes que requerirán firma directa de gerencia para evitar riesgos de morosidad (Percentil 90, P90).`;
+
+function cargarEnunciadoOficial(irAPaso0 = false){
+    const el = document.getElementById('stu-enunciado');
+    if(el){
+        el.value = ENUNCIADO_PINULTECO;
+        renderEntregaPreview();
+    }
+    if(irAPaso0){
+        switchTab('tab-datos');
+        if(el){
+            el.scrollIntoView({behavior:'smooth', block:'center'});
+            el.focus();
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     refreshContextUI();
     buildFromCsv(DEFAULT_CSV);
     document.getElementById('csv-input').value = DEFAULT_CSV;
+    if(!document.getElementById('stu-enunciado').value.trim()){
+        cargarEnunciadoOficial(false);
+    }
     updatePdfGate();
 });
 
@@ -691,7 +846,7 @@ function buildFromCsv(text){
 }
 function setUnitAndCtx(unit,ctx){ unitKey=unit; ctxKey=ctx; document.getElementById('unit-select').value=unit; refreshContextUI(); }
 function applyCsvDataset(){ buildFromCsv(document.getElementById('csv-input').value); }
-function resetDataset(){ document.getElementById('csv-input').value = DEFAULT_CSV; document.getElementById('case-name-label').textContent='Cooperativa "El Ahorro Pinulteco"'; setUnitAndCtx('Q','creditos'); buildFromCsv(DEFAULT_CSV); }
+function resetDataset(){ document.getElementById('csv-input').value = DEFAULT_CSV; document.getElementById('case-name-label').textContent='Cooperativa "El Ahorro Pinulteco"'; setUnitAndCtx('Q','creditos'); buildFromCsv(DEFAULT_CSV); cargarEnunciadoOficial(false); }
 function loadCsvFile(ev){
     const f = ev.target.files[0]; if(!f) return;
     const r = new FileReader();

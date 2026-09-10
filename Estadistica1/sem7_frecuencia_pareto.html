@@ -1104,15 +1104,29 @@
             }
         }
 
-        function computeSturges(data, customK = null) {
+        function computeSturges(data, customK = null, options = {}) {
             const n = data.length;
             if (n === 0) return null;
 
-            const xmin = Math.min(...data);
-            const xmax = Math.max(...data);
+            const {
+                overrideN = null,          // N total combinado en caso de 2 datasets
+                overrideXmin = null,       // Xmin global
+                overrideXmax = null,       // Xmax global
+                sharedIntervals = null,    // rejilla de intervalos compartida
+                isComparativeMode = false, // indica si se está en análisis conjunto
+                seriesNameA = '',
+                seriesNameB = '',
+                nA = 0,
+                nB = 0
+            } = options;
+
+            const effectiveN = (overrideN !== null && overrideN !== undefined && overrideN > 0) ? overrideN : n;
+
+            const xmin = (overrideXmin !== null && overrideXmin !== undefined) ? overrideXmin : Math.min(...data);
+            const xmax = (overrideXmax !== null && overrideXmax !== undefined) ? overrideXmax : Math.max(...data);
             const R = xmax - xmin;
 
-            const kRaw = 1 + 3.322 * Math.log10(n);
+            const kRaw = 1 + 3.322 * Math.log10(effectiveN);
             let kSturges = Math.round(kRaw);
             if (kSturges < 1) kSturges = 1;
 
@@ -1137,14 +1151,30 @@
                 A = Math.ceil(Adiv * 100) / 100;
             }
 
-            const intervals = [];
-            let Li = xmin;
+            let intervals = [];
             const EPS = 1e-9;
-            for (let i = 0; i < k; i++) {
-                let Ls = Li + A;
-                if (i === k - 1 && Ls < xmax - EPS) Ls = xmax;
-                intervals.push({ Li, Ls, fi: 0, fr: 0, fp: 0, Fa: 0, FaMayor: 0, Xi: (Li + Ls) / 2 });
-                Li = Ls;
+
+            if (sharedIntervals && Array.isArray(sharedIntervals) && sharedIntervals.length > 0) {
+                // Usar la misma rejilla para ambas series
+                intervals = sharedIntervals.map(inter => ({
+                    Li: inter.Li,
+                    Ls: inter.Ls,
+                    Xi: inter.Xi,
+                    fi: 0,
+                    fr: 0,
+                    fp: 0,
+                    Fa: 0,
+                    FaMayor: 0
+                }));
+                k = intervals.length;
+            } else {
+                let Li = xmin;
+                for (let i = 0; i < k; i++) {
+                    let Ls = Li + A;
+                    if (i === k - 1 && Ls < xmax - EPS) Ls = xmax;
+                    intervals.push({ Li, Ls, fi: 0, fr: 0, fp: 0, Fa: 0, FaMayor: 0, Xi: (Li + Ls) / 2 });
+                    Li = Ls;
+                }
             }
 
             data.forEach((x) => {
@@ -1188,7 +1218,27 @@
             intervals.forEach(c => sumXiFi += (c.Xi * c.fi));
             const mean = n > 0 ? sumXiFi / n : 0;
 
-            return { n, xmin, xmax, R, kRaw, kSturges, k, isCustom, Adiv, A, intervals, modalIdx, mean };
+            return {
+                n,
+                effectiveN,
+                isComparativeMode,
+                seriesNameA,
+                seriesNameB,
+                nA,
+                nB,
+                xmin,
+                xmax,
+                R,
+                kRaw,
+                kSturges,
+                k,
+                isCustom,
+                Adiv,
+                A,
+                intervals,
+                modalIdx,
+                mean
+            };
         }
 
         // ==================== FORMATOS DE VISUALIZACIÓN ====================
@@ -1314,26 +1364,68 @@
                     return;
                 }
 
-                analysisA = computeSturges(dataA, customKParam);
-                renderKpis(analysisA);
-                renderBreakdown(analysisA, getSeriesNameA());
-                renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
-                document.getElementById('kpi-cards').classList.remove('hidden');
-                document.getElementById('step-breakdown').classList.remove('hidden');
-
-                document.getElementById('table-title-a').innerHTML = `
-                    <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
-                `;
-
                 if (dataB.length >= 5) {
-                    analysisB = computeSturges(dataB, customKParam);
-                    renderFreqTable(analysisB, 'freq-table-body-b', getSeriesNameB());
+                    // MODO COMPARATIVO CON AMBAS SERIES:
+                    // Se utiliza el tamaño total N = nA + nB y el rango global [minGlobal, maxGlobal]
+                    const totalN = dataA.length + dataB.length;
+                    const combinedData = [...dataA, ...dataB];
+                    const minGlobal = Math.min(...combinedData);
+                    const maxGlobal = Math.max(...combinedData);
+                    const nameA = getSeriesNameA();
+                    const nameB = getSeriesNameB();
+
+                    const compOptions = {
+                        overrideN: totalN,
+                        overrideXmin: minGlobal,
+                        overrideXmax: maxGlobal,
+                        isComparativeMode: true,
+                        seriesNameA: nameA,
+                        seriesNameB: nameB,
+                        nA: dataA.length,
+                        nB: dataB.length
+                    };
+
+                    // Calculamos A con la rejilla global
+                    analysisA = computeSturges(dataA, customKParam, compOptions);
+
+                    // Calculamos B con exactamente la misma rejilla de intervalos para comparabilidad directa
+                    const compOptionsB = {
+                        ...compOptions,
+                        sharedIntervals: analysisA.intervals
+                    };
+                    analysisB = computeSturges(dataB, customKParam, compOptionsB);
+
+                    renderKpis(analysisA);
+                    renderBreakdown(analysisA, `${nameA} & ${nameB}`);
+                    renderFreqTable(analysisA, 'freq-table-body-a', nameA);
+                    renderFreqTable(analysisB, 'freq-table-body-b', nameB);
+
+                    document.getElementById('kpi-cards').classList.remove('hidden');
+                    document.getElementById('step-breakdown').classList.remove('hidden');
+
+                    document.getElementById('table-title-a').innerHTML = `
+                        <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${nameA}</span>
+                    `;
+
                     const titleB = document.querySelector('#container-table-b h4');
                     if (titleB) {
-                        titleB.innerHTML = `<i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-emerald-300 font-bold">${getSeriesNameB()}</span>`;
+                        titleB.innerHTML = `<i class="fa-solid fa-table-cells text-emerald-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-emerald-300 font-bold">${nameB}</span>`;
                     }
                     renderLabChart(currentChartType && currentChartType.startsWith('compare_') ? currentChartType : 'compare_poly');
                 } else {
+                    // Sólo Serie A válida
+                    analysisA = computeSturges(dataA, customKParam);
+                    analysisB = null;
+
+                    renderKpis(analysisA);
+                    renderBreakdown(analysisA, getSeriesNameA());
+                    renderFreqTable(analysisA, 'freq-table-body-a', getSeriesNameA());
+                    document.getElementById('kpi-cards').classList.remove('hidden');
+                    document.getElementById('step-breakdown').classList.remove('hidden');
+
+                    document.getElementById('table-title-a').innerHTML = `
+                        <i class="fa-solid fa-table-cells text-blue-400 mr-2"></i>Tabla de Distribución de Frecuencias · <span class="text-blue-300 font-bold">${getSeriesNameA()}</span>
+                    `;
                     renderLabChart('polygon');
                 }
             }
@@ -1380,7 +1472,11 @@
         }
 
         function renderKpis(a) {
-            document.getElementById('kpi-n').textContent = a.n;
+            if (a.isComparativeMode) {
+                document.getElementById('kpi-n').innerHTML = `N = ${a.effectiveN} <span class="text-[10px] text-slate-400 font-normal block">(${a.nA} + ${a.nB})</span>`;
+            } else {
+                document.getElementById('kpi-n').textContent = a.n;
+            }
             document.getElementById('kpi-k').textContent = a.isCustom ? `${a.k} (Manual)` : `${a.k} (Sturges)`;
             document.getElementById('kpi-r').textContent = formatDataValue(a.R);
             document.getElementById('kpi-a').textContent = formatDataValue(a.A);
@@ -1428,29 +1524,69 @@
             const showSheets = chk ? chk.checked : false;
             const sheetsClass = showSheets ? 'sheets-formula' : 'sheets-formula hidden';
 
+            // Paso 1: n simple vs N total conjunto
+            const step1Html = a.isComparativeMode ? `
+                <!-- Paso 1: N Combinado -->
+                <div class="bg-slate-950 border border-blue-500/30 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-calculator mr-1.5"></i>Paso 1 · N Total Combinado (Ambas Series Superpuestas)</span>
+                    <p><strong class="text-white">Regla Metodológica para Comparación de 2 Series:</strong> Para superponer dos distribuciones en el mismo gráfico con una escala homogénea, se calcula el número de clases y la amplitud sobre el <strong class="text-white">tamaño total combinado (N)</strong> y el <strong class="text-white">rango global</strong> de ambos datasets.</p>
+                    <p class="text-slate-300">• <span class="text-blue-300 font-semibold">${a.seriesNameA}:</span> n₁ = ${a.nA} observaciones.</p>
+                    <p class="text-slate-300">• <span class="text-emerald-300 font-semibold">${a.seriesNameB}:</span> n₂ = ${a.nB} observaciones.</p>
+                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=CONTAR(datos_A) + CONTAR(datos_B)</code>.</p>
+                    <p class="text-slate-200">Tamaño muestral conjunto: <strong class="text-emerald-400 font-bold">N = n₁ + n₂ = ${a.nA} + ${a.nB} = ${a.effectiveN} observaciones</strong>.</p>
+                </div>
+            ` : `
+                <!-- Paso 1: n -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-calculator mr-1.5"></i>Paso 1 · n (Tamaño de la Muestra / Conteo Total)</span>
+                    <p><strong class="text-white">n</strong> = Número total de observaciones registradas en la serie <span class="text-blue-300 font-semibold">${seriesName}</span>.</p>
+                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=CONTAR(rango_datos)</code>. En estadística: <strong class="text-white">n = Σ fi</strong>.</p>
+                    <p class="text-slate-200">Resultado: <strong class="text-emerald-400 font-bold">n = ${a.n} observaciones</strong>.</p>
+                </div>
+            `;
+
             const kStepHtml = a.isCustom ? `
                 <!-- Paso 2: k (Manual) -->
                 <div class="bg-slate-950 border border-amber-500/30 rounded-xl p-3 space-y-1">
                     <span class="text-amber-400 font-bold block"><i class="fa-solid fa-sliders mr-1.5"></i>Paso 2 · k (Número de Clases - Definido Manualmente / Criterio Libre)</span>
-                    <p><strong class="text-white">Modo Libre Seleccionado:</strong> El estudiante especificó manualmente un total de <strong class="text-amber-300">${a.k} clases</strong> para agrupar esta distribución.</p>
-                    <p class="text-slate-400">Referencia - Regla de Sturges original para n=${a.n}: <code class="text-slate-300 font-mono">k = 1 + 3.322 × log₁₀(${a.n}) = ${fmtNum(a.kRaw, 4)} ≈ ${a.kSturges} clases</code>.</p>
-                    <p class="text-slate-200">Clases activas en la tabla y gráficos: <strong class="text-amber-400">k = ${a.k} clases (Manual)</strong>.</p>
+                    <p><strong class="text-white">Modo Libre Seleccionado:</strong> El estudiante especificó manualmente un total de <strong class="text-amber-300">${a.k} clases</strong> para agrupar esta distribución${a.isComparativeMode ? ' (aplicada uniformemente a ambas series)' : ''}.</p>
+                    <p class="text-slate-400">Referencia - Regla de Sturges original para ${a.isComparativeMode ? 'N=' + a.effectiveN : 'n=' + a.n}: <code class="text-slate-300 font-mono">k = 1 + 3.322 × log₁₀(${a.effectiveN}) = ${fmtNum(a.kRaw, 4)} ≈ ${a.kSturges} clases</code>.</p>
+                    <p class="text-slate-200">Clases activas en la tabla y gráficos: <strong class="text-amber-400 font-bold">k = ${a.k} clases (Manual)</strong>.</p>
                 </div>
             ` : `
                 <!-- Paso 2: k (Sturges) -->
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
                     <span class="text-blue-400 font-bold block"><i class="fa-solid fa-layer-group mr-1.5"></i>Paso 2 · k (Número de Clases o Intervalos - Sturges)</span>
-                    <p><strong class="text-white">Fórmula de Sturges (Por defecto):</strong> <code class="text-blue-300 font-mono">k = 1 + 3.322 × log₁₀(n)</code></p>
-                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=REDONDEAR(1 + 3.322 * LOG10(CONTAR(datos)); 0)</code>.</p>
-                    <p class="text-slate-200">Cálculo: k = 1 + 3.322 × log₁₀(${a.n}) = 1 + 3.322 × ${fmtNum(Math.log10(a.n), 5)} = <strong class="text-white">${fmtNum(a.kRaw, 4)}</strong></p>
-                    <p class="text-slate-200">Redondeado al entero más cercano: <strong class="text-emerald-400">k = ${a.k} clases (Sturges)</strong>.</p>
+                    <p><strong class="text-white">Fórmula de Sturges:</strong> <code class="text-blue-300 font-mono">k = 1 + 3.322 × log₁₀(${a.isComparativeMode ? 'N' : 'n'})</code></p>
+                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=REDONDEAR(1 + 3.322 * LOG10(${a.isComparativeMode ? 'CONTAR(A)+CONTAR(B)' : 'CONTAR(datos)'}); 0)</code>.</p>
+                    <p class="text-slate-200">Cálculo: k = 1 + 3.322 × log₁₀(${a.effectiveN}) = 1 + 3.322 × ${fmtNum(Math.log10(a.effectiveN), 5)} = <strong class="text-white">${fmtNum(a.kRaw, 4)}</strong></p>
+                    <p class="text-slate-200">Redondeado al entero más cercano: <strong class="text-emerald-400 font-bold">k = ${a.k} clases (Sturges)</strong>.</p>
+                </div>
+            `;
+
+            const rStepHtml = a.isComparativeMode ? `
+                <!-- Paso 3: Rango Global -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-arrows-left-right mr-1.5"></i>Paso 3 · R (Rango Global de Ambos Datasets)</span>
+                    <p><strong class="text-white">Rango Global (R):</strong> Diferencia entre el valor máximo global y el valor mínimo global de ambas series para que todos los datos de A y B queden contenidos en la misma rejilla.</p>
+                    <p class="text-slate-300">• Mínimo Global: <strong class="text-white">Xmin = ${formatDataValue(a.xmin)}</strong>  |  Máximo Global: <strong class="text-white">Xmax = ${formatDataValue(a.xmax)}</strong>.</p>
+                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=MAX(datos_A; datos_B) - MIN(datos_A; datos_B)</code>.</p>
+                    <p class="text-slate-200">Cálculo: R = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-emerald-400 font-bold">R = ${formatDataValue(a.R)}</strong>.</p>
+                </div>
+            ` : `
+                <!-- Paso 3: R -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-arrows-left-right mr-1.5"></i>Paso 3 · R (Rango o Recorrido Total)</span>
+                    <p><strong class="text-white">R</strong> = Diferencia entre el valor máximo y el valor mínimo registrado en la muestra.</p>
+                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=MAX(datos) - MIN(datos)</code>. En estadística: <strong class="text-white">R = Xmax − Xmin</strong>.</p>
+                    <p class="text-slate-200">Cálculo: R = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-emerald-400 font-bold">R = ${formatDataValue(a.R)}</strong>.</p>
                 </div>
             `;
 
             const aStepHtml = `
                 <!-- Paso 4: A -->
                 <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
-                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-ruler-horizontal mr-1.5"></i>Paso 4 · A (Amplitud o Ancho de Cada Intervalo)</span>
+                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-ruler-horizontal mr-1.5"></i>Paso 4 · A (Amplitud o Ancho de Cada Intervalo${a.isComparativeMode ? ' - Común a Ambas Series' : ''})</span>
                     <p><strong class="text-white">Fórmula Teórica de la Amplitud:</strong> <code class="text-blue-300 font-mono">A = R / k</code> (${a.isCustom ? 'con k manual = ' + a.k : 'con k Sturges = ' + a.k}).</p>
                     <p class="text-slate-200">División directa: A = ${formatDataValue(a.R)} / ${a.k} = <strong class="text-slate-300">${fmtNum(a.Adiv, 4)}</strong>.</p>
                     <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-lg p-2.5 my-1.5 space-y-1 text-xs">
@@ -1467,24 +1603,9 @@
             `;
 
             body.innerHTML = `
-                <!-- Paso 1: n -->
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
-                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-calculator mr-1.5"></i>Paso 1 · n (Tamaño de la Muestra / Conteo Total)</span>
-                    <p><strong class="text-white">n</strong> = Número total de observaciones registradas en la serie <span class="text-blue-300 font-semibold">${seriesName}</span>.</p>
-                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=CONTAR(rango_datos)</code>. En estadística: <strong class="text-white">n = Σ fi</strong>.</p>
-                    <p class="text-slate-200">Resultado: <strong class="text-emerald-400">n = ${a.n} observaciones</strong>.</p>
-                </div>
-
+                ${step1Html}
                 ${kStepHtml}
-
-                <!-- Paso 3: R -->
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1">
-                    <span class="text-blue-400 font-bold block"><i class="fa-solid fa-arrows-left-right mr-1.5"></i>Paso 3 · R (Rango o Recorrido Total)</span>
-                    <p><strong class="text-white">R</strong> = Diferencia entre el valor máximo y el valor mínimo registrado en la muestra.</p>
-                    <p class="text-slate-400 ${sheetsClass}">En Google Sheets: <code class="text-emerald-300 font-mono">=MAX(datos) - MIN(datos)</code>. En estadística: <strong class="text-white">R = Xmax − Xmin</strong>.</p>
-                    <p class="text-slate-200">Cálculo: R = ${formatDataValue(a.xmax)} − ${formatDataValue(a.xmin)} = <strong class="text-emerald-400">R = ${formatDataValue(a.R)}</strong>.</p>
-                </div>
-
+                ${rStepHtml}
                 ${aStepHtml}
 
                 <!-- Paso 5: Intervalos y Xi -->
@@ -2065,13 +2186,13 @@
             printSection('3. DECISIÓN ADMINISTRATIVA & ESTRATEGIA GERENCIAL', wsVal('ws-decision'), [245, 158, 11]);
 
             // TABLA RESUMEN EN ANEXO (Serie A)
-            if (a.intervals.length) {
+            if (a && a.intervals.length) {
                 if (y > 235) { doc.addPage(); y = 16; }
                 y += 2;
                 doc.setFont('helvetica', 'bold');
                 doc.setFontSize(8);
                 doc.setTextColor(71, 85, 105);
-                doc.text(`Anexo: Tabla de Distribución de Frecuencias — ${nameA}`, margin, y);
+                doc.text(`Anexo: Tabla de Distribución de Frecuencias — ${nameA}${a.isComparativeMode ? ` (n₁=${a.nA} de N=${a.effectiveN})` : ''}`, margin, y);
                 y += 5;
 
                 doc.setFontSize(7);
@@ -2084,6 +2205,38 @@
                 a.intervals.forEach((c, i) => {
                     if (y > 285) { doc.addPage(); y = 16; }
                     const isLast = i === a.intervals.length - 1;
+                    doc.text(intervalLabel(c, isLast), cols[0], y);
+                    doc.text(String(c.fi), cols[1], y);
+                    doc.text(c.fr.toFixed(3), cols[2], y);
+                    doc.text(c.fp.toFixed(1) + '%', cols[3], y);
+                    doc.text(c.fpAcum.toFixed(1) + '%', cols[4], y);
+                    doc.text(String(c.Fa), cols[5], y);
+                    doc.text(String(c.FaMayor), cols[6], y);
+                    doc.text(formatDataValue(c.Xi), cols[7], y);
+                    y += 3.5;
+                });
+            }
+
+            // TABLA RESUMEN EN ANEXO (Serie B en caso comparativo)
+            if (analysisB && analysisB.intervals.length) {
+                if (y > 235) { doc.addPage(); y = 16; }
+                y += 4;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(71, 85, 105);
+                doc.text(`Anexo: Tabla de Distribución de Frecuencias — ${nameB} (n₂=${analysisB.nB} de N=${analysisB.effectiveN})`, margin, y);
+                y += 5;
+
+                doc.setFontSize(7);
+                const cols = [margin, margin + 35, margin + 52, margin + 70, margin + 92, margin + 115, margin + 140, margin + 162];
+                doc.setFont('helvetica', 'bold');
+                ['Intervalo', 'fi', 'fr', 'fp%', 'fp acum%', 'Fa', 'Fa Mayor', 'Xi'].forEach((h, i) => doc.text(h, cols[i], y));
+                y += 3.5;
+                doc.setFont('helvetica', 'normal');
+
+                analysisB.intervals.forEach((c, i) => {
+                    if (y > 285) { doc.addPage(); y = 16; }
+                    const isLast = i === analysisB.intervals.length - 1;
                     doc.text(intervalLabel(c, isLast), cols[0], y);
                     doc.text(String(c.fi), cols[1], y);
                     doc.text(c.fr.toFixed(3), cols[2], y);
