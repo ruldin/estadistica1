@@ -96,14 +96,20 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 
 12. 📊 **`Estadistica1/sem9_agrupados.html` (Semana 9: Estadígrafos de Tendencia Central para Datos Agrupados & Medidas de Posición):**
     - Módulo integral de cálculo, interpretación gerencial y hoja de trabajo aplicada:
+      - **Selector Visual de 4 Casos de Negocio Dinámicos:** Selector destacado en cuadrícula con datos y contextos de [Estadistica1/contexto_sem9_agrupado.md](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/contexto_sem9_agrupado.md):
+        1. *Caso 1: Cooperativa "El Ahorro Pinulteco"* (San José Pinula, microcréditos, Q, x̄, Q3 y P90).
+        2. *Caso 2: Call Center "BPO Americas"* (Zona 10, sueldos y bonos CSAT, Q, x̄ vs Me, D2 y Q3).
+        3. *Caso 3: Farmacia y Distribuidora "La Salud"* (Calzada Roosevelt, tiempos de despacho y entrega a domicilio, min, x̄, Me y P90).
+        4. *Caso 4: Selección de Talento UMG* (Campus Central, pruebas de aptitud cuantitativa y admisiones, pts, x̄, Q1 y P90).
+      - **Navegación Guiada Paso a Paso:** Botones de navegación *Anterior* y *Siguiente* en cada una de las pestañas (Paso 0 a Paso 7) para guiar al estudiante de forma estructurada.
+      - **Tutor Formativo IA (Mentor Amigo):** Botón `Retroalimentación IA` en cada paso para evaluar las conclusiones de pensamiento crítico del alumno mediante OpenRouter API (`inclusionai/ling-3.0-flash-fin:free`), con tono empático, formativo y constructivo de "tú", sin saludos ceremoniales iniciales y con modal de configuración seguro en `localStorage`.
       - **Cálculo de Estadígrafos Agrupados:** Media aritmética ponderada por frecuencias ($\bar{x} = \frac{\sum f_i \cdot x_i}{n}$), Mediana ($Me$) utilizando la columna de frecuencia acumulada $F_i$ como GPS ordinal e interpolación de clase, y Moda ($Mo$) a través del diferencial de frecuencias adyacentes ($\Delta_1$ y $\Delta_2$).
       - **Fórmula Madre de Medidas de Posición:** Interpolación unificada para Cuartiles ($Q_k$), Deciles ($D_k$) y Percentiles ($P_k$) con cálculo de posición ordinal y clase de trabajo.
-      - **Caso Empresarial & Contexto Gerencial:** Banner ejecutivo colapsable con el caso de la Cooperativa "El Ahorro Pinulteco" (San José Pinula: 50 microcréditos para microempresarios, cálculo guiado de Media, Q3 y P90 para políticas de riesgo y carga asistida a la ficha del estudiante).
       - **Soporte de Datasets:** Entrada por tabla agrupada manual/CSV o datos crudos que se agrupan automáticamente, selector de unidades de medida (Q, US$, pts, min, h, años, kg, cm, und) y carga rápida de casos.
       - **Visualización Gráfica:** Histograma interactivo con líneas verticales de estadígrafos $(\bar{x}, Me, Mo)$ y Ojiva porcentual acumulada (%Ac).
       - **Simulador de Políticas:** Deslizadores en tiempo real para evaluar el impacto de requisitos de crédito en la cartera de clientes y gráfico circular de composición.
       - **Diseño Responsive & Modal Móvil:** Barra lateral con `.sticky-source` optimizada para computadoras y estática en pantallas móviles (evitando solapamientos), botón flotante `Ver Tabla` y ventana modal para consultar la tabla de frecuencias sin perder la posición en los ejercicios.
-      - **Modo Examen & Generación PDF:** Ficha del estudiante, problemas personalizados, autoevaluación con soluciones ocultas y exportación de hoja de trabajo oficial a PDF con jsPDF.
+      - **Modo Examen & Generación PDF Oficial:** Ficha del estudiante, autoevaluación con soluciones ocultas y exportación de hoja de trabajo oficial a PDF con jsPDF, imprimiendo tanto las respuestas y análisis del estudiante como los dictámenes pedagógicos del Mentor IA para cada paso y para las conclusiones generales.
 
 13. 📊 **`Estadistica1/GoogleSheetSim.html` (Simulador Google Sheets & Slides):**
     - Simulador interactivo de Diagrama de Pareto enfocado en casos empresariales y presentación de informes.
