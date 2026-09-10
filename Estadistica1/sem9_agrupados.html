@@ -1170,6 +1170,12 @@ Como Coordinador de Admisiones de Administración de Empresas, evalúo 60 prueba
 };
 
 let currentCaseId = 'caso1';
+window.stepAiFeedback = {};
+const stepAiFeedback = window.stepAiFeedback;
+
+function openApiModal(){
+    toggleApiModal(true);
+}
 
 async function cargarContextoDesdeMarkdown(){
     try {
@@ -1642,6 +1648,16 @@ function syncApiUi(){
         const modelName = s.model || DEFAULT_MODEL;
         const mShort = modelName.includes('/') ? modelName.split('/')[1] : modelName;
         modelBadge.textContent = mShort.replace(':free','');
+    }
+    const hBadge = document.getElementById('header-api-status-badge');
+    if(hBadge){
+        if(hasKey){
+            hBadge.className = 'ml-1 inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold';
+            hBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Activa';
+        } else {
+            hBadge.className = 'ml-1 inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold';
+            hBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Pendiente';
+        }
     }
 }
 
