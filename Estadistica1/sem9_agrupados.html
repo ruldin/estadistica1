@@ -1081,6 +1081,185 @@ function onUnitChange(){
     refreshContextUI(); renderAll();
 }
 
+/* ===== CATÁLOGO DE CASOS GERENCIALES (SEMANA 9) ===== */
+const CASES_CATALOG = {
+    caso1: {
+        id: "caso1",
+        badge: "CASO 1 · MICROCRÉDITOS",
+        title: "Cooperativa \"El Ahorro Pinulteco\"",
+        location: "San José Pinula, Guatemala",
+        unit: "Q",
+        ctx: "creditos",
+        n: 50,
+        csv: "1000,2000,5\n2000,3000,12\n3000,4000,18\n4000,5000,10\n5000,6000,5",
+        context: "Como nuevo Gerente de Riesgos de la cooperativa en San José Pinula, debes analizar la cartera de 50 microcréditos otorgados este mes a comerciantes locales (abarroterías, pacas de ropa, carretas de shukos) para proteger la liquidez institucional y fijar políticas de cobro y garantías.",
+        q1: "Media Aritmética (x̄): ¿Cuál es el monto promedio general desembolsado por microcrédito?",
+        q2: "Tercer Cuartil (Q3): ¿A partir de qué monto se ubica el 25% de microcréditos más altos para exigir fiador con arraigo laboral?",
+        q3: "Percentil 90 (P90): ¿Cuál es el umbral para el 10% de créditos de mayor cuantía que requieren aprobación directa del Gerente General?",
+        action: "Fijar escalonamiento de tasas preferenciales (P10), garantías prendarias (Q3) y control de morosidad institucional (P90).",
+        fullEnunciado: `Caso Práctico Gerencial: Cooperativa "El Ahorro Pinulteco" (San José Pinula).
+El Problema:
+Como nuevo Gerente de Riesgos de una cooperativa en el centro de San José Pinula, analizo 50 microcréditos otorgados este mes a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos) para responder con urgencia al Gerente General con 3 indicadores clave:
+1. Promedio general de los créditos otorgados (Media Aritmética, x̄).
+2. Monto a partir del cual un crédito está en el 25% más alto para exigirle un fiador (Tercer Cuartil, Q3).
+3. Monto umbral para el 10% de los créditos más grandes que requerirán firma directa de gerencia para evitar riesgos de morosidad (Percentil 90, P90).`
+    },
+    caso2: {
+        id: "caso2",
+        badge: "CASO 2 · TALENTO Y SUELDOS",
+        title: "Call Center \"BPO Americas\"",
+        location: "Zona 10, Ciudad de Guatemala",
+        unit: "Q",
+        ctx: "creditos",
+        n: 65,
+        csv: "3000,4000,8\n4000,5000,15\n5000,6000,22\n6000,7000,12\n7000,8000,8",
+        context: "Como Director de Recursos Humanos de una multinacional de servicios BPO en Zona 10, evalúas la distribución de remuneración mensual (salario base + bonificaciones de calidad y métricas CSAT) de 65 agentes bilingües de soporte corporativo para reestructurar la escala salarial.",
+        q1: "Media vs. Mediana: ¿Representa la media adecuadamente el salario típico o el sesgo salarial favorece a una minoría?",
+        q2: "Decil 2 (D2 / P20): ¿Cuál es el techo de ingreso del 20% con remuneración más baja para plan de retención?",
+        q3: "Tercer Cuartil (Q3 / P75): ¿A partir de qué monto inicia el 25% de agentes de mejor desempeño para bono de lealtad?",
+        action: "Ajustar bandas salariales para evitar fuga de talento hacia otros centros de contacto en la capital.",
+        fullEnunciado: `Caso Práctico Gerencial: Call Center "BPO Americas" (Zona 10, Ciudad de Guatemala).
+El Problema:
+Como Director de Recursos Humanos de una multinacional de servicios BPO en Zona 10, evalúo la distribución de remuneración mensual de 65 agentes bilingües de soporte corporativo para responder al Comité Directivo con 3 decisiones urgentes:
+1. Salario representativo del agente típico (Media vs. Mediana y análisis de sesgo distributivo).
+2. Umbral salarial del 20% con menores ingresos (Decil 2 / P20) para activar plan de nivelación y evitar rotación temprana.
+3. Ingreso mínimo del 25% superior (Tercer Cuartil, Q3) para plan de incentivos y promociones a supervisor de cuenta.`
+    },
+    caso3: {
+        id: "caso3",
+        badge: "CASO 3 · LOGÍSTICA EXPRESS",
+        title: "Farmacia y Distribuidora \"La Salud\"",
+        location: "Calzada Roosevelt, Mixco",
+        unit: "min",
+        ctx: "tiempos",
+        n: 70,
+        csv: "5,15,6\n15,25,18\n25,35,28\n35,45,14\n45,55,4",
+        context: "Como Jefe de Logística y Despacho del centro de distribución en Calzada Roosevelt, analizas 70 órdenes de entrega a domicilio para cumplir la promesa comercial de 'Entrega Segura en menos de 45 minutos' y reducir cancelaciones de clientes.",
+        q1: "Media y Desviación Típica del servicio: ¿Cuál es el promedio real de despacho y entrega a domicilio?",
+        q2: "Mediana (P50): ¿En qué tiempo se atiende exactamente al 50% de las órdenes?",
+        q3: "Percentil 90 (P90): ¿Cuál es el tiempo máximo en el que se despacha el 90% de los envíos para detectar cuellos de botella?",
+        action: "Reorganizar rutas de motoristas y rediseñar empaque en horas pico para reducir quejas de entregas tardías.",
+        fullEnunciado: `Caso Práctico Gerencial: Farmacia y Distribuidora "La Salud" (Calzada Roosevelt, Mixco).
+El Problema:
+Como Jefe de Operaciones y Logística en Calzada Roosevelt, audito los tiempos de despacho y entrega a domicilio de 70 pedidos farmacéuticos para responder a la Gerencia Comercial:
+1. Tiempo promedio y moda de entrega (x̄ y Mo) para evaluar cumplimiento del estándar de calidad en mostrador.
+2. Tiempo mediano (Me, P50) en el que se atiende la mitad de la demanda.
+3. Tiempo crítico del 90% de entregas (Percentil 90, P90) para indemnizar pedidos demorados y sancionar deficiencias en ruta.`
+    },
+    caso4: {
+        id: "caso4",
+        badge: "CASO 4 · ADMISIONES Y APTITUD",
+        title: "Selección de Talento UMG",
+        location: "Campus Central, Guatemala",
+        unit: "pts",
+        ctx: "notas",
+        n: 60,
+        csv: "40,52,5\n52,64,12\n64,76,25\n76,88,14\n88,100,4",
+        context: "Como Coordinador de Admisiones de la Facultad de Ciencias de la Administración, evalúas las puntuaciones de 60 postulantes en la prueba estandarizada de aptitud cuantitativa y lógica gerencial para definir puntos de corte de becas y tutorías.",
+        q1: "Media General (x̄): ¿Cuál fue el desempeño medio de la cohorte evaluada?",
+        q2: "Primer Cuartil (Q1 / P25): ¿Cuál es el puntaje por debajo del cual se encuentra el 25% de aspirantes que requerirán propedéutico?",
+        q3: "Percentil 85 o 90 (P90): ¿Qué nota delimita al 10% superior con derecho a Beca de Excelencia Académica?",
+        action: "Establecer políticas de ingreso meritocrático y programas de nivelación en matemáticas y razonamiento lógico.",
+        fullEnunciado: `Caso Práctico Académico: Proceso de Selección y Admisiones UMG (Campus Central).
+El Problema:
+Como Coordinador de Admisiones de Administración de Empresas, evalúo 60 pruebas de aptitud cuantitativa para el Decanato con el fin de establecer políticas institucionales de ingreso:
+1. Nivel promedio de competencia matemática de los aspirantes (Media x̄).
+2. Calificación del 25% más bajo (Primer Cuartil, Q1) para asignar talleres obligatorios de nivelación previa.
+3. Calificación de corte para el 10% más destacado (Percentil 90, P90) para adjudicación de la Beca de Excelencia Universitaria.`
+    }
+};
+
+let currentCaseId = 'caso1';
+
+async function cargarContextoDesdeMarkdown(){
+    try {
+        const resp = await fetch('contexto_sem9_agrupado.md');
+        if(!resp.ok) return;
+        const text = await resp.text();
+        console.log("contexto_sem9_agrupado.md sincronizado.");
+    } catch(err) {
+        console.log("Carga local de casos activada.");
+    }
+}
+
+function selectCaseById(caseId, irAPaso0 = false){
+    const c = CASES_CATALOG[caseId];
+    if(!c) return;
+    currentCaseId = caseId;
+
+    // Actualizar botones de las tarjetas en el selector
+    ['caso1', 'caso2', 'caso3', 'caso4'].forEach(id => {
+        const btn = document.getElementById('btn-case-' + id);
+        const tag = document.getElementById('case-active-tag-' + id);
+        if(btn){
+            if(id === caseId){
+                btn.className = 'case-card-btn text-left p-3.5 rounded-2xl border transition-all duration-200 relative bg-teal-500/10 border-teal-500/60 shadow-lg shadow-teal-500/10';
+            } else {
+                btn.className = 'case-card-btn text-left p-3.5 rounded-2xl border transition-all duration-200 relative bg-slate-900/60 border-slate-800 hover:border-slate-700';
+            }
+        }
+        if(tag){
+            tag.classList.toggle('hidden', id !== caseId);
+        }
+    });
+
+    // Actualizar Banner de Briefing Ejecutivo
+    const elBadge = document.getElementById('briefing-badge');
+    const elTitle = document.getElementById('briefing-title');
+    const elContext = document.getElementById('briefing-context');
+    const elQ1 = document.getElementById('briefing-q1');
+    const elQ2 = document.getElementById('briefing-q2');
+    const elQ3 = document.getElementById('briefing-q3');
+    const elAction = document.getElementById('briefing-action');
+
+    if(elBadge) elBadge.textContent = c.badge;
+    if(elTitle) elTitle.textContent = c.title + " · " + c.location;
+    if(elContext) elContext.textContent = c.context;
+    if(elQ1) elQ1.textContent = c.q1;
+    if(elQ2) elQ2.textContent = c.q2;
+    if(elQ3) elQ3.textContent = c.q3;
+    if(elAction) elAction.textContent = c.action;
+
+    // Actualizar Nombre de Caso en Barra de Dataset
+    const lblCase = document.getElementById('case-name-label');
+    if(lblCase) lblCase.textContent = c.title;
+
+    // Actualizar Unidad y Contexto
+    setUnitAndCtx(c.unit, c.ctx);
+
+    // Cargar dataset CSV
+    const csvInput = document.getElementById('csv-input');
+    if(csvInput) csvInput.value = c.csv;
+    setLoaderMode('agrup');
+    buildFromCsv(c.csv);
+
+    // Actualizar Enunciado en Paso 0
+    const elEnun = document.getElementById('stu-enunciado');
+    if(elEnun){
+        elEnun.value = c.fullEnunciado;
+        renderEntregaPreview();
+    }
+
+    if(irAPaso0){
+        switchTab('tab-datos');
+        if(elEnun){
+            elEnun.scrollIntoView({behavior:'smooth', block:'center'});
+            elEnun.focus();
+        }
+    }
+}
+
+function cargarEnunciadoOficial(irAPaso0 = false){
+    selectCaseById(currentCaseId, irAPaso0);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    cargarContextoDesdeMarkdown();
+    syncApiUi();
+    selectCaseById('caso1', false);
+    updatePdfGate();
+});
+
 function parseCsv(text){
     const rows = text.trim().split(/\n+/).map(l=>l.trim()).filter(Boolean);
     const out = [];
