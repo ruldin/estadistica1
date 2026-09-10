@@ -74,6 +74,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
      - **Polígono de frecuencias:** Conexión de marcas de clase $(X_i)$ y anclaje en extremos a frecuencia cero $(X_1 - A, 0)$ y $(X_k + A, 0)$.
      - **Ojivas Acumuladas:** Ojiva "Menor que" (ascendente $F_a$) y Ojiva "Mayor que" (descendente), cálculo visual de la mediana ($Me$) e interpolación de percentiles.
      - **Superposición Mixta y Comparativa:** Superposición de Histograma + Polígono de una misma serie, y superposición de Polígonos u Ojivas entre dos series independientes (**Serie A vs Serie B**) para análisis de turnos, sucursales y periodos.
+     - **Flexibilidad en Selección de Clases ($k$):** Selector de cálculo de clases entre la **Regla de Sturges (automática por defecto)** y **Definición Manual/Libre ($k$ personalizado)**, actualizando dinámicamente el desglose paso a paso (Paso 2 y Paso 4) y la amplitud de intervalos $A$.
      - **Caso Textil San Lucas S.A.:** Comparativa de turnos matutino vs vespertino en confección de exportación.
      - **Laboratorio Interactivo & Exportación PDF:** Ingreso de datasets simples o comparativos, selector de tipo de dato (Q, u, L, m, decimales) y generación de informe ejecutivo con gráfico en alta resolución y conclusiones gerenciales con jsPDF.
 
