@@ -96,11 +96,11 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 
 12. 📊 **`Estadistica1/sem9_agrupados.html` (Semana 9: Estadígrafos de Tendencia Central para Datos Agrupados & Medidas de Posición):**
     - Módulo integral de cálculo, interpretación gerencial y hoja de trabajo aplicada:
-      - **Selector Visual de 4 Casos de Negocio Dinámicos:** Selector destacado en cuadrícula con datos y contextos de [Estadistica1/contexto_sem9_agrupado.md](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/contexto_sem9_agrupado.md):
-        1. *Caso 1: Cooperativa "El Ahorro Pinulteco"* (San José Pinula, microcréditos, Q, x̄, Q3 y P90).
-        2. *Caso 2: Call Center "BPO Americas"* (Zona 10, sueldos y bonos CSAT, Q, x̄ vs Me, D2 y Q3).
-        3. *Caso 3: Farmacia y Distribuidora "La Salud"* (Calzada Roosevelt, tiempos de despacho y entrega a domicilio, min, x̄, Me y P90).
-        4. *Caso 4: Selección de Talento UMG* (Campus Central, pruebas de aptitud cuantitativa y admisiones, pts, x̄, Q1 y P90).
+      - **Selector Visual de 4 Casos de Negocio Dinámicos:** Selector destacado en cuadrícula con datos y contextos de [Estadistica1/contexto_sem9_agrupado.md](file:///d:/U/2026/Semestre2/Estadistica/WebAppEstadistica/Estadistica1/contexto_sem9_agrupado.md), actualización dinámica integral del banner de Briefing Ejecutivo (categoría, ubicación, tamaño de muestra `briefing-badge-n` según el caso y las 3 fichas de indicadores gerenciales contextualizadas), conmutación de estado a `[Activado]`, y limpieza automática de cálculos previos, conclusiones y dictámenes de IA (`clearStudentWork`) al cambiar de caso o pulsar "Cargar enunciado a mi Ficha":
+        1. *Caso 1: Cooperativa "El Ahorro Pinulteco"* (San José Pinula, 50 microcréditos, Q, x̄, Q3 y P90).
+        2. *Caso 2: Call Center & BPO Zona 10* (Zona 10 Ciudad de Guatemala, 56 colaboradores, Q, x̄ vs Me, D2 y P85).
+        3. *Caso 3: Farmacia y Autoservicio Calzada Roosevelt* (Mixco, 50 despachos express, min, x̄, Q3 y P90).
+        4. *Caso 4: Selección de Talento UMG* (Campus Central, 30 aspirantes evaluados, pts, x̄ bimodal, Q1 y P70).
       - **Navegación Guiada Paso a Paso:** Botones de navegación *Anterior* y *Siguiente* en cada una de las pestañas (Paso 0 a Paso 7) para guiar al estudiante de forma estructurada.
       - **Tutor Formativo IA (Mentor Amigo):** Botón `Retroalimentación IA` en cada paso para evaluar las conclusiones de pensamiento crítico del alumno mediante OpenRouter API (`inclusionai/ling-3.0-flash-fin:free`), con tono empático, formativo y constructivo de "tú", sin saludos ceremoniales iniciales y con modal de configuración seguro en `localStorage`.
       - **Cálculo de Estadígrafos Agrupados:** Media aritmética ponderada por frecuencias ($\bar{x} = \frac{\sum f_i \cdot x_i}{n}$), Mediana ($Me$) utilizando la columna de frecuencia acumulada $F_i$ como GPS ordinal e interpolación de clase, y Moda ($Mo$) a través del diferencial de frecuencias adyacentes ($\Delta_1$ y $\Delta_2$).

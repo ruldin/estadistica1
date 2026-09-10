@@ -234,7 +234,7 @@
                     <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">Microcréditos, fiador (Q3) y aprobación (P90)</p>
                     <div class="mt-2.5 flex items-center justify-between text-[10px] text-slate-400 font-medium pt-2 border-t border-slate-800/80">
                         <span class="text-teal-300 font-semibold">📍 San José Pinula</span>
-                        <span id="badge-status-caso1" class="text-teal-400 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> Activo</span>
+                        <span id="badge-status-caso1" class="text-teal-400 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> Activado</span>
                     </div>
                 </button>
 
@@ -367,8 +367,8 @@
                         </div>
                         <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
                             <span>Resuélvelo en:</span>
-                            <button type="button" onclick="setPreset('Q',3); switchTab('tab-posicion')" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
-                                <span>Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            <button type="button" id="briefing-q2-btn" onclick="setPreset('Q',3); switchTab('tab-posicion')" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+                                <span id="briefing-q2-btn-text">Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
                     </div>
@@ -386,8 +386,8 @@
                         </div>
                         <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
                             <span>Resuélvelo en:</span>
-                            <button type="button" onclick="setPreset('P',90); switchTab('tab-posicion')" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-                                <span>Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            <button type="button" id="briefing-q3-btn" onclick="setPreset('P',90); switchTab('tab-posicion')" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+                                <span id="briefing-q3-btn-text">Paso 3 · Posición</span><i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
                     </div>
@@ -402,9 +402,9 @@
                         </span>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <button type="button" onclick="cargarEnunciadoOficial(true)" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 heading-font shadow-lg shadow-teal-500/20">
+                        <button type="button" id="btn-briefing-cargar" onclick="cargarEnunciadoOficial(true)" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 heading-font shadow-lg shadow-teal-500/20">
                             <i class="fa-solid fa-clipboard-check"></i>
-                            <span>Cargar enunciado a mi Ficha</span>
+                            <span id="btn-briefing-cargar-text">Cargar enunciado a mi Ficha</span>
                         </button>
                     </div>
                 </div>
@@ -530,8 +530,8 @@
                         <div class="mt-3 text-xs space-y-1.5">
                             <div class="flex items-center justify-between flex-wrap gap-2">
                                 <label class="font-bold text-slate-300 block">Enunciado del problema a analizar y resolver *</label>
-                                <button type="button" onclick="cargarEnunciadoOficial(false)" class="text-[11px] text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-1 bg-teal-950/50 border border-teal-500/30 px-2.5 py-1 rounded-lg transition">
-                                    <i class="fa-solid fa-file-import text-[10px]"></i> Cargar enunciado oficial del caso
+                                <button type="button" id="btn-step0-cargar" onclick="cargarEnunciadoOficial(false)" class="text-[11px] text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-1 bg-teal-950/50 border border-teal-500/30 px-2.5 py-1 rounded-lg transition">
+                                    <i class="fa-solid fa-file-import text-[10px]"></i> <span id="btn-step0-cargar-text">Cargar enunciado oficial del caso</span>
                                 </button>
                             </div>
                             <textarea id="stu-enunciado" rows="4" oninput="renderEntregaPreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:border-teal-400 focus:outline-none" placeholder="Ej: Analizar los montos de 50 microcréditos de la Cooperativa El Ahorro Pinulteco para definir la tasa preferencial (P10), el fiador obligatorio (Q3) y la aprobación especial (P90)..."></textarea>
@@ -1086,86 +1086,150 @@ const CASES_CATALOG = {
     caso1: {
         id: "caso1",
         badge: "CASO 1 · MICROCRÉDITOS",
+        badgeCat: "Microfinanzas y Riesgo",
+        badgeN: "50 microcréditos",
+        icon: "fa-building-columns",
         title: "Cooperativa \"El Ahorro Pinulteco\"",
         location: "San José Pinula, Guatemala",
         unit: "Q",
         ctx: "creditos",
         n: 50,
         csv: "1000,2000,5\n2000,3000,12\n3000,4000,18\n4000,5000,10\n5000,6000,5",
-        context: "Como nuevo Gerente de Riesgos de la cooperativa en San José Pinula, debes analizar la cartera de 50 microcréditos otorgados este mes a comerciantes locales (abarroterías, pacas de ropa, carretas de shukos) para proteger la liquidez institucional y fijar políticas de cobro y garantías.",
-        q1: "Media Aritmética (x̄): ¿Cuál es el monto promedio general desembolsado por microcrédito?",
-        q2: "Tercer Cuartil (Q3): ¿A partir de qué monto se ubica el 25% de microcréditos más altos para exigir fiador con arraigo laboral?",
-        q3: "Percentil 90 (P90): ¿Cuál es el umbral para el 10% de créditos de mayor cuantía que requieren aprobación directa del Gerente General?",
-        action: "Fijar escalonamiento de tasas preferenciales (P10), garantías prendarias (Q3) y control de morosidad institucional (P90).",
+        context: "Como nuevo Gerente de Riesgos de la Cooperativa \"El Ahorro Pinulteco\" en San José Pinula, analizas 50 microcréditos otorgados este mes a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos y comedores populares) para fijar políticas de cobro, fiadores y autorizaciones que protejan la liquidez institucional.",
+        contextHtml: `Imagina que eres el nuevo <strong class="text-white font-semibold">Gerente de Riesgos</strong> de una cooperativa en el centro de <strong class="text-teal-300 font-semibold">San José Pinula</strong>. 
+Este mes, otorgaron <strong class="text-teal-300 font-semibold">50 microcréditos</strong> a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos y comedores populares).
+<span class="block mt-1 text-slate-400">La <strong class="text-slate-200">Gerencia General</strong> te pide los siguientes <strong class="text-amber-300">3 indicadores urgentes</strong> para establecer políticas financieras y de control de riesgo:</span>`,
+        q1Title: "Media Aritmética (x̄)",
+        q1Text: "«¿Cuál es el promedio general de los créditos otorgados?»",
+        q1Target: "switchTab('tab-tendencia')",
+        q1TargetLabel: "Paso 2 · Tendencia",
+        q2Title: "Tercer Cuartil (Q3)",
+        q2Text: "«¿A partir de qué monto consideramos que un crédito está en el 25% más alto para exigirle un fiador con arraigo socioeconómico?»",
+        q2Target: "setPreset('Q',3); switchTab('tab-posicion')",
+        q2TargetLabel: "Paso 3 · Posición (Q3)",
+        q3Title: "Percentil 90 (P90)",
+        q3Text: "«¿Cuál es el monto umbral para el 10% de los créditos más grandes, los cuales requerirán mi firma directa para evitar riesgos de morosidad institucional?»",
+        q3Target: "setPreset('P',90); switchTab('tab-posicion')",
+        q3TargetLabel: "Paso 3 · Posición (P90)",
+        action: "Fijar escalonamiento de tasas preferenciales (P10), garantías prendarias y fiador (Q3) y autorización gerencial (P90).",
+        systemGuidance: "Valora si el alumno comprende el balance entre inclusión financiera y control de riesgo: exigir fiador a partir de Q3 (Q4,250) protege el 25% más expuesto sin asfixiar al 75% de microempresarios; reservar firma del Gerente General para P90 (Q5,000) agiliza las operaciones cotidianas.",
         fullEnunciado: `Caso Práctico Gerencial: Cooperativa "El Ahorro Pinulteco" (San José Pinula).
 El Problema:
-Como nuevo Gerente de Riesgos de una cooperativa en el centro de San José Pinula, analizo 50 microcréditos otorgados este mes a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos) para responder con urgencia al Gerente General con 3 indicadores clave:
+Como nuevo Gerente de Riesgos de una cooperativa en el centro de San José Pinula, analizo 50 microcréditos otorgados este mes a emprendedores locales (dueños de abarroterías, pacas de ropa, carretas de shukos y comedores populares) para responder con urgencia al Gerente General con 3 indicadores clave:
 1. Promedio general de los créditos otorgados (Media Aritmética, x̄).
-2. Monto a partir del cual un crédito está en el 25% más alto para exigirle un fiador (Tercer Cuartil, Q3).
-3. Monto umbral para el 10% de los créditos más grandes que requerirán firma directa de gerencia para evitar riesgos de morosidad (Percentil 90, P90).`
+2. Monto a partir del cual un crédito está en el 25% más alto para exigirle un fiador con arraigo socioeconómico (Tercer Cuartil, Q3).
+3. Monto umbral para el 10% de los créditos más grandes que requerirán firma directa de gerencia para evitar riesgos de morosidad institucional (Percentil 90, P90).`
     },
     caso2: {
         id: "caso2",
         badge: "CASO 2 · TALENTO Y SUELDOS",
-        title: "Call Center \"BPO Americas\"",
+        badgeCat: "Talento Humano y Compensaciones",
+        badgeN: "56 colaboradores",
+        icon: "fa-headset",
+        title: "Call Center & BPO Zona 10",
         location: "Zona 10, Ciudad de Guatemala",
         unit: "Q",
         ctx: "creditos",
-        n: 65,
-        csv: "3000,4000,8\n4000,5000,15\n5000,6000,22\n6000,7000,12\n7000,8000,8",
-        context: "Como Director de Recursos Humanos de una multinacional de servicios BPO en Zona 10, evalúas la distribución de remuneración mensual (salario base + bonificaciones de calidad y métricas CSAT) de 65 agentes bilingües de soporte corporativo para reestructurar la escala salarial.",
-        q1: "Media vs. Mediana: ¿Representa la media adecuadamente el salario típico o el sesgo salarial favorece a una minoría?",
-        q2: "Decil 2 (D2 / P20): ¿Cuál es el techo de ingreso del 20% con remuneración más baja para plan de retención?",
-        q3: "Tercer Cuartil (Q3 / P75): ¿A partir de qué monto inicia el 25% de agentes de mejor desempeño para bono de lealtad?",
+        n: 56,
+        csv: "2500,3500,8\n3500,4500,15\n4500,5500,20\n5500,6500,9\n6500,7500,4",
+        context: "Como Gerente de Compensaciones y Talento Humano de un Call Center bilingüe en Zona 10 de la Ciudad de Guatemala, analizas la planilla de 56 agentes operativos y coordinadores de cuenta para reestructurar las bandas salariales, fijar bono de nivelación y retener talento clave.",
+        contextHtml: `Imagina que eres el <strong class="text-white font-semibold">Gerente de Compensaciones</strong> de un Call Center bilingüe en <strong class="text-indigo-300 font-semibold">Zona 10, Ciudad de Guatemala</strong>. 
+Analizas la nómina mensual de <strong class="text-indigo-300 font-semibold">56 colaboradores</strong> (agentes de soporte técnico y coordinadores de cuenta).
+<span class="block mt-1 text-slate-400">El <strong class="text-slate-200">Vicepresidente de Operaciones</strong> te solicita los siguientes <strong class="text-indigo-300">3 indicadores urgentes</strong> para negociar el presupuesto y frenar la rotación:</span>`,
+        q1Title: "Costo Salarial Medio (x̄)",
+        q1Text: "«¿Cuál es el costo salarial medio por colaborador en el área operativa y por qué la Mediana refleja mejor al agente típico?»",
+        q1Target: "switchTab('tab-tendencia')",
+        q1TargetLabel: "Paso 2 · Tendencia",
+        q2Title: "Decil 2 (D2 / P20)",
+        q2Text: "«¿Cuál es el techo de ingreso del 20% de agentes con menor remuneración para aplicarles un bono de nivelación por costo de vida?»",
+        q2Target: "setPreset('D',2); switchTab('tab-posicion')",
+        q2TargetLabel: "Paso 3 · Posición (D2)",
+        q3Title: "Percentil 85 (P85 / Retención)",
+        q3Text: "«¿A partir de qué monto inicia el 15% de colaboradores con mejor remuneración para activar el plan de retención ejecutiva?»",
+        q3Target: "setPreset('P',85); switchTab('tab-posicion')",
+        q3TargetLabel: "Paso 3 · Posición (P85)",
         action: "Ajustar bandas salariales para evitar fuga de talento hacia otros centros de contacto en la capital.",
-        fullEnunciado: `Caso Práctico Gerencial: Call Center "BPO Americas" (Zona 10, Ciudad de Guatemala).
+        systemGuidance: "Revisa si el alumno comprende el uso de percentiles salariales (P20 para compensar colaboradores de entrada y P85 para fidelizar a los de mayor rendimiento), y si distingue la Media (Q4,732.14) frente a la Mediana (Q4,750.00) para evitar que valores extremos distorsionen la equidad interna.",
+        fullEnunciado: `Caso Práctico Gerencial: Call Center & BPO Zona 10 (Ciudad de Guatemala).
 El Problema:
-Como Director de Recursos Humanos de una multinacional de servicios BPO en Zona 10, evalúo la distribución de remuneración mensual de 65 agentes bilingües de soporte corporativo para responder al Comité Directivo con 3 decisiones urgentes:
-1. Salario representativo del agente típico (Media vs. Mediana y análisis de sesgo distributivo).
-2. Umbral salarial del 20% con menores ingresos (Decil 2 / P20) para activar plan de nivelación y evitar rotación temprana.
-3. Ingreso mínimo del 25% superior (Tercer Cuartil, Q3) para plan de incentivos y promociones a supervisor de cuenta.`
+Como Gerente de Compensaciones y Talento Humano de un Call Center bilingüe en Zona 10, evalúo la distribución de salarios mensuales de 56 agentes y coordinadores para responder al Vicepresidente de Operaciones con 3 decisiones clave:
+1. Costo salarial representativo del agente típico (Media x̄ vs. Mediana Me y análisis de sesgo).
+2. Umbral salarial del 20% con menores ingresos (Decil 2 / P20) para activar plan de nivelación salarial y evitar rotación temprana.
+3. Ingreso mínimo del 15% superior (Percentil 85, P85) para plan de incentivos y promociones de fidelidad a talento senior.`
     },
     caso3: {
         id: "caso3",
         badge: "CASO 3 · LOGÍSTICA EXPRESS",
-        title: "Farmacia y Distribuidora \"La Salud\"",
+        badgeCat: "Logística y Operaciones Express",
+        badgeN: "50 despachos express",
+        icon: "fa-truck-fast",
+        title: "Farmacia y Autoservicio Calzada Roosevelt",
         location: "Calzada Roosevelt, Mixco",
         unit: "min",
         ctx: "tiempos",
-        n: 70,
-        csv: "5,15,6\n15,25,18\n25,35,28\n35,45,14\n45,55,4",
-        context: "Como Jefe de Logística y Despacho del centro de distribución en Calzada Roosevelt, analizas 70 órdenes de entrega a domicilio para cumplir la promesa comercial de 'Entrega Segura en menos de 45 minutos' y reducir cancelaciones de clientes.",
-        q1: "Media y Desviación Típica del servicio: ¿Cuál es el promedio real de despacho y entrega a domicilio?",
-        q2: "Mediana (P50): ¿En qué tiempo se atiende exactamente al 50% de las órdenes?",
-        q3: "Percentil 90 (P90): ¿Cuál es el tiempo máximo en el que se despacha el 90% de los envíos para detectar cuellos de botella?",
-        action: "Reorganizar rutas de motoristas y rediseñar empaque en horas pico para reducir quejas de entregas tardías.",
-        fullEnunciado: `Caso Práctico Gerencial: Farmacia y Distribuidora "La Salud" (Calzada Roosevelt, Mixco).
+        n: 50,
+        csv: "5,10,6\n10,15,14\n15,20,18\n20,25,8\n25,30,4",
+        context: "Como Supervisor de Operaciones de una sucursal insignia de farmacia con autoservicio y entrega express en la Calzada Roosevelt, analizas 50 despachos cronometrados un viernes por la tarde para fijar un Acuerdo de Nivel de Servicio (SLA) con garantía de satisfacción.",
+        contextHtml: `Imagina que eres el <strong class="text-white font-semibold">Supervisor de Operaciones y Logística</strong> de una sucursal insignia en la <strong class="text-amber-300 font-semibold">Calzada Roosevelt, Mixco</strong>. 
+Se cronometraron <strong class="text-amber-300 font-semibold">50 atenciones consecutivas</strong> en autoservicio y mostrador express un viernes por la tarde.
+<span class="block mt-1 text-slate-400">El <strong class="text-slate-200">Director de Cadena de Suministro</strong> te solicita los siguientes <strong class="text-amber-300">3 indicadores urgentes</strong> para fijar los SLAs comerciales:</span>`,
+        q1Title: "Tiempo Medio y Moda (x̄ y Mo)",
+        q1Text: "«¿Cuál es el tiempo promedio real de espera del cliente y cuál es el tiempo de despacho más repetido en mostrador?»",
+        q1Target: "switchTab('tab-tendencia')",
+        q1TargetLabel: "Paso 2 · Tendencia",
+        q2Title: "Tercer Cuartil (Q3 / P75)",
+        q2Text: "«¿Cuál es el tiempo garantizado bajo el cual se despacha al 75% de las órdenes para fijar nuestra promesa de servicio express?»",
+        q2Target: "setPreset('Q',3); switchTab('tab-posicion')",
+        q2TargetLabel: "Paso 3 · Posición (Q3)",
+        q3Title: "Percentil 90 (P90 / Alerta)",
+        q3Text: "«¿Cuál es el tiempo umbral de alerta roja para el 10% más demorado que debe recibir indemnización o cupón de compensación?»",
+        q3Target: "setPreset('P',90); switchTab('tab-posicion')",
+        q3TargetLabel: "Paso 3 · Posición (P90)",
+        action: "Reorganizar rutas de motoristas, rediseñar empaque en horas pico y asegurar el cumplimiento de SLAs de entrega rápida.",
+        systemGuidance: "Verifica si el alumno razona con criterio de riesgo operativo: prometer la media (16.2 min) como garantía comercial quebraría la operación porque el 50% de las órdenes excede ese tiempo; en cambio fijar el SLA en Q3 o P90 (20 a 25 min) protege la reputación sin sobrecargar al personal.",
+        fullEnunciado: `Caso Práctico Gerencial: Farmacia y Autoservicio Calzada Roosevelt (Mixco, Guatemala).
 El Problema:
-Como Jefe de Operaciones y Logística en Calzada Roosevelt, audito los tiempos de despacho y entrega a domicilio de 70 pedidos farmacéuticos para responder a la Gerencia Comercial:
-1. Tiempo promedio y moda de entrega (x̄ y Mo) para evaluar cumplimiento del estándar de calidad en mostrador.
-2. Tiempo mediano (Me, P50) en el que se atiende la mitad de la demanda.
-3. Tiempo crítico del 90% de entregas (Percentil 90, P90) para indemnizar pedidos demorados y sancionar deficiencias en ruta.`
+Como Supervisor de Operaciones y Logística en Calzada Roosevelt, audito los tiempos de despacho de 50 pedidos farmacéuticos cronometrados para definir la política de Acuerdos de Nivel de Servicio (SLAs):
+1. Tiempo promedio y moda de despacho (x̄ y Mo) para auditar el cumplimiento del estándar operativo en mostrador.
+2. Tiempo garantizado al 75% de los clientes (Tercer Cuartil, Q3) para fijar la campaña comercial de entrega rápida.
+3. Tiempo crítico del 10% más demorado (Percentil 90, P90) para indemnizar pedidos demorados y corregir cuellos de botella en horas pico.`
     },
     caso4: {
         id: "caso4",
         badge: "CASO 4 · ADMISIONES Y APTITUD",
-        title: "Selección de Talento UMG",
-        location: "Campus Central, Guatemala",
+        badgeCat: "Selección de Personal y Aptitud",
+        badgeN: "30 aspirantes evaluados",
+        icon: "fa-graduation-cap",
+        title: "Evaluación y Selección de Talento UMG",
+        location: "Campus Central UMG, Guatemala",
         unit: "pts",
         ctx: "notas",
-        n: 60,
-        csv: "40,52,5\n52,64,12\n64,76,25\n76,88,14\n88,100,4",
-        context: "Como Coordinador de Admisiones de la Facultad de Ciencias de la Administración, evalúas las puntuaciones de 60 postulantes en la prueba estandarizada de aptitud cuantitativa y lógica gerencial para definir puntos de corte de becas y tutorías.",
-        q1: "Media General (x̄): ¿Cuál fue el desempeño medio de la cohorte evaluada?",
-        q2: "Primer Cuartil (Q1 / P25): ¿Cuál es el puntaje por debajo del cual se encuentra el 25% de aspirantes que requerirán propedéutico?",
-        q3: "Percentil 85 o 90 (P90): ¿Qué nota delimita al 10% superior con derecho a Beca de Excelencia Académica?",
-        action: "Establecer políticas de ingreso meritocrático y programas de nivelación en matemáticas y razonamiento lógico.",
+        n: 30,
+        csv: "1,3,8\n3,5,6\n5,7,2\n7,9,4\n9,11,10",
+        context: "Como Coordinador de Selección y Admisiones de la Facultad de Ciencias de la Administración, evalúas las puntuaciones de 30 aspirantes en la prueba estandarizada de aptitud cuantitativa para estructurar puntos de corte objetivos de contratación, capacitación o descarte.",
+        contextHtml: `Imagina que eres el <strong class="text-white font-semibold">Coordinador de Selección y Admisiones</strong> en el <strong class="text-purple-300 font-semibold">Campus Central UMG</strong>. 
+Analizas las pruebas estandarizadas de aptitud cuantitativa y lógica gerencial de <strong class="text-purple-300 font-semibold">30 aspirantes</strong> a plazas de coordinación académica y analistas.
+<span class="block mt-1 text-slate-400">La <strong class="text-slate-200">Decanatura</strong> te pide estructurar los siguientes <strong class="text-purple-300">3 indicadores de corte meritocrático</strong>:</span>`,
+        q1Title: "Media vs. Bimodalidad (x̄)",
+        q1Text: "«¿Cuál es la nota media y por qué el promedio simple engaña ante una marcada polarización o bimodalidad en U?»",
+        q1Target: "switchTab('tab-tendencia')",
+        q1TargetLabel: "Paso 2 · Tendencia",
+        q2Title: "Primer Cuartil (Q1 / P25)",
+        q2Text: "«¿Cuál es el puntaje límite del 25% con rendimiento más bajo que exige inducción obligatoria o descarte del proceso?»",
+        q2Target: "setPreset('Q',1); switchTab('tab-posicion')",
+        q2TargetLabel: "Paso 3 · Posición (Q1)",
+        q3Title: "Percentil 70 (P70 / Excelencia)",
+        q3Text: "«¿Qué calificación delimita al 30% superior de excelencia para avanzar de inmediato a entrevista con el Decano?»",
+        q3Target: "setPreset('P',70); switchTab('tab-posicion')",
+        q3TargetLabel: "Paso 3 · Posición (P70)",
+        action: "Establecer políticas de ingreso meritocrático, filtros con percentiles y programas de inducción en razonamiento lógico.",
+        systemGuidance: "Presta especial atención a si el alumno detecta la trampa del promedio en distribuciones bimodales o polarizadas (forma de 'U'): la media de 6.13 pts es ficticia porque los postulantes están polarizados entre muy preparados o muy deficientes. Valora si propone filtros tajantes con Q1 para inducción/descarte y P70 para contratación.",
         fullEnunciado: `Caso Práctico Académico: Proceso de Selección y Admisiones UMG (Campus Central).
 El Problema:
-Como Coordinador de Admisiones de Administración de Empresas, evalúo 60 pruebas de aptitud cuantitativa para el Decanato con el fin de establecer políticas institucionales de ingreso:
-1. Nivel promedio de competencia matemática de los aspirantes (Media x̄).
-2. Calificación del 25% más bajo (Primer Cuartil, Q1) para asignar talleres obligatorios de nivelación previa.
-3. Calificación de corte para el 10% más destacado (Percentil 90, P90) para adjudicación de la Beca de Excelencia Universitaria.`
+Como Coordinador de Selección de Talento en Administración de Empresas de la UMG, evalúo las pruebas estandarizadas de 30 aspirantes para responder al Decanato con 3 políticas de ingreso meritocrático:
+1. Rendimiento promedio de la cohorte (Media x̄) y detección de bimodalidad en forma de 'U' que cuestiona el uso de promedios simples.
+2. Calificación de corte para el 25% con menor puntuación (Primer Cuartil, Q1) para asignar programas intensivos de inducción o descarte.
+3. Puntaje umbral para el 30% más sobresaliente (Percentil 70, P70) para pase directo a entrevista ejecutiva con el Decano.`
     }
 };
 
@@ -1188,64 +1252,185 @@ async function cargarContextoDesdeMarkdown(){
     }
 }
 
+function clearStudentWork(keepFicha = true){
+    // 1. Limpiar campos de práctica de cálculos en los pasos
+    const practiceInputIds = [
+        'in-media', 'in-me-pos', 'in-me-li', 'in-mediana',
+        'in-d1', 'in-d2', 'in-moda', 'in-pos'
+    ];
+    practiceInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+
+    // 2. Limpiar campos de cálculos finales en Paso 7 (tab-entrega)
+    const finalInputIds = [
+        'final-media', 'final-mediana', 'final-moda', 'final-q3', 'final-p90'
+    ];
+    finalInputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+
+    // 3. Limpiar mensajes de verificación
+    const msgIds = ['msg-media', 'msg-mediana', 'msg-moda', 'msg-pos', 'quiz-msg', 'pdf-msg'];
+    msgIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el){ el.textContent = ''; el.className = 'text-[11px] mt-1'; }
+    });
+
+    // 4. Limpiar radio buttons del auto-quiz
+    ['q1', 'q2', 'q3'].forEach(name => {
+        const radios = document.querySelectorAll(`input[name="${name}"]`);
+        radios.forEach(r => r.checked = false);
+    });
+
+    // 5. Limpiar textareas de conclusiones y pensamiento crítico del alumno
+    const noteIds = [
+        'note-caso', 'note-tendencia', 'note-posicion',
+        'note-graficos', 'note-simulador', 'note-teoria', 'note-general'
+    ];
+    noteIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+
+    // 6. Limpiar dictámenes de la IA (memoria y contenedores DOM)
+    if(window.stepAiFeedback){
+        for(const k in window.stepAiFeedback){
+            delete window.stepAiFeedback[k];
+        }
+    }
+    const aiBoxIds = [
+        'ai-feedback-note-caso',
+        'ai-feedback-note-tendencia',
+        'ai-feedback-note-posicion',
+        'ai-feedback-note-graficos',
+        'ai-feedback-note-simulador',
+        'ai-feedback-note-teoria',
+        'ai-feedback-note-general'
+    ];
+    aiBoxIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el){
+            el.innerHTML = '';
+            el.classList.add('hidden');
+        }
+    });
+
+    // Actualizar previsualización y checklist del informe PDF
+    renderEntregaPreview();
+}
+
 function selectCaseById(caseId, irAPaso0 = false){
     const c = CASES_CATALOG[caseId];
     if(!c) return;
     currentCaseId = caseId;
 
-    // Actualizar botones de las tarjetas en el selector
+    // 1. Limpiar datos y cálculos anteriores del alumno, así como dictámenes de la IA
+    clearStudentWork(true);
+
+    // 2. Actualizar botones y badges de las tarjetas en el catálogo superior
     ['caso1', 'caso2', 'caso3', 'caso4'].forEach(id => {
         const btn = document.getElementById('btn-case-' + id);
-        const tag = document.getElementById('case-active-tag-' + id);
+        const badge = document.getElementById('badge-status-' + id);
+        const sideBtn = document.getElementById('sidebar-btn-' + id);
+        const isActive = (id === caseId);
+
         if(btn){
-            if(id === caseId){
-                btn.className = 'case-card-btn text-left p-3.5 rounded-2xl border transition-all duration-200 relative bg-teal-500/10 border-teal-500/60 shadow-lg shadow-teal-500/10';
+            btn.className = 'case-card-btn text-left p-3.5 rounded-2xl border transition-all duration-200 relative ' + 
+                (isActive 
+                    ? 'bg-teal-500/10 border-teal-500/60 shadow-lg shadow-teal-500/10' 
+                    : 'bg-slate-950/70 border-slate-800 hover:border-slate-700');
+        }
+        if(badge){
+            if(isActive){
+                badge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px]"></i> Activado';
+                badge.className = 'text-teal-400 font-bold flex items-center gap-1';
             } else {
-                btn.className = 'case-card-btn text-left p-3.5 rounded-2xl border transition-all duration-200 relative bg-slate-900/60 border-slate-800 hover:border-slate-700';
+                badge.innerHTML = 'Hacer clic';
+                badge.className = 'text-slate-500 font-normal';
             }
         }
-        if(tag){
-            tag.classList.toggle('hidden', id !== caseId);
+        if(sideBtn){
+            sideBtn.className = 'px-2 py-1.5 rounded-lg text-left truncate transition ' + 
+                (isActive 
+                    ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 font-bold' 
+                    : 'bg-slate-900 text-slate-300 border border-slate-700 hover:border-slate-600 font-semibold');
         }
     });
 
-    // Actualizar Banner de Briefing Ejecutivo
-    const elBadge = document.getElementById('briefing-badge');
+    // 3. Actualizar Banner de Briefing Ejecutivo
+    const elIcon = document.getElementById('briefing-icon');
+    const elBadgeCat = document.getElementById('briefing-badge-cat');
+    const elLoc = document.getElementById('briefing-loc');
     const elTitle = document.getElementById('briefing-title');
+    const elBadgeN = document.getElementById('briefing-badge-n');
     const elContext = document.getElementById('briefing-context');
-    const elQ1 = document.getElementById('briefing-q1');
-    const elQ2 = document.getElementById('briefing-q2');
-    const elQ3 = document.getElementById('briefing-q3');
-    const elAction = document.getElementById('briefing-action');
 
-    if(elBadge) elBadge.textContent = c.badge;
-    if(elTitle) elTitle.textContent = c.title + " · " + c.location;
-    if(elContext) elContext.textContent = c.context;
-    if(elQ1) elQ1.textContent = c.q1;
-    if(elQ2) elQ2.textContent = c.q2;
-    if(elQ3) elQ3.textContent = c.q3;
-    if(elAction) elAction.textContent = c.action;
+    if(elIcon && c.icon) elIcon.className = 'fa-solid ' + c.icon + ' text-base';
+    if(elBadgeCat) elBadgeCat.textContent = c.badgeCat || c.badge;
+    if(elLoc) elLoc.innerHTML = `<i class="fa-solid fa-location-dot text-rose-400 mr-1"></i>${c.location}`;
+    if(elTitle) elTitle.textContent = c.title;
+    if(elBadgeN) elBadgeN.textContent = c.badgeN || (`n = ${c.n}`);
+    if(elContext) elContext.innerHTML = c.contextHtml || c.context;
 
-    // Actualizar Nombre de Caso en Barra de Dataset
+    // 4. Actualizar las 3 Fichas de Indicadores Urgentes del Briefing
+    const elQ1Title = document.getElementById('briefing-q1-title');
+    const elQ1Text = document.getElementById('briefing-q1-text');
+    const elQ2Title = document.getElementById('briefing-q2-title');
+    const elQ2Text = document.getElementById('briefing-q2-text');
+    const elQ3Title = document.getElementById('briefing-q3-title');
+    const elQ3Text = document.getElementById('briefing-q3-text');
+
+    if(elQ1Title) elQ1Title.textContent = c.q1Title;
+    if(elQ1Text) elQ1Text.textContent = c.q1Text;
+    if(elQ2Title) elQ2Title.textContent = c.q2Title;
+    if(elQ2Text) elQ2Text.textContent = c.q2Text;
+    if(elQ3Title) elQ3Title.textContent = c.q3Title;
+    if(elQ3Text) elQ3Text.textContent = c.q3Text;
+
+    const btnQ2 = document.getElementById('briefing-q2-btn');
+    const btnQ2Txt = document.getElementById('briefing-q2-btn-text');
+    if(btnQ2 && c.q2Target){
+        btnQ2.setAttribute('onclick', c.q2Target);
+        if(btnQ2Txt && c.q2TargetLabel) btnQ2Txt.textContent = c.q2TargetLabel;
+    }
+
+    const btnQ3 = document.getElementById('briefing-q3-btn');
+    const btnQ3Txt = document.getElementById('briefing-q3-btn-text');
+    if(btnQ3 && c.q3Target){
+        btnQ3.setAttribute('onclick', c.q3Target);
+        if(btnQ3Txt && c.q3TargetLabel) btnQ3Txt.textContent = c.q3TargetLabel;
+    }
+
+    // 5. Actualizar estado de los botones "Cargar enunciado a mi Ficha"
+    const btnBriefingTxt = document.getElementById('btn-briefing-cargar-text');
+    if(btnBriefingTxt) btnBriefingTxt.textContent = "¡Activado en tu Ficha!";
+    const btnStep0Txt = document.getElementById('btn-step0-cargar-text');
+    if(btnStep0Txt) btnStep0Txt.textContent = "¡Enunciado Activado!";
+
+    // 6. Actualizar Nombre de Caso en Barra de Dataset
     const lblCase = document.getElementById('case-name-label');
     if(lblCase) lblCase.textContent = c.title;
 
-    // Actualizar Unidad y Contexto
+    // 7. Actualizar Unidad y Contexto
     setUnitAndCtx(c.unit, c.ctx);
 
-    // Cargar dataset CSV
+    // 8. Cargar dataset CSV
     const csvInput = document.getElementById('csv-input');
     if(csvInput) csvInput.value = c.csv;
     setLoaderMode('agrup');
     buildFromCsv(c.csv);
 
-    // Actualizar Enunciado en Paso 0
+    // 9. Actualizar Enunciado oficial en la Ficha (Paso 0)
     const elEnun = document.getElementById('stu-enunciado');
     if(elEnun){
         elEnun.value = c.fullEnunciado;
         renderEntregaPreview();
     }
 
+    // 10. Si se pidió ir a Paso 0
     if(irAPaso0){
         switchTab('tab-datos');
         if(elEnun){
@@ -1257,6 +1442,7 @@ function selectCaseById(caseId, irAPaso0 = false){
 
 function cargarEnunciadoOficial(irAPaso0 = false){
     selectCaseById(currentCaseId, irAPaso0);
+    showToast("✔ Enunciado oficial activado: datos anteriores e IA reiniciados");
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1919,6 +2105,7 @@ Tu rol pedagógico:
 - Eres cercano, empático, constructivo, alentador y profesional. Tratas al estudiante siempre de "tú".
 - NUNCA uses calificativos punitivos ni regaños. Si el estudiante cometió una inconsistencia de cálculo o interpretación, indícaselo con amabilidad y muéstrale el camino correcto.
 - PROHIBIDO empezar con saludos ceremoniales o redundantes como "¡Hola! Como tu mentor amigo...", "Estimado estudiante...". Comienza DIRECTAMENTE con tu valoración y análisis pedagógico.
+- Enfoque pedagógico del caso (${currentCase.title}): ${currentCase.systemGuidance || ''}
 - Evalúa con pensamiento crítico:
   1. Si las cifras o conceptos que menciona guardan coherencia con la tabla de datos agrupados del caso.
   2. Si su conclusión aporta valor gerencial real (toma de decisiones, mitigación de riesgos, fijación de políticas) y no solo repite números mecánicos.
