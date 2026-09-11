@@ -610,6 +610,145 @@ function pdfBlock(doc,label,text,y){
   }
   return y+2;
 }
+/* ============ TAREA INDIVIDUAL: LA SILLA DEL GERENTE (guía del parcial) ============ */
+// Caso adaptado (NO es el examen): Beneficio de Café Las Nubes, Cobán.
+// Rescate Q36,000/72h · pérdida Q5,200/día · planilla Q75,000 · prevención: Q350/mes + Q750/año + Q650/año.
+const TAREA_ESP={perd5:5*5200,prev:350*12+750+650};
+TAREA_ESP.veces=TAREA_ESP.perd5/TAREA_ESP.prev; // ≈4.64
+function tGet(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function verificarTarea(){
+  const msg=document.getElementById('t_calcMsg');
+  const perd=+tGet('t_perd5'),prev=+tGet('t_prevAnual'),vec=+tGet('t_veces');
+  const ops=tGet('t_ops');
+  const out=[];
+  let ok=0;
+  if(perd===TAREA_ESP.perd5){out.push('✅ (a) Pérdida 5 días correcta: 5 × 5,200 = Q'+TAREA_ESP.perd5.toLocaleString()+'.');ok++;}
+  else if(perd>0){out.push('🔎 (a) Revisa: multiplica los <b>días (5)</b> por la <b>pérdida diaria (Q5,200)</b>. Tu resultado: Q'+perd.toLocaleString()+'.');}
+  else{out.push('⛔ (a) Ingresa la pérdida por 5 días (pista: 5 × 5,200).');}
+  if(prev===TAREA_ESP.prev){out.push('✅ (b) Prevención anual correcta: (350 × 12) + 750 + 650 = Q'+TAREA_ESP.prev.toLocaleString()+'.');ok++;}
+  else if(prev>0){out.push('🔎 (b) Revisa: primero <b>350 × 12</b> (= backup anual) y luego <b>suma 750 + 650</b>. Tu resultado: Q'+prev.toLocaleString()+'.');}
+  else{out.push('⛔ (b) Ingresa la prevención anual (pista: mensual × 12 + anuales).');}
+  if(prev>0&&vec>0){
+    const esp=perd>0?(perd/prev):TAREA_ESP.veces;
+    if(Math.abs(vec-TAREA_ESP.veces)<=0.25&&Math.abs(prev-TAREA_ESP.prev)<1&&Math.abs(perd-TAREA_ESP.perd5)<1){out.push('✅ (c) Correcto: ~'+TAREA_ESP.veces.toFixed(1)+' veces. Con evitar UN incidente se pagan casi 5 años de prevención.');ok++;}
+    else{out.push('🔎 (c) Revisa: divide <b>pérdida de un incidente ÷ prevención anual</b> (usa tus valores: '+perd.toLocaleString()+' ÷ '+prev.toLocaleString()+' ≈ '+esp.toFixed(1)+'). Se espera ≈ '+TAREA_ESP.veces.toFixed(1)+'.');}
+  }else{out.push('⛔ (c) Ingresa cuántas veces cabe la prevención en la pérdida (división).');}
+  if(ops.length<15)out.push('✍️ Escribe tus <b>operaciones</b> (las cuentas, no solo el resultado): es lo que más puntos vale en el parcial.');
+  else{out.push('✅ Operaciones registradas.');ok++;}
+  msg.className='form-msg '+(ok>=4?'ok':'err');
+  msg.innerHTML=(ok>=4?'🎉 ¡Vas muy bien! ':'🧭 Sigue la tutoría: ')+out.join('<br>');
+  if(ok>=4)addXP(20);
+  validarTareaCierre();
+}
+function tareaCompleta(){
+  const dec=tGet('t_decision');
+  const a1=tGet('t_arg1'),a2=tGet('t_arg2'),a3=tGet('t_arg3');
+  const perd=+tGet('t_perd5'),prev=+tGet('t_prevAnual'),vec=+tGet('t_veces');
+  const ops=tGet('t_ops'),pua=tGet('t_pua'),concl=tGet('t_concl');
+  return dec&&a1.length>=30&&a2.length>=30&&a3.length>=30&&perd>0&&prev>0&&vec>0&&ops.length>=15&&pua.length>=25&&concl.length>=60;
+}
+function validarTareaCierre(){
+  const btn=document.getElementById('t_btnPDF');if(!btn)return false;
+  const msg=document.getElementById('t_msg');
+  const faltan=[];
+  if(!(tGet('t_nombre').length>=5&&tGet('t_carnet').length>=5))faltan.push('tus datos (nombre + carnet)');
+  if(!tGet('t_seccion'))faltan.push('sección');
+  if(!tGet('t_decision'))faltan.push('T.1 decisión');
+  const args=['t_arg1','t_arg2','t_arg3'].filter(id=>tGet(id).length<30).length;
+  if(args)faltan.push(args+' argumento(s) corto(s) (30+)');
+  if(!(+tGet('t_perd5')>0&&+tGet('t_prevAnual')>0&&+tGet('t_veces')>0))faltan.push('T.2 números');
+  if(tGet('t_ops').length<15)faltan.push('T.2 operaciones');
+  if(tGet('t_pua').length<25)faltan.push('T.3 regla PUA');
+  if(tGet('t_concl').length<60)faltan.push('conclusión (60+)');
+  if(!document.getElementById('t_declaro').checked)faltan.push('declaración de autoría');
+  btn.disabled=faltan.length>0;
+  if(msg){msg.className='form-msg '+(faltan.length?'err':'ok');msg.textContent=faltan.length?('⏳ Falta: '+faltan.join(' · ')):'✅ Todo listo. Genera tu PDF para Canvas.';}
+  return !faltan.length;
+}
+function construirReporteTarea(){
+  const fecha=tGet('t_fecha')||new Date().toLocaleDateString('es-GT');
+  return `<div style="text-align:center;border-bottom:3px solid #6d28d9;padding-bottom:10px;margin-bottom:12px">
+   <div style="font-size:15px;font-weight:800">🎓 Universidad Mariano Gálvez de Guatemala — Facultad de Ciencias de la Administración</div>
+   <div style="font-size:13px">Informática I · Semana 10: Tarea individual “La Silla del Gerente — El Dilema del Rescate” (guía del parcial)</div>
+   <div style="font-size:12px">XP en simuladores: ${XP}</div></div>
+   <h2>📌 Tarea: análisis del caso — Beneficio de Café Las Nubes, S.A. (Cobán)</h2>
+   <table border="1" cellspacing="0" cellpadding="6" width="100%"><tr><td><b>Estudiante:</b> ${esc(tGet('t_nombre'))}<br><b>Carnet:</b> ${esc(tGet('t_carnet'))}</td><td><b>Sección:</b> ${esc(tGet('t_seccion'))}<br><b>Fecha:</b> ${esc(fecha)}</td></tr></table>
+   <p><b>Caso (resumen):</b> servidor de facturación cifrado tras falso correo SAT; rescate Q36,000 en 72 h; sin backup externo; planilla Q75,000 en 4 días; pérdida Q5,200/día. Decisión del administrador: ¿pagar?</p>
+   <h3>T.1 · Decisión: ${esc(tGet('t_decision')==='SI'?'SÍ PAGAR':'NO PAGAR')}</h3>
+   <p><b>Argumento 1:</b> ${esc(tGet('t_arg1'))}</p><p><b>Argumento 2:</b> ${esc(tGet('t_arg2'))}</p><p><b>Argumento 3:</b> ${esc(tGet('t_arg3'))}</p>
+   <h3>T.2 · Números</h3>
+   <table border="1" cellspacing="0" cellpadding="6" width="100%"><tr><td><b>(a) Pérdida 5 días: Q${(+tGet('t_perd5')).toLocaleString()}</b></td><td><b>(b) Prevención anual: Q${(+tGet('t_prevAnual')).toLocaleString()}</b></td><td><b>(c) Veces: ${esc(tGet('t_veces'))}</b></td></tr></table>
+   <p><b>Operaciones:</b> ${esc(tGet('t_ops'))}</p>
+   <h3>T.3 · Regla PUA</h3><p>${esc(tGet('t_pua'))}</p>
+   <h3>Conclusión</h3><p>${esc(tGet('t_concl'))}</p>
+   <p>Declaro que esta tarea es de mi autoría. _____________ (firma)</p>
+   <p style="font-size:11px">Guía de aprendizaje con datos adaptados (no es el examen). En el parcial los montos y plazos serán distintos. Guardar como: Apellido_Carnet_TareaCiber.pdf y subir a Canvas.</p>`;
+}
+function vistaPreviaTarea(){
+  if(!tareaCompleta()){validarTareaCierre();document.getElementById('t_msg').scrollIntoView({behavior:'smooth'});return;}
+  const r=document.getElementById('reporteTarea');
+  r.innerHTML=construirReporteTarea();r.style.display='block';
+  r.scrollIntoView({behavior:'smooth'});
+}
+function generarPdfTarea(){
+  if(!validarTareaCierre()){document.getElementById('t_msg').scrollIntoView({behavior:'smooth'});return;}
+  if(!(window.jspdf&&window.jspdf.jsPDF&&window.jspdf.jsPDF.API&&window.jspdf.jsPDF.API.autoTable)){
+    document.getElementById('reporteTarea').innerHTML=construirReporteTarea();
+    document.getElementById('reporteTarea').style.display='block';
+    setTimeout(()=>window.print(),300);return;
+  }
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc=new jsPDF({unit:'mm',format:'letter'});
+    const X=10,W=190;
+    doc.setFillColor(76,29,149);doc.rect(0,0,216,30,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(12);
+    doc.text('Universidad Mariano Gálvez de Guatemala',X,10);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');
+    doc.text('Facultad de Ciencias de la Administración · Informática I · Semana 10',X,16);
+    doc.text('Tarea individual: La Silla del Gerente (guía del parcial)',X,22);
+    let y=36;doc.setTextColor(0,0,0);
+    const fecha=tGet('t_fecha')||new Date().toLocaleDateString('es-GT');
+    doc.autoTable({startY:y,margin:{left:X,right:X},head:[['Estudiante','Sección']],
+      body:[[[pdfClean(tGet('t_nombre'))+'\nCarnet: '+pdfClean(tGet('t_carnet'))],[pdfClean(tGet('t_seccion'))+'\nFecha: '+fecha]]],
+      headStyles:{fillColor:[109,40,217]},styles:{fontSize:10}});
+    y=doc.lastAutoTable.finalY+6;
+    y=pdfBlock(doc,'Caso (resumen): ','Servidor de facturación cifrado tras falso correo SAT; rescate Q36,000 en 72 h; sin backup externo; planilla Q75,000 en 4 días; pérdida Q5,200/día.',y);
+    y=pdfBlock(doc,'T.1 Decisión: ',tGet('t_decision')==='SI'?'SÍ PAGAR el rescate':'NO PAGAR y restaurar / reconstruir',y);
+    y=pdfBlock(doc,'Argumento 1: ',tGet('t_arg1'),y);
+    y=pdfBlock(doc,'Argumento 2: ',tGet('t_arg2'),y);
+    y=pdfBlock(doc,'Argumento 3: ',tGet('t_arg3'),y);
+    if(y>230){doc.addPage();y=15;}
+    doc.autoTable({startY:y,margin:{left:X,right:X},
+      body:[['(a) Pérdida 5 días: Q'+(+tGet('t_perd5')).toLocaleString(),'(b) Prevención anual: Q'+(+tGet('t_prevAnual')).toLocaleString(),'(c) Veces: '+tGet('t_veces')]],
+      styles:{fontSize:9}});
+    y=doc.lastAutoTable.finalY+4;
+    y=pdfBlock(doc,'T.2 Operaciones: ',tGet('t_ops'),y);
+    y=pdfBlock(doc,'T.3 Regla PUA: ',tGet('t_pua'),y+1);
+    y=pdfBlock(doc,'Conclusión: ',tGet('t_concl'),y+1);
+    if(y>240){doc.addPage();y=15;}
+    doc.setFont('helvetica','normal');doc.setFontSize(10);
+    doc.text('Declaro que esta tarea es de mi autoría.',X,y);y+=12;
+    doc.text('__________________________   (firma)',X,y);y+=8;
+    doc.setFontSize(8);doc.setTextColor(100,100,100);
+    doc.text('Guía de aprendizaje (datos adaptados, no es el examen). Subir a Canvas como Apellido_Carnet_TareaCiber.pdf',X,y);
+    const n=doc.getNumberOfPages();
+    for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(120,120,120);doc.text('Página '+i+' de '+n+' · CiberChapín UMG',150,272);}
+    doc.save('Apellido_Carnet_TareaCiber.pdf');
+    addXP(50);
+    const msg=document.getElementById('t_msg');
+    msg.className='form-msg ok';msg.textContent='✅ PDF descargado. Súbelo a Canvas como Apellido_Carnet_TareaCiber.pdf';
+  }catch(e){
+    document.getElementById('reporteTarea').innerHTML=construirReporteTarea();
+    document.getElementById('reporteTarea').style.display='block';
+    setTimeout(()=>window.print(),300);
+  }
+}
+['t_nombre','t_carnet','t_seccion','t_fecha','t_decision','t_arg1','t_arg2','t_arg3','t_perd5','t_prevAnual','t_veces','t_ops','t_pua','t_concl','t_declaro'].forEach(id=>{
+  document.addEventListener('input',e=>{if(e.target&&e.target.id===id)validarTareaCierre();});
+  document.addEventListener('change',e=>{if(e.target&&e.target.id===id)validarTareaCierre();});
+});
 // init
-renderPhish();renderCaso();actualizarProgreso();renderQuiz();renderGlos();ddosCalc();syncApiUi();
+renderPhish();renderCaso();actualizarProgreso();renderQuiz();renderGlos();ddosCalc();syncApiUi();validarTareaCierre();
 const fc=document.getElementById('fechaClase');if(fc)fc.valueAsDate=new Date();
+const tf=document.getElementById('t_fecha');if(tf)tf.valueAsDate=new Date();

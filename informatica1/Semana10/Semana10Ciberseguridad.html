@@ -26,6 +26,7 @@
       <a href="#skimming">Skimming</a>
       <a href="#ransom">Ransomware</a>
       <a href="#ejercicio">📝 Ejercicio Parejas</a>
+      <a href="#tarea">📌 Tarea Caso</a>
       <a href="#quiz">Quiz</a>
       <button id="btnApiNav" onclick="openIaModal('api-config-modal')" title="Configurar API Key de OpenRouter para la mentoría IA">🤖 API IA <span id="nav-api-badge">Pendiente</span></button>
     </div>
@@ -235,6 +236,112 @@
     <p class="small">📎 Al generar el PDF se descargará directamente (<b>Apellidos_Carnets_Ciber.pdf</b>, cámbiale el nombre con sus apellidos) → súbanlo a Canvas → Tarea “Ejercicio Ciberseguridad en Pareja”. Funciona en teléfono y computadora.</p>
   </div>
   <div id="reporteFinal" class="reporte"></div>
+</section>
+
+<!-- TAREA INDIVIDUAL: LA SILLA DEL GERENTE (guía para el parcial) -->
+<section id="tarea" class="section alt">
+  <div class="mision">TAREA INDIVIDUAL · GUÍA DE APRENDIZAJE PARA EL PARCIAL · SUBIR A CANVAS</div>
+  <h2>📌 Tarea: La Silla del Gerente — El Dilema del Rescate <small>individual · con PDF</small></h2>
+  <p class="lead">Te sientas en <strong>la silla del gerente</strong>: decides, calculas y pones la regla (decisión + números + regla PUA). Usa esta guia como tutoría: lee los tips, investiga y escribe tus conclusiones.</p>
+  <div class="card rules">
+    <b>📋 Instrucciones (individual, 30–40 min):</b>
+    <ol>
+      <li>Ingresa tus <b>datos</b> (Paso 0). El PDF saldrá con tu nombre.</li>
+      <li>Lee el <b>caso nuevo</b> y los <b>tips de tutoría</b> (cómo calcular la prevención anual y cómo investigar).</li>
+      <li>Resuelve <b>T.1 decisión</b>, <b>T.2 cálculos con operaciones</b> y <b>T.3 regla PUA</b> + tu <b>conclusión</b>.</li>
+      <li>Verifica tus números con el botón <b>“Verificar”</b> (te dice si vas bien sin regalarte la nota) y genera el <b>PDF para Canvas</b>.</li>
+    </ol>
+    <p class="small">esta es una guía de aprendizaje.</p>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>Paso 0 · Tus datos 🎓</h3>
+    <div class="pair-grid">
+      <label>👤 Nombre completo<input id="t_nombre" placeholder="Ej. Ana Lucía Morales" autocomplete="off"></label>
+      <label>🎫 Carnet<input id="t_carnet" placeholder="Ej. 1490-24-1234" autocomplete="off"></label>
+      <label>🏫 Sección / Jornada<input id="t_seccion" placeholder="Ej. A · Nocturna" autocomplete="off"></label>
+      <label>📅 Fecha<input id="t_fecha" type="date"></label>
+    </div>
+    <div id="t_datosMsg" class="form-msg"></div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>📁 El caso nuevo: Beneficio de Café Las Nubes, S.A. (Cobán, Alta Verapaz)</h3>
+    <p>El <b>auxiliar contable</b> abrió un falso correo de la SAT (“ajuste de inventario pendiente de auditoría”) y el <b>servidor de facturación quedó cifrado</b>: los atacantes piden <b>Q36,000 en 72 horas</b> o borran todo. <b>No existe backup externo</b> (solo un disco USB conectado, que también se cifró).</p>
+    <p>Faltan <b>4 días para pagar la planilla de Q75,000</b> y la empresa <b>pierde Q5,200 por cada día sin facturar ni despachar</b>. El dueño le pregunta a usted, el administrador: <b>¿pagamos el rescate?</b></p>
+    <div class="case-meta"><span>🎯 Ransomware vía phishing</span><span>💰 Rescate Q36,000 / 72 h</span><span>📉 Q5,200/día parado</span><span>👥 Planilla Q75,000 en 4 días</span><span>💾 Sin backup externo</span></div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>🧭 Tutoría: cómo resolverlo como administrador (léeme antes de escribir)</h3>
+    <div class="fcase">
+      <fieldset><legend>🧮 Tip 1 · Cómo calcular la prevención anual (sin enredarte)</legend>
+        <p class="small">La prevención anual es una <b>suma de costos anuales</b>. Todo lo mensual se vuelve anual multiplicando por 12:</p>
+        <p><b>Prevención anual = (costo mensual × 12) + costo anual 1 + costo anual 2</b></p>
+        <p class="small">🧪 <b>Ejemplo resuelto con otros números</b> (para practicar la fórmula): si el backup costara Q200/mes, el antivirus Q400/año y la capacitación Q300/año → Q200×12 = Q2,400; Q2,400 + Q400 + Q300 = <b>Q3,100/año</b>. Ahora aplica la misma fórmula con los datos de <b>TU tarea</b>:</p>
+        <p><b>Tus datos:</b> backup en la nube <b>Q350/mes</b> + antivirus <b>Q750/año</b> + capacitación <b>Q650/año</b>.</p>
+        <details class="guia"><summary>🔍 Ver pasos de T.2 sin ver el resultado final</summary>
+          <ul>
+            <li>(a) Pérdida por días parados = <b>días × pérdida diaria</b>. Aquí: 5 × Q5,200.</li>
+            <li>(b) Prevención anual = <b>(Q350 × 12) + Q750 + Q650</b>. Haz primero la multiplicación.</li>
+            <li>(c) “Cuántas veces cabe” = <b>pérdida de un incidente ÷ prevención anual</b>. El resultado te dice cuántos años de prevención se pagan con evitar UN solo ataque.</li>
+          </ul>
+        </details>
+      </fieldset>
+      <fieldset><legend>🔎 Tip 2 · Cómo investigar para defender tu decisión (5–10 min)</legend>
+        <ul class="small" style="line-height:1.9;margin:.2rem 0;padding-left:1.2rem">
+          <li><b>Verifica el modus operandi:</b> busca “phishing SAT Guatemala agenciavirtual” y confirma que la SAT nunca pide abrir .zip urgentes; la vía oficial es escribir <b>agenciavirtual.sat.gob.gt</b> a mano en el navegador.</li>
+          <li><b>Respaldo 3-2-1:</b> investiga “regla backup 3-2-1” (3 copias, 2 medios, 1 externa). Te sirve para el argumento de Disponibilidad/Integridad.</li>
+          <li><b>Ransomware y pago:</b> busca “¿se debe pagar rescate ransomware?” — verás que cerca del 40% no recupera sus archivos y que pagar financia el delito (criterio ético/legal + denuncia ante MP/PNC).</li>
+          <li><b>Pilares CIA:</b> usa al menos 2 en tus argumentos (ej. Integridad: datos cifrados no confiables; Disponibilidad: días sin facturar; Confidencialidad: claves expuestas).</li>
+          <li><b>Regla PUA verificable:</b> debe prohibir/ordenar algo comprobable (quién, qué, cuándo). “Tener cuidado” no vale; “prohibido abrir adjuntos .zip…” sí vale.</li>
+        </ul>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>T.1 · Tu decisión fundamentada (como en el parcial)</h3>
+    <label>🚦 Mi decisión<select id="t_decision"><option value="">Seleccione...</option><option value="SI">SÍ PAGAR el rescate</option><option value="NO">NO PAGAR y restaurar / reconstruir</option></select></label>
+    <div class="fcase" style="margin-top:.7rem">
+      <label>✍️ Argumento 1 (usa un pilar CIA, el costo o un criterio ético/legal — mín. 30 caracteres)<textarea id="t_arg1" rows="2" placeholder="Ej. Disponibilidad: ..."></textarea></label>
+      <label>✍️ Argumento 2 (mín. 30 caracteres)<textarea id="t_arg2" rows="2" placeholder="Ej. Costo: Q36,000 + días parados vs. planilla..."></textarea></label>
+      <label>✍️ Argumento 3 (mín. 30 caracteres)<textarea id="t_arg3" rows="2" placeholder="Ej. Ético/legal: pagar financia el delito; corresponde aislar, denunciar y reconstruir..."></textarea></label>
+    </div>
+    <p class="small">💡 Se acepta SÍ o NO si está bien defendido: exige postura clara + lógica causa-efecto en cada argumento (no frases sueltas). Si defiendes SÍ PAGAR, debes explicar riesgo de quiebra por planilla + costo de reconstrucción mayor al rescate + plan de respaldo inmediato.</p>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>T.2 · El número que convence al dueño (muestra operaciones)</h3>
+    <p class="small">Calcula con los datos del caso: <b>(a)</b> pérdida por <b>5 días</b> parados · <b>(b)</b> costo anual de prevención (Q350/mes + Q750/año + Q650/año) · <b>(c)</b> cuántas veces cabe la prevención en la pérdida de un solo incidente.</p>
+    <div class="budget-line">
+      <label>💸 (a) Pérdida 5 días Q<input type="number" id="t_perd5" min="0" placeholder="Ej. 20000"></label>
+      <label>🛡️ (b) Prevención anual Q<input type="number" id="t_prevAnual" min="0" placeholder="Ej. 4000"></label>
+      <label>🔁 (c) Veces (incidente ÷ prevención)<input type="number" id="t_veces" min="0" step="0.1" placeholder="Ej. 4.5"></label>
+    </div>
+    <label style="margin-top:.6rem">🧾 Mis operaciones (escríbelas, ej. 5 × 5,200 = ...; 350 × 12 + 750 + 650 = ...; ... ÷ ... = ...)<textarea id="t_ops" rows="3" placeholder="Muestra tus multiplicaciones, sumas y división..."></textarea></label>
+    <div class="case-btns" style="margin-top:.6rem"><button class="btn small ghost" onclick="verificarTarea()">🧮 Verificar mis números</button></div>
+    <div id="t_calcMsg" class="form-msg"></div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>T.3 · La regla que habría evitado el clic (máx. 2 líneas)</h3>
+    <label>📜 Mi regla PUA (específica y verificable, conectada al caso)<textarea id="t_pua" rows="2" placeholder="Ej. Prohibido abrir adjuntos .zip/Excel con macros de correos no verificados; toda notificación tributaria se consulta escribiendo manualmente agenciavirtual.sat.gob.gt"></textarea></label>
+    <p class="small">✅ Debe ser específica + verificable (alguien puede comprobar si se cumplió) + conectada al caso. ❌ No valen frases genéricas (“tener cuidado con los correos”).</p>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <h3>Paso final · Tu conclusión + PDF 📤</h3>
+    <label>💬 Mi conclusión como futuro administrador (mín. 60 caracteres: ¿qué aprendiste y qué harías distinto como gerente?)<textarea id="t_concl" rows="3" placeholder="Ej. Aprendí que un clic cuesta más que años de prevención; como gerente exigiría backup externo, 2FA y capacitación porque..."></textarea></label>
+    <label class="chk" style="display:block;margin:.6rem 0"><input type="checkbox" id="t_declaro"> Declaro que esta tarea es de mi autoría y la subiré a Canvas UMG.</label>
+    <div id="t_msg" class="form-msg"></div>
+    <div class="cierre-btns">
+      <button class="btn ghost" onclick="vistaPreviaTarea()">👁️ Vista previa</button>
+      <button class="btn primary" id="t_btnPDF" onclick="generarPdfTarea()" disabled>📄 Generar PDF de la tarea</button>
+    </div>
+    <p class="small">📎 El PDF se descargará como <b>Apellido_Carnet_TareaCiber.pdf</b> (cámbiale el nombre con tus datos) → súbelo a Canvas → Tarea “Tarea: La Silla del Gerente”.</p>
+  </div>
+  <div id="reporteTarea" class="reporte"></div>
 </section>
 
 <!-- QUIZ -->

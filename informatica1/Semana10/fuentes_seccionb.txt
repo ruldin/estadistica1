@@ -1,0 +1,52 @@
+﻿SECCIÓN B — La silla del gerente: el dilema del rescate (5 puntos)
+INSTRUCCIONES: Lea el caso y resuelva los 3 incisos. No hay una única respuesta correcta: se califica la coherencia entre su decisión, sus números y su política. Fundamente como administrador, no como técnico.
+CASO: Lácteos El Progreso, S.A. (Teculután, Zacapa). 
+La contadora abrió el falso correo de la SAT y el servidor contable quedó cifrado: piden Q30,000 en 48 horas o borran todo. 
+No existe backup externo (solo un USB conectado, también cifrado). 
+Faltan 3 días para pagar la planilla de Q60,000 y la empresa pierde Q4,500 por cada día sin facturar ni despachar. 
+El dueño le pregunta a usted, el administrador: ¿pagamos el rescate?
+
+B.1 Decisión fundamentada (2 puntos). 
+Marque su decisión y defiéndala con 3 argumentos (use al menos 2 pilares CIA, el costo y un criterio ético/legal):
+
+Mi decisión (marque una):   (  ) SÍ PAGAR el rescate   /   (  ) NO PAGAR y restaurar / reconstruir
+
+Argumento 1: ________________________________________________________________________
+Argumento 2: ________________________________________________________________________
+Argumento 3: ________________________________________________________________________
+
+
+B.2 El número que convence al dueño (1.5 puntos). 
+Calcule: 
+(a) la pérdida por 5 días parados, 
+(b) el costo anual de prevención (backup nube Q300/mes + antivirus Q600/año + capacitación Q500/año) y 
+(c) cuántas veces cabe la prevención en la pérdida de un solo incidente. 
+Muestre operaciones.
+Operaciones y resultado: _____________________________________________________________
+___________________________________________________________________________________
+
+B.3 La regla que habría evitado el clic (1.5 puntos). 
+Redacte UNA regla de la Política de Uso Aceptable (PUA) de la empresa, en máximo 2 líneas, que de haberse cumplido habría evitado este desastre. 
+Debe ser verificable (alguien puede comprobar si se cumplió) y no una frase genérica.
+
+Mi regla PUA: 
+_______________________________________________________________________
+___________________________________________________________________________________
+
+
+
+Sección B.1 — Decisión (2 puntos): se acepta SÍ o NO si está bien defendida. 
+
+Modelo de respuesta completa (NO PAGAR): 
+(1) Integridad/Disponibilidad: pagar no garantiza recuperar las claves (cerca del 40% no recupera) y el servidor seguiría comprometido; 
+
+(2) Costo: Q30,000 financian al crimen y no evitan los Q22,500 de días parados ni la planilla; 
+
+(3) Ético/legal: pagar ransomware financia el delito y debe denunciarse; la salida gerencial es aislar, denunciar y reconstruir desde backups. 
+Si defiende SÍ PAGAR, exigir: riesgo de quiebra por planilla + costo de reconstrucción mayor al rescate + pago como medida única con plan de respaldo inmediato; máximo 1.5 si los argumentos son sólidos pero ignoran el riesgo ético.
+
+
+Rúbrica B.1: 0.5 por decisión marcada con postura clara + 0.5 por cada argumento válido (máx. 1.5). Argumento válido = menciona pilar CIA o costo o criterio ético con lógica causa-efecto, no frase suelta.
+
+Sección B.2 — Cálculo (1.5 puntos): (a) Pérdida 5 días = 5 × Q4,500 = Q22,500 (sin contar el rescate). (b) Prevención anual = Q300×12 + Q600 + Q500 = Q3,600 + Q600 + Q500 = Q4,700/año. (c) Un solo incidente (Q22,500) equivale a ~4.8 años de prevención (22,500 ÷ 4,700 ≈ 4.8). Conclusión esperada: con evitar UN incidente se pagan casi 5 años de prevención. 0.5 por cada literal con operaciones visibles.
+Sección B.3 — Regla PUA (1.5 puntos): debe ser específica y verificable. Ejemplos válidos: Prohibido abrir adjuntos .zip/Excel con macros de correos no verificados; toda notificación tributaria se consulta escribiendo manualmente agenciavirtual.sat.gob.gt. / Ningún código de verificación o token se comparte por ningún canal; su entrega es causal de sanción. / Toda transferencia mayor a Q5,000 requiere doble firma y confirmación por llamada a número registrado. No aceptar (0.5 máx.): frases genéricas como tener cuidado con los correos o no abrir cosas raras. Rúbrica: 0.5 especificidad + 0.5 verificabilidad + 0.5 conexión directa con el caso.
