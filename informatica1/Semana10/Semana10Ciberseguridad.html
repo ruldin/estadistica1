@@ -27,6 +27,7 @@
       <a href="#ransom">Ransomware</a>
       <a href="#ejercicio">📝 Ejercicio Parejas</a>
       <a href="#quiz">Quiz</a>
+      <button id="btnApiNav" onclick="openIaModal('api-config-modal')" title="Configurar API Key de OpenRouter para la mentoría IA">🤖 API IA <span id="nav-api-badge">Pendiente</span></button>
     </div>
     <button class="hamburger" id="hamburger">☰</button>
   </div>
@@ -196,7 +197,13 @@
     </ol>
   </div>
   <div class="card" id="datosPareja" style="margin-top:1rem">
-    <h3>Paso 0 · Datos de la pareja 👥</h3>
+    <h3>Paso 0 · Datos de la pareja 👥 + Servicio de IA 🤖</h3>
+    <p class="small">La <b>mentoría IA (Mentor Amigo)</b> valida cada caso antes de avanzar: punto de vista, retroalimentación y consejo gerencial. Usa tu API Key de <b>OpenRouter</b> (la misma de Estadística I / Informática I, guardada solo en este navegador). Si la IA falla, puedes continuar igualmente.</p>
+    <div class="ia-status-row">
+      <span id="ia-global-badge">IA: sin configurar</span>
+      <button class="btn small ghost" onclick="openIaModal('api-config-modal')">⚙️ Configurar API Key</button>
+      <a class="btn small ghost" href="../index_informatica.html" title="Abrir centro de configuración del portal">🔗 Centro IA del portal</a>
+    </div>
     <div class="pair-grid">
       <label>🧑‍✈️ Piloto — Nombre completo<input id="nombrePiloto" placeholder="Ej. María Fernanda López" autocomplete="off"></label>
       <label>🎫 Carnet Piloto<input id="carnetPiloto" placeholder="Ej. 1490-22-1234" autocomplete="off"></label>
@@ -245,6 +252,51 @@
   <div class="glos" id="glos"></div>
   <footer>Hecho con 💙 pedagógico por <b>Ruldin Ayala</b>, Informática I · UMG · Semana 10 · 2026 · Montos en Quetzales (Q) estimados con fines didácticos.</footer>
 </section>
+
+<!-- MODAL CONFIG API OPENROUTER (compartida con ambos portales) -->
+<div id="api-config-modal" class="ia-modal" style="display:none">
+  <div class="ia-modal-card">
+    <div class="ia-modal-head"><h3>🤖 Servicio de IA (OpenRouter)</h3><button class="btn small ghost" onclick="closeIaModal('api-config-modal')">✕</button></div>
+    <p class="small">La clave se guarda <b>solo en este navegador</b> (<code>bias-lab-settings</code> / <code>openrouter_settings</code>) y sirve para Estadística I e Informática I. <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">Obtén tu key gratis aquí</a> (empieza con <code>sk-or-v1-</code>).</p>
+    <label>🔑 API Key de OpenRouter<input type="password" id="cfg-api-key" placeholder="Pega aquí tu clave (sk-or-v1-...)" autocomplete="off"></label>
+    <label>🌐 Endpoint<input type="url" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions"></label>
+    <label>🧠 Modelo<select id="cfg-model-select">
+      <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Defecto · Gratuito)</option>
+      <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Rápido · Gratuito)</option>
+      <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Gratuito)</option>
+      <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (Razonamiento · Gratuito)</option>
+      <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct</option>
+      <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini</option>
+    </select></label>
+    <div id="cfg-test-feedback" class="form-msg"></div>
+    <div class="ia-modal-btns">
+      <button class="btn small ghost" onclick="testApiConnection()">🧪 Probar conexión</button>
+      <button class="btn small ghost" onclick="purgeApiKey()">🗑️ Olvidar clave</button>
+      <button class="btn small primary" onclick="saveApiSettings()">💾 Guardar</button>
+    </div>
+    <p class="small">🔒 En laboratorios compartidos usa “Olvidar clave” al salir.</p>
+  </div>
+</div>
+
+<!-- MODAL MENTOR IA (retroalimentación por caso) -->
+<div id="mentor-modal" class="ia-modal" style="display:none">
+  <div class="ia-modal-card">
+    <div class="ia-modal-head"><h3>🤖 Mentor IA · <span id="mentor-case-title"></span></h3><button class="btn small ghost" onclick="closeIaModal('mentor-modal')">✕</button></div>
+    <div id="mentor-loading">⏳ Consultando al mentor IA...</div>
+    <div id="mentor-content" style="display:none">
+      <p class="small"><b>Tu análisis registrado:</b></p>
+      <div class="mentor-user" id="mentor-user-text"></div>
+      <p class="small"><b>💬 Punto de vista, retroalimentación y consejo del mentor</b> <span id="mentor-model-badge" class="small"></span></p>
+      <div class="mentor-ai" id="mentor-response-text"></div>
+      <p class="small">✅ Esta retroalimentación quedará guardada y aparecerá en tu PDF final.</p>
+    </div>
+    <div id="mentor-error" class="form-msg err" style="display:none"></div>
+    <div class="ia-modal-btns">
+      <button class="btn small ghost" onclick="closeIaModal('mentor-modal')">Entendido, continuar</button>
+      <button class="btn small ghost" id="mentor-retry" onclick="consultarMentorIA(false)" style="display:none">🔄 Reintentar</button>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>

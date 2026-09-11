@@ -120,12 +120,12 @@ function rReset(){rStep=0;document.getElementById('ransomTime').innerHTML='';doc
 
 // ---- Quiz ----
 const QUIZ=[
-  {q:'1. Un atacante lee planillas porque alguien compartió su clave. ¿Qué pilar CIA se rompió?',o:['Disponibilidad','Confidencialidad ✅','Integridad','Ninguno'],a:1},
-  {q:'2. ¿Qué malware cifra archivos y pide rescate?',o:['Spyware','Gusano','Ransomware ✅','Virus simple'],a:2},
-  {q:'3. ¿Qué malware se propaga SOLO por la red sin clic del usuario?',o:['Gusano (Worm) ✅','Virus clásico','Spoofing','Phishing'],a:0},
-  {q:'4. SMS “Su banca ha sido bloqueada, actualice su token aquí” es típicamente...',o:['Mensaje legítimo','Phishing + spoofing ✅','Backup','VPN'],a:1},
-  {q:'5. Te piden el código de 6 dígitos de WhatsApp por una oferta de empleo. Debes...',o:['Enviarlo rápido','Ignorar y reportar, jamás compartirlo ✅','Reenviarlo a amigos','Pagar Q100'],a:1},
-  {q:'6. Como administrador, la mejor defensa integral es...',o:['Solo antivirus','Antivirus + PUA + capacitación + backups externos ✅','Desconectar todo','Pagar rescates'],a:1}
+  {q:'1. Un atacante lee planillas porque alguien compartió su clave. ¿Qué pilar CIA se rompió?',o:['Disponibilidad','Confidencialidad','Integridad','Ninguno'],a:1},
+  {q:'2. ¿Qué malware cifra archivos y pide rescate?',o:['Spyware','Gusano','Ransomware','Virus simple'],a:2},
+  {q:'3. ¿Qué malware se propaga SOLO por la red sin clic del usuario?',o:['Gusano (Worm)','Virus clásico','Spoofing','Phishing'],a:0},
+  {q:'4. SMS “Su banca ha sido bloqueada, actualice su token aquí” es típicamente...',o:['Mensaje legítimo','Phishing + spoofing','Backup','VPN'],a:1},
+  {q:'5. Te piden el código de 6 dígitos de WhatsApp por una oferta de empleo. Debes...',o:['Enviarlo rápido','Ignorar y reportar, jamás compartirlo','Reenviarlo a amigos','Pagar Q100'],a:1},
+  {q:'6. Como administrador, la mejor defensa integral es...',o:['Solo antivirus','Antivirus + PUA + capacitación + backups externos','Desconectar todo','Pagar rescates'],a:1}
 ];
 let qi=0,qs=0;
 function renderQuiz(){
@@ -160,7 +160,43 @@ const CASOS=[
 const ATAQUES=['Skimming / clonación en POS','Ingeniería social por WhatsApp','Phishing SAT → Ransomware','Spoofing bancario (phishing)','Virus por USB','Ataque DDoS','Gusano de red','Robo de identidad'];
 const PILARES=['Confidencialidad','Integridad','Disponibilidad','Confidencialidad + Integridad','Integridad + Disponibilidad','Los tres (CIA completo)'];
 let casoActual=0;const respuestas=[{},{},{},{}];
-function irCaso(i){casoActual=i;document.querySelectorAll('.cnav').forEach(b=>b.classList.toggle('active',+b.dataset.case===i));renderCaso();document.getElementById('casoBox').scrollIntoView({behavior:'smooth',block:'start'});}
+function irCaso(i){guardarBorrador();casoActual=i;document.querySelectorAll('.cnav').forEach(b=>b.classList.toggle('active',+b.dataset.case===i));renderCaso();document.getElementById('casoBox').scrollIntoView({behavior:'smooth',block:'start'});}
+// Guarda el formulario actual sin validar, para no perder el avance al navegar.
+function guardarBorrador(){
+  try{
+    const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+    if(!document.getElementById('f_just'))return;
+    const prev=respuestas[casoActual]||{};
+    respuestas[casoActual]={ataque:g('f_ataque')||prev.ataque,pilar:g('f_pilar')||prev.pilar,just:g('f_just'),debate:g('f_debate'),perd:g('f_perd')?+g('f_perd'):prev.perd,prev:g('f_prev')?+g('f_prev'):prev.prev,medida:g('f_medida')||prev.medida,fact:g('f_fact'),roi:prev.roi,acierto:prev.acierto,ia:prev.ia||null};
+  }catch(e){}
+}
+// Avance al siguiente caso con validación suave de mentoría IA: recomienda consultar,
+// pero NUNCA bloquea (si no hay conexión o no hay key, el alumno continúa).
+function avanzarCaso(){
+  guardarBorrador();
+  const r=respuestas[casoActual]||{};
+  const guardado=!!(r.roi&&r.just); // roi solo existe tras Guardar validado
+  if(!guardado){irCaso((casoActual+1)%4);return;}
+  if(r.ia&&r.ia.status==='ok'){irCaso((casoActual+1)%4);return;}
+  if(r.ia&&r.ia.status==='error'){
+    if(confirm('La mentoría IA no pudo conectarse en este caso, pero tu respuesta quedó guardada.\n\n¿Deseas continuar al siguiente caso de todos modos?'))irCaso((casoActual+1)%4);
+    return;
+  }
+  // Sin mentoría aún: ofrecer consulta proactiva, con opción de continuar.
+  const key=getStoredApiSettings().apiKey;
+  if(!key){
+    if(confirm('Aún no consultas al Mentor IA en este caso (se recomienda antes de avanzar).\n\n¿Deseas configurar tu API Key ahora? (Cancelar = continuar sin mentoría)')){openIaModal('api-config-modal');}
+    else{irCaso((casoActual+1)%4);}
+    return;
+  }
+  if(confirm('Aún no validas este caso con el Mentor IA (punto de vista + retroalimentación + consejo).\n\nAceptar = consultar al mentor ahora · Cancelar = continuar sin mentoría.')){consultarMentorIA(false);}
+  else{irCaso((casoActual+1)%4);}
+}
+function mentorBadge(r){
+  if(r&&r.ia&&r.ia.status==='ok')return '✅ Mentor consultado'+(r.ia.model?' ('+esc(String(r.ia.model).split('/').pop())+')':'');
+  if(r&&r.ia&&r.ia.status==='error')return '⚠️ Sin conexión: puedes continuar';
+  return '⏳ Sin consultar';
+}
 function liderDeCaso(i){const alt=document.getElementById('alternar')?.checked;if(!alt)return 'Piloto lidera · Copiloto debate';return (i%2===0)?'🧑‍✈️ Lidera PILOTO · 🧭 debate COPILOTO':'🧭 Lidera COPILOTO · 🧑‍✈️ debate PILOTO';}
 function renderCaso(){
   const c=CASOS[casoActual],r=respuestas[casoActual];const box=document.getElementById('casoBox');if(!box)return;
@@ -187,8 +223,18 @@ function renderCaso(){
      <label>📊 ¿Por qué le conviene al gerente pagar la prevención? (mín. 30 caracteres)<textarea id="f_fact" rows="2" placeholder="Ej. Sí conviene: Q1,500 evita perder Q14,000; se paga solo con evitar un incidente...">${r.fact||''}</textarea></label>
      <div class="calc-box" id="calcBox">🧮 ROI prevención: se calcula al guardar (pérdida evitada ÷ costo).</div>
     </fieldset>
-    <div class="case-btns"><button class="btn ghost" onclick="irCaso(${(casoActual+3)%4})">← Anterior</button><button class="btn primary" onclick="guardarCaso()">💾 Guardar caso ${CASOS[casoActual].id}</button><button class="btn ghost" onclick="irCaso(${(casoActual+1)%4})">Siguiente →</button></div>
+    <div class="case-btns"><button class="btn ghost" onclick="irCaso(${(casoActual+3)%4})">← Anterior</button><button class="btn primary" onclick="guardarCaso()">💾 Guardar caso ${CASOS[casoActual].id}</button><button class="btn ghost" onclick="avanzarCaso()">Siguiente →</button></div>
     <div id="casoMsg" class="form-msg"></div>
+    <div class="mentor-box" id="mentorBox">
+      <div class="mentor-head"><b>🤖 Mentoría IA · Mentor Amigo</b><span id="mentor-badge">${mentorBadge(r)}</span></div>
+      <p class="small">Antes de avanzar, valida tu análisis con el mentor: te dará su <b>punto de vista</b>, <b>retroalimentación</b> y un <b>consejo gerencial</b>. La respuesta quedará en el PDF final. Si la IA falla, puedes continuar igualmente.</p>
+      <div class="mentor-ai" id="mentor-inline" style="${r.ia&&r.ia.feedback?'':'display:none'}">${r.ia&&r.ia.feedback?esc(r.ia.feedback):''}</div>
+      <div class="case-btns">
+        <button class="btn small primary" id="btnMentor" onclick="consultarMentorIA(false)">🤖 Consultar Mentor IA</button>
+        <button class="btn small ghost" onclick="openIaModal('api-config-modal')">⚙️ Configurar API Key</button>
+      </div>
+      <div id="mentorMsg" class="form-msg"></div>
+    </div>
    </div></div>`;
 }
 function guardarCaso(){
@@ -205,13 +251,22 @@ function guardarCaso(){
   if(errs.length){msg.className='form-msg err';msg.innerHTML='⛔ '+errs.join('<br>⛔ ');return;}
   const roi=prev>0?(perd/prev).toFixed(1):'—';
   const acierto=ataque===CASOS[casoActual].ataque;
-  respuestas[casoActual]={ataque,pilar,just,debate,perd,prev,medida,fact,roi,acierto};
+  const previa=respuestas[casoActual]&&respuestas[casoActual].ia?respuestas[casoActual].ia:null;
+  respuestas[casoActual]={ataque,pilar,just,debate,perd,prev,medida,fact,roi,acierto,ia:previa};
   document.getElementById('calcBox').textContent=`🧮 Cada Q1 en prevención evita Q${roi} en pérdidas. ${acierto?'🎯 ¡Diagnóstico correcto del método de fallo! +25 XP':'⚠️ Diagnóstico distinto al esperado ('+CASOS[casoActual].ataque+'). Igual suma si tu justificación es sólida.'}`;
   msg.className='form-msg ok';msg.textContent=`✅ Caso ${CASOS[casoActual].id} guardado. +25 XP`;
   document.querySelector(`.cnav[data-case="${casoActual}"]`).classList.add('done');
   addXP(25);actualizarProgreso();
+  // Mentoría proactiva: tras guardar, consultar al mentor IA automáticamente si hay key y aún no hay feedback.
+  const s=getStoredApiSettings();
+  if(s.apiKey&&!(previa&&previa.status==='ok')){
+    msg.textContent+=` · 🤖 Consultando al Mentor IA...`;
+    setTimeout(()=>consultarMentorIA(true),400);
+  } else if(!s.apiKey){
+    msg.textContent+=` · 🤖 Tip: consulta al Mentor IA abajo antes de avanzar (requiere API Key).`;
+  }
 }
-function casosCompletos(){return respuestas.filter(r=>r.ataque&&r.just).length;}
+function casosCompletos(){return respuestas.filter(r=>r.roi&&r.just&&r.ataque).length;}
 function actualizarProgreso(){
   const n=casosCompletos();
   const f=document.getElementById('casesFill');if(f)f.style.width=(n/4*100)+'%';
@@ -238,6 +293,181 @@ function validarCierre(){
   document.addEventListener('input',e=>{if(e.target&&e.target.id===id)validarCierre();});
   document.addEventListener('change',e=>{if(e.target&&e.target.id===id){if(id==='alternar')renderCaso();validarCierre();}});
 });
+/* ============ MENTORÍA IA (OpenRouter, 100% cliente) ============ */
+// Mismas claves que ambos portales: la key configurada en Estadística/Informática se reutiliza aquí.
+const API_STORAGE_KEY_BIAS='bias-lab-settings';
+const API_STORAGE_KEY_GLOBAL='openrouter_settings';
+const DEFAULT_API_URL='https://openrouter.ai/api/v1/chat/completions';
+const DEFAULT_MODEL='inclusionai/ling-3.0-flash-fin:free';
+function getStoredApiSettings(){
+  try{
+    const raw=localStorage.getItem(API_STORAGE_KEY_BIAS)||localStorage.getItem(API_STORAGE_KEY_GLOBAL);
+    if(raw){const p=JSON.parse(raw);return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model:p.model||DEFAULT_MODEL};}
+  }catch(e){}
+  return{apiKey:'',apiUrl:DEFAULT_API_URL,model:DEFAULT_MODEL};
+}
+function openIaModal(id){const el=document.getElementById(id);if(el){el.style.display='flex';if(id==='api-config-modal')syncApiUi();}}
+function closeIaModal(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function syncApiUi(){
+  const s=getStoredApiSettings();
+  const k=document.getElementById('cfg-api-key');if(k&&!k.value)k.value=s.apiKey;
+  const u=document.getElementById('cfg-api-url');if(u&&!u.value)u.value=s.apiUrl;
+  const m=document.getElementById('cfg-model-select');
+  if(m){const opts=Array.from(m.options).map(o=>o.value);m.value=opts.includes(s.model)?s.model:opts[0];}
+  const ok=!!(s.apiKey&&s.apiKey.trim());
+  const badge=document.getElementById('ia-global-badge');if(badge)badge.textContent=ok?('✅ IA lista ('+s.model.split('/').pop()+')'):'⚠️ IA sin configurar';
+  const nav=document.getElementById('nav-api-badge');if(nav)nav.textContent=ok?'Conectada':'Pendiente';
+}
+function saveApiSettings(){
+  const k=(document.getElementById('cfg-api-key').value||'').trim();
+  const u=(document.getElementById('cfg-api-url').value||'').trim()||DEFAULT_API_URL;
+  const m=(document.getElementById('cfg-model-select').value||'').trim()||DEFAULT_MODEL;
+  const payload={apiKey:k,apiUrl:u,model:m};
+  try{localStorage.setItem(API_STORAGE_KEY_BIAS,JSON.stringify(payload));localStorage.setItem(API_STORAGE_KEY_GLOBAL,JSON.stringify(payload));}catch(e){}
+  syncApiUi();
+  const f=document.getElementById('cfg-test-feedback');if(f){f.className='form-msg ok';f.textContent='✅ Configuración guardada en este navegador.';}
+}
+function purgeApiKey(){
+  if(!confirm('¿Olvidar tu API Key de este navegador?'))return;
+  try{const s=getStoredApiSettings();s.apiKey='';localStorage.setItem(API_STORAGE_KEY_BIAS,JSON.stringify(s));localStorage.setItem(API_STORAGE_KEY_GLOBAL,JSON.stringify(s));}catch(e){}
+  document.getElementById('cfg-api-key').value='';syncApiUi();
+}
+async function testApiConnection(){
+  const f=document.getElementById('cfg-test-feedback');
+  const s={apiKey:(document.getElementById('cfg-api-key').value||'').trim(),apiUrl:(document.getElementById('cfg-api-url').value||'').trim()||DEFAULT_API_URL,model:document.getElementById('cfg-model-select').value||DEFAULT_MODEL};
+  if(!s.apiKey){f.className='form-msg err';f.textContent='⛔ Ingresa primero tu API Key.';return;}
+  f.className='form-msg';f.textContent='⏳ Contactando OpenRouter...';
+  try{
+    const r=await fetch(s.apiUrl,{method:'POST',headers:{'Authorization':'Bearer '+s.apiKey,'Content-Type':'application/json','HTTP-Referer':location.origin,'X-Title':'UMG Informatica 1 Mentoria'},body:JSON.stringify({model:s.model,max_tokens:10,messages:[{role:'user',content:'Di OK'}]})});
+    const d=await r.json();
+    if(r.ok&&d.choices&&d.choices.length){f.className='form-msg ok';f.textContent='✅ ¡Conexión exitosa con '+s.model+'.';}
+    else{f.className='form-msg err';f.textContent='⛔ Error '+(r.status)+': '+((d.error&&d.error.message)||r.statusText);}
+  }catch(e){f.className='form-msg err';f.textContent='⛔ Error de red: '+e.message;}
+}
+// Recorta texto para cuidar los tokens de contexto.
+function trunc(s,n){s=String(s==null?'':s);return s.length>n?s.slice(0,n)+'…':s;}
+// Limpia trazas de razonamiento (<think>, preámbulos de análisis, ecos de instrucciones,
+// notas de evaluación interna tipo "Method: ... -> Correct") y conserva solo la respuesta
+// final del mentor (punto de vista + retroalimentación + consejo). Si no queda ningún
+// apartado real, devuelve '' para que la app pida reintentar en vez de mostrar basura.
+function sanitizeAi(raw){
+  if(!raw)return '';
+  let t=String(raw).replace(/<think>[\s\S]*?<\/think>/gi,'').replace(/<think>[\s\S]*/gi,'').replace(/<\/think>/gi,'');
+  // 1) Si hay un preámbulo de razonamiento antes del primer apartado real, cortarlo.
+  const answerMark=/(🎯|🧭|💼|punto de vista|retroalimentaci[oó]n|consejo gerencial)/i;
+  const reasonSig=/(analy[sz]e|evaluate|role\s*:|tone\s*:|structure\s*:|constraints?\s*:|goal\s*:|objectives?\s*:|student'?s response|\*method\s*:\*|\*cia pillar\s*:\*|cadena de pensamiento|razonamiento interno|análisis interno|must contain only|no english)/i;
+  const m=answerMark.exec(t);
+  if(m&&m.index>0&&reasonSig.test(t.slice(0,m.index))){
+    t=t.slice(m.index);
+  }
+  // 2) Filtrar líneas de razonamiento / eco de instrucciones, tolerando viñetas y negritas.
+  const REASON_FIELDS='goal|objectives?|steps?|method|justification|debate|feasibility|analy[sz]is|evaluation|reasoning|constraints?|tone|role|structure|case details|student.?s response|cia pillar|pensamiento|razonamiento interno|análisis interno|cadena de pensamiento';
+  const reasonFieldRe=new RegExp('^[\\s*\\-•>]*\\*{0,2}('+REASON_FIELDS+')\\b[^:\\n]{0,40}:','i');
+  const echoRe=/must contain only|no english|starting directly with|only the \d+ sections/i;
+  const arrowRe=/->\s*\*{0,2}(correct|partially|incorrect)/i;
+  t=t.split('\n').filter(ln=>{
+    if(!ln.trim())return true;
+    if(reasonFieldRe.test(ln))return false;
+    if(echoRe.test(ln))return false;
+    if(arrowRe.test(ln))return false;
+    if(/^\s*\d+\.\s*(\*\*)?(analyze|evaluate)\b/i.test(ln))return false;
+    return true;
+  }).join('\n');
+  // 3) Quitar saludos iniciales residuales.
+  t=t.replace(/^[\s\n]*(¡?\s*hola\b|estimad[oa]\b|saludos\b|buen día\b)[^\n]*(\n)?/i,'');
+  t=t.trim();
+  // 4) Sin apartados reales no hay retroalimentación que mostrar.
+  if(!answerMark.test(t))return '';
+  return t;
+}
+/* Consulta proactiva al Mentor Amigo. auto=true cuando se dispara sola tras guardar. */
+async function consultarMentorIA(auto){
+  const c=CASOS[casoActual];
+  const r=respuestas[casoActual]||{};
+  const mMsg=document.getElementById('mentorMsg');
+  const btn=document.getElementById('btnMentor');
+  // Requiere caso guardado (o al menos justificación escrita)
+  const just=((document.getElementById('f_just')||{}).value||r.just||'').trim();
+  if(just.length<40){
+    if(mMsg){mMsg.className='form-msg err';mMsg.textContent='⛔ Escribe primero tu justificación (mín. 40 caracteres) y guarda el caso.';}
+    if(!auto)openIaModal('mentor-modal'),showMentorError('Escribe primero tu justificación del caso y pulsa Guardar.');
+    return;
+  }
+  const s=getStoredApiSettings();
+  if(!s.apiKey){
+    if(mMsg){mMsg.className='form-msg err';mMsg.textContent='⚠️ Configura tu API Key para recibir la mentoría (puedes continuar sin ella).';}
+    openIaModal('api-config-modal');
+    return;
+  }
+  // Armar contexto COMPACTO (control de tokens): solo lo esencial del caso + respuesta del alumno.
+  const ataque=(document.getElementById('f_ataque')||{}).value||r.ataque||'';
+  const pilar=(document.getElementById('f_pilar')||{}).value||r.pilar||'';
+  const debate=trunc((document.getElementById('f_debate')||{}).value||r.debate||'',300);
+  const fact=trunc((document.getElementById('f_fact')||{}).value||r.fact||'',400);
+  const perd=(document.getElementById('f_perd')||{}).value||r.perd||'';
+  const prev=(document.getElementById('f_prev')||{}).value||r.prev||'';
+  const medida=(document.getElementById('f_medida')||{}).value||r.medida||'';
+  const systemPrompt='Eres el Mentor Amigo de ciberseguridad para estudiantes de Administración (UMG Guatemala). Trátalos de TÚ, con tono cercano, constructivo y motivador, para que se sientan cómodos. NUNCA uses etiquetas frías como "Incorrecto". Si hay que corregir, hazlo con empatía ("¡Buen intento! ... fijémonos juntos en..."). Responde SIEMPRE en español, aunque el texto del alumno venga en otro idioma. Tu respuesta debe contener ÚNICAMENTE estos 3 apartados breves (140-200 palabras en total): 1) Punto de vista sobre su diagnóstico 2) Retroalimentación técnica (método de ataque y pilar CIA correctos) 3) Consejo gerencial práctico en quetzales. No muestres tu proceso de análisis ni notas internas, no repitas estas instrucciones, no uses saludos iniciales: empieza directamente con el punto de vista.';
+  const userPrompt='Caso: '+c.titulo+' | Contexto: '+trunc(c.ctx,550)+' | Ataque esperado: '+c.ataque+' | Respuesta del alumno -> método: '+ataque+', pilar CIA: '+pilar+', pérdida Q'+perd+', prevención Q'+prev+', medida: '+medida+'. Justificación: "'+trunc(just,500)+'" Debate: "'+debate+'" Factibilidad: "'+fact+'" Evalúa como mentor amigo en español.';
+  // UI loading
+  openIaModal('mentor-modal');
+  document.getElementById('mentor-case-title').textContent='Caso '+c.id;
+  document.getElementById('mentor-loading').style.display='block';
+  document.getElementById('mentor-content').style.display='none';
+  document.getElementById('mentor-error').style.display='none';
+  document.getElementById('mentor-retry').style.display='none';
+  if(btn)btn.disabled=true;
+  if(mMsg){mMsg.className='form-msg';mMsg.textContent='⏳ Consultando al Mentor IA...';}
+  try{
+    const resp=await fetch(s.apiUrl,{method:'POST',
+      headers:{'Authorization':'Bearer '+s.apiKey,'Content-Type':'application/json','HTTP-Referer':location.origin||'http://localhost','X-Title':'UMG Informatica 1 Mentoria'},
+      body:JSON.stringify({model:s.model,reasoning:{exclude:true},messages:[{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],temperature:0.4,max_tokens:500})});
+    const data=await resp.json();
+    let raw='';
+    if(resp.ok&&data.choices&&data.choices.length){
+      const ch=data.choices[0];
+      if(ch.message&&typeof ch.message.content==='string'&&ch.message.content.trim())raw=ch.message.content.trim();
+      else if(ch.message&&typeof ch.message.reasoning==='string')raw=ch.message.reasoning.trim();
+      else if(typeof ch.text==='string')raw=ch.text.trim();
+    } else {
+      throw new Error('Error '+(resp.status)+': '+((data.error&&data.error.message)||resp.statusText));
+    }
+    let fb=sanitizeAi(raw);
+    if(!fb){
+      if(data.choices[0]&&data.choices[0].finish_reason==='length')throw new Error('El modelo agotó sus tokens. Prueba con google/gemini-2.0-flash-exp:free en Configurar API Key.');
+      throw new Error('El modelo devolvió su análisis interno en lugar de la retroalimentación final. Pulsa "Reintentar" y si se repite, cambia de modelo en "Configurar API Key" (p. ej. google/gemini-2.0-flash-exp:free).');
+    }
+    // Guardar en el caso (estará en el PDF)
+    respuestas[casoActual].ia={feedback:fb,model:s.model,timestamp:new Date().toISOString(),status:'ok'};
+    showMentorOk(c,r,fb,s.model);
+    if(mMsg){mMsg.className='form-msg ok';mMsg.textContent='✅ Mentoría recibida. Ya puedes avanzar al siguiente caso.';}
+    const badge=document.getElementById('mentor-badge');if(badge)badge.textContent=mentorBadge(respuestas[casoActual]);
+    const inline=document.getElementById('mentor-inline');if(inline){inline.style.display='block';inline.textContent=fb;}
+  }catch(e){
+    // FALLO SUAVE: guardar el error pero permitir continuar.
+    respuestas[casoActual].ia={feedback:'',model:s.model,timestamp:new Date().toISOString(),status:'error',error:String(e.message||e)};
+    showMentorError('No se pudo consultar al mentor IA ('+e.message+'). Tu respuesta quedó guardada y puedes continuar al siguiente caso sin problema; podrás reintentar la mentoría o generar el PDF igualmente.');
+    if(mMsg){mMsg.className='form-msg err';mMsg.textContent='⚠️ Sin conexión con la IA: puedes continuar al siguiente caso. Tu respuesta quedó guardada.';}
+    const badge=document.getElementById('mentor-badge');if(badge)badge.textContent=mentorBadge(respuestas[casoActual]);
+  }finally{
+    if(btn)btn.disabled=false;
+  }
+}
+function showMentorOk(c,r,fb,model){
+  document.getElementById('mentor-loading').style.display='none';
+  document.getElementById('mentor-error').style.display='none';
+  document.getElementById('mentor-content').style.display='block';
+  document.getElementById('mentor-user-text').textContent='"'+trunc(r.just||((document.getElementById('f_just')||{}).value||''),400)+'"';
+  document.getElementById('mentor-response-text').textContent=fb;
+  document.getElementById('mentor-model-badge').textContent='Modelo: '+model;
+}
+function showMentorError(msg){
+  openIaModal('mentor-modal');
+  document.getElementById('mentor-loading').style.display='none';
+  document.getElementById('mentor-content').style.display='none';
+  const e=document.getElementById('mentor-error');e.style.display='block';e.textContent='⚠️ '+msg;
+  document.getElementById('mentor-retry').style.display='inline-block';
+}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function construirReporte(){
   const g=id=>document.getElementById(id).value.trim();
@@ -257,7 +487,10 @@ function construirReporte(){
    <tr><td><b>Método diagnosticado:</b> ${esc(r.ataque)}<br><small>Esperado: ${esc(c.ataque)}</small></td><td><b>Pilar CIA:</b> ${esc(r.pilar)}</td></tr>
    <tr><td><b>Pérdida estimada: Q${(+r.perd).toLocaleString()}</b></td><td><b>Prevención: Q${(+r.prev).toLocaleString()}</b> (1 Q evita ${esc(r.roi)} Q)</td></tr>
    <tr><td colspan="2"><b>Medida estrella:</b> ${esc(r.medida)}</td></tr></table>
-   <p><b>Justificación:</b> ${esc(r.just)}</p><p><b>Debate:</b> ${esc(r.debate)}</p><p><b>Decisión gerencial:</b> ${esc(r.fact)}</p>`;});
+   <p><b>Justificación:</b> ${esc(r.just)}</p><p><b>Debate:</b> ${esc(r.debate)}</p><p><b>Decisión gerencial:</b> ${esc(r.fact)}</p>`;
+   if(r.ia&&r.ia.status==='ok'&&r.ia.feedback){h+=`<p><b>🤖 Retroalimentación del Mentor IA (${esc(r.ia.model||'OpenRouter')}):</b> ${esc(r.ia.feedback)}</p>`;}
+   else if(r.ia&&r.ia.status==='error'){h+=`<p><b>🤖 Mentor IA:</b> No se pudo consultar al mentor en este caso (${esc(r.ia.error||'sin conexión')}); la pareja continuó con su análisis y este quedó registrado para revisión docente.</p>`;}
+   else{h+=`<p><b>🤖 Mentor IA:</b> Caso sin consulta de mentoría (la pareja avanzó sin validación IA).</p>`;}});
   h+=`<h3>Cierre</h3><p><b>Compromiso PUA de la pareja:</b> ${esc(g('compromiso'))}</p><p><b>Reflexión conjunta:</b> ${esc(g('opinionFinal'))}</p>
   <p><b>Totales:</b> Pérdidas evitables Q${totalPerd.toLocaleString()} · Inversión preventiva Q${totalPrev.toLocaleString()}</p>
   <p>Declaramos que debatimos cada caso y las respuestas son de nuestra autoría. _____________ (Piloto) &nbsp; _____________ (Copiloto)</p>
@@ -322,6 +555,13 @@ function generarPDF(){
       y=pdfBlock(doc,'Justificación: ',r.just,y);
       y=pdfBlock(doc,'Debate piloto/copiloto: ',r.debate,y);
       y=pdfBlock(doc,'Decisión gerencial: ',r.fact,y+1);
+      if(r.ia&&r.ia.status==='ok'&&r.ia.feedback){
+        y=pdfBlock(doc,'Mentor IA ('+String(r.ia.model||'OpenRouter').slice(0,60)+'): ',String(r.ia.feedback).slice(0,1200),y+1);
+      }else if(r.ia&&r.ia.status==='error'){
+        y=pdfBlock(doc,'Mentor IA: ','Sin conexión al consultar ('+String(r.ia.error||'error de red').slice(0,200)+'). La pareja continuó y su análisis quedó registrado.',y+1);
+      }else{
+        y=pdfBlock(doc,'Mentor IA: ','Caso sin consulta de mentoría (la pareja avanzó sin validación IA).',y+1);
+      }
       y+=2;
     });
     // Cierre
@@ -371,5 +611,5 @@ function pdfBlock(doc,label,text,y){
   return y+2;
 }
 // init
-renderPhish();renderCaso();actualizarProgreso();renderQuiz();renderGlos();ddosCalc();
+renderPhish();renderCaso();actualizarProgreso();renderQuiz();renderGlos();ddosCalc();syncApiUi();
 const fc=document.getElementById('fechaClase');if(fc)fc.valueAsDate=new Date();
