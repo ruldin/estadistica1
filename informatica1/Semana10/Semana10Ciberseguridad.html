@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 10 · Ciberseguridad para Administradores | Informática I - UMG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="../index_informatica.html" class="btn-back-menu">← Menú</a>
+    <img src="logo.png" alt="Logo UMG" class="nav-logo">
+    <div class="logo">🛡️ <span>CiberChapín</span> <small>UMG · Admón</small></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#cia">Tríada CIA</a>
+      <a href="#malware">Malware</a>
+      <a href="#ddos">DDoS</a>
+      <a href="#phishing">Phishing</a>
+      <a href="#skimming">Skimming</a>
+      <a href="#ransom">Ransomware</a>
+      <a href="#ejercicio">📝 Ejercicio Parejas</a>
+      <a href="#quiz">Quiz</a>
+    </div>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="badge">🎓 UMG · Ciencias de la Administración · Semana 10</div>
+    <h1>Ciberseguridad e <span class="hl">Integridad de la Información</span> 🇬🇹</h1>
+    <p class="subtitle">Módulo: Seguridad de los Sistemas (Parte 1) — Aprende como <strong>gerente</strong>: cómo fallan los sistemas, cuánto cuesta cada fallo en quetzales y cómo prevenirlo con políticas, capacitación y respaldos.</p>
+    <div class="hero-stats">
+      <div class="hstat"><b id="statExp">0</b><span>XP Gerencial</span></div>
+      <div class="hstat"><b>7</b><span>Misiones</span></div>
+      <div class="hstat"><b>Q</b><span>Pérdidas evitables</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#cia" class="btn primary">🚀 Empezar misión 1</a>
+      <a href="#ejercicio" class="btn ghost">📝 Ir al ejercicio en parejas</a>
+    </div>
+    <div class="hero-tip">💡 <b>¿Cómo usar?</b> Toca todo: cada tarjeta, slider y mensaje responde. Gana XP, detecta fraudes reales de Guatemala (WhatsApp, SAT, bancos, cajeros) y cierra con el reporte PDF en parejas para Canvas.</div>
+  </div>
+  <div class="hero-card">
+    <div class="terminal">
+      <div class="term-head"><span></span><span></span><span></span> alertas.exe — Comercial La Torre, S.A.</div>
+      <div class="term-body">
+        <div>> correo “SAT: omisos IVA” recibido... <span class="warn">adjunto .zip ⚠️</span></div>
+        <div>> clic de contabilidad... <span class="warn">ransomware activo ✗</span></div>
+        <div>> backup externo cifrado... <span class="ok">restaurado ✓ Q0 rescate</span></div>
+        <div class="blink">> TU MISIÓN: que el cuento termine así _</div>
+      </div>
+      <button class="btn small primary" onclick="document.getElementById('cia').scrollIntoView({behavior:'smooth'})">Entendido, ¡a blindar mi empresa!</button>
+    </div>
+  </div>
+</header>
+
+<!-- MISIÓN 1: TRÍADA CIA -->
+<section id="cia" class="section">
+  <div class="mision">MISIÓN 1 · El modelo que todo gerente debe saber</div>
+  <h2>La Tríada CIA 🔺 <small>toca cada pilar para ver cómo falla</small></h2>
+  <p class="lead">Tres preguntas gerenciales: <strong>¿Quién puede verlo?</strong> (Confidencialidad) · <strong>¿Sigue intacto?</strong> (Integridad) · <strong>¿Está disponible cuando lo necesito?</strong> (Disponibilidad). Si una falla, el negocio pierde dinero.</p>
+  <div class="cia-grid">
+    <div class="cia-card" id="cia-c" onclick="showCIA('c')"><div class="cia-icon">🔒</div><h3>Confidencialidad</h3><p>Solo autorizados (Need to Know).</p><span class="small">Ej: claves, planillas, precios</span></div>
+    <div class="cia-card" id="cia-i" onclick="showCIA('i')"><div class="cia-icon">✅</div><h3>Integridad</h3><p>Que nadie lo altere sin permiso.</p><span class="small">Ej: facturas DTE, inventarios</span></div>
+    <div class="cia-card" id="cia-d" onclick="showCIA('d')"><div class="cia-icon">⚡</div><h3>Disponibilidad</h3><p>Accesible cuando se necesita.</p><span class="small">Ej: POS, tienda en línea, FEL</span></div>
+  </div>
+  <div class="card" id="ciaDetail" style="margin-top:1rem">👆 Toca un pilar para simular su <b>fallo</b>, su impacto en quetzales y su defensa.</div>
+  <div class="card" id="ciaQuiz" style="margin-top:1rem">
+    <h3>🎯 Mini-reto: tu tienda en línea se cae en quincena y nadie puede comprar. ¿Qué pilar falló?</h3>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn small ghost" onclick="ciaQuiz(false,this)">Confidencialidad</button>
+      <button class="btn small ghost" onclick="ciaQuiz(false,this)">Integridad</button>
+      <button class="btn small ghost" onclick="ciaQuiz(true,this)">Disponibilidad</button>
+    </div>
+    <div id="ciaFb" style="margin-top:.6rem;font-size:.9rem"></div>
+  </div>
+</section>
+
+<!-- MISIÓN 2: MALWARE -->
+<section id="malware" class="section alt">
+  <div class="mision">MISIÓN 2 · Cómo entra el bicho</div>
+  <h2>Laboratorio de Malware 🧪 <small>activa cada amenaza</small></h2>
+  <p class="lead"><strong>Malware</strong> = software malicioso. El <strong>virus</strong> necesita que abras un archivo; el <strong>gusano</strong> se propaga solo por la red; el <strong>spyware</strong> espía en silencio; el <strong>ransomware</strong> cifra y pide rescate.</p>
+  <div class="mal-grid">
+    <div class="mal-card" id="mal-virus" onclick="toggleMal('virus')">🦠<b>Virus</b><p>Factura.xlsm infectada que borra reportes.</p></div>
+    <div class="mal-card" id="mal-worm" onclick="toggleMal('worm')">🪱<b>Gusano (Worm)</b><p>Se replica solo por la LAN en minutos.</p></div>
+    <div class="mal-card" id="mal-spy" onclick="toggleMal('spy')">🕵️<b>Spyware</b><p>Graba teclas y roba claves bancarias.</p></div>
+    <div class="mal-card" id="mal-ransom" onclick="toggleMal('ransom')">🔐<b>Ransomware</b><p>Cifra el servidor y exige rescate.</p></div>
+    <div class="mal-card" id="mal-ddos" onclick="toggleMal('ddos')">🌊<b>DDoS</b><p>Satura tu tienda en línea con bots.</p></div>
+    <div class="mal-card" style="cursor:default">🛡️<b>Defensa gerente</b><p>Antivirus + parches + backup externo + PUA y capacitación.</p></div>
+  </div>
+  <div class="card" id="malDetail" style="margin-top:1rem">👆 Activa al menos un malware para ver <b>cómo falla</b> el negocio y cuánto cuesta.</div>
+</section>
+
+<!-- MISIÓN 3: DDoS -->
+<section id="ddos" class="section">
+  <div class="mision">MISIÓN 3 · Cuando te inundan</div>
+  <h2>Ataque de Denegación de Servicio 🌊 <small>mueve el slider</small></h2>
+  <p class="lead"><strong>DoS</strong> = una computadora inunda tu servidor. <strong>DDoS</strong> = miles a la vez. Los clientes legítimos ya no entran. Prueba cuántos bots aguanta una pyme típica (capacidad ~2,000 req/s).</p>
+  <div class="card">
+    <label>🤖 Bots atacantes: <b id="botsVal">500</b></label>
+    <input type="range" id="bots" min="0" max="10000" step="100" value="500" oninput="ddosCalc()">
+    <div class="server-box">
+      <div><small>Tráfico malicioso</small><div class="healthbar"><div id="ddosFill" style="width:15%"></div></div></div>
+      <div><small>Salud del servidor (ventas)</small><div class="healthbar"><div id="serverFill" style="width:80%"></div></div></div>
+      <div id="ddosVerdict" style="border-radius:12px;padding:.8rem;font-weight:700"></div>
+    </div>
+    <p class="small">💡 Defensa: firewall + CDN + plan con tu ISP para mitigación DDoS. El gerente lo exige por escrito en el SLA.</p>
+  </div>
+</section>
+
+<!-- MISIÓN 4: PHISHING -->
+<section id="phishing" class="section alt">
+  <div class="mision">MISIÓN 4 · El eslabón más débil eres tú (o tu equipo)</div>
+  <h2>Detector de Fraudes GT 🔍 <small>¿legítimo o fraude?</small></h2>
+  <p class="lead"><strong>Ingeniería social</strong> = manipulación psicológica. <strong>Phishing</strong> = mensajes falsos (SAT, bancos). <strong>Spoofing</strong> = falsifican remitente/dominio. Decide como gerente: ¿autorizas o reportas?</p>
+  <div class="phish-grid">
+    <div id="phishBox"></div>
+    <div class="card">
+      <h3>🚩 Checklist chapín anti-fraude</h3>
+      <ul class="small" style="line-height:1.9">
+        <li>¿Urgencia + secreto + cuenta nueva? = fraude seguro.</li>
+        <li>¿Piden código de 6 dígitos de WhatsApp? <b>Jamás</b> se comparte.</li>
+        <li>¿Dominio raro (.top, letras cambiadas)? = spoofing.</li>
+        <li>¿Adjunto .zip “SAT omisos”? No abrir: ir a Agencia Virtual directo.</li>
+        <li>Regla de oro: verificar por <b>otro canal</b> (llamada conocida).</li>
+      </ul>
+      <p class="small">Casos reales GT: “familiar en el extranjero + encomienda en aduana”, “empleo por likes”, “banca bloqueada / actualiza token”.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MISIÓN 5: SKIMMING -->
+<section id="skimming" class="section">
+  <div class="mision">MISIÓN 5 · Inspección física</div>
+  <h2>Clonación en Cajeros (Skimming) 🏧 <small>encuentra los 3 trucos</small></h2>
+  <p class="lead"><strong>Skimming</strong> = aparato disimulado en la ranura que copia la banda + microcámara que graba tu PIN. Zonas de riesgo: cajeros de alto flujo (Zona 9, 10, 11 y centros comerciales). Toca los puntos rojos.</p>
+  <div class="atm">
+    <div class="atm-stage">
+      <div style="font-size:3rem">🏧</div>
+      <p><b>Cajero Zona 10 — inspección gerente</b></p>
+      <div class="hotspot" id="skim-slot" style="top:38%;left:44%" onclick="skim('slot')" title="Ranura">🔍</div>
+      <div class="hotspot" id="skim-cam" style="top:22%;left:62%" onclick="skim('cam')" title="Teclado">🔍</div>
+      <div class="hotspot" id="skim-sticker" style="top:60%;left:58%" onclick="skim('sticker')" title="Calcomanía">🔍</div>
+      <p class="small">Pista: ranura · teclado · calcomanía sospechosa</p>
+    </div>
+    <div class="card"><h3>Reporte de auditoría</h3><div id="skimFb">🔍 Aún no inspeccionas. Toca los 3 puntos parpadeantes.</div>
+    <p class="small" style="margin-top:.6rem">💼 Impacto administrativo: contracargos, pérdidas directas, clientes insatisfechos y daño a POS/flotillas de viáticos. Defensa: jalar la ranura, tapar el PIN, preferir cajeros internos, alertas SMS inmediatas.</p></div>
+  </div>
+</section>
+
+<!-- MISIÓN 6: RANSOMWARE -->
+<section id="ransom" class="section alt">
+  <div class="mision">MISIÓN 6 · El secuestro digital</div>
+  <h2>Anatomía de un Ransomware 🔐 <small>avanza paso a paso</small></h2>
+  <p class="lead">Así cae una pyme sin cultura de respaldo: un clic → cifrado → rescate. Como administrador, tu decisión vale Q30,000.</p>
+  <div class="card">
+    <div class="timeline" id="ransomTime"></div>
+    <div id="ransomFb" style="margin:.6rem 0;font-size:.92rem"></div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn small primary" onclick="rNext()">▶ Avanzar el ataque</button>
+      <button class="btn small ghost" onclick="rReset()">↺ Reiniciar</button>
+    </div>
+    <p class="small" style="margin-top:.6rem">Costo de la inacción en pymes: interrupción operativa, pérdida de productividad y daño reputacional. Antídoto: <b>backups periódicos cifrados fuera de la empresa + PUA + capacitación continua</b>.</p>
+  </div>
+  <h3 style="margin-top:1.5rem">Defensas del administrador 🛡️ <small>voltea cada tarjeta</small></h3>
+  <div class="flip-grid">
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">📜<b>PUA</b><span>toca para ver</span></div><div class="flip-back"><b>Política de Uso Aceptable</b><p>Reglas claras: no abrir adjuntos .zip, no compartir códigos, reportar todo lo sospechoso.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🎓<b>Capacitación</b><span>toca para ver</span></div><div class="flip-back"><b>Concientización continua</b><p>Simulacros de phishing cada trimestre. El antivirus no sirve sin personas entrenadas.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">💾<b>Backup 3-2-1</b><span>toca para ver</span></div><div class="flip-back"><b>Cultura de respaldo</b><p>3 copias, 2 medios, 1 externa cifrada. Así el rescate de ransomware vale Q0.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🔑<b>2FA + límites</b><span>toca para ver</span></div><div class="flip-back"><b>Freno al spoofing</b><p>Doble factor en banca + doble firma y límites de transferencia. Ni con tu clave mueven Q grandes.</p></div></div></div>
+  </div>
+</section>
+
+<!-- EJERCICIO EN PAREJAS -->
+<section id="ejercicio" class="section">
+  <div class="mision">TRABAJO EN CLASE · 2.º AÑO ADMÓN UMG · EN PAREJAS (PILOTO + COPILOTO)</div>
+  <h2>📝 Ejercicio en Clase: Auditores de Ciberseguridad en Pareja</h2>
+  <p class="lead">El <strong>🧑‍✈️ Piloto</strong> diagnostica el método de fallo y el <strong>🧭 Copiloto</strong> cuestiona con la guía y valida el costo en quetzales. Completen los <strong>4 casos guatemaltecos</strong> y generen el <strong>PDF para Canvas</strong>.</p>
+  <div class="card rules">
+    <b>📋 Instrucciones (2 min, léanlas juntos):</b>
+    <ol>
+      <li>Ingresen <b>nombres + carnets</b> y sección. Pueden alternar liderazgo por caso.</li>
+      <li>En cada caso identifiquen el <b>método de fallo</b>, el <b>pilar CIA</b> roto y la <b>pérdida vs. prevención (Q)</b>.</li>
+      <li>Justifiquen <b>por qué ese ataque y no otro</b> + qué debatieron.</li>
+      <li>Solo con los 4 casos ✅ + reflexión + compromiso PUA se habilita el <b>PDF</b>.</li>
+    </ol>
+  </div>
+  <div class="card" id="datosPareja" style="margin-top:1rem">
+    <h3>Paso 0 · Datos de la pareja 👥</h3>
+    <div class="pair-grid">
+      <label>🧑‍✈️ Piloto — Nombre completo<input id="nombrePiloto" placeholder="Ej. María Fernanda López" autocomplete="off"></label>
+      <label>🎫 Carnet Piloto<input id="carnetPiloto" placeholder="Ej. 1490-22-1234" autocomplete="off"></label>
+      <label>🧭 Copiloto — Nombre completo<input id="copilotoNombre" placeholder="Ej. Carlos Andrés Pérez" autocomplete="off"></label>
+      <label>🎫 Carnet Copiloto<input id="carnetCopiloto" placeholder="Ej. 1490-22-5678" autocomplete="off"></label>
+      <label>📅 Fecha<input id="fechaClase" type="date"></label>
+    </div>
+    <div class="role-swap"><span>🔄 Alternar roles por caso (recomendado):</span><label><input type="checkbox" id="alternar" checked> Sí, alternaremos (A y C lidera Piloto, B y D lidera Copiloto)</label></div>
+    <div id="datosMsg" class="form-msg"></div>
+  </div>
+  <div class="case-nav" id="caseNav">
+    <button class="cnav active" data-case="0" onclick="irCaso(0)">A · POS 🏧</button>
+    <button class="cnav" data-case="1" onclick="irCaso(1)">B · WhatsApp 💬</button>
+    <button class="cnav" data-case="2" onclick="irCaso(2)">C · SAT 📧</button>
+    <button class="cnav" data-case="3" onclick="irCaso(3)">D · Banco 🏦</button>
+  </div>
+  <div id="casoBox"></div>
+  <div class="card" id="cierreBox" style="margin-top:1rem">
+    <h3>Paso final · Compromiso PUA + PDF 📤</h3>
+    <label>🤝 Nuestro compromiso como administradores (PUA de 1 línea: ¿qué regla exigirán en su empresa?)<select id="compromiso"><option value="">Seleccione...</option><option>Jamás compartir códigos de 6 dígitos ni tokens por ningún canal</option><option>Verificar todo pago/cambio por un segundo canal (llamada conocida)</option><option>Backup 3-2-1 cifrado externo + prueba de restauración mensual</option><option>2FA obligatorio + doble firma para transferencias mayores a Q5,000</option><option>Simulacro de phishing trimestral + reporte inmediato de sospechas</option></select></label>
+    <label style="margin-top:.6rem">💬 Reflexión conjunta: ¿cómo cambia su rol de administrador frente a estos fallos? (mín. 50 caracteres)<textarea id="opinionFinal" rows="3" placeholder="Ej. Aprendimos que el gerente no compra solo antivirus: debe entrenar personas, exigir 2FA y backups externos, porque un clic cuesta Q30,000..."></textarea></label>
+    <label class="chk" style="display:block;margin:.6rem 0"><input type="checkbox" id="declaro"> Declaramos que ambos debatimos cada caso y las respuestas son de nuestra autoría para subir a Canvas UMG.</label>
+    <div class="progress-cases"><div id="casesFill"></div><span id="casesTxt">0/4 casos completos</span></div>
+    <div id="cierreMsg" class="form-msg"></div>
+    <div class="cierre-btns">
+      <button class="btn ghost" onclick="vistaPrevia()">👁️ Vista previa del reporte</button>
+      <button class="btn primary" id="btnPDF" onclick="generarPDF()" disabled>📄 Generar PDF para Canvas</button>
+    </div>
+    <p class="small">📎 Al generar el PDF se descargará directamente (<b>Apellidos_Carnets_Ciber.pdf</b>, cámbiale el nombre con sus apellidos) → súbanlo a Canvas → Tarea “Ejercicio Ciberseguridad en Pareja”. Funciona en teléfono y computadora.</p>
+  </div>
+  <div id="reporteFinal" class="reporte"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="section alt">
+  <div class="mision">GRADUACIÓN · Demuestra que eres gerente ciberseguro</div>
+  <h2>Quiz Final 🎓 <small id="quizScore">XP: 0</small></h2>
+  <div class="card" id="quizBox"></div>
+  <div class="card hidden" id="diploma"><h3>🏆 ¡Felicidades, Gerente Ciberseguro!</h3><p id="dipText"></p><button class="btn primary" onclick="location.reload()">🔄 Reiniciar curso</button></div>
+</section>
+
+<!-- GLOSARIO -->
+<section class="section">
+  <h2>Glosario exprés 📖</h2>
+  <input class="search" id="glosSearch" placeholder="🔍 Busca: ransomware, PUA, skimming..." oninput="filterGlos()">
+  <div class="glos" id="glos"></div>
+  <footer>Hecho con 💙 pedagógico por <b>Ruldin Ayala</b>, Informática I · UMG · Semana 10 · 2026 · Montos en Quetzales (Q) estimados con fines didácticos.</footer>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -154,6 +154,8 @@ El repositorio se organiza mediante archivos HTML autocontenidos o modularizados
 
 **Informática I (`informatica1/index_informatica.html`):**
 1. Semana 7 — IA para la Gestión Empresarial (Glosario, MoE/MLA, Modelos de Frontera, Calculadora ROI Tokens, Agentes ReAct y Gobernanza Shadow AI) en `informatica1/Guia_IA_Administradores.html`.
+2. Semana 9 — Redes y Telecomunicaciones GT en `informatica1/Semana9/` (HTML + `styles.css` + `app.js` con ejercicio en parejas y PDF vía impresión).
+3. Semana 10 — Ciberseguridad e Integridad de la Información en `informatica1/Semana10/` (`Semana10Ciberseguridad.html` + `styles.css` + `app.js` con logo UMG en navbar, PDF directo con jsPDF + autotable vía CDN —compatible con teléfonos—, identificación de pareja sin jornada; `semana10seguridad.pptx` de 10 diapositivas para clase; `ExamenParcial_Semana10_Ciberseguridad.docx` de 10 pts; imágenes CC en `img/`).
 
 ### Convención pedagógica recurrente
 

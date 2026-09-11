@@ -1,0 +1,375 @@
+// ===== Semana 10 Ciberseguridad — lógica interactiva (100% cliente) =====
+let XP = 0;
+function addXP(n){XP+=n;const a=document.getElementById('statExp');if(a)a.textContent=XP;const b=document.getElementById('quizScore');if(b)b.textContent='XP: '+XP;}
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+  const bar=document.getElementById('progressBar');if(bar)bar.style.width=p+'%';
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    const s=document.querySelector(a.getAttribute('href'));if(!s)return;
+    const r=s.getBoundingClientRect();a.classList.toggle('active',r.top<150&&r.bottom>150);
+  });
+});
+const ham=document.getElementById('hamburger');if(ham)ham.onclick=()=>document.getElementById('navLinks').classList.toggle('open');
+
+// ---- Misión 1: Tríada CIA ----
+const CIA={
+  c:{t:'🔒 Confidencialidad',falla:'Falla: un empleado comparte su contraseña del ERP por WhatsApp. Un atacante lee planillas y precios de compra.',impacto:'Impacto gerente: fuga de información → competencia ajusta precios y pierdes licitaciones. Pilar roto: acceso a no autorizados.',tip:'Defensa: Need to Know + doble factor (2FA) + Política de Uso Aceptable (PUA).'},
+  i:{t:'✅ Integridad',falla:'Falla: un virus altera facturas electrónicas (DTE) y cambia montos antes de enviar a la SAT.',impacto:'Impacto gerente: multas SAT + desconfianza de clientes. Los datos ya no son confiables para decidir.',tip:'Defensa: antivirus + control de cambios + copias de seguridad cifradas.'},
+  d:{t:'⚡ Disponibilidad',falla:'Falla: un DDoS tumba tu tienda en línea el día de pago de quincena.',impacto:'Impacto gerente: Q0 ventas por horas + clientes molestos en redes. La info existe pero nadie la puede usar.',tip:'Defensa: doble enlace + UPS + plan de continuidad del negocio.'}
+};
+function showCIA(k){
+  document.querySelectorAll('.cia-card').forEach(c=>c.classList.remove('active-c','active-i','active-d'));
+  const el=document.getElementById('cia-'+k);if(el)el.classList.add(k==='c'?'active-c':k==='i'?'active-i':'active-d');
+  const m=CIA[k];
+  document.getElementById('ciaDetail').innerHTML=`<h3>${m.t}</h3><p>💥 <b>${m.falla}</b></p><p>📉 ${m.impacto}</p><p>🛡️ <b>${m.tip}</b></p>`;
+  addXP(5);
+}
+function ciaQuiz(ok,btn){
+  const fb=document.getElementById('ciaFb');
+  document.querySelectorAll('#ciaQuiz button').forEach(b=>{b.classList.remove('good','bad');b.style.cssText='';});
+  if(ok){btn.style.cssText='background:rgba(16,185,129,.2);border-color:#10b981;color:#6ee7b7';fb.innerHTML='✅ ¡Correcto! Disponibilidad = que el sistema esté accesible cuando el gerente lo necesita. <b>+10 XP</b>';addXP(10);}
+  else{btn.style.cssText='background:rgba(239,68,68,.2);border-color:#ef4444';fb.textContent='❌ No: confidencialidad es “quién puede ver”, integridad es “que no lo alteren”. Caída = disponibilidad.';}
+}
+
+// ---- Misión 2: Malware lab ----
+const MAL={
+  virus:{n:'🦠 Virus',como:'Necesita que abras un archivo (factura.xlsm infectada). Se replica y borra reportes.',costo:'Q6,000 en horas-hombre + multas SAT por no declarar a tiempo.'},
+  worm:{n:'🪱 Gusano (Worm)',como:'Se propaga SOLO por la red, sin que nadie haga clic. En 10 min infecta las 12 PCs.',costo:'Toda la LAN caída 2 días ≈ Q15,000 en ventas + soporte.'},
+  spy:{n:'🕵️ Spyware',como:'Silencioso: registra teclas y roba usuarios/claves bancarias por semanas.',costo:'Vacían Q25,000 de la cuenta nómina antes de notarlo.'},
+  ransom:{n:'🔐 Ransomware',como:'Cifra el servidor contable y deja nota: “paga 1 BTC o pierdes todo”.',costo:'Rescate + 5 días parados ≈ Q40,000. Con backup externo: Q0 rescate.'},
+  ddos:{n:'🌊 DDoS',como:'10,000 bots piden tu catálogo a la vez. El servidor se satura y clientes reales ven error.',costo:'6 horas sin vender en línea ≈ Q18,000 + daño reputacional.'}
+};
+const malOn={virus:false,worm:false,spy:false,ddos:false,ransom:false};
+function toggleMal(k){
+  malOn[k]=!malOn[k];
+  document.getElementById('mal-'+k).classList.toggle('on',malOn[k]);
+  renderMal();addXP(3);
+}
+function renderMal(){
+  const act=Object.keys(malOn).filter(k=>malOn[k]);
+  const box=document.getElementById('malDetail');
+  if(!act.length){box.innerHTML='👆 Activa al menos un malware para ver <b>cómo falla</b> el negocio y cuánto cuesta.';return;}
+  box.innerHTML=act.map(k=>`<p><b>${MAL[k].n}:</b> ${MAL[k].como}<br>💸 <b>${MAL[k].costo}</b></p>`).join('')+
+  `<p class="small">🛡️ Lección gerente: antivirus + parches + <b>backup cifrado fuera de la empresa</b> + capacitación. Ningún software basta sin personas entrenadas.</p>`;
+  if(malOn.ransom&&!malOn.spy)box.innerHTML+=`<p>💡 Activa también el <b>spyware</b>: así entra el ransomware (primero espían, luego cifran).</p>`;
+}
+
+// ---- Misión 3: DDoS slider ----
+function ddosCalc(){
+  const bots=+document.getElementById('bots').value;
+  document.getElementById('botsVal').textContent=bots.toLocaleString();
+  const cap=2000; // capacidad servidor pyme
+  const pct=Math.min(100,Math.round(bots/cap*60));
+  const health=Math.max(0,100-Math.round(bots/cap*100));
+  document.getElementById('ddosFill').style.width=Math.min(100,pct)+'%';
+  document.getElementById('serverFill').style.width=health+'%';
+  const v=document.getElementById('ddosVerdict');
+  if(bots<800){v.style.background='rgba(16,185,129,.15)';v.textContent='🟢 Servidor estable: filtra tráfico falso sin problema.';}
+  else if(bots<2500){v.style.background='rgba(245,158,11,.15)';v.textContent='🟡 Servidor lento: clientes esperan 8s, algunos abandonan el carrito.';}
+  else{v.style.background='rgba(239,68,68,.15)';v.textContent='🔴 ¡CAÍDO! DoS/DDoS exitoso: 0 ventas + quejas. Necesitas CDN + firewall + ISP con mitigación.';}
+}
+
+// ---- Misión 4: Detector phishing (5 mensajes) ----
+const PHISH=[
+  {de:'WhatsApp +502 5XXX-XXXX “Primo en USA”',txt:'“Hola primo, soy yo, cambié de número. Me retuvieron una encomienda en aduana, deposita Q1,500 a esta cuenta y mañana te pago. No le digas a nadie.”',fraude:true,s:'Señales: número desconocido, urgencia, secreto, pago a cuenta personal, “encomienda retenida” = modalidad típica GT.'},
+  {de:'empleos.gt.real@gmail.com',txt:'“¡Felicidades! Ganarás Q8,000/mes solo dando likes en TikTok. Solo envíanos el código de 6 dígitos que llegó a tu WhatsApp para activarte.”',fraude:true,s:'Señales: sueldo irreal por likes + piden tu código de verificación = te roban la cuenta de WhatsApp.'},
+  {de:'notificaciones@sat.gob.gt (verificado)',txt:'“Le recordamos el calendario de vencimientos del IVA en Agencia Virtual. Para dudas llame al 2321-XXXX o visite su agencia.” Sin enlaces ni adjuntos.',fraude:false,s:'Señales de legítimo: no pide clic urgente, no trae adjunto .zip, remite a canales oficiales.'},
+  {de:'“Banco Industrial” <seguridad-biurgente.top>',txt:'“SU BANCA EN LÍNEA HA SIDO BLOQUEADA. Actualice su token aquí en 24h o se suspenderá su cuenta empresarial.” + botón.',fraude:true,s:'Señales: dominio falso (.top), mayúsculas urgentes, enlace a login idéntico (spoofing) para robar usuario + token.'},
+  {de:'Contabilidad interna <maria@tuempresa.com>',txt:'“Adjunto reporte de viáticos POS de Zona 10 para revisión del gerente. (Archivo interno, sin links externos).”',fraude:false,s:'Legítimo probable: remitente interno conocido, sin urgencia ni links raros. Igual verifica por otro canal si hay montos.'}
+];
+let phi=0,phiOk=0,phiDone={};
+function renderPhish(){
+  const box=document.getElementById('phishBox');if(!box)return;
+  const m=PHISH[phi];
+  box.innerHTML=`<div class="msg"><div class="from">📩 De: <b>${m.de}</b> (${phi+1}/${PHISH.length})</div><div class="body">“${m.txt}”</div>
+  <div class="msg-btns"><button onclick="phishVote(false)">✅ Legítimo</button><button onclick="phishVote(true)">🚨 Fraude</button></div>
+  <div class="signal" id="phishFb">Aciertos: ${phiOk} · Decide como gerente: ¿autorizas clic/pago o lo reportas?</div></div>`;
+}
+function phishVote(v){
+  const m=PHISH[phi];const fb=document.getElementById('phishFb');
+  const key=phi;
+  if(v===m.fraude){if(!phiDone[key]){phiOk++;addXP(10);}phiDone[key]=true;
+    fb.innerHTML=`✅ Correcto: ${m.fraude?'ES FRAUDE.':'ES LEGÍTIMO.'} ${m.s} <b>+10 XP</b><br><button class="btn small ghost" style="margin-top:.5rem" onclick="phishNext()">Siguiente mensaje →</button>`;}
+  else{fb.innerHTML=`❌ Cuidado gerente: ${m.fraude?'SÍ es fraude.':'NO es fraude.'} ${m.s}<br><button class="btn small ghost" style="margin-top:.5rem" onclick="phishNext()">Entendido, siguiente →</button>`;}
+}
+function phishNext(){phi=(phi+1)%PHISH.length;renderPhish();}
+
+// ---- Misión 5: Skimming cajero ----
+let skimFound={};
+function skim(k){
+  skimFound[k]=true;
+  document.getElementById('skim-'+k).classList.add('found');
+  const n=Object.keys(skimFound).length;
+  const fb=document.getElementById('skimFb');
+  const info={slot:'Ranura con skimmer: se siente floja/sobresaliente y copia la banda magnética.',cam:'Microcámara en el teclado: graba tu PIN. ¡Tapa siempre con la mano!',sticker:'Calcomanía falsa “fuera de servicio / llame aquí”: te desvía a un número de estafadores.'};
+  fb.innerHTML=`✅ Hallazgo ${n}/3: <b>${info[k]}</b>${n===3?'<br>🏆 ¡Auditoría completa! Regla gerente: jala la ranura, tapa el PIN, usa cajeros internos y alertas SMS. <b>+20 XP</b>':''}`;
+  if(n===3)addXP(20);else addXP(5);
+}
+
+// ---- Misión 6: Ransomware timeline ----
+let rStep=0;
+const RSTEPS=['1️⃣ Clic en “DTE pendiente SAT.zip” → se ejecuta el ransomware.','2️⃣ Cifra servidor contable + planillas en 20 min. Pantalla: “TUS ARCHIVOS ESTÁN BLOQUEADOS”.','3️⃣ Piden rescate Q30,000 en cripto en 48h o borran todo.','4️⃣ Decisión gerente: ❌ NO PAGAR (financia crimen, 40% no recupera) → restaurar backup externo + PUA + denuncia.'];
+function rNext(){
+  if(rStep<RSTEPS.length){
+    const d=document.createElement('div');d.className='tstep unlocked done';d.textContent=RSTEPS[rStep];
+    document.getElementById('ransomTime').appendChild(d);rStep++;addXP(5);
+    if(rStep===RSTEPS.length)document.getElementById('ransomFb').innerHTML='✅ Lección: con <b>backup cifrado externo + capacitación</b> el rescate vale Q0. Sin backup, la empresa quiebra. <b>+10 XP</b>';
+  }
+}
+function rReset(){rStep=0;document.getElementById('ransomTime').innerHTML='';document.getElementById('ransomFb').innerHTML='';}
+
+// ---- Quiz ----
+const QUIZ=[
+  {q:'1. Un atacante lee planillas porque alguien compartió su clave. ¿Qué pilar CIA se rompió?',o:['Disponibilidad','Confidencialidad ✅','Integridad','Ninguno'],a:1},
+  {q:'2. ¿Qué malware cifra archivos y pide rescate?',o:['Spyware','Gusano','Ransomware ✅','Virus simple'],a:2},
+  {q:'3. ¿Qué malware se propaga SOLO por la red sin clic del usuario?',o:['Gusano (Worm) ✅','Virus clásico','Spoofing','Phishing'],a:0},
+  {q:'4. SMS “Su banca ha sido bloqueada, actualice su token aquí” es típicamente...',o:['Mensaje legítimo','Phishing + spoofing ✅','Backup','VPN'],a:1},
+  {q:'5. Te piden el código de 6 dígitos de WhatsApp por una oferta de empleo. Debes...',o:['Enviarlo rápido','Ignorar y reportar, jamás compartirlo ✅','Reenviarlo a amigos','Pagar Q100'],a:1},
+  {q:'6. Como administrador, la mejor defensa integral es...',o:['Solo antivirus','Antivirus + PUA + capacitación + backups externos ✅','Desconectar todo','Pagar rescates'],a:1}
+];
+let qi=0,qs=0;
+function renderQuiz(){
+  const box=document.getElementById('quizBox');if(!box)return;
+  if(qi>=QUIZ.length){box.classList.add('hidden');const d=document.getElementById('diploma');d.classList.remove('hidden');
+    document.getElementById('dipText').textContent=`Sacaste ${qs}/${QUIZ.length}. XP total: ${XP}. Ya puedes defender una Política de Uso Aceptable ante tu junta directiva.`;return;}
+  const it=QUIZ[qi];
+  box.innerHTML=`<div class="q"><h3>${it.q}</h3>${it.o.map((o,i)=>`<button onclick="answer(${i})">${o}</button>`).join('')}</div><p>Pregunta ${qi+1} de ${QUIZ.length} · Aciertos: ${qs}</p>`;
+}
+function answer(i){
+  const btns=document.querySelectorAll('#quizBox button');
+  btns.forEach((b,j)=>{if(j===QUIZ[qi].a)b.classList.add('correct');});
+  if(i===QUIZ[qi].a){qs++;addXP(10);}else{btns[i].classList.add('wrong');}
+  setTimeout(()=>{qi++;renderQuiz();},800);
+}
+
+// ---- Glosario ----
+const GLOS=[['Ciberseguridad','Protección de activos digitales contra robo, alteración o interrupción.'],['Tríada CIA','Confidencialidad + Integridad + Disponibilidad. El modelo base.'],['Malware','Software malicioso: virus, gusanos, spyware, ransomware.'],['Ransomware','Cifra archivos y exige rescate. Se frena con backups externos.'],['DDoS','Miles de equipos inundan tu servidor hasta tumbarlo.'],['Ingeniería social','Manipulación psicológica para que TÚ entregues la clave.'],['Phishing','Mensajes falsos que suplantan SAT/bancos para robar datos.'],['Spoofing','Falsificar remitente (IP, SMS, dominio) para parecer confiable.'],['Skimming','Aparato en cajeros/POS que clona tarjetas + cámara roba PIN.'],['PUA','Política de Uso Aceptable: reglas de conducta digital de la empresa.'],['Backup 3-2-1','3 copias, 2 medios, 1 externa/cifrada. Tu seguro contra ransomware.'],['2FA','Doble factor: contraseña + código. Frena el 90% de robos de cuenta.']];
+function renderGlos(f=''){
+  const g=document.getElementById('glos');if(!g)return;
+  g.innerHTML=GLOS.filter(([k])=>k.toLowerCase().includes(f.toLowerCase())).map(([k,v])=>`<div class="g-item"><b>${k}</b><p>${v}</p></div>`).join('');
+}
+function filterGlos(){renderGlos(document.getElementById('glosSearch').value);}
+
+/* ============ MÓDULO EJERCICIO EN PAREJAS ============ */
+const CASOS=[
+  {id:'A',titulo:'Caso A · Skimming en POS — Tienda Zona 11 🏧',ctx:'“Comercial La Torre, S.A.” (Zona 11) recibe 3 contracargos: clientes dicen que tras pagar con tarjeta en su POS les vaciaron la cuenta. Sospechan terminal manipulada o empleado que fotografió tarjetas + PIN a la vista.',meta:['👥 Clientes retail','🎯 Foco: robo de datos tarjeta','💰 Techo defensa: Q3,000','📍 Zona 11, alto flujo'],guia:['Copiloto: ¿esto es malware o manipulación física + descuido humano?','¿Qué pilar CIA se rompió (confidencialidad del PIN/datos)?','¿POS chip + tapar PIN + cámaras + rotar personal evita que se repita?'],ref:'💰 Referencia: POS con chip/contactless Q1,200 · Cámaras Q900 · Capacitación PUA Q500 · Seguro contracargos 3% venta.',ataque:'Skimming / clonación en POS'},
+  {id:'B',titulo:'Caso B · WhatsApp secuestrado — Importadora Escuintla 💬',ctx:'Al gerente le llega WhatsApp de su “socio” (foto real) pidiendo Q9,000 urgente a una cuenta nueva por un contenedor retenido. Era una cuenta clonada; además le piden el código de 6 dígitos “para verificar”. La asistente casi lo envía.',meta:['👥 10 empleados','🎯 Ingeniería social pura','💰 Casi pierden Q9,000','📍 Escuintla / puerto'],guia:['Copiloto: ¿qué señales (urgencia, secreto, cuenta nueva, código) delatan fraude?','¿Qué pilar se ataca: confidencialidad de credenciales?','¿Qué regla PUA pondrían: verificar por llamada conocida + jamás compartir códigos?'],ref:'💰 Referencia: Verificación en 2 pasos Q0 · Capacitación Q500 · Línea de verificación Q200/mes.',ataque:'Ingeniería social por WhatsApp'},
+  {id:'C',titulo:'Caso C · Falso correo SAT — Ransomware en oficina contable 📧',ctx:'Contadora abre “SAT: omisos IVA/DTE pendiente de auditoría” con adjunto .zip. A los 20 min el servidor contable muestra “archivos cifrados, pague Q30,000”. No hay backup externo, solo USB conectado (también cifrado).',meta:['👥 Contabilidad 6 personas','🎯 Phishing → ransomware','💰 Rescate Q30,000','📍 Ciudad de Guatemala'],guia:['Copiloto: ¿por qué el .zip + urgencia SAT es phishing clásico?','¿Qué pilares caen: integridad (datos alterados) + disponibilidad (todo bloqueado)?','¿Backup 3-2-1 externo habría hecho el rescate = Q0?'],ref:'💰 Referencia: Backup nube cifrado Q300/mes · Antivirus empresarial Q600/año · Simulacro phishing Q400.',ataque:'Phishing SAT → Ransomware'},
+  {id:'D',titulo:'Caso D · Spoofing bancario — Tesorería pyme 🏦',ctx:'El tesorero recibe SMS “G&T: su token empresarial será suspendido, actualícelo aquí” con link a login idéntico al real. Ingresa usuario, clave y token. Minutos después salen 2 transferencias por Q14,000.',meta:['👥 Tesorería','🎯 Spoofing + robo credenciales','💰 Pérdida Q14,000','📍 Banca local GT'],guia:['Copiloto: ¿cómo verificar el dominio real vs. falso antes de loguearse?','¿Qué pilar se rompió primero (confidencialidad) y qué cayó después (integridad del saldo/disponibilidad del dinero)?','¿2FA por app + límites de transferencia + doble firma habrían frenado el daño?'],ref:'💰 Referencia: Token app Q0 · Límites y doble firma Q0 · Capacitación Q500 · Seguro fraude Q350/mes.',ataque:'Spoofing bancario (phishing)'}
+];
+const ATAQUES=['Skimming / clonación en POS','Ingeniería social por WhatsApp','Phishing SAT → Ransomware','Spoofing bancario (phishing)','Virus por USB','Ataque DDoS','Gusano de red','Robo de identidad'];
+const PILARES=['Confidencialidad','Integridad','Disponibilidad','Confidencialidad + Integridad','Integridad + Disponibilidad','Los tres (CIA completo)'];
+let casoActual=0;const respuestas=[{},{},{},{}];
+function irCaso(i){casoActual=i;document.querySelectorAll('.cnav').forEach(b=>b.classList.toggle('active',+b.dataset.case===i));renderCaso();document.getElementById('casoBox').scrollIntoView({behavior:'smooth',block:'start'});}
+function liderDeCaso(i){const alt=document.getElementById('alternar')?.checked;if(!alt)return 'Piloto lidera · Copiloto debate';return (i%2===0)?'🧑‍✈️ Lidera PILOTO · 🧭 debate COPILOTO':'🧭 Lidera COPILOTO · 🧑‍✈️ debate PILOTO';}
+function renderCaso(){
+  const c=CASOS[casoActual],r=respuestas[casoActual];const box=document.getElementById('casoBox');if(!box)return;
+  box.innerHTML=`<div class="card"><div class="case-head"><h3>${c.titulo}</h3>
+   <div class="case-meta">${c.meta.map(m=>`<span>${m}</span>`).join('')}</div>
+   <div style="margin-top:.5rem;font-size:.85rem">🎙️ Rol: <b>${liderDeCaso(casoActual)}</b></div></div>
+   <p>${c.ctx}</p><p class="small">${c.ref}</p>
+   <details class="guia"><summary>🧭 Guía del copiloto (leer en voz alta y debatir)</summary><ul>${c.guia.map(g=>`<li>${g}</li>`).join('')}</ul></details>
+   <div class="fcase">
+    <fieldset><legend>1️⃣ Diagnóstico del fallo (decidan juntos)</legend>
+     <div class="opt-grid">
+      <label>🎯 Método de fallo / ataque<select id="f_ataque">${ATAQUES.map(e=>`<option ${r.ataque===e?'selected':''}>${e}</option>`).join('')}</select></label>
+      <label>🔺 Pilar CIA vulnerado<select id="f_pilar">${PILARES.map(e=>`<option ${r.pilar===e?'selected':''}>${e}</option>`).join('')}</select></label>
+     </div>
+     <label>🛠️ ¿Por qué es ese método y no otro? (mín. 40 caracteres)<textarea id="f_just" rows="3" placeholder="Ej. Es skimming porque hubo contracargos tras uso del POS y coincide con PIN expuesto, no con un virus masivo...">${r.just||''}</textarea></label>
+     <label>🗣️ ¿Qué debatieron? ¿Hubo desacuerdo? (mín. 30 caracteres)<textarea id="f_debate" rows="2" placeholder="Ej. El copiloto pensó en virus, pero el piloto mostró que solo afectó tarjetas del POS...">${r.debate||''}</textarea></label>
+    </fieldset>
+    <fieldset><legend>2️⃣ Decisión administrativa (en Quetzales Q)</legend>
+     <div class="budget-line">
+      <label>💸 Pérdida estimada Q<input type="number" id="f_perd" min="0" value="${r.perd||''}" placeholder="Ej. 14000"></label>
+      <label>🛡️ Costo prevención Q<input type="number" id="f_prev" min="0" value="${r.prev||''}" placeholder="Ej. 1500"></label>
+      <label>📋 Medida estrella<select id="f_medida"><option value="">Seleccione...</option>${['PUA + capacitación anti-phishing','Doble factor (2FA) en todo','Backup 3-2-1 externo cifrado','POS chip/contactless + cámaras','Doble firma + límites bancarios','Antivirus + parches + simulacros'].map(e=>`<option ${r.medida===e?'selected':''}>${e}</option>`).join('')}</select></label>
+     </div>
+     <label>📊 ¿Por qué le conviene al gerente pagar la prevención? (mín. 30 caracteres)<textarea id="f_fact" rows="2" placeholder="Ej. Sí conviene: Q1,500 evita perder Q14,000; se paga solo con evitar un incidente...">${r.fact||''}</textarea></label>
+     <div class="calc-box" id="calcBox">🧮 ROI prevención: se calcula al guardar (pérdida evitada ÷ costo).</div>
+    </fieldset>
+    <div class="case-btns"><button class="btn ghost" onclick="irCaso(${(casoActual+3)%4})">← Anterior</button><button class="btn primary" onclick="guardarCaso()">💾 Guardar caso ${CASOS[casoActual].id}</button><button class="btn ghost" onclick="irCaso(${(casoActual+1)%4})">Siguiente →</button></div>
+    <div id="casoMsg" class="form-msg"></div>
+   </div></div>`;
+}
+function guardarCaso(){
+  const msg=document.getElementById('casoMsg');
+  const v=id=>document.getElementById(id).value.trim();
+  const ataque=v('f_ataque'),pilar=v('f_pilar'),just=v('f_just'),debate=v('f_debate'),perd=+v('f_perd'),prev=+v('f_prev'),medida=v('f_medida'),fact=v('f_fact');
+  const errs=[];
+  if(just.length<40)errs.push('Justificación muy corta (mín. 40 caracteres).');
+  if(debate.length<30)errs.push('Falta describir el debate (mín. 30 caracteres).');
+  if(!(perd>0))errs.push('Estima la pérdida en Q.');
+  if(!(prev>=0&&v('f_prev')!==''))errs.push('Ingresa el costo de prevención en Q.');
+  if(!medida)errs.push('Elige la medida estrella.');
+  if(fact.length<30)errs.push('Factibilidad muy corta (mín. 30 caracteres).');
+  if(errs.length){msg.className='form-msg err';msg.innerHTML='⛔ '+errs.join('<br>⛔ ');return;}
+  const roi=prev>0?(perd/prev).toFixed(1):'—';
+  const acierto=ataque===CASOS[casoActual].ataque;
+  respuestas[casoActual]={ataque,pilar,just,debate,perd,prev,medida,fact,roi,acierto};
+  document.getElementById('calcBox').textContent=`🧮 Cada Q1 en prevención evita Q${roi} en pérdidas. ${acierto?'🎯 ¡Diagnóstico correcto del método de fallo! +25 XP':'⚠️ Diagnóstico distinto al esperado ('+CASOS[casoActual].ataque+'). Igual suma si tu justificación es sólida.'}`;
+  msg.className='form-msg ok';msg.textContent=`✅ Caso ${CASOS[casoActual].id} guardado. +25 XP`;
+  document.querySelector(`.cnav[data-case="${casoActual}"]`).classList.add('done');
+  addXP(25);actualizarProgreso();
+}
+function casosCompletos(){return respuestas.filter(r=>r.ataque&&r.just).length;}
+function actualizarProgreso(){
+  const n=casosCompletos();
+  const f=document.getElementById('casesFill');if(f)f.style.width=(n/4*100)+'%';
+  const t=document.getElementById('casesTxt');if(t)t.textContent=`${n}/4 casos completos`;
+  validarCierre();
+}
+function validarCierre(){
+  const g=id=>document.getElementById(id).value.trim();
+  const okDatos=g('nombrePiloto').length>=5&&g('carnetPiloto').length>=5&&g('copilotoNombre').length>=5&&g('carnetCopiloto').length>=5;
+  const okCasos=casosCompletos()===4;
+  const okOp=g('opinionFinal').length>=50&&g('compromiso').value&&document.getElementById('declaro').checked;
+  const btn=document.getElementById('btnPDF');const msg=document.getElementById('cierreMsg');
+  const faltan=[];
+  if(!okDatos)faltan.push('datos de la pareja');
+  if(!okCasos)faltan.push(`${casosCompletos()}/4 casos`);
+  if(g('opinionFinal').length<50)faltan.push('reflexión final (50+)');
+  if(!g('compromiso'))faltan.push('compromiso PUA');
+  if(!document.getElementById('declaro').checked)faltan.push('declaración de autoría');
+  if(btn)btn.disabled=faltan.length>0;
+  if(msg){msg.className='form-msg '+(faltan.length?'err':'ok');msg.textContent=faltan.length?('⏳ Falta: '+faltan.join(' · ')):'✅ Todo listo. Genera tu PDF para Canvas.';}
+  return !faltan.length;
+}
+['nombrePiloto','carnetPiloto','copilotoNombre','carnetCopiloto','fechaClase','opinionFinal','compromiso','declaro','alternar'].forEach(id=>{
+  document.addEventListener('input',e=>{if(e.target&&e.target.id===id)validarCierre();});
+  document.addEventListener('change',e=>{if(e.target&&e.target.id===id){if(id==='alternar')renderCaso();validarCierre();}});
+});
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function construirReporte(){
+  const g=id=>document.getElementById(id).value.trim();
+  const fecha=g('fechaClase')||new Date().toLocaleDateString('es-GT');
+  const totalPerd=respuestas.reduce((a,r)=>a+(+r.perd||0),0);
+  const totalPrev=respuestas.reduce((a,r)=>a+(+r.prev||0),0);
+  let h=`<div style="text-align:center;border-bottom:3px solid #dc2626;padding-bottom:10px;margin-bottom:12px">
+   <div style="font-size:15px;font-weight:800">🎓 Universidad Mariano Gálvez de Guatemala — Facultad de Ciencias de la Administración</div>
+   <div style="font-size:13px">Informática I · Semana 10: Ciberseguridad e Integridad de la Información · Ejercicio en Parejas</div>
+   <div style="font-size:12px">XP obtenido en simuladores: ${XP} · Aciertos diagnóstico: ${respuestas.filter(r=>r.acierto).length}/4 · Quiz: ${qs}/${QUIZ.length}</div></div>
+   <h2>🛡️ Reporte de análisis de fallos de ciberseguridad — Piloto + Copiloto</h2>
+   <table border="1" cellspacing="0" cellpadding="6" width="100%"><tr><td><b>🧑‍✈️ Piloto:</b> ${esc(g('nombrePiloto'))}<br><b>Carnet:</b> ${esc(g('carnetPiloto'))}</td><td><b>🧭 Copiloto:</b> ${esc(g('copilotoNombre'))}<br><b>Carnet:</b> ${esc(g('carnetCopiloto'))}</td></tr>
+   <tr><td><b>Fecha:</b> ${esc(fecha)}</td><td><b>Roles alternados:</b> ${document.getElementById('alternar').checked?'Sí':'No'}</td></tr></table>`;
+  CASOS.forEach((c,i)=>{const r=respuestas[i];
+   h+=`<h3>${c.titulo} ${r.acierto?'✅':'⚠️'}</h3>
+   <table border="1" cellspacing="0" cellpadding="6" width="100%">
+   <tr><td><b>Método diagnosticado:</b> ${esc(r.ataque)}<br><small>Esperado: ${esc(c.ataque)}</small></td><td><b>Pilar CIA:</b> ${esc(r.pilar)}</td></tr>
+   <tr><td><b>Pérdida estimada: Q${(+r.perd).toLocaleString()}</b></td><td><b>Prevención: Q${(+r.prev).toLocaleString()}</b> (1 Q evita ${esc(r.roi)} Q)</td></tr>
+   <tr><td colspan="2"><b>Medida estrella:</b> ${esc(r.medida)}</td></tr></table>
+   <p><b>Justificación:</b> ${esc(r.just)}</p><p><b>Debate:</b> ${esc(r.debate)}</p><p><b>Decisión gerencial:</b> ${esc(r.fact)}</p>`;});
+  h+=`<h3>Cierre</h3><p><b>Compromiso PUA de la pareja:</b> ${esc(g('compromiso'))}</p><p><b>Reflexión conjunta:</b> ${esc(g('opinionFinal'))}</p>
+  <p><b>Totales:</b> Pérdidas evitables Q${totalPerd.toLocaleString()} · Inversión preventiva Q${totalPrev.toLocaleString()}</p>
+  <p>Declaramos que debatimos cada caso y las respuestas son de nuestra autoría. _____________ (Piloto) &nbsp; _____________ (Copiloto)</p>
+  <p style="font-size:11px">Montos didácticos estimados en Quetzales. Guardar como: Apellidos_Carnets_Ciber.pdf y subir a Canvas → Tarea “Ejercicio Ciberseguridad en Pareja”.</p>`;
+  return h;
+}
+function vistaPrevia(){
+  if(casosCompletos()<4){document.getElementById('cierreMsg').className='form-msg err';document.getElementById('cierreMsg').textContent='⛔ Completa los 4 casos primero.';return;}
+  document.getElementById('reporteFinal').innerHTML=construirReporte();
+  document.getElementById('reporteFinal').style.display='block';
+  document.getElementById('reporteFinal').scrollIntoView({behavior:'smooth'});
+}
+function generarPDF(){
+  if(!validarCierre()){document.getElementById('cierreMsg').scrollIntoView({behavior:'smooth'});return;}
+  // Si la librería no cargó (sin internet), respaldo con impresión del navegador
+  if(!(window.jspdf&&window.jspdf.jsPDF&&window.jspdf.jsPDF.API&&window.jspdf.jsPDF.API.autoTable)){
+    document.getElementById('reporteFinal').innerHTML=construirReporte();
+    document.getElementById('reporteFinal').style.display='block';
+    setTimeout(()=>window.print(),300);return;
+  }
+  try{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({unit:'mm',format:'letter'});
+    const g=id=>document.getElementById(id).value.trim();
+    const fecha=g('fechaClase')||new Date().toLocaleDateString('es-GT');
+    const W=190, X=10;
+    // Encabezado institucional
+    doc.setFillColor(127,29,29);doc.rect(0,0,216,30,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(12);
+    doc.text('Universidad Mariano Gálvez de Guatemala',X,10);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');
+    doc.text('Facultad de Ciencias de la Administración · Informática I · Semana 10: Ciberseguridad',X,16);
+    doc.text('Ejercicio en Parejas · Reporte de análisis de fallos de ciberseguridad',X,22);
+    let y=36;
+    doc.setTextColor(0,0,0);doc.setFontSize(10);
+    doc.setFont('helvetica','normal');
+    y=pdfBlock(doc,'XP en simuladores: '+XP+'   ·   Diagnóstico: '+respuestas.filter(r=>r.acierto).length+'/4   ·   Quiz: '+qs+'/'+QUIZ.length,y);
+    // Datos de la pareja
+    doc.autoTable({startY:y,margin:{left:X,right:X},
+      head:[['Piloto','Copiloto']],
+      body:[[[pdfClean(g('nombrePiloto'))+'\nCarnet: '+pdfClean(g('carnetPiloto'))],[pdfClean(g('copilotoNombre'))+'\nCarnet: '+pdfClean(g('carnetCopiloto'))]],
+            [['Fecha: '+fecha],['Roles alternados: '+(document.getElementById('alternar').checked?'Sí':'No')]]],
+      headStyles:{fillColor:[220,38,38]},styles:{fontSize:10}});
+    y=doc.lastAutoTable.finalY+6;
+    // Casos
+    CASOS.forEach((c,i)=>{
+      const r=respuestas[i];
+      if(y>240){doc.addPage();y=15;}
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(127,29,29);
+      const t=doc.splitTextToSize(pdfClean(c.titulo)+(r.acierto?'  [OK]':'  [rev]'),W);
+      if(y+t.length*6>270){doc.addPage();y=15;}
+      doc.text(t,X,y);y+=t.length*6;doc.setTextColor(0,0,0);
+      const R=k=>pdfClean(r[k]), C=k=>pdfClean(c[k]);
+      doc.autoTable({startY:y,margin:{left:X,right:X},
+        body:[
+          ['Método diagnosticado: '+R('ataque')+' (esperado: '+C('ataque')+')','Pilar CIA: '+R('pilar')],
+          ['Pérdida estimada: Q'+(+r.perd).toLocaleString(),'Prevención: Q'+(+r.prev).toLocaleString()+' (1 Q evita '+r.roi+' Q)'],
+          [{content:'Medida estrella: '+R('medida'),colSpan:2}]
+        ],
+        styles:{fontSize:9},columnStyles:{0:{cellWidth:95},1:{cellWidth:95}}});
+      y=doc.lastAutoTable.finalY+4;
+      y=pdfBlock(doc,'Justificación: ',r.just,y);
+      y=pdfBlock(doc,'Debate piloto/copiloto: ',r.debate,y);
+      y=pdfBlock(doc,'Decisión gerencial: ',r.fact,y+1);
+      y+=2;
+    });
+    // Cierre
+    if(y>230){doc.addPage();y=15;}
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(127,29,29);
+    doc.text('Cierre de la pareja',X,y);y+=7;doc.setTextColor(0,0,0);
+    y=pdfBlock(doc,'Compromiso PUA: ',g('compromiso'),y);
+    y=pdfBlock(doc,'Reflexión conjunta: ',g('opinionFinal'),y);
+    const totalPerd=respuestas.reduce((a,r)=>a+(+r.perd||0),0);
+    const totalPrev=respuestas.reduce((a,r)=>a+(+r.prev||0),0);
+    y=pdfBlock(doc,'Totales estimados: ','Pérdidas evitables Q'+totalPerd.toLocaleString()+' · Inversión preventiva Q'+totalPrev.toLocaleString(),y);
+    if(y>240){doc.addPage();y=15;}
+    doc.setFont('helvetica','normal');doc.setFontSize(10);
+    doc.text('Declaramos que debatimos cada caso y las respuestas son de nuestra autoría.',X,y);y+=12;
+    doc.text('__________________________   (Piloto)',X,y);
+    doc.text('__________________________   (Copiloto)',110,y);y+=8;
+    doc.setFontSize(8);doc.setTextColor(100,100,100);
+    doc.text('Montos didácticos estimados en Quetzales. Subir a Canvas como Apellidos_Carnets_Ciber.pdf',X,y);
+    // Numeración de páginas
+    const n=doc.getNumberOfPages();
+    for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(120,120,120);doc.text('Página '+i+' de '+n+' · CiberChapín UMG',150,272);}
+    doc.save('Apellidos_Carnets_Ciber.pdf');
+    addXP(50);
+    const msg=document.getElementById('cierreMsg');
+    msg.className='form-msg ok';msg.textContent='✅ PDF descargado. Súbanlo a Canvas como Apellidos_Carnets_Ciber.pdf';
+  }catch(e){
+    document.getElementById('reporteFinal').innerHTML=construirReporte();
+    document.getElementById('reporteFinal').style.display='block';
+    setTimeout(()=>window.print(),300);
+  }
+}
+// Quita emojis y símbolos fuera de latin-1 (la fuente del PDF no los soporta)
+function pdfClean(s){return String(s==null?'':s).replace(/[^\x09\x0A\x0D\x20-\xFF]/g,'');}
+// Escribe un bloque etiqueta+texto con salto de página automático; devuelve el nuevo Y
+function pdfBlock(doc,label,text,y){
+  const W=190,X=10,lineH=5,limit=268;
+  label=pdfClean(label);
+  const lines=[label].concat(doc.setFont('helvetica','normal').setFontSize(10).splitTextToSize(pdfClean(text||'—'),W));
+  let idx=0;
+  // primera línea en negrita ya incluida: la reescribimos por partes es complejo; usamos todo normal salvo etiqueta
+  while(idx<lines.length){
+    if(y+lineH>limit){doc.addPage();y=15;}
+    const isLabel=(idx===0);
+    doc.setFont('helvetica',isLabel?'bold':'normal');
+    doc.text(lines[idx],X,y);y+=lineH;idx++;
+  }
+  return y+2;
+}
+// init
+renderPhish();renderCaso();actualizarProgreso();renderQuiz();renderGlos();ddosCalc();
+const fc=document.getElementById('fechaClase');if(fc)fc.valueAsDate=new Date();
