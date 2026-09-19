@@ -421,7 +421,7 @@ async function consultarMentorIA(auto){
   try{
     const resp=await fetch(s.apiUrl,{method:'POST',
       headers:{'Authorization':'Bearer '+s.apiKey,'Content-Type':'application/json','HTTP-Referer':location.origin||'http://localhost','X-Title':'UMG Informatica 1 Mentoria'},
-      body:JSON.stringify({model:s.model,reasoning:{exclude:true},messages:[{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],temperature:0.4,max_tokens:500})});
+      body:JSON.stringify({model:s.model,reasoning:{exclude:true},messages:[{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],temperature:0.4,max_tokens:1200})});
     const data=await resp.json();
     let raw='';
     if(resp.ok&&data.choices&&data.choices.length){

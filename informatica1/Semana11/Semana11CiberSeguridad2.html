@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 11 · Herramientas de Seguridad y Privacidad | Informática I - UMG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>/* S11: mentor IA desactivado en esta página */
+#mentorBox,#btnMentor,#mentor-modal{display:none!important}</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="../index_informatica.html" class="btn-back-menu">← Menú</a>
+    <img src="logo.png" alt="Logo UMG" class="nav-logo">
+    <div class="logo">🛡️ <span>EscudoGerencial</span> <small>UMG · Admón</small></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#ecosistema">Ecosistema</a>
+      <a href="#mfa">MFA</a>
+      <a href="#accesos">ACL/RBAC</a>
+      <a href="#cifrado">Cifrado</a>
+      <a href="#perimetro">Firewall/VPN</a>
+      <a href="#resiliencia">Backups</a>
+      <a href="#ids">IDS</a>
+      <a href="#pii">PII</a>
+      <a href="#ejercicio">📝 Ejercicio Parejas</a>
+      <a href="#tarea">📌 Tarea Caso</a>
+      <a href="#quiz">Quiz</a>
+      <button id="btnApiNav" onclick="openIaModal('api-config-modal')" title="Configurar API Key de OpenRouter para la mentoría IA">🤖 API IA <span id="nav-api-badge">Pendiente</span></button>
+    </div>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="badge">🎓 UMG · Ciencias de la Administración · Semana 11</div>
+    <h1>Herramientas de <span class="hl">Seguridad y Privacidad</span> 🇬🇹</h1>
+    <p class="subtitle">Módulo: Seguridad de los Sistemas (Parte 2) — Aprende como <strong>gerente</strong>: autenticación, MFA, controles ACL/RBAC, cifrado, firewall/VPN, backups 3-2-1, IDS, políticas PUA y protección de datos personales (DPI/PII).</p>
+    <div class="hero-stats">
+      <div class="hstat"><b id="statExp">0</b><span>XP Gerencial</span></div>
+      <div class="hstat"><b>10</b><span>Misiones</span></div>
+      <div class="hstat"><b>Q</b><span>Decisiones con costo</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#ecosistema" class="btn primary">🚀 Empezar misión 1</a>
+      <a href="#ejercicio" class="btn ghost">📝 Ir al ejercicio en parejas (40 min)</a>
+    </div>
+    <div class="hero-tip">💡 <b>¿Cómo usar?</b> Toca todo: cada tarjeta, engranaje y paquete responde. Gana XP, prueba el MFA, el cifrado y el firewall, clasifica datos PII y cierra con el reporte PDF en parejas para Canvas.</div>
+  </div>
+  <div class="hero-card">
+    <div class="terminal">
+      <div class="term-head"><span></span><span></span><span></span> escudo.exe — Distribuidora de Occidente, S.A.</div>
+      <div class="term-body">
+        <div>> login solo con contraseña... <span class="warn">cuenta robada ✗</span></div>
+        <div>> activan MFA + RBAC + VPN... <span class="ok">intruso frenado ✓</span></div>
+        <div>> backup offsite probado... <span class="ok">operación continua ✓ Q0 rescate</span></div>
+        <div class="blink">> TU MISIÓN: blindar sin frenar el negocio _</div>
+      </div>
+      <button class="btn small primary" onclick="document.getElementById('ecosistema').scrollIntoView({behavior:'smooth'})">Entendido, ¡a blindar mi empresa!</button>
+    </div>
+    <div class="fig"><img src="img/estr_p01.jpg" alt="Ciberseguridad y privacidad de datos - escudo multicapa"><figcaption>Guía gerencial de protección de activos · Ilustración: Estrategia de Seguridad Digital (Gemini Notebook). <span class="src">img/estr_p01.jpg</span></figcaption></div>
+  </div>
+</header>
+
+<!-- MISIÓN 1: ECOSISTEMA -->
+<section id="ecosistema" class="section">
+  <div class="mision">MISIÓN 1 · El mapa completo del blindaje</div>
+  <h2>El Ecosistema de Seguridad 🔺 <small>toca cada pilar</small></h2>
+  <p class="lead">Todo gerente protege <strong>confidencialidad, integridad y disponibilidad</strong> con 3 familias de herramientas: <strong>autenticación</strong> (verificar quién eres), <strong>prevención</strong> (bloquear) y <strong>detección</strong> (alertar).</p>
+  <div class="cia-grid">
+    <div class="cia-card" id="eco-a" onclick="showEco('a')"><div class="cia-icon">🪪</div><h3>Autenticación</h3><p>Verificar identidades.</p><span class="small">Ej: contraseña + token + huella</span></div>
+    <div class="cia-card" id="eco-p" onclick="showEco('p')"><div class="cia-icon">🧱</div><h3>Prevención</h3><p>Bloquear accesos e interrupciones.</p><span class="small">Ej: firewall, VPN, antivirus, cifrado</span></div>
+    <div class="cia-card" id="eco-d" onclick="showEco('d')"><div class="cia-icon">📡</div><h3>Detección</h3><p>Identificar patrones sospechosos.</p><span class="small">Ej: IDS + seguridad física</span></div>
+  </div>
+  <div class="card" id="ecoDetail" style="margin-top:1rem">👆 Toca un pilar para ver <b>qué hace, qué herramienta usa</b> y qué pasa si falta.</div>
+  <div class="fig"><img src="img/estr_p02.jpg" alt="Ecosistema de seguridad: autenticación, prevención y detección"><figcaption>El ecosistema protege los datos al centro · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p02.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 2: 3 FACTORES -->
+<section id="factores" class="section alt">
+  <div class="mision">MISIÓN 2 · ¿Quién eres realmente?</div>
+  <h2>Los 3 Factores de Autenticación 🪪 <small>prueba tu contraseña</small></h2>
+  <p class="lead"><strong>Algo que sabes</strong> (contraseña/PIN/OOW) · <strong>Algo que posees</strong> (tarjeta, llave, token RSA con código dinámico) · <strong>Algo que eres</strong> (huella, retina, rostro).</p>
+  <div class="mal-grid">
+    <div class="mal-card" onclick="toggleFactor('sabe')">🧠<b>Algo que se sabe</b><p>Contraseñas, PIN, preguntas OOW.</p></div>
+    <div class="mal-card" onclick="toggleFactor('posee')">🔑<b>Algo que se posee</b><p>Tarjeta, llave, token dinámico.</p></div>
+    <div class="mal-card" onclick="toggleFactor('es')">👆<b>Algo que se es</b><p>Huella, retina, geometría facial.</p></div>
+  </div>
+  <div class="card" id="factorDetail" style="margin-top:1rem">👆 Toca cada factor para ver su <b>ejemplo chapín y su debilidad</b>.</div>
+  <div class="card" style="margin-top:1rem">
+    <h3>🔬 Laboratorio: ¿tu contraseña aguanta? <small>escríbela (no uses tu clave real)</small></h3>
+    <input type="text" id="pwInput" placeholder="Ej. Coban2026! Gerencia" oninput="pwCheck()" autocomplete="off">
+    <div class="pw-meter"><div id="pwFill"></div></div>
+    <div id="pwFb" class="small">Pista: +12 caracteres, mayúscula + número + símbolo, única por sistema.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p03.jpg" alt="Tres factores de autenticación"><figcaption>Tres columnas de identidad · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p03.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 3: MFA -->
+<section id="mfa" class="section">
+  <div class="mision">MISIÓN 3 · El doble engranaje que frena hackers</div>
+  <h2>Autenticación Multifactorial (MFA) ⚙️ <small>mueve los engranajes</small></h2>
+  <p class="lead">Un solo factor se vulnera fácil. <strong>MFA exige 2+ factores de distintas categorías</strong>: ej. PIN memorizado (<i>sabes</i>) + código del token físico (<i>posees</i>).</p>
+  <div class="card">
+    <div class="gears"><span class="gear" id="gear1">⚙️</span><span style="font-size:2rem">🔒</span><span class="gear g2" id="gear2">⚙️</span></div>
+    <label><input type="checkbox" id="mfaPass" checked> 1️⃣ Factor 1: contraseña correcta</label><br>
+    <label><input type="checkbox" id="mfaToken"> 2️⃣ Factor 2: token físico / app (código dinámico)</label>
+    <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap"><button class="btn small primary" onclick="mfaTry()">🔓 Intentar acceso al ERP</button></div>
+    <div id="mfaFb" class="small" style="margin-top:.5rem">Activa o quita el token y prueba: con solo contraseña el atacante entra; con MFA se queda fuera.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p04.jpg" alt="Poder del MFA: contraseña vulnerada vs token requerido"><figcaption>Sin el segundo engranaje no hay apertura · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p04.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 4: ACL vs RBAC -->
+<section id="accesos" class="section alt">
+  <div class="mision">MISIÓN 4 · Quién puede qué</div>
+  <h2>Controles de Acceso: ACL vs RBAC 👥 <small>mueve el slider</small></h2>
+  <p class="lead">Autenticado el usuario, el control decide sus privilegios (<strong>leer, escribir, agregar, eliminar</strong>). <strong>ACL</strong> asigna permiso por persona y recurso (caos a escala). <strong>RBAC</strong> asigna permisos a <strong>roles</strong> (Gerencia, Auditoría) y vincula personas a roles.</p>
+  <div class="card">
+    <label>👥 Empleados: <b id="empVal">12</b> · 📁 Recursos: <b>8</b></label>
+    <input type="range" id="empRange" min="3" max="60" value="12" oninput="aclCalc()">
+    <div class="server-box">
+      <div><small>Reglas ACL (persona × recurso)</small><div class="healthbar"><div id="aclFill" style="width:40%"></div></div><b id="aclNum">96 reglas</b></div>
+      <div><small>Reglas RBAC (4 roles + asignaciones)</small><div class="healthbar"><div id="rbacFill" style="width:12%"></div></div><b id="rbacNum">~16 reglas</b></div>
+      <div id="aclVerdict" style="border-radius:12px;padding:.8rem;font-weight:700;margin-top:.5rem"></div>
+    </div>
+  </div>
+  <div class="fig"><img src="img/estr_p05.jpg" alt="ACL enredado vs RBAC por roles"><figcaption>Izq: maraña ACL · Der: orden RBAC por Gerencia/Auditoría · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p05.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 5: CIFRADO -->
+<section id="cifrado" class="section">
+  <div class="mision">MISIÓN 5 · El lenguaje secreto</div>
+  <h2>Cifrado: Simétrico vs Asimétrico 🔐 <small>cifra tu mensaje</small></h2>
+  <p class="lead">El cifrado vuelve los datos <strong>incomprensibles sin la clave</strong>. <strong>Simétrico:</strong> una sola clave compartida para cifrar y descifrar. <strong>Asimétrico (clave pública):</strong> clave pública abierta para cifrar + clave privada exclusiva para descifrar.</p>
+  <div class="card">
+    <label>✉️ Mensaje del gerente (ej. Pagar planilla Q75,000)<input type="text" id="plainMsg" value="Pagar planilla Q75,000 el viernes" oninput="cifrarDemo()"></label>
+    <div style="display:grid;gap:.6rem;margin-top:.6rem">
+      <div>🔑 <b>Simétrico</b> (clave única <code id="symKey">GT-2026</code>): <div class="msg" id="symOut" style="margin-top:.3rem">—</div></div>
+      <div>🔓🔒 <b>Asimétrico</b> (cifras con pública, solo abres con privada): <div class="msg" id="asyOut" style="margin-top:.3rem">—</div></div>
+    </div>
+    <p class="small">💡 Intercambiar la clave simétrica por WhatsApp la expone; la asimétrica resuelve eso para banca y FEL. En la práctica se combinan (híbrido).</p>
+  </div>
+  <div class="fig"><img src="img/estr_p06.jpg" alt="Cifrado simétrico y asimétrico"><figcaption>Una clave vs par pública/privada · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p06.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 6: PERÍMETRO -->
+<section id="perimetro" class="section alt">
+  <div class="mision">MISIÓN 6 · El muro digital + el túnel</div>
+  <h2>Firewall, Antivirus y VPN 🧱 <small>filtra paquetes y abre el túnel</small></h2>
+  <p class="lead"><strong>Firewall:</strong> inspecciona tráfico y bloquea lo que viola reglas. <strong>VPN:</strong> túnel cifrado para que el remoto entre seguro a la intranet. <strong>Antivirus:</strong> neutraliza software malicioso.</p>
+  <div class="card">
+    <h3>🧱 Mini-firewall: ¿pasa o se bloquea?</h3>
+    <p class="small">Regla de la empresa: <b>solo</b> pasan facturación FEL y correo corporativo. Lo demás (.zip desconocido, streaming, remoto sin VPN) se bloquea. Toca cada paquete:</p>
+    <div class="fw-road"><div class="fw-pkt" onclick="fwClick(this,true)">📄 FEL SAT ✅</div><div style="font-size:1.6rem">🧱</div><div class="fw-pkt" onclick="fwClick(this,false)">📦 update.zip desconocido ⛔</div></div>
+    <div class="fw-road"><div class="fw-pkt" onclick="fwClick(this,true)">📧 correo corporativo ✅</div><div style="font-size:1.6rem">🧱</div><div class="fw-pkt" onclick="fwClick(this,false)">🎬 streaming 4K hora pico ⛔</div></div>
+    <div id="fwFb" class="small" style="margin-top:.4rem">0/4 inspeccionados.</div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>🔒 Túnel VPN: del café a la intranet</h3>
+    <p class="small">Sin VPN tus datos viajan expuestos en WiFi público. Con VPN viajan cifrados dentro del túnel.</p>
+    <label><input type="checkbox" id="vpnOn" checked onchange="vpnToggle()"> VPN activada (túnel cifrado)</label>
+    <div class="tunnel" id="tunnel"><div class="lane"></div><div class="packet" id="vpnPkt">💼</div></div>
+    <div style="display:flex;gap:.5rem;margin-top:.6rem"><button class="btn small primary" id="vpnBtn" onclick="vpnSend()">📤 Enviar planilla Q75,000</button></div>
+    <div id="vpnFb" class="small" style="margin-top:.4rem">Pulsa enviar y observa si un espía del WiFi puede leer.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p07.jpg" alt="Defensas perimetrales: firewall y antivirus"><figcaption>El muro filtra; el antivirus patrulla adentro · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p07.jpg</span></figcaption></div>
+  <div class="fig"><img src="img/estr_p08.jpg" alt="VPN: túnel seguro sobre internet público"><figcaption>El túnel cruza el internet hostil sin exponerse · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p08.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 7: RESILIENCIA -->
+<section id="resiliencia" class="section">
+  <div class="mision">MISIÓN 7 · Que el negocio nunca pare</div>
+  <h2>Backups y Continuidad 💾 <small>completa el ciclo</small></h2>
+  <p class="lead">Plan de desastres: <strong>1)</strong> copias periódicas · <strong>2)</strong> copia <strong>offsite</strong> (fuera del local) · <strong>3)</strong> pruebas de restauración · <strong>4)</strong> UPS + sitio en caliente + SAN.</p>
+  <div class="card">
+    <div id="bkList">
+      <label><input type="checkbox" onchange="bkCheck()"> Copia periódica automática (diaria)</label><br>
+      <label><input type="checkbox" onchange="bkCheck()"> Copia offsite cifrada (nube / otra sede)</label><br>
+      <label><input type="checkbox" onchange="bkCheck()"> Prueba de restauración este mes</label><br>
+      <label><input type="checkbox" onchange="bkCheck()"> UPS + sitio alterno + SAN listos</label>
+    </div>
+    <div id="bkFb" class="small" style="margin-top:.5rem">0/4 — Sin ciclo completo, un ransomware o un apagón te deja en Q0.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p09.jpg" alt="Ciclo de resiliencia y continuidad"><figcaption>Respaldar → guardar fuera → probar → energía alterna · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p09.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 8: IDS -->
+<section id="ids" class="section alt">
+  <div class="mision">MISIÓN 8 · Ojos que nunca duermen</div>
+  <h2>Detección: IDS + Seguridad Física 📡 <small>activa el radar</small></h2>
+  <p class="lead"><strong>IDS:</strong> inspecciona tráfico en tiempo real y alerta ante patrones sospechosos. <strong>Seguridad física:</strong> puertas, sensores, temperatura/humedad y vigilancia del hardware.</p>
+  <div class="card" style="text-align:center">
+    <div class="radar" id="radar" style="opacity:.45"><div class="sweep"></div><div class="blip" style="top:30%;left:60%"></div><div class="blip" style="top:62%;left:34%;animation-delay:.4s"></div></div>
+    <button class="btn small primary" onclick="radarToggle()">📡 Encender IDS</button>
+    <div id="idsFb" class="small" style="margin-top:.5rem">IDS apagado: el ataque entra sin que nadie lo vea.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p10.jpg" alt="IDS y seguridad física"><figcaption>Radar digital + cuarto blindado · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p10.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 9: POLÍTICAS -->
+<section id="politicas" class="section">
+  <div class="mision">MISIÓN 9 · El factor humano manda</div>
+  <h2>Políticas y PUA 📜 <small>voltea y equilibra</small></h2>
+  <p class="lead">Sin reglas claras la técnica falla: <strong>política de seguridad</strong> (directrices + sanciones) y <strong>PUA</strong> (qué se permite y qué se prohíbe: compartir credenciales, proyectos personales en servidores, masivos no autorizados).</p>
+  <div class="flip-grid">
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">📜<b>Política</b><span>toca para ver</span></div><div class="flip-back"><b>Documento formal</b><p>Fija uso correcto de activos y sanciones. Sin firma no hay exigencia.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">📵<b>No compartir</b><span>toca para ver</span></div><div class="flip-back"><b>Credenciales</b><p>Prohibido prestar usuarios/claves y códigos de 6 dígitos.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">🖥️<b>No personal</b><span>toca para ver</span></div><div class="flip-back"><b>Servidores limpios</b><p>Prohibido alojar proyectos personales o minería en equipo corporativo.</p></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">📧<b>No spam</b><span>toca para ver</span></div><div class="flip-back"><b>Masivos controlados</b><p>Prohibido enviar correos masivos no autorizados (reputación + FEL).</p></div></div></div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>⚖️ Balanza gerente: seguridad vs usabilidad <small>mueve el slider</small></h3>
+    <label>Rigor del control: <b id="rigVal">5</b>/10</label>
+    <input type="range" id="rigRange" min="0" max="10" value="5" oninput="rigCalc()">
+    <div class="balancer"><span style="font-size:2rem">🔐</span><div class="beam" id="beam"><span class="wL">🔐</span><span class="wR">🏃</span></div><span style="font-size:2rem">🏃</span></div>
+    <div id="rigFb" class="small" style="margin-top:.4rem"></div>
+  </div>
+  <div class="fig"><img src="img/estr_p11.jpg" alt="Políticas administrativas y PUA"><figcaption>El libro de reglas que la tecnología no puede escribir sola · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p11.jpg</span></figcaption></div>
+  <div class="fig"><img src="img/estr_p12.jpg" alt="Equilibrio seguridad vs usabilidad"><figcaption>Si el control estorba, el usuario lo elude (workaround) · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p12.jpg</span></figcaption></div>
+</section>
+
+<!-- MISIÓN 10: PII -->
+<section id="pii" class="section alt">
+  <div class="mision">MISIÓN 10 · Lo más valioso: las personas</div>
+  <h2>Privacidad y PII 🪪 <small>¿es PII o no?</small></h2>
+  <p class="lead"><strong>Privacidad:</strong> controlar tu propia información. <strong>PII:</strong> nombres + DPI/CUI, nacimiento y biometría, expedientes médicos/laborales, datos financieros. Protégela con <strong>consentimiento, propósito claro, recolección mínima y salvaguardas</strong>.</p>
+  <div class="card"><div id="piiBox"></div></div>
+  <div class="card" style="margin-top:1rem">
+    <h3>✅ Principios de información justa <small>marca los que cumple tu empresa</small></h3>
+    <label><input type="checkbox" class="fair" onchange="fairCheck()"> Consentimiento + propósito informado antes de recolectar</label><br>
+    <label><input type="checkbox" class="fair" onchange="fairCheck()"> Solo datos necesarios, sin reúso sin permiso</label><br>
+    <label><input type="checkbox" class="fair" onchange="fairCheck()"> Salvaguardas proporcionales (cifrado, accesos, nube segura)</label><br>
+    <label><input type="checkbox" class="fair" onchange="fairCheck()"> Capacitación continua + plan de respuesta a incidentes</label>
+    <div id="fairFb" class="small" style="margin-top:.4rem">0/4 principios.</div>
+  </div>
+  <div class="fig"><img src="img/estr_p13.jpg" alt="PII: DPI, registros sensibles y biometría"><figcaption>DPI/CUI + salud/finanzas + biometría = trato especial · Fuente: Estrategia de Seguridad Digital. <span class="src">img/estr_p13.jpg</span></figcaption></div>
+</section>
+
+<!-- EJERCICIO EN PAREJAS -->
+<section id="ejercicio" class="section">
+  <div class="mision">TRABAJO EN CLASE · 2.º AÑO ADMÓN UMG · EN PAREJAS (PILOTO + COPILOTO) · ~40 MIN</div>
+  <h2>📝 Ejercicio en Clase: Blindadores de Activos en Pareja</h2>
+  <p class="lead">El <strong>🧑‍✈️ Piloto</strong> propone la herramienta y el <strong>🧭 Copiloto</strong> la cuestiona con la guía y valida el costo en quetzales. Completen los <strong>4 casos guatemaltecos de herramientas</strong> + fase de <strong>investigación (5–10 min)</strong> y generen el <strong>PDF para Canvas</strong>.</p>
+  <div class="card rules">
+    <b>📋 Instrucciones y tiempo (40 min, léanlas juntos):</b>
+    <ol>
+      <li><b>0–3 min:</b> nombres + carnets. Activen <b>alternar roles</b>.</li>
+      <li><b>3–10 min · Investigación:</b> busquen “backup 3-2-1”, “MFA banca Guatemala” y “agenciavirtual.sat.gob.gt”. Anoten 1 hallazgo por caso en el debate.</li>
+      <li><b>10–32 min:</b> resuelvan los 4 casos (herramienta que falló/falta, pilar CIA, pérdida vs prevención Q).</li>
+      <li><b>32–40 min:</b> compromiso PUA + reflexión + <b>PDF</b>. Sin 4 casos ✅ no se habilita.</li>
+    </ol>
+    <p class="small">Amenazas actuales que verán: códigos de 6 dígitos robados, ex-empleados con acceso, WiFi público espiado, DPI en Excel sin control, QR falsos y backups que nunca se probaron.</p>
+  </div>
+  <div class="card" id="datosPareja" style="margin-top:1rem">
+    <h3>Paso 0 · Datos de la pareja 👥 + Servicio de IA 🤖</h3>
+    <p class="small">Completa cada caso con tu análisis y debate en pareja. En esta página la <b>mentoría IA está desactivada</b>: no se requiere API Key de OpenRouter.</p>
+    <div class="ia-status-row">
+      <span id="ia-global-badge">IA: sin configurar</span>
+      <button class="btn small ghost" onclick="openIaModal('api-config-modal')">⚙️ Configurar API Key</button>
+      <a class="btn small ghost" href="../index_informatica.html" title="Abrir centro de configuración del portal">🔗 Centro IA del portal</a>
+    </div>
+    <div class="pair-grid">
+      <label>🧑‍✈️ Piloto — Nombre completo<input id="nombrePiloto" placeholder="Ej. María Fernanda López" autocomplete="off"></label>
+      <label>🎫 Carnet Piloto<input id="carnetPiloto" placeholder="Ej. 1490-22-1234" autocomplete="off"></label>
+      <label>🧭 Copiloto — Nombre completo<input id="copilotoNombre" placeholder="Ej. Carlos Andrés Pérez" autocomplete="off"></label>
+      <label>🎫 Carnet Copiloto<input id="carnetCopiloto" placeholder="Ej. 1490-22-5678" autocomplete="off"></label>
+      <label>📅 Fecha<input id="fechaClase" type="date"></label>
+    </div>
+    <div class="role-swap"><span>🔄 Alternar roles por caso (recomendado):</span><label><input type="checkbox" id="alternar" checked> Sí, alternaremos (A y C lidera Piloto, B y D lidera Copiloto)</label></div>
+    <div id="datosMsg" class="form-msg"></div>
+  </div>
+  <div class="case-nav" id="caseNav">
+    <button class="cnav active" data-case="0" onclick="irCaso(0)">A · MFA 🏦</button>
+    <button class="cnav" data-case="1" onclick="irCaso(1)">B · RBAC 🏬</button>
+    <button class="cnav" data-case="2" onclick="irCaso(2)">C · VPN/Cifrado 🚚</button>
+    <button class="cnav" data-case="3" onclick="irCaso(3)">D · PII/Backup 🏥</button>
+  </div>
+  <div id="casoBox"></div>
+  <div class="card" id="cierreBox" style="margin-top:1rem">
+    <h3>Paso final · Compromiso PUA + PDF 📤</h3>
+    <label>🤝 Nuestro compromiso como administradores (PUA de 1 línea)<select id="compromiso"><option value="">Seleccione...</option><option>MFA obligatorio en banca, correo y ERP + jamás compartir códigos de 6 dígitos</option><option>RBAC por roles con revisión mensual de accesos y baja inmediata de ex-empleados</option><option>VPN + cifrado en todo trabajo remoto y backup 3-2-1 con prueba mensual</option><option>Cero DPI/PII en Excel sin control: solo sistema con accesos y consentimiento firmado</option><option>Simulacro trimestral + reporte inmediato de lo sospechoso sin sanción</option></select></label>
+    <label style="margin-top:.6rem">💬 Reflexión conjunta: ¿qué herramienta les ahorra más dinero y por qué? (mín. 50 caracteres)<textarea id="opinionFinal" rows="3" placeholder="Ej. El MFA + RBAC porque por Q500 evitan vaciar Q18,500 y el backup externo deja el rescate en Q0..."></textarea></label>
+    <label class="chk" style="display:block;margin:.6rem 0"><input type="checkbox" id="declaro"> Declaramos que ambos debatimos cada caso e incluimos 1 hallazgo de investigación por caso para subir a Canvas UMG.</label>
+    <div class="progress-cases"><div id="casesFill"></div><span id="casesTxt">0/4 casos completos</span></div>
+    <div id="cierreMsg" class="form-msg"></div>
+    <div class="cierre-btns">
+      <button class="btn ghost" onclick="vistaPrevia()">👁️ Vista previa del reporte</button>
+      <button class="btn primary" id="btnPDF" onclick="generarPDF()" disabled>📄 Generar PDF para Canvas</button>
+    </div>
+    <p class="small">📎 Se descargará <b>Apellidos_Carnets_Sem11.pdf</b> (renómbrenlo) → Canvas → Tarea “Ejercicio Herramientas en Pareja S11”. Funciona en teléfono y PC.</p>
+  </div>
+  <div id="reporteFinal" class="reporte"></div>
+</section>
+
+<!-- TAREA INDIVIDUAL -->
+<section id="tarea" class="section alt">
+  <div class="mision">TAREA INDIVIDUAL · GUÍA DE APRENDIZAJE PARA EL PARCIAL · SUBIR A CANVAS</div>
+  <h2>📌 Tarea: La Silla del Gerente — Backups que Nunca se Probaron <small>individual · con PDF</small></h2>
+  <p class="lead">Te sientas en <strong>la silla del gerente</strong>: decides, calculas y pones la regla (decisión + números + regla PUA). Caso <b>nuevo y distinto</b> al de Semana 10.</p>
+  <div class="card rules">
+    <b>📋 Instrucciones (individual, 30–40 min):</b>
+    <ol>
+      <li>Ingresa tus <b>datos</b> (Paso 0). El PDF saldrá con tu nombre.</li>
+      <li>Lee el <b>caso nuevo</b> y la <b>tutoría</b> (cómo calcular prevención anual e investigar).</li>
+      <li>Resuelve <b>T.1 decisión</b>, <b>T.2 cálculos con operaciones</b>, <b>T.3 regla PUA</b> + <b>conclusión</b>.</li>
+      <li>Verifica con <b>“Verificar”</b> (no regala la nota) y genera el <b>PDF</b>.</li>
+    </ol>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>Paso 0 · Tus datos 🎓</h3>
+    <div class="pair-grid">
+      <label>👤 Nombre completo<input id="t_nombre" placeholder="Ej. Ana Lucía Morales" autocomplete="off"></label>
+      <label>🎫 Carnet<input id="t_carnet" placeholder="Ej. 1490-24-1234" autocomplete="off"></label>
+      <label>🏫 Sección / Jornada<input id="t_seccion" placeholder="Ej. A · Nocturna" autocomplete="off"></label>
+      <label>📅 Fecha<input id="t_fecha" type="date"></label>
+    </div>
+    <div id="t_datosMsg" class="form-msg"></div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>📁 El caso nuevo: Hotel Posada del Viajero, Antigua Guatemala</h3>
+    <p>La <b>recepcionista</b> conectó una <b>USB encontrada en el parqueo</b> para “ver qué tenía” y el <b>sistema de reservas quedó cifrado</b>: piden <b>Q28,000 en 48 horas</b> o borran todo. <b>Hay “backup” en un disco externo… conectado al mismo servidor (también cifrado) y jamás probado</b>. No hay copia offsite ni PUA firmada.</p>
+    <p>Faltan <b>3 días para un congreso de 120 huéspedes</b> y el hotel <b>pierde Q4,600 por día sin reservar ni facturar</b>. La planilla de <b>Q60,000</b> vence en 5 días. El dueño pregunta: <b>¿pagamos el rescate?</b></p>
+    <div class="case-meta"><span>🎯 Ransomware vía USB + sin backup real</span><span>💰 Rescate Q28,000 / 48 h</span><span>📉 Q4,600/día parado</span><span>👥 Planilla Q60,000</span><span>💾 Sin offsite ni prueba</span></div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>🧭 Tutoría: cómo resolverlo (léeme antes de escribir)</h3>
+    <div class="fcase">
+      <fieldset><legend>🧮 Tip 1 · Prevención anual = suma anual</legend>
+        <p><b>Prevención anual = (mensual × 12) + anual 1 + anual 2</b></p>
+        <p class="small">🧪 <b>Ejemplo con otros números:</b> backup Q200/mes + firewall Q400/año + capacitación Q300/año → 200×12=2,400; +400+300=<b>Q3,100/año</b>. Ahora con <b>TUS datos:</b> backup nube <b>Q300/mes</b> + firewall/antivirus <b>Q900/año</b> + capacitación <b>Q550/año</b>.</p>
+        <details class="guia"><summary>🔍 Ver pasos de T.2 sin ver el resultado</summary>
+          <ul>
+            <li>(a) Pérdida 5 días = <b>5 × Q4,600</b>.</li>
+            <li>(b) Prevención = <b>(300 × 12) + 900 + 550</b>.</li>
+            <li>(c) Veces = <b>pérdida ÷ prevención anual</b>.</li>
+          </ul>
+        </details>
+      </fieldset>
+      <fieldset><legend>🔎 Tip 2 · Investiga 5–10 min para defenderte</legend>
+        <ul class="small" style="line-height:1.9;margin:.2rem 0;padding-left:1.2rem">
+          <li><b>USB + ransomware:</b> busca “ataque USB drop ransomware hotel” — verifica que conectar USB desconocidos es vector clásico.</li>
+          <li><b>3-2-1 real:</b> “regla backup 3-2-1” — una copia conectada NO es offsite ni válida.</li>
+          <li><b>Pagar o no:</b> “¿pagar rescate ransomware?” — ~40% no recupera y financia el delito; denuncia MP/PNC.</li>
+          <li><b>PUA verificable:</b> prohíbe algo comprobable (quién/qué/cuándo), no “tener cuidado”.</li>
+        </ul>
+      </fieldset>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>T.1 · Tu decisión fundamentada</h3>
+    <label>🚦 Mi decisión<select id="t_decision"><option value="">Seleccione...</option><option value="SI">SÍ PAGAR el rescate</option><option value="NO">NO PAGAR y restaurar / reconstruir</option></select></label>
+    <div class="fcase" style="margin-top:.7rem">
+      <label>✍️ Argumento 1 (pilar CIA, costo o ética — mín. 30 caracteres)<textarea id="t_arg1" rows="2" placeholder="Ej. Disponibilidad: ..."></textarea></label>
+      <label>✍️ Argumento 2 (mín. 30 caracteres)<textarea id="t_arg2" rows="2" placeholder="Ej. Costo: Q28,000 + días parados vs planilla..."></textarea></label>
+      <label>✍️ Argumento 3 (mín. 30 caracteres)<textarea id="t_arg3" rows="2" placeholder="Ej. Ético/legal: pagar financia el delito; aislar, denunciar y reconstruir..."></textarea></label>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>T.2 · El número que convence al dueño</h3>
+    <p class="small">Calcula: <b>(a)</b> pérdida <b>5 días</b> · <b>(b)</b> prevención anual (Q300/mes + Q900/año + Q550/año) · <b>(c)</b> veces que cabe la prevención en la pérdida.</p>
+    <div class="budget-line">
+      <label>💸 (a) Pérdida 5 días Q<input type="number" id="t_perd5" min="0" placeholder="Ej. 20000"></label>
+      <label>🛡️ (b) Prevención anual Q<input type="number" id="t_prevAnual" min="0" placeholder="Ej. 4000"></label>
+      <label>🔁 (c) Veces<input type="number" id="t_veces" min="0" step="0.1" placeholder="Ej. 4.5"></label>
+    </div>
+    <label style="margin-top:.6rem">🧾 Mis operaciones<textarea id="t_ops" rows="3" placeholder="Muestra tus multiplicaciones, sumas y división..."></textarea></label>
+    <div class="case-btns" style="margin-top:.6rem"><button class="btn small ghost" onclick="verificarTarea()">🧮 Verificar mis números</button></div>
+    <div id="t_calcMsg" class="form-msg"></div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>T.3 · La regla que habría evitado el clic</h3>
+    <label>📜 Mi regla PUA (específica y verificable)<textarea id="t_pua" rows="2" placeholder="Ej. Prohibido conectar USB ajenos; todo medio externo lo revisa TI en equipo aislado; backups offsite con prueba mensual"></textarea></label>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <h3>Paso final · Tu conclusión + PDF 📤</h3>
+    <label>💬 Mi conclusión como futuro administrador (mín. 60 caracteres)<textarea id="t_concl" rows="3" placeholder="Ej. Aprendí que un backup conectado no es backup; como gerente exigiría 3-2-1 real porque..."></textarea></label>
+    <label class="chk" style="display:block;margin:.6rem 0"><input type="checkbox" id="t_declaro"> Declaro que esta tarea es de mi autoría y la subiré a Canvas UMG.</label>
+    <div id="t_msg" class="form-msg"></div>
+    <div class="cierre-btns">
+      <button class="btn ghost" onclick="vistaPreviaTarea()">👁️ Vista previa</button>
+      <button class="btn primary" id="t_btnPDF" onclick="generarPdfTarea()" disabled>📄 Generar PDF de la tarea</button>
+    </div>
+    <p class="small">📎 El PDF se descargará como <b>Apellido_Carnet_TareaSem11.pdf</b> → Canvas → “Tarea: Silla del Gerente S11”.</p>
+  </div>
+  <div id="reporteTarea" class="reporte"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="section alt">
+  <div class="mision">GRADUACIÓN · Demuestra que eres gerente blindado</div>
+  <h2>Quiz Final 🎓 <small id="quizScore">XP: 0</small></h2>
+  <div class="card" id="quizBox"></div>
+  <div class="card hidden" id="diploma"><h3>🏆 ¡Felicidades, Gerente Blindado!</h3><p id="dipText"></p><button class="btn primary" onclick="location.reload()">🔄 Reiniciar curso</button></div>
+</section>
+
+<!-- GLOSARIO -->
+<section class="section">
+  <h2>Glosario exprés 📖</h2>
+  <input class="search" id="glosSearch" placeholder="🔍 Busca: MFA, RBAC, cifrado, PII..." oninput="filterGlos()">
+  <div class="glos" id="glos"></div>
+  <div class="fig"><img src="img/estr_p14.jpg" alt="Buenas prácticas y principios de información justa"><figcaption>Cierre gerencial: меньше datos, más protección · Fuente: Estrategia de Seguridad Digital (p.14). <span class="src">img/estr_p14.jpg</span></figcaption></div>
+  <div class="fig"><img src="img/estr_p15.jpg" alt="Síntesis y checklist gerencial"><figcaption>Checklist final para tu empresa · Fuente: Estrategia de Seguridad Digital (p.15). <span class="src">img/estr_p15.jpg</span></figcaption></div>
+  <footer>Hecho con 💙 pedagógico por <b>Ruldin Ayala</b>, Informática I · UMG · Semana 11 · 2026 · Montos en Quetzales (Q) estimados con fines didácticos. Ilustraciones blueprint: Estrategia de Seguridad Digital.</footer>
+</section>
+
+<!-- MODAL CONFIG API OPENROUTER -->
+<div id="api-config-modal" class="ia-modal" style="display:none">
+  <div class="ia-modal-card">
+    <div class="ia-modal-head"><h3>🤖 Servicio de IA (OpenRouter)</h3><button class="btn small ghost" onclick="closeIaModal('api-config-modal')">✕</button></div>
+    <p class="small">La clave se guarda <b>solo en este navegador</b> (<code>bias-lab-settings</code> / <code>openrouter_settings</code>) y sirve para Estadística I e Informática I. <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">Obtén tu key gratis aquí</a> (empieza con <code>sk-or-v1-</code>).</p>
+    <label>🔑 API Key de OpenRouter<input type="password" id="cfg-api-key" placeholder="Pega aquí tu clave (sk-or-v1-...)" autocomplete="off"></label>
+    <label>🌐 Endpoint<input type="url" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions"></label>
+    <label>🧠 Modelo<select id="cfg-model-select">
+      <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Defecto · Gratuito)</option>
+      <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Rápido · Gratuito)</option>
+      <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Gratuito)</option>
+      <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (Razonamiento · Gratuito)</option>
+      <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct</option>
+      <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini</option>
+    </select></label>
+    <div id="cfg-test-feedback" class="form-msg"></div>
+    <div class="ia-modal-btns">
+      <button class="btn small ghost" onclick="testApiConnection()">🧪 Probar conexión</button>
+      <button class="btn small ghost" onclick="purgeApiKey()">🗑️ Olvidar clave</button>
+      <button class="btn small primary" onclick="saveApiSettings()">💾 Guardar</button>
+    </div>
+    <p class="small">🔒 En laboratorios compartidos usa “Olvidar clave” al salir.</p>
+  </div>
+</div>
+
+<!-- MODAL MENTOR IA -->
+<div id="mentor-modal" class="ia-modal" style="display:none">
+  <div class="ia-modal-card">
+    <div class="ia-modal-head"><h3>🤖 Mentor IA · <span id="mentor-case-title"></span></h3><button class="btn small ghost" onclick="closeIaModal('mentor-modal')">✕</button></div>
+    <div id="mentor-loading">⏳ Consultando al mentor IA...</div>
+    <div id="mentor-content" style="display:none">
+      <p class="small"><b>Tu análisis registrado:</b></p>
+      <div class="mentor-user" id="mentor-user-text"></div>
+      <p class="small"><b>💬 Punto de vista, retroalimentación y consejo del mentor</b> <span id="mentor-model-badge" class="small"></span></p>
+      <div class="mentor-ai" id="mentor-response-text"></div>
+      <p class="small">✅ Esta retroalimentación quedará guardada y aparecerá en tu PDF final.</p>
+    </div>
+    <div id="mentor-error" class="form-msg err" style="display:none"></div>
+    <div class="ia-modal-btns">
+      <button class="btn small ghost" onclick="closeIaModal('mentor-modal')">Entendido, continuar</button>
+      <button class="btn small ghost" id="mentor-retry" onclick="consultarMentorIA(false)" style="display:none">🔄 Reintentar</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
