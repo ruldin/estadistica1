@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios: Medidas de Dispersión — Semana 12 · UMG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --azul:#1a3a6b; --azul2:#274e8d; --celeste:#e8f1ff; --amarillo:#ffc531; --naranja:#ff7a1a;
+  --verde:#0e9f6e; --verde-claro:#e6f9f0; --rojo:#e02424; --rojo-claro:#fdecec;
+  --morado:#6c3ce0; --gris:#f4f6fb; --texto:#1e2a3a; --muted:#5b6b82;
+  --card-shadow:0 8px 28px rgba(26,58,107,.12); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--texto);background:#fafbff;line-height:1.6}
+.heading-font{font-family:'Space Grotesk','Inter',sans-serif}
+.progress-wrap{background:rgba(255,255,255,.15);height:5px;border-radius:999px;margin-top:8px;overflow:hidden}
+#progressBar{height:100%;width:0%;background:var(--amarillo);border-radius:999px;transition:width .4s}
+nav.steps{position:sticky;top:76px;z-index:40;background:#0f2a52ee;backdrop-filter:blur(6px);max-width:none;margin:0;display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.15)}
+nav.steps a{color:#fff;text-decoration:none;font-size:.78rem;white-space:nowrap;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+nav.steps a:hover{background:var(--amarillo);color:#1a3a6b}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:24px;margin:22px 0;border:1px solid #e6ebf5}
+.card h2{margin-top:0;color:var(--azul)}
+.card h3{color:var(--azul2)}
+.formula{background:#0f2a52;color:#ffe9a8;font-size:1.1rem;text-align:center;padding:14px;border-radius:14px;margin:12px 0;overflow-x:auto}
+.formula small{display:block;color:#bcd0f0;font-size:.8rem;margin-top:6px}
+.tip{background:#fff8de;border-left:6px solid var(--amarillo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tip strong{color:#7a5a00}
+.tutor{background:var(--verde-claro);border-left:6px solid var(--verde);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tutor strong{color:#06593f}
+.alerta{background:var(--rojo-claro);border-left:6px solid var(--rojo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.cocinero{border-radius:14px;padding:16px}
+.coc-A{background:#e6f9f0;border:2px solid #0e9f6e}
+.coc-B{background:#fdecec;border:2px solid #e02424}
+input[type=number],input[type=text]{padding:10px 12px;border:2px solid #cbd5e6;border-radius:10px;font-size:1rem;width:130px;text-align:center}
+input:focus{outline:none;border-color:var(--azul2);box-shadow:0 0 0 3px var(--celeste)}
+textarea.interp{width:100%;min-height:96px;padding:12px 14px;border:2px solid #cbd5e6;border-radius:12px;font-size:.95rem;font-family:inherit;resize:vertical}
+textarea.interp:focus{outline:none;border-color:var(--azul2);box-shadow:0 0 0 3px var(--celeste)}
+button{cursor:pointer;border:none;border-radius:6px;padding:11px 20px;font-size:.95rem;font-weight:700;transition:.2s}
+.btn-azul{background:var(--azul);color:#fff} .btn-azul:hover{background:var(--azul2)}
+.btn-verde{background:var(--verde);color:#fff} .btn-amarillo{background:var(--amarillo);color:#1a3a6b}
+.btn-ghost{background:#eef2f9;color:var(--azul)} .btn-naranja{background:var(--naranja);color:#fff}
+.btn-morado{background:var(--morado);color:#fff}
+.feedback{font-weight:700;margin-top:8px;min-height:1.4em}
+.ok{color:var(--verde)} .mal{color:var(--rojo)}
+table.taller{width:100%;border-collapse:collapse;margin:12px 0;font-size:.95rem}
+table.taller th{background:var(--azul);color:#fff;padding:10px}
+table.taller td,table.taller th{border:1px solid #d4ddee;padding:8px;text-align:center}
+table.taller tr:nth-child(even) td{background:#f5f8ff}
+details{margin:8px 0;background:#f7f9ff;border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700;color:var(--azul)}
+.quiz-opt{display:block;background:#f2f5fb;border:2px solid #dbe4f3;border-radius:12px;padding:10px 14px;margin:8px 0;cursor:pointer}
+.quiz-opt:hover{border-color:var(--azul2)}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.kpi div{flex:1;min-width:140px;background:var(--gris);border-radius:12px;padding:12px;text-align:center}
+.kpi b{font-size:1.3rem;display:block;color:var(--azul)}
+.pildora{display:inline-block;background:var(--celeste);color:var(--azul);font-weight:800;border-radius:999px;padding:2px 12px;margin:2px}
+.miedo{background:linear-gradient(135deg,#fff6d6,#ffe9a8);border:2px dashed #b78d00;border-radius:14px;padding:14px;margin:12px 0}
+code{background:#eef2f9;padding:2px 6px;border-radius:6px}
+.ex-num{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:14px;background:var(--azul);color:#fff;font-weight:800;font-size:1.1rem}
+.ia-box{background:#f3f0ff;border:2px dashed var(--morado);border-radius:14px;padding:14px;margin:12px 0}
+.ia-feedback{background:#fff;border:1px solid #d9d2ff;border-radius:12px;padding:12px 14px;margin-top:10px;white-space:pre-wrap}
+footer.site-footer{background:#020617;color:#94a3b8;text-align:center;padding:2rem 1rem;font-size:.85rem;border-top:1px solid #0f172a}
+/* Modales */
+.modal-back{position:fixed;inset:0;background:rgba(2,6,23,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
+.modal-card{background:#fff;border-radius:18px;max-width:640px;width:100%;padding:24px;max-height:90vh;overflow-y:auto;color:var(--texto)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<!-- HEADER INSTITUCIONAL / NAVEGACIÓN (formato estándar Estadística I) -->
+<header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div class="flex items-start sm:items-center gap-3 min-w-0">
+<a href="../index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Regresar al índice general de Estadística I">
+<i class="fa-solid fa-arrow-left text-sm"></i>
+</a>
+<a href="medidas-dispersion.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Volver al tutor: Medidas de Dispersión">
+<i class="fa-solid fa-chart-bar text-sm text-amber-400"></i>
+</a>
+<div class="bg-white p-1 rounded-xl shadow-lg shadow-blue-500/15 shrink-0 flex items-center justify-center">
+<img src="../../cosas/Umg.png" alt="Escudo Universidad Mariano Gálvez" class="h-9 w-auto object-contain" onerror="this.onerror=null; this.src='../../cosas/umg.png';">
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-2 text-blue-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">
+<span>Universidad Mariano Gálvez</span><span>•</span><span class="hidden sm:inline">Facultad de Ciencias de la Administración</span>
+</div>
+<h1 class="text-base sm:text-xl font-extrabold tracking-tight mt-0.5 text-white heading-font">Ejercicios: Medidas de Dispersión <span class="text-xs text-slate-400 font-normal">| Semana 12</span></h1>
+<p class="text-xs text-slate-400 mt-0.5">Laboratorio en el aula · 10 casos empresariales 🇬🇹 · <span class="text-amber-300 font-semibold">R · RIC · S² · S · CV %</span></p>
+<div class="flex flex-wrap gap-1.5 mt-1.5">
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">📘 UMG · Admón. Empresas 🇬🇹</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">Semana 12</span>
+<a href="medidas-dispersion.html" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/40 font-semibold" title="Repasar el tutor paso a paso">📊 Repasar tutor</a>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/90 px-3 py-2 rounded-2xl border border-slate-800 text-right text-xs text-slate-300 hidden sm:block shrink-0 space-y-1">
+<div class="flex items-center justify-end gap-2">
+<span id="header-api-status-badge" class="ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> IA Pendiente</span>
+<button type="button" onclick="openApiModal()" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 py-1 rounded-lg transition"><i class="fa-solid fa-robot text-purple-400 mr-1"></i>Configurar IA</button>
+</div>
+<div class="text-slate-500 text-[11px]"><span id="doneCounter">0 / 10</span> ejercicios verificados</div>
+</div>
+</div>
+<div class="progress-wrap"><div id="progressBar"></div></div>
+</div>
+</header>
+<nav class="steps" id="exNav"></nav>
+
+<main>
+<section class="card" style="background:linear-gradient(135deg,#eef4ff,#e6f9f0);padding:16px 20px">
+<b>👋 Bienvenido al laboratorio en el aula.</b> Cada ejercicio sigue la misma línea del <b>Taller Guiado: Envasadora en Escuintla 🥤</b>:
+<b>Paso 1</b> Media 🧮 → <b>Paso 2</b> Varianza y S 📐 → <b>Paso 3</b> CV % ⚖️ → <b>Paso 4</b> Decisión + interpretación gerencial 👔.
+Las respuestas <b>no están visibles</b>: usa el botón <b>Revisar</b> y el botón <b>🆘 Ayuda</b> que te guía sin regalarte el resultado.
+</section>
+
+<!-- DATOS DEL ALUMNO -->
+<section class="card" id="datos">
+<h2>🧑‍🎓 Datos del alumno</h2>
+<p>Escribe únicamente tu <b>nombre</b> y tu <b>carnet</b>. Saldrán impresos en el PDF de entrega.</p>
+<div class="grid2">
+<div><label for="stuName"><b>Nombre completo</b></label><br><input type="text" id="stuName" placeholder="Ej: María López" style="width:100%;max-width:340px;text-align:left"></div>
+<div><label for="stuId"><b>Carnet</b></label><br><input type="text" id="stuId" placeholder="Ej: 2024-00123" style="width:100%;max-width:240px;text-align:left"></div>
+</div>
+<div class="tip">💡 <b>Recuerda:</b> usa la <b>S muestral (n−1)</b>, no la poblacional. En tu calculadora: modo STAT → <code>xσn-1</code>.</div>
+<div class="formula">R = x<sub>máx</sub> − x<sub>mín</sub> &nbsp;·&nbsp; S² = Σ(x<sub>i</sub> − x̄)² / (n−1) &nbsp;·&nbsp; S = √S² &nbsp;·&nbsp; CV = (S / x̄) × 100%<small>Muestras: SIEMPRE divide entre n−1 · Menor CV = proceso más consistente ✅</small></div>
+</section>
+
+<div id="exercises"></div>
+
+<!-- ENTREGA -->
+<section class="card" id="entrega">
+<h2>📄 Entrega del laboratorio (PDF)</h2>
+<p>Verifica tus 10 ejercicios, escribe tus interpretaciones y pide retroalimentación de la IA donde la necesites. Luego genera el PDF con tus datos, tus cálculos, tus análisis y los dictámenes de IA.</p>
+<div class="kpi"><div><b id="kpiDone">0/10</b>Ejercicios verificados</div><div><b id="kpiInterp">0/10</b>Interpretaciones</div><div><b id="kpiIA">0/10</b>Análisis con IA</div></div>
+<button class="btn-naranja" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Generar PDF de entrega 📄</button>
+<button class="btn-ghost" onclick="openApiModal()"><i class="fa-solid fa-robot"></i> Configurar IA (OpenRouter)</button>
+<div id="fbPdf" class="feedback"></div>
+<div class="tip">💡 El PDF incluye el <b>logo de la UMG</b>, tus datos, cada caso con tus respuestas, tus interpretaciones gerenciales, la retroalimentación de IA y el criterio técnico docente.</div>
+</section>
+</main>
+
+<!-- FOOTER INSTITUCIONAL -->
+<footer class="site-footer bg-slate-950 border-t border-slate-900 py-8 mt-12">
+<div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+<div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+<a href="../index_estadistica.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition" title="Volver al índice general de Estadística I"><i class="fa-solid fa-list text-blue-400"></i> Índice general de Estadística I</a>
+<a href="medidas-dispersion.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition" title="Volver al tutor de dispersión"><i class="fa-solid fa-chart-bar text-amber-400"></i> Tutor Semana 12</a>
+<a href="../../index.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 px-4 py-2 rounded-xl transition" title="Portal Académico General UMG"><i class="fa-solid fa-house text-emerald-400"></i> Portal General</a>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">Plataforma de apoyo docente diseñada por <strong class="text-blue-400 font-bold">Ruldin Ayala</strong>, catedrático | Exclusivamente para el curso de <strong>Estadística I</strong>.<br>Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).</p>
+<p class="text-[11px] text-slate-600">&copy; 2026 UMG Administración de Empresas • Semana 12: Ejercicios de Medidas de Dispersión.</p>
+</div>
+</footer>
+
+<!-- MODAL CONFIG API -->
+<div id="api-modal" class="modal-back hidden">
+<div class="modal-card">
+<h2 style="color:var(--azul);margin-top:0"><i class="fa-solid fa-robot"></i> Configuración IA (OpenRouter)</h2>
+<p class="text-sm">Tu clave se guarda <b>solo en tu navegador</b> (<code>localStorage</code>). Sin clave, puedes seguir trabajando: la IA solo se omite.</p>
+<ol class="text-sm">
+<li>Entra a <a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a> y crea una cuenta.</li>
+<li>Crea una Key en <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a> y pégala abajo.</li>
+</ol>
+<label class="text-sm"><b>API Key</b></label><br>
+<input type="password" id="cfg-api-key" placeholder="sk-or-v1-..." style="width:100%;text-align:left"><br><br>
+<label class="text-sm"><b>Modelo</b></label><br>
+<select id="cfg-model-select" style="width:100%;padding:10px;border:2px solid #cbd5e6;border-radius:10px" onchange="document.getElementById('cfg-api-model').value=this.value">
+<option value="inclusionai/ling-3.0-flash-fin:free">inclusionai/ling-3.0-flash-fin:free (por defecto)</option>
+<option value="google/gemini-2.0-flash-exp:free">google/gemini-2.0-flash-exp:free</option>
+<option value="meta-llama/llama-3.3-70b-instruct:free">meta-llama/llama-3.3-70b-instruct:free</option>
+<option value="custom">Otro (escríbelo abajo)</option>
+</select><br><br>
+<input type="text" id="cfg-api-model" value="inclusionai/ling-3.0-flash-fin:free" style="width:100%;text-align:left"><br><br>
+<input type="hidden" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions">
+<div id="cfg-test-feedback" class="feedback"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+<button class="btn-verde" onclick="saveApiSettings()">💾 Guardar</button>
+<button class="btn-azul" onclick="testApiConnection()">🔌 Probar conexión</button>
+<button class="btn-ghost" onclick="purgeApiSettings()">🗑 Borrar clave</button>
+<button class="btn-ghost" onclick="closeApiModal()">Cerrar</button>
+</div>
+<p class="text-xs" id="cfg-key-indicator" style="color:#888">Sin clave guardada</p>
+</div>
+</div>
+
+<!-- MODAL EVALUACIÓN IA -->
+<div id="ia-modal" class="modal-back hidden">
+<div class="modal-card">
+<h2 style="color:var(--morado);margin-top:0">🤖 Retroalimentación IA · Mentor Amigo <span id="modal-ia-model-badge" style="font-size:.7rem;background:#ede9fe;padding:2px 10px;border-radius:999px"></span></h2>
+<p class="text-sm"><b id="modal-ia-case-title"></b></p>
+<p class="text-sm"><b>Tu análisis:</b></p>
+<p class="text-sm" id="modal-ia-user-text" style="background:#f4f6fb;border-radius:10px;padding:10px"></p>
+<div id="ia-eval-loading" class="tutor">⏳ Consultando al mentor IA...</div>
+<div id="ia-eval-content" class="hidden">
+<p class="text-sm"><b>💬 Respuesta del mentor:</b></p>
+<div class="ia-feedback text-sm" id="modal-ia-response-text"></div>
+<p class="text-sm" style="margin-top:10px"><b>📘 Criterio técnico docente:</b></p>
+<p class="text-sm" id="modal-ia-solution-text" style="background:#e6f9f0;border-radius:10px;padding:10px"></p>
+</div>
+<div id="ia-eval-error" class="hidden alerta"><b>❌ No se pudo consultar la IA.</b><br><span id="ia-eval-error-msg"></span></div>
+<div style="margin-top:12px"><button class="btn-ghost" onclick="document.getElementById('ia-modal').classList.add('hidden')">Cerrar</button></div>
+</div>
+</div>
+
+<script>
+/* ================= 10 EJERCICIOS (misma línea del Taller Escuintla) ================= */
+const EXERCISES = [
+{titulo:"Tortillería San Juan Sacatepéquez 🌽", meta:"50 g por tortilla", unidad:"g",
+ contexto:"Eres gerente de control de calidad. La tortilla ideal pesa 50 g. Dos turnos reportan el mismo promedio: ¿cuál hornea parejo y cuál desperdicia masa?",
+ datosA:[50,49,51,50,49,51], datosB:[52,45,55,43,50,55],
+ impacto:"Tortilla de 43 g = cliente molesto 😡; de 55 g = regalas masa y pierdes pisto 💸.",
+ pregunta:"¿Qué turno se felicita y cuál se reentrena HOY? Justifica con S y CV."},
+{titulo:"Café de Xela ☕", meta:"454 g por bolsa", unidad:"g",
+ contexto:"Exportadora en Quetzaltenango. La bolsa premium debe pesar 454 g. Dos empacadoras promedian lo mismo. Una va a Europa: debe ser la consistente.",
+ datosA:[454,453,455,454,453,455], datosB:[458,446,462,444,454,460],
+ impacto:"Bolsa baja = reclamo del comprador extranjero; bolsa alta = regalas café de exportación.",
+ pregunta:"¿Qué empacadora exporta y cuál se calibra? Justifica con S y CV."},
+{titulo:"Gaseosas en Escuintla 🥤", meta:"500 ml por botella", unidad:"ml",
+ contexto:"Presentación de 500 ml con reclamos por llenado disparejo. Dos líneas promedian 500 ml. La DIACO vigila el contenido neto.",
+ datosA:[500,499,501,500,499,501], datosB:[508,488,512,486,502,504],
+ impacto:"Botella de 486 ml = multa DIACO ⚖️; de 512 ml = derrame + producto regalado.",
+ pregunta:"¿Qué línea sigue operando y cuál se detiene HOY? Justifica con S y CV."},
+{titulo:"Panadería San Martín 🥐", meta:"60 g por pan", unidad:"g",
+ contexto:"El pan francés debe pesar 60 g. Dos hornos reportan el mismo promedio, pero un supermercado se queja de panes disparejos.",
+ datosA:[60,59,61,60,60], datosB:[64,54,66,52,64],
+ impacto:"Pan de 52 g = devolución del cliente; de 66 g = comes tu margen de ganancia.",
+ pregunta:"¿Con qué horno cumples el pedido del supermercado? Justifica con S y CV."},
+{titulo:"Lácteos El Oriental, Zacapa 🥛", meta:"1000 ml por envase", unidad:"ml",
+ contexto:"Envase familiar de 1000 ml. Dos dosificadores promedian igual, pero hay quejas de envases a medio llenar.",
+ datosA:[1000,998,1002,1001,999,1000], datosB:[1010,985,1015,980,1005,1005],
+ impacto:"Envase de 980 ml = denuncia por contenido incompleto; de 1015 ml = leche regalada a diario.",
+ pregunta:"¿Qué dosificador certificas y cuál ajustas? Justifica con S y CV."},
+{titulo:"Call Center Zona 10 🎧", meta:"180 s por llamada", unidad:"s",
+ contexto:"El tiempo meta de atención es 180 segundos. Dos equipos promedian lo mismo, pero uno tiene clientes furiosos por esperas eternas y cortes.",
+ datosA:[180,178,182,181,179,180], datosB:[195,160,205,155,180,185],
+ impacto:"Llamada de 205 s = cola de espera y abandono; de 155 s = atención a la carrera y mala calidad.",
+ pregunta:"¿Qué equipo pones como modelo y cuál reentrenas? Justifica con S y CV."},
+{titulo:"Farmacia Calzada Roosevelt 💊", meta:"12 min por despacho", unidad:"min",
+ contexto:"El despacho debe tardar 12 minutos. Dos turnos promedian igual, pero en uno los pacientes esperan 16 y en otro salen en 7 sin explicación.",
+ datosA:[12,11,13,12,11,13], datosB:[15,8,16,7,12,14],
+ impacto:"Despacho de 16 min = paciente molesto; de 7 min = riesgo de error por prisa.",
+ pregunta:"¿Qué turno replicás y cuál intervenís? Justifica con S y CV."},
+{titulo:"Calzado en Pastores 👞", meta:"30 mm de suela", unidad:"mm",
+ contexto:"La suela debe medir 30 mm. Dos troqueladoras promedian lo mismo, pero un lote salió con suelas frágiles y otras toscas.",
+ datosA:[30,29,31,30,30], datosB:[33,26,34,25,32],
+ impacto:"Suela de 25 mm = zapato que se rompe y devuelven; de 34 mm = material desperdiciado.",
+ pregunta:"¿Qué troqueladora dejas produciendo? Justifica con S y CV."},
+{titulo:"Retail Cemaco 🛒", meta:"Q 250 ticket promedio", unidad:"Q",
+ contexto:"El ticket promedio es Q 250 en ambas cajas, pero una caja tiene ventas estables y la otra alterna ventas mínimas con ventas enormes (¿descuentos mal aplicados?).",
+ datosA:[250,245,255,250,245,255], datosB:[280,200,300,190,260,270],
+ impacto:"Ticket de Q 190 = posible fuga o mal cobro; de Q 300 = cliente pudo pagar de más por error.",
+ pregunta:"¿Qué caja auditas HOY? Justifica con S y CV."},
+{titulo:"Snacks Tortrix 🍘", meta:"150 g por bolsa", unidad:"g",
+ contexto:"La bolsa debe pesar 150 g. Dos selladoras promedian igual, pero el supermercado reporta bolsas infladas y bolsas vacías.",
+ datosA:[150,149,151,150,149,151], datosB:[156,140,160,138,152,154],
+ impacto:"Bolsa de 138 g = multa por peso incompleto; de 160 g = producto regalado en cada bolsa.",
+ pregunta:"¿Qué selladora mantienes y cuál paras para calibrar? Justifica con S y CV."}
+];
+
+/* ================= ESTADÍSTICA (idéntica al taller: muestral n−1) ================= */
+function stats(arr){
+  const n = arr.length;
+  const sum = arr.reduce((a,b)=>a+b,0);
+  const mean = sum/n;
+  const ss = arr.reduce((a,x)=>a+(x-mean)*(x-mean),0);
+  const s2 = ss/(n-1);
+  const s = Math.sqrt(s2);
+  const cv = mean !== 0 ? (s/Math.abs(mean))*100 : 0;
+  return {n,sum,mean,ss,s2,s,cv,min:Math.min(...arr),max:Math.max(...arr),rango:Math.max(...arr)-Math.min(...arr)};
+}
+const f2 = v => (Math.round(v*100)/100).toFixed(2);
+
+/* ================= RENDER DE EJERCICIOS ================= */
+function renderExercises(){
+  const box = document.getElementById('exercises');
+  const nav = document.getElementById('exNav');
+  let navHtml = '<a href="#datos">🧑‍🎓 Datos</a>';
+  let html = '';
+  EXERCISES.forEach((ex,i)=>{
+    const A = stats(ex.datosA), B = stats(ex.datosB);
+    navHtml += `<a href="#ex${i+1}">Ejer. ${i+1}</a>`;
+    html += `
+    <section class="card" id="ex${i+1}">
+      <h2><span class="ex-num">${i+1}</span> ${ex.titulo}</h2>
+      <p><b>Caso:</b> ${ex.contexto}</p>
+      <p>Meta: <span class="pildora">${ex.meta}</span> &nbsp; Muestra: <span class="pildora">n = ${A.n}</span></p>
+      <div class="grid2">
+        <div class="cocinero coc-A"><b>🟢 Grupo A:</b><br>${ex.datosA.map(v=>`<span class="pildora">${v}</span>`).join('')}<br><small>Suma = ? · Media = ? ${ex.unidad}</small></div>
+        <div class="cocinero coc-B"><b>🔴 Grupo B:</b><br>${ex.datosB.map(v=>`<span class="pildora">${v}</span>`).join('')}<br><small>Suma = ? · Media = ? ${ex.unidad}</small></div>
+      </div>
+
+      <h3>Paso 1: La media 🧮 (suma ÷ n)</h3>
+      <p>Grupo A: suma = <input type="number" id="ex${i}_sumA" placeholder="suma"> ÷${A.n} = <input type="number" step="0.01" id="ex${i}_meanA" placeholder="media"></p>
+      <p>Grupo B: suma = <input type="number" id="ex${i}_sumB" placeholder="suma"> ÷${B.n} = <input type="number" step="0.01" id="ex${i}_meanB" placeholder="media"></p>
+      <button class="btn-verde" onclick="checkPaso(${i},1)">Revisar Paso 1</button>
+      <div id="ex${i}_fb1" class="feedback"></div>
+      <details><summary>🆘 Ayuda: ¿cómo resuelvo el Paso 1?</summary>
+        <p>1) Suma todos los datos del grupo con calculadora, sin pena. 2) Divide entre <b>n = ${A.n}</b>. 3) Esa es la media <b>x̄</b>.</p>
+        <p>Ejemplo con tu primera fila del Grupo A: el dato es <code>${ex.datosA[0]}</code>. Súmalo con los demás (${ex.datosA.join(' + ')}) y divide entre ${A.n}. Si ambos grupos dan la misma media, ¡no te detengas ahí! El gerente que solo ve promedios reprueba: sigue al Paso 2. 😱</p>
+      </details>
+
+      <h3>Paso 2: Varianza y Desviación 📐 (la tablita mágica)</h3>
+      <p><b>Receta fila por fila:</b> 1) Resta: dato − x̄. 2) Eleva al cuadrado (el − desaparece). 3) Suma los cuadrados. 4) Divide entre <b>n−1 = ${A.n-1}</b> → S². 5) Raíz cuadrada → S.</p>
+      <p>Grupo A: Σ( )² = <input type="number" step="0.01" id="ex${i}_ssA" placeholder="suma ⬛"> &nbsp; S² = <input type="number" step="0.01" id="ex${i}_s2A" placeholder="S²"> ÷${A.n-1} &nbsp; S = <input type="number" step="0.01" id="ex${i}_sA" placeholder="S"></p>
+      <p>Grupo B: Σ( )² = <input type="number" step="0.01" id="ex${i}_ssB" placeholder="suma ⬛"> &nbsp; S² = <input type="number" step="0.01" id="ex${i}_s2B" placeholder="S²"> ÷${B.n-1} &nbsp; S = <input type="number" step="0.01" id="ex${i}_sB" placeholder="S"></p>
+      <button class="btn-verde" onclick="checkPaso(${i},2)">Revisar Paso 2</button>
+      <div id="ex${i}_fb2" class="feedback"></div>
+      <details><summary>🆘 Ayuda: ¿cómo resuelvo el Paso 2?</summary>
+        <p>Arma tu tablita con 3 columnas: <code>xi</code> | <code>xi − x̄</code> | <code>(xi − x̄)²</code>. Ejemplo con la primera fila del Grupo A: dato <code>${ex.datosA[0]}</code> menos su media → ese resultado al cuadrado. Repite con cada dato, suma la columna de cuadrados y divide entre <b>${A.n-1}</b> (¡no entre ${A.n}! n es solo para poblaciones completas). La raíz de S² es S, en ${ex.unidad} normales.</p>
+        <p>Verificación gratis: la columna <code>xi − x̄</code> siempre suma <b>0</b>. Si no te da 0, revisa las restas. ✅</p>
+      </details>
+
+      <h3>Paso 3: Coeficiente de Variación ⚖️ (el desempatador)</h3>
+      <div class="formula">CV = ( S ÷ x̄ ) × 100%</div>
+      <p>CV<sub>A</sub> = <input type="number" step="0.01" id="ex${i}_cvA" placeholder="0.00"> % &nbsp; CV<sub>B</sub> = <input type="number" step="0.01" id="ex${i}_cvB" placeholder="0.00"> %</p>
+      <button class="btn-verde" onclick="checkPaso(${i},3)">Revisar Paso 3</button>
+      <div id="ex${i}_fb3" class="feedback"></div>
+      <details><summary>🆘 Ayuda: ¿cómo resuelvo el Paso 3?</summary>
+        <p>Divide tu <b>S</b> entre tu <b>media x̄</b> y multiplica por 100. El que tenga <b>menor CV %</b> es el proceso más consistente y gana. 🏆 Recuerda: CV &lt; 5% excelente ✅ · 5–15% vigilar ⚠️ · &gt; 15% fuera de control 🛑.</p>
+      </details>
+
+      <h3>Paso 4: Decisión + interpretación gerencial 👔</h3>
+      <p><b>${ex.pregunta}</b></p>
+      <label class="quiz-opt"><input type="radio" name="dec${i}" value="A"> Grupo A: es el más consistente (menor CV)</label>
+      <label class="quiz-opt"><input type="radio" name="dec${i}" value="B"> Grupo B: es el más consistente (menor CV)</label>
+      <label class="quiz-opt"><input type="radio" name="dec${i}" value="ninguna"> Son iguales, no hay nada que decidir</label>
+      <p><b>✍️ Tu interpretación gerencial (mínimo 15 palabras: qué significan S y CV en plata, multa, desperdicio, cliente y tu decisión):</b></p>
+      <textarea class="interp" id="ex${i}_interp" placeholder="Ej: Como gerente decido... porque el grupo... tiene S=... y CV=...% frente a... Esto significa en dinero que..."></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn-naranja" onclick="checkDecision(${i})">Emitir decisión 🚨</button>
+        <button class="btn-morado" onclick="analyzeWithAI(${i})">🤖 Analizar mi análisis con IA <span id="ex${i}_iaBadge" class="text-[10px] px-1.5 py-0.5 rounded-full bg-white/20 font-normal">Feedback</span></button>
+      </div>
+      <div id="ex${i}_fbDec" class="feedback"></div>
+      <div id="ex${i}_iaOut" class="ia-box hidden"><b>🤖 Mentor IA dice:</b><div class="ia-feedback text-sm" id="ex${i}_iaText"></div></div>
+      <div class="alerta">⚖️ <b>Impacto real:</b> ${ex.impacto}</div>
+    </section>`;
+  });
+  box.innerHTML = html;
+  nav.innerHTML = navHtml + '<a href="#entrega">📄 Entregar PDF</a>';
+}
+
+/* ================= VALIDACIÓN (respuestas ocultas, tolerancia) ================= */
+function ok(el,msg){el.className='feedback ok';el.textContent='✅ '+msg;updateProgress();}
+function bad(el,msg){el.className='feedback mal';el.textContent='❌ '+msg;}
+function num(id){return parseFloat(document.getElementById(id).value);}
+function close2(a,b,t){return !isNaN(a) && Math.abs(a-b)<=t;}
+
+function checkPaso(i,p){
+  const ex = EXERCISES[i], A = stats(ex.datosA), B = stats(ex.datosB);
+  if(p===1){
+    const fb = document.getElementById(`ex${i}_fb1`);
+    const errs = [];
+    if(!close2(num(`ex${i}_sumA`),A.sum,0.001)) errs.push('suma A');
+    if(!close2(num(`ex${i}_meanA`),A.mean,0.02)) errs.push('media A');
+    if(!close2(num(`ex${i}_sumB`),B.sum,0.001)) errs.push('suma B');
+    if(!close2(num(`ex${i}_meanB`),B.mean,0.02)) errs.push('media B');
+    errs.length===0 ? ok(fb,`¡Perfecto! Ambas medias calculadas. Ojo gerente: si dan igual, la decisión está en la dispersión.`) : bad(fb,'Revisa: '+errs.join(', ')+'. Suma con calma y divide entre n.');
+  }
+  if(p===2){
+    const fb = document.getElementById(`ex${i}_fb2`);
+    const errs = [];
+    if(!close2(num(`ex${i}_ssA`),A.ss,0.05)) errs.push('Σ⬛ A');
+    if(!close2(num(`ex${i}_s2A`),A.s2,0.05)) errs.push('S² A (÷'+(A.n-1)+')');
+    if(!close2(num(`ex${i}_sA`),A.s,0.08)) errs.push('S A (√)');
+    if(!close2(num(`ex${i}_ssB`),B.ss,0.5)) errs.push('Σ⬛ B');
+    if(!close2(num(`ex${i}_s2B`),B.s2,0.5)) errs.push('S² B (÷'+(B.n-1)+')');
+    if(!close2(num(`ex${i}_sB`),B.s,0.1)) errs.push('S B (√)');
+    errs.length===0 ? ok(fb,`¡Tablita dominada! S(A)≈${f2(A.s)} vs S(B)≈${f2(B.s)} ${ex.unidad}.`) : bad(fb,'Revisa: '+errs.join(', ')+'. Recuerda: resta, cuadrado, suma, ÷(n−1), raíz.');
+  }
+  if(p===3){
+    const fb = document.getElementById(`ex${i}_fb3`);
+    const errs = [];
+    if(!close2(num(`ex${i}_cvA`),A.cv,0.15)) errs.push('CV A');
+    if(!close2(num(`ex${i}_cvB`),B.cv,0.15)) errs.push('CV B');
+    errs.length===0 ? ok(fb,`¡Exacto! CV(A)≈${f2(A.cv)}% vs CV(B)≈${f2(B.cv)}%. Gana el menor. 🏆`) : bad(fb,'Revisa: '+errs.join(', ')+'. Fórmula: (S ÷ x̄) × 100.');
+  }
+}
+function checkDecision(i){
+  const sel = document.querySelector(`input[name=dec${i}]:checked`);
+  const fb = document.getElementById(`ex${i}_fbDec`);
+  const txt = document.getElementById(`ex${i}_interp`).value.trim();
+  const words = txt.length===0?0:txt.split(/\s+/).length;
+  if(!sel){bad(fb,'Elige una decisión como buen gerente.');return;}
+  if(words<15){bad(fb,'Primero escribe tu interpretación gerencial (mínimo 15 palabras) y luego emite tu decisión.');document.getElementById(`ex${i}_interp`).focus();return;}
+  // En los 10 casos el Grupo A es el consistente (menor CV)
+  const A = stats(EXERCISES[i].datosA), B = stats(EXERCISES[i].datosB);
+  const winner = A.cv <= B.cv ? 'A' : 'B';
+  sel.value===winner ? ok(fb,'¡Decisión gerencial correcta! Menor CV = proceso bajo control. 👔') : bad(fb,'Ojo: gana el de MENOR CV (más consistente). Revisa tu Paso 3.');
+}
+
+function updateProgress(){
+  const oks = document.querySelectorAll('.feedback.ok').length;
+  const total = 42;
+  document.getElementById('progressBar').style.width = Math.min(100, oks/total*100)+'%';
+  let done = 0, interp = 0, ia = 0;
+  EXERCISES.forEach((ex,i)=>{
+    if(document.getElementById(`ex${i}_fbDec`) && document.getElementById(`ex${i}_fbDec`).classList.contains('ok')) done++;
+    const t = document.getElementById(`ex${i}_interp`);
+    if(t && t.value.trim().split(/\s+/).filter(Boolean).length>=15) interp++;
+    if(ex.aiEvaluation) ia++;
+  });
+  document.getElementById('doneCounter').textContent = done+' / 10';
+  document.getElementById('kpiDone').textContent = done+'/10';
+  document.getElementById('kpiInterp').textContent = interp+'/10';
+  document.getElementById('kpiIA').textContent = ia+'/10';
+}
+document.addEventListener('input', e=>{ if(e.target && e.target.classList && e.target.classList.contains('interp')) updateProgress(); });
+
+/* ================= IA — Mentor Amigo (patrón OpenRouter del sitio) ================= */
+const API_KEY_BIAS='bias-lab-settings', API_KEY_GLOBAL='openrouter_settings';
+const DEFAULT_API_URL='https://openrouter.ai/api/v1/chat/completions';
+const DEFAULT_MODEL='inclusionai/ling-3.0-flash-fin:free';
+let iaCurrentEx = 0;
+
+function getStoredApiSettings(){
+  try{
+    const raw = localStorage.getItem(API_KEY_BIAS)||localStorage.getItem(API_KEY_GLOBAL);
+    if(raw){const p=JSON.parse(raw);return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model:p.model||DEFAULT_MODEL};}
+  }catch(e){}
+  return {apiKey:'',apiUrl:DEFAULT_API_URL,model:DEFAULT_MODEL};
+}
+function syncApiUi(){
+  const s=getStoredApiSettings();
+  const badge=document.getElementById('header-api-status-badge');
+  if(badge){
+    if(s.apiKey){badge.className='ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold';badge.innerHTML='<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> IA Conectada';}
+    else{badge.className='ml-1 inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold';badge.innerHTML='<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> IA Pendiente';}
+  }
+  const k=document.getElementById('cfg-api-key'); if(k&&!k.value) k.value=s.apiKey;
+  const m=document.getElementById('cfg-api-model'); if(m&&s.model) m.value=s.model;
+  const ind=document.getElementById('cfg-key-indicator');
+  if(ind) ind.textContent = s.apiKey ? 'Clave guardada localmente ✓' : 'Sin clave guardada';
+}
+function openApiModal(){syncApiUi();document.getElementById('api-modal').classList.remove('hidden');}
+function closeApiModal(){document.getElementById('api-modal').classList.add('hidden');}
+function saveApiSettings(){
+  const apiKey=document.getElementById('cfg-api-key').value.trim();
+  const model=document.getElementById('cfg-api-model').value.trim()||DEFAULT_MODEL;
+  const payload={apiKey,apiUrl:DEFAULT_API_URL,model};
+  try{localStorage.setItem(API_KEY_BIAS,JSON.stringify(payload));localStorage.setItem(API_KEY_GLOBAL,JSON.stringify(payload));}catch(e){alert('No se pudo guardar: '+e.message);return;}
+  document.getElementById('cfg-test-feedback').textContent='✅ Configuración guardada en este navegador.';
+  document.getElementById('cfg-test-feedback').className='feedback ok';
+  syncApiUi();
+}
+function purgeApiSettings(){
+  localStorage.removeItem(API_KEY_BIAS);localStorage.removeItem(API_KEY_GLOBAL);
+  document.getElementById('cfg-api-key').value='';
+  document.getElementById('cfg-test-feedback').textContent='🗑 Clave eliminada del navegador.';
+  syncApiUi();
+}
+async function testApiConnection(){
+  const fb=document.getElementById('cfg-test-feedback');
+  const s=getStoredApiSettings();
+  const key=document.getElementById('cfg-api-key').value.trim()||s.apiKey;
+  if(!key){fb.textContent='❌ Pega primero tu API Key.';fb.className='feedback mal';return;}
+  fb.textContent='⏳ Probando conexión...';fb.className='feedback';
+  try{
+    const r=await fetch(DEFAULT_API_URL,{method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.origin,'X-Title':'UMG Sem12 Ejercicios'},body:JSON.stringify({model:document.getElementById('cfg-api-model').value.trim()||DEFAULT_MODEL,messages:[{role:'user',content:'Responde solo: Conexión OK'}],max_tokens:20,temperature:0})});
+    const d=await r.json();
+    if(r.ok&&d.choices){fb.textContent='✅ Conexión exitosa. Ya puedes pedir retroalimentación.';fb.className='feedback ok';}
+    else throw new Error((d.error&&d.error.message)||r.statusText);
+  }catch(e){fb.textContent='❌ Falló: '+e.message;fb.className='feedback mal';}
+}
+function sanitizeAiResponse(raw){
+  let text=String(raw||'');
+  text=text.replace(/<think>[\s\S]*?<\/think>/gi,'');
+  text=text.replace(/<think>[\s\S]*/gi,'');
+  text=text.replace(/<\/think>/gi,'');
+  const lines=text.split('\n'); const keep=[];
+  for(const ln of lines){
+    if(/^\s*(Analyze the Request|Evaluate the Student|Goal\s*:|Method\s*:|Justification\s*:)/i.test(ln)) continue;
+    if(/->\s*(Correct|Partially|Incorrect)/i.test(ln)) continue;
+    keep.push(ln);
+  }
+  text=keep.join('\n');
+  const idx=text.search(/(🎯|🧭|💼|1\.\s|Consejo del Mentor)/);
+  if(idx>40) text=text.slice(idx);
+  return text.trim();
+}
+function docenteCriterio(i){
+  const ex=EXERCISES[i],A=stats(ex.datosA),B=stats(ex.datosB);
+  const win = A.cv<=B.cv ? 'Grupo A' : 'Grupo B';
+  return `${win} es el proceso bajo control (media x̄≈${f2(A.mean)} ${ex.unidad} en ambos; S(A)≈${f2(A.s)} vs S(B)≈${f2(B.s)}; CV(A)≈${f2(A.cv)}% vs CV(B)≈${f2(B.cv)}%). Decisión: operar con el grupo consistente y detener/reentrenar el otro. ${ex.impacto}`;
+}
+async function analyzeWithAI(i, tempModel){
+  iaCurrentEx=i;
+  const ex=EXERCISES[i];
+  const ta=document.getElementById(`ex${i}_interp`);
+  const txt=(ta.value||'').trim();
+  if(txt.split(/\s+/).filter(Boolean).length<10){alert('Escribe primero tu interpretación gerencial (al menos 15 palabras) para que la IA tenga material que evaluar.');ta.focus();return;}
+  const s=getStoredApiSettings();
+  if(!s.apiKey){openApiModal();return;}
+  const activeModel=(tempModel&&tempModel.trim())||s.model||DEFAULT_MODEL;
+  document.getElementById('ia-modal').classList.remove('hidden');
+  document.getElementById('ia-eval-loading').classList.remove('hidden');
+  document.getElementById('ia-eval-content').classList.add('hidden');
+  document.getElementById('ia-eval-error').classList.add('hidden');
+  document.getElementById('modal-ia-case-title').textContent=`Ejercicio ${i+1}: ${ex.titulo}`;
+  document.getElementById('modal-ia-user-text').textContent='"'+txt+'"';
+  document.getElementById('modal-ia-solution-text').textContent=docenteCriterio(i);
+  document.getElementById('modal-ia-model-badge').textContent=activeModel;
+  const A=stats(ex.datosA),B=stats(ex.datosB);
+  const systemPrompt=`Eres un mentor y consultor de negocios en Guatemala para estudiantes de Administración de Empresas de la Universidad Mariano Gálvez (UMG).
+ROL Y TONO (MENTOR AMIGO Y CERCANO):
+- Trata SIEMPRE al estudiante directamente de "TÚ" (nunca "el estudiante/alumno/usuario").
+- NUNCA uses etiquetas frías o punitivas ("Incorrecto", "Incompleto"). Motiva con empatía: "¡Buen intento! ... analicemos juntos...".
+- Si acertó, felicítalo con calidez y destaca su visión gerencial.
+ESTRUCTURA OBLIGATORIA EN 3 APARTADOS DIRECTOS:
+1. 🎯 Consejo del Mentor sobre tu Análisis:
+2. 🧭 Orientación y Justificación Práctica:
+3. 💼 Recomendación para tu Gestión:
+REGLAS DE SALIDA: NO monólogo interno ni <think>. Sin saludos ("¡Hola!"). Comienza DIRECTAMENTE con "🎯 Consejo del Mentor sobre tu Análisis:". 140-200 palabras. Tema: medidas de dispersión (Rango, S² con n−1, S, CV %; menor CV = más consistente).`;
+  const userPrompt=`EJERCICIO EMPRESARIAL (Semana 12 — Dispersión):
+Título: ${ex.titulo}
+Contexto: ${ex.contexto}
+Meta: ${ex.meta}. Grupo A (n=${A.n}): ${ex.datosA.join(', ')} ${ex.unidad}. Grupo B (n=${B.n}): ${ex.datosB.join(', ')} ${ex.unidad}.
+Resultados calculados: x̄(A)=${f2(A.mean)}, x̄(B)=${f2(B.mean)}; S²(A)=${f2(A.s2)}, S²(B)=${f2(B.s2)}; S(A)=${f2(A.s)}, S(B)=${f2(B.s)}; CV(A)=${f2(A.cv)}%, CV(B)=${f2(B.cv)}%.
+Pregunta guía: ${ex.pregunta}
+CRITERIO DOCENTE: ${docenteCriterio(i)}
+ANÁLISIS DEL ESTUDIANTE A EVALUAR: "${txt}"
+EVALÚA como mentor amigo en los 3 apartados (tú, cálido, sin saludos, sin <think>).`;
+  try{
+    const r=await fetch(s.apiUrl,{method:'POST',headers:{'Authorization':'Bearer '+s.apiKey,'Content-Type':'application/json','HTTP-Referer':location.origin||'http://localhost','X-Title':'UMG Sem12 Ejercicios IA'},body:JSON.stringify({model:activeModel,messages:[{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],temperature:0.3,max_tokens:1200})});
+    const d=await r.json();
+    if(!(r.ok&&d.choices&&d.choices.length)) throw new Error('('+(r.status)+') '+((d.error&&d.error.message)||r.statusText));
+    const ch=d.choices[0]; let raw='';
+    if(ch.message){ raw = (typeof ch.message.content==='string'&&ch.message.content.trim()) ? ch.message.content.trim() : (ch.message.reasoning||''); }
+    else if(typeof ch.text==='string') raw=ch.text.trim();
+    let fb=sanitizeAiResponse(raw);
+    if(!fb){ if(ch.finish_reason==='length') throw new Error('El modelo agotó tokens. Prueba con "google/gemini-2.0-flash-exp:free" y Reevaluar.'); fb=String(raw).replace(/<\/?think>/gi,'').trim(); }
+    if(!fb) throw new Error('La IA no devolvió veredicto. Prueba otro modelo.');
+    document.getElementById('modal-ia-response-text').textContent=fb;
+    document.getElementById('ia-eval-loading').classList.add('hidden');
+    document.getElementById('ia-eval-content').classList.remove('hidden');
+    ex.aiEvaluation={feedback:fb,model:activeModel,timestamp:new Date().toISOString()};
+    const badge=document.getElementById(`ex${i}_iaBadge`);
+    if(badge){badge.textContent='✓ Evaluado';badge.style.background='#0e9f6e';badge.style.color='#fff';}
+    const out=document.getElementById(`ex${i}_iaOut`);
+    document.getElementById(`ex${i}_iaText`).textContent=fb;
+    out.classList.remove('hidden');
+    updateProgress();
+  }catch(e){
+    document.getElementById('ia-eval-loading').classList.add('hidden');
+    document.getElementById('ia-eval-error').classList.remove('hidden');
+    document.getElementById('ia-eval-error-msg').textContent=String(e.message||e);
+  }
+}
+/* Limpia emojis y símbolos fuera de WinAnsi para que jsPDF (helvetica) no los imprima como signos raros */
+function pdfClean(t){
+  let s=String(t==null?'':t);
+  const map={'x̄':'x-media','X̄':'X-media','Σ':'Sum ','σ':'sigma ','μ':'mu ','√':'sqrt ','≈':' aprox. ','→':'->','←':'<-','−':'-','–':'-','—':'-','“':'"','”':'"','‘':"'",'’':"'",'…':'...','⬛':'[ ]','✓':'[ok]','✔':'[ok]','✅':'[ok]','❌':'[X]','⚠':'[!]','̄':''};
+  for(const k in map) s=s.split(k).join(map[k]);
+  s=s.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE00}-\u{FE0F}\u{200D}\u{2190}-\u{21FF}\u{2300}-\u{23FF}\u{25A0}-\u{25FF}]/gu,'');
+  s=s.replace(/[^\x09\x0A\x0D\x20-\xFF]/g,'');
+  return s.replace(/[ \t]{2,}/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+}
+/* ================= PDF DE ENTREGA (con logo UMG) ================= */
+async function loadLogoDataUrl(){
+  const urls=['../../cosas/Umg.png','../../cosas/umg.png'];
+  for(const u of urls){
+    try{
+      const r=await fetch(u); if(!r.ok) continue;
+      const b=await r.blob();
+      const d=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(b);});
+      return d;
+    }catch(e){}
+  }
+  return null;
+}
+async function generatePDF(){
+  const fb=document.getElementById('fbPdf');
+  const name=document.getElementById('stuName').value.trim();
+  const carnet=document.getElementById('stuId').value.trim();
+  if(!name||!carnet){fb.className='feedback mal';fb.textContent='❌ Escribe tu nombre y tu carnet antes de generar el PDF.';document.getElementById('datos').scrollIntoView({behavior:'smooth'});return;}
+  fb.className='feedback';fb.textContent='⏳ Generando PDF...';
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF();
+    const _docText=doc.text.bind(doc);
+    doc.text=(t,x,yp,opt)=>_docText(pdfClean(t),x,yp,opt);
+    const W=doc.internal.pageSize.getWidth(), M=15, CW=W-M*2;
+    let y=0;
+    const need=(h)=>{if(y+h>275){doc.addPage();y=15;}};
+    function addText(t,x,yp,maxW,fs,style){
+      t=pdfClean(t);
+      doc.setFontSize(fs);doc.setFont('helvetica',style||'normal');
+      const lines=doc.splitTextToSize(String(t),maxW);
+      lines.forEach(ln=>{if(yp>275){doc.addPage();yp=15;}doc.text(ln,x,yp);yp+=fs*0.45;});
+      return yp;
+    }
+    // Encabezado institucional con logo
+    const logo=await loadLogoDataUrl();
+    doc.setFillColor(15,42,82);doc.rect(0,0,W,36,'F');
+    if(logo){try{doc.addImage(logo,'PNG',M,6,16,16);}catch(e){}}
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(13);
+    doc.text('Ejercicios: Medidas de Dispersion — Semana 12', M+(logo?22:0), 14);
+    doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(188,208,240);
+    doc.text('Estadistica I · Universidad Mariano Galvez (UMG) · Facultad de Ciencias de la Administracion', M+(logo?22:0), 21);
+    doc.text('Fecha: '+new Date().toLocaleDateString('es-GT',{year:'numeric',month:'long',day:'numeric'}), M+(logo?22:0), 27);
+    y=44;doc.setTextColor(20,30,50);
+    let nDone=0,nInterp=0,nIA=0;
+    EXERCISES.forEach((ex,i)=>{
+      const fbEl=document.getElementById(`ex${i}_fbDec`);
+      if(fbEl&&fbEl.classList.contains('ok')) nDone++;
+      const tv=document.getElementById(`ex${i}_interp`);
+      if(tv&&tv.value.trim().split(/\s+/).filter(Boolean).length>=15) nInterp++;
+      if(ex.aiEvaluation) nIA++;
+    });
+    doc.setFillColor(232,241,255);doc.setDrawColor(26,58,107);
+    doc.roundedRect(M,y,CW,30,2,2,'FD');
+    doc.setFontSize(11);doc.setFont('helvetica','bold');
+    doc.text('Datos del estudiante',M+5,y+7);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');
+    doc.text('Nombre: '+name,M+5,y+14);
+    doc.text('Carnet: '+carnet,M+100,y+14);
+    doc.setFontSize(9.5);doc.setFont('helvetica','bold');
+    doc.text(`Ejercicios verificados: ${nDone}/10   |   Interpretaciones: ${nInterp}/10   |   Analisis con IA: ${nIA}/10`,M+5,y+24);
+    y+=38;
+    EXERCISES.forEach((ex,i)=>{
+      const A=stats(ex.datosA),B=stats(ex.datosB);
+      const g=id=>{const el=document.getElementById(id);return el?(el.value||'').trim():'';};
+      const sel=document.querySelector(`input[name=dec${i}]:checked`);
+      need(40);
+      doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(26,58,107);
+      y=addText(`Ejercicio ${i+1}: ${ex.titulo}`,M,y,CW,11,'bold')+4;
+      doc.setTextColor(60,70,90);doc.setFontSize(8.5);
+      y=addText(ex.contexto,M,y,CW,8.5)+2;
+      y=addText(`Meta: ${ex.meta} | Grupo A (n=${A.n}): ${ex.datosA.join(', ')} ${ex.unidad} | Grupo B (n=${B.n}): ${ex.datosB.join(', ')} ${ex.unidad}`,M,y,CW,8.5)+3;
+      doc.setTextColor(14,90,60);
+      y=addText(`Resultados tecnicos: xBar(A)=${f2(A.mean)}, xBar(B)=${f2(B.mean)} | S2(A)=${f2(A.s2)}, S2(B)=${f2(B.s2)} | S(A)=${f2(A.s)}, S(B)=${f2(B.s)} ${ex.unidad} | CV(A)=${f2(A.cv)}%, CV(B)=${f2(B.cv)}%`,M,y,CW,8.5)+3;
+      doc.setTextColor(20,30,50);
+      y=addText(`Respuestas del alumno — P1: sumaA=${g(`ex${i}_sumA`)||'—'}, mediaA=${g(`ex${i}_meanA`)||'—'}; sumaB=${g(`ex${i}_sumB`)||'—'}, mediaB=${g(`ex${i}_meanB`)||'—'} | P2: SS(A)=${g(`ex${i}_ssA`)||'—'}, S2(A)=${g(`ex${i}_s2A`)||'—'}, S(A)=${g(`ex${i}_sA`)||'—'}; SS(B)=${g(`ex${i}_ssB`)||'—'}, S2(B)=${g(`ex${i}_s2B`)||'—'}, S(B)=${g(`ex${i}_sB`)||'—'} | P3: CV(A)=${g(`ex${i}_cvA`)||'—'}%, CV(B)=${g(`ex${i}_cvB`)||'—'}% | Decision: ${sel?('Grupo '+sel.value):'—'}`,M,y,CW,8.5)+3;
+      const interp=g(`ex${i}_interp`)||'(sin redactar)';
+      doc.setFont('helvetica','bold');y=addText('Interpretacion gerencial (alumno):',M,y,CW,8.5,'bold')+1;
+      doc.setFont('helvetica','italic');doc.setTextColor(40,50,70);
+      y=addText('"'+interp+'"',M+3,y,CW-3,8.5)+3;
+      doc.setTextColor(20,30,50);
+      if(ex.aiEvaluation&&ex.aiEvaluation.feedback){
+        need(20);
+        doc.setFont('helvetica','bold');doc.setTextColor(108,60,224);
+        y=addText(`Retroalimentacion IA (${ex.aiEvaluation.model}):`,M,y,CW,8.5,'bold')+1;
+        doc.setFont('helvetica','normal');doc.setTextColor(60,70,90);
+        y=addText(ex.aiEvaluation.feedback,M+3,y,CW-3,8.2)+3;
+        doc.setTextColor(20,30,50);
+      }
+      need(16);
+      doc.setFont('helvetica','bold');doc.setTextColor(14,120,80);
+      y=addText('Criterio tecnico docente:',M,y,CW,8.5,'bold')+1;
+      doc.setFont('helvetica','normal');doc.setTextColor(90,100,115);
+      y=addText(docenteCriterio(i),M+3,y,CW-3,8)+6;
+      doc.setDrawColor(200,210,230);doc.line(M,y,W-M,y);y+=7;
+      doc.setTextColor(20,30,50);
+    });
+    const pages=doc.internal.getNumberOfPages();
+    for(let p=1;p<=pages;p++){
+      doc.setPage(p);
+      if(logo){try{doc.addImage(logo,'PNG',M,282,8,8);}catch(e){}}
+      doc.setFontSize(7.5);doc.setTextColor(148,163,184);
+      doc.text('Estadistica 1 · UMG · Catedratico Ruldin Ayala · Semana 12: Medidas de Dispersion',W/2,288,{align:'center'});
+      doc.text(`Pagina ${p} de ${pages}`,W-M,288,{align:'right'});
+    }
+    const safe=carnet.replace(/[^\w-]/g,'')||'UMG';
+    doc.save(`Laboratorio_Sem12_Dispersion_${safe}.pdf`);
+    fb.className='feedback ok';fb.textContent='✅ PDF generado. Revisa tu carpeta de descargas y entrégalo en clase.';
+    updateProgress();
+  }catch(e){fb.className='feedback mal';fb.textContent='❌ No se pudo generar el PDF: '+(e.message||e);}
+}
+
+/* ================= INIT ================= */
+renderExercises();
+syncApiUi();
+updateProgress();
+</script>
+</body>
+</html>

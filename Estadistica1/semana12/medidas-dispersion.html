@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 12: Medidas de Dispersión — El Secreto de la Consistencia · UMG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --azul:#1a3a6b; --azul2:#274e8d; --celeste:#e8f1ff; --amarillo:#ffc531; --naranja:#ff7a1a;
+  --verde:#0e9f6e; --verde-claro:#e6f9f0; --rojo:#e02424; --rojo-claro:#fdecec;
+  --morado:#6c3ce0; --gris:#f4f6fb; --texto:#1e2a3a; --muted:#5b6b82;
+  --card-shadow:0 8px 28px rgba(26,58,107,.12); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--texto);background:#fafbff;line-height:1.6}
+.heading-font{font-family:'Space Grotesk','Inter',sans-serif}
+header.hero{background:linear-gradient(135deg,#0f2a52 0%,#274e8d 70%);color:#fff;padding:10px 16px;position:static}
+.hero-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:2px 9px;border-radius:999px;font-size:.72rem}
+.hero h1{margin:0;font-size:1.12rem;line-height:1.3;font-weight:800}
+.hero p.sub{display:none}
+.progress-wrap{background:rgba(255,255,255,.22);height:5px;border-radius:999px;margin-top:8px;overflow:hidden;flex-basis:100%}
+#progressBar{height:100%;width:0%;background:var(--amarillo);border-radius:999px;transition:width .4s}
+nav.steps{position:sticky;top:76px;z-index:40;background:#0f2a52ee;backdrop-filter:blur(6px);max-width:none;margin:0;display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.15)}
+nav.steps a{color:#fff;text-decoration:none;font-size:.78rem;white-space:nowrap;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+nav.steps a{color:#fff;text-decoration:none;font-size:.85rem;background:rgba(255,255,255,.14);padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}
+nav.steps a:hover{background:var(--amarillo);color:#1a3a6b}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:24px;margin:22px 0;border:1px solid #e6ebf5}
+.card h2{margin-top:0;color:var(--azul)}
+.card h3{color:var(--azul2)}
+.formula{background:#0f2a52;color:#ffe9a8;font-size:1.25rem;text-align:center;padding:16px;border-radius:14px;margin:14px 0;overflow-x:auto}
+.formula small{display:block;color:#bcd0f0;font-size:.8rem;margin-top:6px}
+.tip{background:#fff8de;border-left:6px solid var(--amarillo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tip strong{color:#7a5a00}
+.tutor{background:var(--verde-claro);border-left:6px solid var(--verde);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tutor strong{color:#06593f}
+.alerta{background:var(--rojo-claro);border-left:6px solid var(--rojo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.cocinero{border-radius:14px;padding:16px}
+.coc-A{background:#e6f9f0;border:2px solid #0e9f6e}
+.coc-B{background:#fdecec;border:2px solid #e02424}
+.dots{display:flex;align-items:flex-end;gap:8px;height:150px;background:#fff;border-radius:10px;padding:10px;border:1px dashed #bbb;margin-top:10px;position:relative}
+.dot-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px}
+.dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff}
+.dot.A{background:var(--verde)} .dot.B{background:var(--rojo)}
+.target-line{position:absolute;left:0;right:0;border-top:3px dashed var(--azul);font-size:.75rem;color:var(--azul)}
+input[type=number],input[type=text]{padding:10px 12px;border:2px solid #cbd5e6;border-radius:10px;font-size:1rem;width:130px;text-align:center}
+input:focus{outline:none;border-color:var(--azul2);box-shadow:0 0 0 3px var(--celeste)}
+button{cursor:pointer;border:none;border-radius:12px;padding:11px 18px;font-size:.95rem;font-weight:700;transition:.2s}
+.btn-azul{background:var(--azul);color:#fff} .btn-azul:hover{background:var(--azul2)}
+.btn-verde{background:var(--verde);color:#fff} .btn-amarillo{background:var(--amarillo);color:#1a3a6b}
+.btn-ghost{background:#eef2f9;color:var(--azul)} .btn-naranja{background:var(--naranja);color:#fff}
+.feedback{font-weight:700;margin-top:8px;min-height:1.4em}
+.ok{color:var(--verde)} .mal{color:var(--rojo)}
+table.taller{width:100%;border-collapse:collapse;margin:12px 0;font-size:.95rem}
+table.taller th{background:var(--azul);color:#fff;padding:10px}
+table.taller td,table.taller th{border:1px solid #d4ddee;padding:8px;text-align:center}
+table.taller tr:nth-child(even) td{background:#f5f8ff}
+table.taller input{width:90px;padding:7px}
+.stepper{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}
+.paso-btn{flex:1;min-width:140px;padding:12px;border-radius:12px;background:#eef2f9;font-weight:800;color:var(--azul);border:2px solid transparent;text-align:center}
+.paso-btn.active{background:var(--azul);color:#fff}
+.paso-content{display:none} .paso-content.active{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+details{margin:8px 0;background:#f7f9ff;border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700;color:var(--azul)}
+.quiz-opt{display:block;background:#f2f5fb;border:2px solid #dbe4f3;border-radius:12px;padding:10px 14px;margin:8px 0;cursor:pointer}
+.quiz-opt:hover{border-color:var(--azul2)}
+.quiz-opt.correct{background:#d9f7e8;border-color:var(--verde)}
+.quiz-opt.wrong{background:#fddede;border-color:var(--rojo)}
+.bell-wrap{background:linear-gradient(#f7faff,#fff);border:1px solid #dbe4f3;border-radius:14px;padding:12px;text-align:center}
+footer.site-footer{background:#020617;color:#94a3b8;text-align:center;padding:2rem 1rem;font-size:.85rem;border-top:1px solid #0f172a}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.kpi div{flex:1;min-width:150px;background:var(--gris);border-radius:12px;padding:12px;text-align:center}
+.kpi b{font-size:1.4rem;display:block;color:var(--azul)}
+.pildora{display:inline-block;background:var(--celeste);color:var(--azul);font-weight:800;border-radius:999px;padding:2px 12px;margin:2px}
+.checklist li{margin:6px 0}
+.miedo{background:linear-gradient(135deg,#fff6d6,#ffe9a8);border:2px dashed #b78d00;border-radius:14px;padding:14px;margin:12px 0}
+code{background:#eef2f9;padding:2px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<!-- HEADER INSTITUCIONAL / NAVEGACIÓN (formato estándar Estadística I) -->
+<header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div class="flex items-start sm:items-center gap-3 min-w-0">
+<a href="../index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Regresar al índice general de Estadística I">
+<i class="fa-solid fa-arrow-left text-sm"></i>
+</a>
+<div class="bg-white p-1 rounded-xl shadow-lg shadow-blue-500/15 shrink-0 flex items-center justify-center">
+<img src="../../cosas/Umg.png" alt="Escudo Universidad Mariano Gálvez" class="h-9 w-auto object-contain" onerror="this.onerror=null; this.src='../../cosas/umg.png';">
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-2 text-blue-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">
+<span>Universidad Mariano Gálvez</span><span>•</span><span class="hidden sm:inline">Facultad de Ciencias de la Administración</span>
+</div>
+<h1 class="text-base sm:text-xl font-extrabold tracking-tight mt-0.5 text-white heading-font truncate">Estadística I — Semana 12: Medidas de Dispersión</h1>
+<p class="text-xs text-slate-400 mt-0.5 truncate">El secreto de la consistencia · Tutor paso a paso 💛 · <span class="text-amber-300 font-semibold">📊 Dispersión</span></p>
+<div class="flex flex-wrap gap-1.5 mt-1.5">
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">📘 UMG · Admón. Empresas 🇬🇹</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">Semana 12</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30 font-semibold">Tutor paso a paso 💛</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/90 px-3 py-2 rounded-2xl border border-slate-800 text-right text-xs text-slate-300 hidden sm:block shrink-0 space-y-1">
+<div class="flex items-center justify-end gap-2">
+<span class="text-slate-400">Curso: <strong class="text-blue-400">Estadística I</strong></span>
+<span>•</span>
+<a href="../index_estadistica.html" class="text-slate-300 hover:text-white underline decoration-blue-500/60 underline-offset-2" title="Ir al índice general de Estadística I"><i class="fa-solid fa-list mr-1 text-blue-400"></i>Índice general</a>
+</div>
+<div class="text-slate-500 text-[11px]">Rango · RIC · Varianza · Desviación S · CV %</div>
+</div>
+</div>
+<div class="progress-wrap mt-3" style="background:rgba(255,255,255,.15);height:5px;border-radius:999px;overflow:hidden"><div id="progressBar"></div></div>
+</div>
+</header>
+<nav class="steps">
+<a href="#s1">1. ¿Promedio no basta?</a><a href="#s2">2. Las 5 medidas</a><a href="#s3">3. Regla 68-95-99.7</a><a href="#s4">4. Taller Escuintla 🥤</a><a href="#s5">5. Calculadora libre</a><a href="#s6">6. Examen gerente</a><a href="#s7">7. Actividad en clase 🏫</a>
+</nav>
+
+<main>
+<section class="card" style="background:linear-gradient(135deg,#eef4ff,#e6f9f0);padding:16px 20px">
+<b>👋 Hola, futuro gerente, soy tu tutor virtual.</b> Te llevo de la mano con hamburguesas 🍔 y gaseosas 🥤 para que <b>entiendas, calcules y decidas como administrador</b>, no como matemático. Sin estrés, paso a pasito.
+</section>
+<!-- INTRO MIEDO -->
+<div class="miedo">😌 <b>Si le tienes miedo a las matemáticas, lee esto:</b> aquí NO te voy a pedir que memorices. Solo que entiendas una idea: <b>promedio = a dónde apuntamos, dispersión = qué tan regados están los tiros</b>. Todo lo demás es sumar, restar y usar calculadora. Tú puedes. Yo te reviso cada casilla. <b>Marca tu avance haciendo los ejercicios ✅</b></div>
+
+<!-- SECCION 1 -->
+<section id="s1" class="card">
+<h2>1️⃣ ¿Por qué el promedio NO es suficiente? 🍔</h2>
+<p>Eres <b>Director de Operaciones</b> de una cadena de comida rápida. La torta ideal debe pesar <span class="pildora">100 gramos</span>.</p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>👨‍🍳 Cocinero A (ordenado):</b><br><span class="pildora">99</span><span class="pildora">101</span><span class="pildora">100</span><span class="pildora">98</span><span class="pildora">102</span><div class="dots" id="dotsA"></div><p>Media: <code>(99+101+100+98+102)/5 = 100 g</code></p></div>
+<div class="cocinero coc-B"><b>🧑‍🍳 Cocinero B (loco):</b><br><span class="pildora">50</span><span class="pildora">150</span><span class="pildora">40</span><span class="pildora">160</span><span class="pildora">100</span><div class="dots" id="dotsB"></div><p>Media: <code>(50+150+40+160+100)/5 = 100 g</code></p></div>
+</div>
+<div class="tutor">🧑‍🏫 <b>Tutor dice:</b> ¡Los dos promedian 100! Si solo miras el promedio dirías "empatan". Pero mira el gráfico: A está pegadito a la línea de 100, B anda por todos lados. <b>A = cliente feliz + sin desperdicio. B = unos clientes con mini-hamburguesa 😡 y otros con gigante que te hace perder pisto 💸.</b></div>
+<div class="tip">💡 <b>Tip gerente:</b> <b>Promedio = centro del proceso. Dispersión = calidad, riesgo y consistencia.</b> Alta variabilidad = proceso FUERA DE CONTROL. Eso es lo que te evalúa tu jefe.</div>
+<h3>✏️ Mini-reto 1: compruébalo tú</h3>
+<p>Suma los 5 pesos del Cocinero A y divide entre 5. Escríbelo:</p>
+<input type="number" id="retoMediaA" placeholder="¿Media A?"> <button class="btn-verde" onclick="checkMediaA()">Revisar</button> <button class="btn-ghost" onclick="document.getElementById('retoMediaA').value=100">😅 No me sale, ayúdame</button>
+<div id="fbMediaA" class="feedback"></div>
+<details><summary>👀 Ver explicación sin miedo</summary><p>Sumamos: 99+101=200, +100=300, +98=398, +102=500. Luego 500÷5=100. ¡Eso es la media! <b>x̄ (x con barrita) = suma ÷ cantidad.</b></p></details>
+</section>
+
+<!-- SECCION 2 -->
+<section id="s2" class="card">
+<h2>2️⃣ Las 5 medidas: de lo fácil a lo poderoso 🚀</h2>
+<p>Piénsalo como niveles de videojuego. Cada una te da más control.</p>
+
+<h3>A. 📏 Rango (R) — Nivel 1, lo más rápido</h3>
+<div class="formula">R = x<sub>máx</sub> − x<sub>mín</sub> <small>Distancia entre el más grande y el más chico</small></div>
+<p>Ejemplo Cocinero A: 102−98=<b>4 g</b>. Cocinero B: 160−40=<b>120 g</b>. ¡Ya se ve quién es el caos!</p>
+<div class="tip">💡 <b>Tip:</b> rapidísimo pero <b>muy sensible a un dato loco</b>. Si un día queman una torta de 10 g, el rango explota aunque todo el mes estuvo bien.</div>
+<p><b>Pruébalo:</b> Rango de B = <input type="number" id="inRangoB" placeholder="?"> <button class="btn-azul" onclick="check('inRangoB',120,'fbRango')">Revisar</button></p><div id="fbRango" class="feedback"></div>
+
+ <h3>B. 📦 Rango Intercuartil (RIC) — ignora extremos</h3>
+ <div class="formula">RIC = C<sub>3</sub> − C<sub>1</sub> <small>Dispersión del 50% central. Q3 menos Q1. Ideal para salarios y finanzas con sueldos gigantes.</small></div>
+ <div class="tutor">🧑‍🏫 <b>En cristiano:</b> ordenas los datos, cortas el 25% más bajo y el 25% más alto, y mides lo del centro. Así los millonarios no te arruinan el análisis de sueldos. 💰</div>
+ <div class="tip">💡 <b>¿Cómo se calcula C<sub>1</sub> y C<sub>3</sub>? Recuérdalo en 3 pasos:</b> 1) Ordena de menor a mayor. 2) Busca la posición <code>L = (P/100) × (n+1)</code> con P=25 para C<sub>1</sub> y P=75 para C<sub>3</sub>. 3) Si L sale con .5, promedia los dos datos que la rodean.</div>
+ <p><b>Paso 1: Ordenar los datos de menor a mayor</b> (antes de cualquier cálculo de posición):</p>
+ <div class="grid2">
+ <div class="cocinero coc-A"><b>👨‍🍳 Cocinero A (n=5):</b><br><span class="pildora">98</span><span class="pildora">99</span><span class="pildora">100</span><span class="pildora">101</span><span class="pildora">102</span><br><small>Original: 99, 101, 100, 98, 102 → ordenado.</small></div>
+ <div class="cocinero coc-B"><b>🧑‍🍳 Cocinero B (n=5):</b><br><span class="pildora">40</span><span class="pildora">50</span><span class="pildora">100</span><span class="pildora">150</span><span class="pildora">160</span><br><small>Original: 50, 150, 40, 160, 100 → ordenado.</small></div>
+ </div>
+ <p><b>Paso 2: Ubicar y encontrar C<sub>1</sub> y C<sub>3</sub></b> (cada cuartil deja 25% de datos en cada tramo):</p>
+ <div class="grid2">
+ <div class="cocinero coc-A"><b>👨‍🍳 Cocinero A:</b><br>Posición C<sub>1</sub>: <code>L<sub>C1</sub> = 0.25 × (5+1) = 1.5</code><br>Está en 1.5 → promedio del 1.º (98) y 2.º (99):<br><code>C<sub>1</sub> = (98+99)/2 = 98.5 g</code><br><br>Posición C<sub>3</sub>: <code>L<sub>C3</sub> = 0.75 × (5+1) = 4.5</code><br>Está en 4.5 → promedio del 4.º (101) y 5.º (102):<br><code>C<sub>3</sub> = (101+102)/2 = 101.5 g</code></div>
+ <div class="cocinero coc-B"><b>🧑‍🍳 Cocinero B:</b><br>Posición C<sub>1</sub>: <code>L<sub>C1</sub> = 0.25 × (5+1) = 1.5</code><br>Está en 1.5 → promedio del 1.º (40) y 2.º (50):<br><code>C<sub>1</sub> = (40+50)/2 = 45 g</code><br><br>Posición C<sub>3</sub>: <code>L<sub>C3</sub> = 0.75 × (5+1) = 4.5</code><br>Está en 4.5 → promedio del 4.º (150) y 5.º (160):<br><code>C<sub>3</sub> = (150+160)/2 = 155 g</code></div>
+ </div>
+ <p><b>Paso 3: Aplicar la fórmula RIC = C<sub>3</sub> − C<sub>1</sub></b></p>
+ <p>👨‍🍳 Cocinero A: <code>RIC = 101.5 − 98.5 = 3 gramos</code> &nbsp; | &nbsp; 🧑‍🍳 Cocinero B: <code>RIC = 155 − 45 = 110 gramos</code></p>
+ <p><b>Pruébalo tú:</b> C<sub>1</sub> de B = <input type="number" id="inC1B" placeholder="?"> <button class="btn-azul" onclick="check('inC1B',45,'fbC1B')">Revisar</button></p><div id="fbC1B" class="feedback"></div>
+ <p>C<sub>3</sub> de B = <input type="number" id="inC3B" placeholder="?"> <button class="btn-azul" onclick="check('inC3B',155,'fbC3B')">Revisar</button></p><div id="fbC3B" class="feedback"></div>
+ <p>RIC de B = <input type="number" id="inRICB" placeholder="?"> <button class="btn-azul" onclick="check('inRICB',110,'fbRICB')">Revisar</button> &nbsp; RIC de A = <input type="number" id="inRICA" placeholder="?"> <button class="btn-azul" onclick="check('inRICA',3,'fbRICA')">Revisar</button></p><div id="fbRICB" class="feedback"></div><div id="fbRICA" class="feedback"></div>
+ <div class="alerta">👔 <b>Lectura gerencial:</b> El 50% central de A varía solo <b>3 g</b> (¡proceso bajo control ✅). El 50% central de B varía <b>110 g</b>. Y ojo: el Rango Total de B es 120 g (160−40), casi igual que su RIC (110 g). Esto confirma que la variabilidad <b>no fue un solo error puntual</b>, sino que <b>todo su proceso intermedio está descontrolado</b> 🛑.</div>
+
+<h3>C. 🧭 Desviación Media (D<sub>m</sub>) — ¿qué tan lejos estoy del promedio?</h3>
+<p>Restas cada dato menos la media: <code>(x<sub>i</sub> − x̄)</code>. Pero si las sumas, ¡siempre da 0! Los + se comen a los −. Truco: usa <b>valor absoluto | |</b> (quitar el signo).</p>
+<div class="formula">D<sub>m</sub> = Σ|x<sub>i</sub> − x̄| / n <small>Promedio de distancias (sin importar si es para arriba o abajo)</small></div>
+
+<h3>D. ⭐ Varianza (S²) y Desviación Estándar (S) — las favoritas del gerente</h3>
+<p>En vez de quitar el signo, <b>elevamos al cuadrado</b>. El cuadrado siempre es positivo y castiga más los errores grandes (¡como debe ser!).</p>
+<div class="formula">S² = Σ(x<sub>i</sub> − x̄)² / (n−1) <small>Varianza muestral. Se divide entre n−1 (grados de libertad) para estimar mejor a toda la población.</small></div>
+<div class="formula" style="background:#123a22">S² = [ Σx<sub>i</sub>² − n·x̄² ] / (n−1) <small style="color:#baf0d2">Fórmula rápida (mismo resultado, menos restas)</small></div>
+<div class="formula">S = √S² <small>Raíz cuadrada para volver a unidades normales. Si S² está en ml², S queda en ml. ¡La que realmente interpretas!</small></div>
+<div class="tutor">🧑‍🏫 <b>Traducción gerente:</b> <b>S = distancia típica a la media.</b> Si S=1.4 ml, tus botellas andan ±1.4 ml del objetivo. Si S=11 ml, ¡tu máquina está bailando! 💃</div>
+<div class="alerta">⚠️ <b>Error que todos cometen:</b> dividir entre <b>n</b> en vez de <b>n−1</b>. En muestras (como aquí, n=6 botellas de miles) SIEMPRE divide entre <b>n−1</b>. n es solo si tuvieras TODA la población.</div>
+
+<h3>E. ⚖️ Coeficiente de Variación (CV) — comparar peras con manzanas 🍐🍎</h3>
+<p>¿Cómo comparas envases de 500 ml con un camión de 5,000 kg? La S del camión será gigante por la escala. Solución: ponla en <b>% de la media</b>.</p>
+<div class="formula">CV = ( S / x̄ ) × 100% &nbsp;&nbsp; | &nbsp;&nbsp; Población: CV = ( σ / μ ) × 100% <small>A menor % → más homogéneo y consistente. ¡El que tenga menor CV gana!</small></div>
+<div class="kpi"><div><b>CV &lt; 5%</b>Excelente ✅</div><div><b>5–15%</b>Aceptable ⚠️ vigilar</div><div><b>&gt; 15%</b>Fuera de control 🛑</div></div>
+</section>
+
+<!-- SECCION 3 -->
+<section id="s3" class="card">
+<h2>3️⃣ ¿Cómo leer la Desviación Estándar? La campana 🔔 (Regla empírica)</h2>
+<p>Si tus datos son simétricos (forma de campana 🔔) con media x̄ y desviación S:</p>
+<div class="bell-wrap">
+<svg viewBox="0 0 500 200" width="100%" height="200">
+<path d="M10,180 C120,180 150,20 250,20 C350,20 380,180 490,180" fill="#e8f1ff" stroke="#1a3a6b" stroke-width="3"/>
+<line x1="250" y1="20" x2="250" y2="180" stroke="#0e9f6e" stroke-width="3" stroke-dasharray="6 4"/>
+<line x1="170" y1="60" x2="170" y2="180" stroke="#ffc531" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="330" y1="60" x2="330" y2="180" stroke="#ffc531" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="250" y="195" text-anchor="middle" font-size="13" font-weight="bold">x̄ (media)</text>
+<text x="170" y="195" text-anchor="middle" font-size="11">x̄−S</text>
+<text x="330" y="195" text-anchor="middle" font-size="11">x̄+S</text>
+<text x="250" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#0e9f6e">68%</text>
+</svg>
+<ul style="text-align:left">
+<li>🟢 <b>68%</b> cae en <b>(x̄ − S , x̄ + S)</b></li>
+<li>🟡 <b>95%</b> cae en <b>(x̄ − 2S , x̄ + 2S)</b></li>
+<li>🔴 <b>99.7% ≈ todo</b> cae en <b>(x̄ − 3S , x̄ + 3S)</b></li>
+</ul>
+</div>
+<div class="tip">💡 <b>Ejemplo chapín:</b> Si tu línea tiene x̄=500 ml y S=1.4 ml, el 95% de tus botellas saldrá entre 497.2 y 502.8 ml. ¡Calidad total! Si S=11 ml, el 95% andará entre 478 y 522 ml. ¡Multa de la DIACO segura! ⚖️</div>
+<p><b>Reto campana:</b> Si x̄=500 y S=10, ¿entre qué valores cae el 68%? <input type="text" id="inCampana" placeholder="ej: 490 y 510"> <button class="btn-azul" onclick="checkCampana()">Revisar</button></p><div id="fbCampana" class="feedback"></div>
+</section>
+
+<!-- SECCION 4 TALLER -->
+<section id="s4" class="card">
+<h2>4️⃣ Taller Guiado: Envasadora en Escuintla 🥤🏭</h2>
+<p><b>Caso:</b> Presentación de <span class="pildora">500 ml</span>. Reclamos por llenado disparejo. Muestras n=6:</p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>Línea A:</b> 500, 498, 502, 501, 499, 500</div>
+<div class="cocinero coc-B"><b>Línea B:</b> 505, 490, 515, 485, 500, 505</div>
+</div>
+<div class="stepper">
+<button class="paso-btn active" onclick="showPaso(1)">Paso 1: Media 🧮</button>
+<button class="paso-btn" onclick="showPaso(2)">Paso 2: Varianza y S 📐</button>
+<button class="paso-btn" onclick="showPaso(3)">Paso 3: CV % ⚖️</button>
+<button class="paso-btn" onclick="showPaso(4)">Paso 4: Decisión 👔</button>
+</div>
+
+<div id="paso1" class="paso-content active">
+<h3>Paso 1: La media (lo más fácil, te lo juro)</h3>
+<p>Suma todo y divide entre 6. Hazlo con calculadora, sin pena.</p>
+<p>Línea A: (500+498+502+501+499+500) = <input type="number" id="sumA" placeholder="suma"> ÷6 = <input type="number" id="mediaA" placeholder="media"> <button class="btn-verde" onclick="checkPaso1A()">Revisar A</button></p><div id="fbP1A" class="feedback"></div>
+<p>Línea B: (505+490+515+485+500+505) = <input type="number" id="sumB" placeholder="suma"> ÷6 = <input type="number" id="mediaB" placeholder="media"> <button class="btn-verde" onclick="checkPaso1B()">Revisar B</button></p><div id="fbP1B" class="feedback"></div>
+<details><summary>🆘 Ayuda: ¿cómo sumo sin perderme?</summary><p>Agrupa: 500+500=1000, 498+502=1000, 501+499=1000 → total 3000. 3000÷6=<b>500</b>. ¡Las dos líneas dan 500! Por eso el gerente que solo ve promedios cree que todo está bien. 😱</p><button class="btn-ghost" onclick="document.getElementById('sumA').value=3000;document.getElementById('mediaA').value=500;document.getElementById('sumB').value=3000;document.getElementById('mediaB').value=500">Rellenar por mí</button></details>
+<div class="tutor">🧑‍🏫 <b>Observación inicial:</b> Ambas dan 500 ml exactos. Si te quedas aquí, repruebas como gerente. ¡Vamos al Paso 2!</div>
+<button class="btn-azul" onclick="showPaso(2)">Siguiente: Varianza →</button>
+</div>
+
+<div id="paso2" class="paso-content">
+<h3>Paso 2: Varianza y Desviación (la tablita mágica)</h3>
+<p><b>Receta (hazlo fila por fila):</b> 1) Resta: dato − 500. 2) Eleva al cuadrado (el − desaparece). 3) Suma los cuadrados. 4) Divide entre n−1 = 5. 5) Saca raíz para S.</p>
+<h4>Línea A (x̄=500) — complétala:</h4>
+<table class="taller"><tr><th>xi</th><th>xi − 500 = ?</th><th>( )² = ?</th></tr>
+<tr><td>500</td><td><input type="number" id="a1" placeholder="0"></td><td><input type="number" id="a1c" placeholder="0"></td></tr>
+<tr><td>498</td><td><input type="number" id="a2" placeholder="-2"></td><td><input type="number" id="a2c" placeholder="4"></td></tr>
+<tr><td>502</td><td><input type="number" id="a3" placeholder="2"></td><td><input type="number" id="a3c" placeholder="4"></td></tr>
+<tr><td>501</td><td><input type="number" id="a4" placeholder="1"></td><td><input type="number" id="a4c" placeholder="1"></td></tr>
+<tr><td>499</td><td><input type="number" id="a5" placeholder="-1"></td><td><input type="number" id="a5c" placeholder="1"></td></tr>
+<tr><td>500</td><td><input type="number" id="a6" placeholder="0"></td><td><input type="number" id="a6c" placeholder="0"></td></tr>
+</table>
+<p>Suma de cuadrados = <input type="number" id="sumCA" placeholder="10"> <button class="btn-verde" onclick="checkTablaA()">Revisar tabla A</button></p><div id="fbTabA" class="feedback"></div>
+<p>S²<sub>A</sub> = 10 ÷ 5 = <input type="number" id="varA" placeholder="2"> &nbsp; S<sub>A</sub>=√2 = <input type="number" step="0.01" id="sdA" placeholder="1.41"> <button class="btn-verde" onclick="checkVarA()">Revisar</button></p><div id="fbVarA" class="feedback"></div>
+<h4>Línea B (x̄=500):</h4>
+<table class="taller"><tr><th>xi</th><th>xi − 500</th><th>( )²</th></tr>
+<tr><td>505</td><td>5</td><td>25</td></tr><tr><td>490</td><td>−10</td><td>100</td></tr><tr><td>515</td><td>15</td><td>225</td></tr><tr><td>485</td><td>−15</td><td>225</td></tr><tr><td>500</td><td>0</td><td>0</td></tr><tr><td>505</td><td>5</td><td>25</td></tr>
+<tr><td><b>Suma</b></td><td><b>0 ✔ (siempre da 0, vas bien)</b></td><td><b>600</b></td></tr></table>
+<p>S²<sub>B</sub> = 600 ÷ 5 = <input type="number" id="varB" placeholder="120"> &nbsp; S<sub>B</sub> ≈ <input type="number" step="0.01" id="sdB" placeholder="10.95"> <button class="btn-verde" onclick="checkVarB()">Revisar</button></p><div id="fbVarB" class="feedback"></div>
+<details><summary>🆘 No entiendo el cuadrado</summary><p>(−2)² = (−2)×(−2)=+4. Menos por menos = más. Por eso el cuadrado “arregla” los signos. ¡Y castiga fuerte los errores grandes: 15²=225!</p></details>
+<button class="btn-azul" onclick="showPaso(3)">Siguiente: CV →</button>
+</div>
+
+<div id="paso3" class="paso-content">
+<h3>Paso 3: Coeficiente de Variación (el desempatador)</h3>
+<div class="formula">CV = ( S ÷ x̄ ) × 100%</div>
+<p>CV<sub>A</sub> = (1.4142 ÷ 500)×100 = <input type="number" step="0.01" id="cvA" placeholder="0.28"> % <button class="btn-verde" onclick="check('cvA',0.28,'fbCvA',0.05)">Revisar</button></p><div id="fbCvA" class="feedback"></div>
+<p>CV<sub>B</sub> = (10.9545 ÷ 500)×100 = <input type="number" step="0.01" id="cvB" placeholder="2.19"> % <button class="btn-verde" onclick="check('cvB',2.19,'fbCvB',0.05)">Revisar</button></p><div id="fbCvB" class="feedback"></div>
+<div class="tutor">🧑‍🏫 <b>Léelo así:</b> A varía solo 0.28% (nada). B varía 2.19% (¡casi 8 veces más! 2.19 ÷ 0.28 ≈ 7.8). En plata: A es Rolex, B es reloj de mercado. ⌚</div>
+<button class="btn-azul" onclick="showPaso(4)">Siguiente: Decisión gerente →</button>
+</div>
+
+<div id="paso4" class="paso-content">
+<h3>Paso 4: Diagnóstico gerencial 👔 (lo que te da el ascenso)</h3>
+<p><b>¿Qué máquina se detiene HOY para calibración?</b></p>
+<label class="quiz-opt"><input type="radio" name="maq" value="A"> Línea A, porque tiene CV mayor</label>
+<label class="quiz-opt"><input type="radio" name="maq" value="B"> Línea B, porque tiene CV 2.19% (8× mayor) y es inconsistente</label>
+<label class="quiz-opt"><input type="radio" name="maq" value="ninguna"> Ninguna, ambas promedian 500</label>
+<button class="btn-naranja" onclick="checkDecision()">Emitir decisión 🚨</button><div id="fbDec" class="feedback"></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Botella de <b>485 ml</b> = menos producto = multa DIACO / derechos del consumidor. Botella de <b>515 ml</b> = derrame + regalas producto. <b>Decisión: detener y calibrar Línea B. Línea A sigue operando.</b></div>
+<button class="btn-verde" onclick="marcarCompleto()">🎓 ¡Lo logré! Marcar taller completo</button>
+</div>
+</section>
+
+<!-- SECCION 5 -->
+<section id="s5" class="card">
+<h2>5️⃣ 🧪 Tu calculadora de gerente (practica con tus datos)</h2>
+<p>Pega tus datos separados por coma (ej: <code>500,498,502,501,499,500</code>) y te calculo todo con explicación:</p>
+<input type="text" id="freeData" style="width:100%;max-width:500px" placeholder="Escribe tus números aquí...">
+<button class="btn-azul" onclick="calcLibre()">Calcular todo ✨</button>
+<div id="outLibre" style="margin-top:12px"></div>
+<div class="tip">💡 <b>Tip de calculadora (casio/celu):</b> usa modo STAT → ingresa datos → SHIFT+1 → x̄, xσn-1 (=S). ¡Ojo! elige <b>S muestral (n−1)</b>, no la poblacional.</div>
+</section>
+
+<!-- SECCION 6 -->
+<section id="s6" class="card">
+<h2>6️⃣ 🎓 Examen de Gerente (5 preguntas, sin miedo)</h2>
+<div id="quiz"></div>
+<p><b>Tu nota:</b> <span id="nota">0 / 5</span> <button class="btn-ghost" onclick="buildQuiz()">🔄 Reintentar</button></p>
+<h3>✅ Checklist para tu parcial</h3>
+<ul class="checklist">
+<li><input type="checkbox" class="chk"> Sé que promedio igual NO significa igual calidad.</li>
+<li><input type="checkbox" class="chk"> Calculo R = máx − mín.</li>
+<li><input type="checkbox" class="chk"> Calculo S² dividiendo entre <b>n−1</b> y S con raíz.</li>
+<li><input type="checkbox" class="chk"> Calculo CV = S/x̄ ×100% y elijo el menor como más consistente.</li>
+<li><input type="checkbox" class="chk"> Explico la decisión en plata: multa, desperdicio, cliente.</li>
+</ul>
+<div id="fbFinal" class="feedback"></div>
+</section>
+
+<!-- SECCION 7 -->
+<section id="s7" class="card" style="background:linear-gradient(135deg,#eef4ff,#fff8de)">
+<h2>7️⃣ 🏫 Actividad en Clase: Laboratorio de 10 ejercicios</h2>
+<p>¿Ya dominas el taller guiado? Ahora resuelve en el aula <b>10 casos empresariales guatemaltecos</b> con la misma línea: Media 🧮 → Varianza y S 📐 → CV % ⚖️ → Decisión + interpretación gerencial 👔, con botón de ayuda, análisis de tu interpretación con IA y PDF de entrega.</p>
+<div class="kpi"><div><b>10</b>Casos en el aula</div><div><b>R·S²·S·CV</b>Misma línea Escuintla</div><div><b>PDF</b>Entrega con IA</div></div>
+<a href="ejercicio_sem12.html" style="display:inline-block;text-decoration:none"><button class="btn-naranja">🏫 Ir a la Actividad en Clase →</button></a>
+<div class="tip">💡 <b>Para el catedrático:</b> el laboratorio pide nombre y carnet, oculta las respuestas y genera el PDF con los análisis del alumno y los dictámenes de IA.</div>
+</section>
+</main>
+<!-- FOOTER INSTITUCIONAL (formato estándar Estadística I) -->
+<footer class="site-footer bg-slate-950 border-t border-slate-900 py-8 mt-12">
+<div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+<div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+<a href="../index_estadistica.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition" title="Volver al índice general de Estadística I">
+<i class="fa-solid fa-list text-blue-400"></i> Índice general de Estadística I
+</a>
+<a href="ejercicio_sem12.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition" title="Ir a la Actividad en Clase: 10 ejercicios">
+<i class="fa-solid fa-school text-amber-400"></i> Actividad en Clase
+</a>
+<a href="../../index.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 px-4 py-2 rounded-xl transition" title="Portal Académico General UMG">
+<i class="fa-solid fa-house text-emerald-400"></i> Portal General
+</a>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+Plataforma de apoyo docente diseñada por <strong class="text-blue-400 font-bold">Ruldin Ayala</strong>, catedrático | Exclusivamente para el curso de <strong>Estadística I</strong>.<br>
+Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).
+</p>
+<p class="text-[11px] text-slate-600">
+&copy; 2026 UMG Administración de Empresas • Semana 12: Medidas de Dispersión — “Promedio te dice a dónde apuntas, dispersión te dice si le atinas.”
+</p>
+</div>
+</footer>
+
+<script>
+// ---------- dots ----------
+function drawDots(id, arr, cls, mean){
+  const c=document.getElementById(id); c.innerHTML='';
+  const min=Math.min(...arr,mean)-5, max=Math.max(...arr,mean)+5;
+  arr.forEach(v=>{
+    const col=document.createElement('div');col.className='dot-col';
+    const pct=Math.max(5,((v-min)/(max-min))*100);
+    const d=document.createElement('div');d.className='dot '+cls;d.textContent=v;d.style.marginBottom=(pct*0.7)+'px';d.title=v+' g';
+    col.appendChild(d);c.appendChild(col);
+  });
+  const line=document.createElement('div');line.className='target-line';line.style.bottom='48px';line.textContent='— — meta 100 g';c.appendChild(line);
+}
+drawDots('dotsA',[99,101,100,98,102],'A',100);
+drawDots('dotsB',[50,150,40,160,100],'B',100);
+
+// ---------- helpers ----------
+function ok(el,msg){el.className='feedback ok';el.textContent='✅ '+msg;updateProgress();}
+function bad(el,msg){el.className='feedback mal';el.textContent='❌ '+msg;}
+function check(id,expected,fbId,tol=0.001){
+  const v=parseFloat(document.getElementById(id).value);const fb=document.getElementById(fbId);
+  if(isNaN(v)){bad(fb,'Escribe un número primero, sin miedo.');return;}
+  Math.abs(v-expected)<=tol?ok(fb,'¡Exacto! '+expected):bad(fb,'Casi... revisa. Pista: la respuesta es '+expected);
+}
+function checkMediaA(){const v=parseFloat(document.getElementById('retoMediaA').value);const fb=document.getElementById('fbMediaA');
+  if(v===100)ok(fb,'¡Eso! 500÷5=100. Ya dominas la media.');else bad(fb,'Suma: 99+101+100+98+102=500, ÷5=100. Inténtalo de nuevo.');}
+function checkCampana(){const t=document.getElementById('inCampana').value;const fb=document.getElementById('fbCampana');
+  if(/490/.test(t)&&/510/.test(t))ok(fb,'¡Bien! 500±10 → (490, 510). Ese es el 68%.');else bad(fb,'Fórmula: (x̄−S, x̄+S) = (500−10, 500+10) = (490, 510).');}
+function checkPaso1A(){const s=parseFloat(document.getElementById('sumA').value),m=parseFloat(document.getElementById('mediaA').value);const fb=document.getElementById('fbP1A');
+  (s===3000&&m===500)?ok(fb,'Perfecto. Línea A suma 3000, media 500 ml.') : bad(fb,'Debe ser suma=3000 y media=500. Agrupa de 1000 en 1000.');}
+function checkPaso1B(){const s=parseFloat(document.getElementById('sumB').value),m=parseFloat(document.getElementById('mediaB').value);const fb=document.getElementById('fbP1B');
+  (s===3000&&m===500)?ok(fb,'Correcto. ¡También 500! Por eso necesitamos dispersión.') : bad(fb,'Suma=3000, media=500. Suma con calma.');}
+function checkTablaA(){
+  const exp={a1:0,a1c:0,a2:-2,a2c:4,a3:2,a3c:4,a4:1,a4c:1,a5:-1,a5c:1,a6:0,a6c:0};
+  let mal=[];for(const k in exp){if(parseFloat(document.getElementById(k).value)!==exp[k])mal.push(k);}
+  const s=parseFloat(document.getElementById('sumCA').value);if(s!==10)mal.push('suma(10)');
+  const fb=document.getElementById('fbTabA');
+  mal.length===0?ok(fb,'¡Tablita perfecta! Suma de cuadrados = 10.') : bad(fb,'Revisa: '+mal.join(', ')+'. Recuerda: resta y luego cuadrado.');
+}
+function checkVarA(){const v=parseFloat(document.getElementById('varA').value),s=parseFloat(document.getElementById('sdA').value);const fb=document.getElementById('fbVarA');
+  (v===2&&Math.abs(s-1.4142)<0.02)?ok(fb,'¡Genial! S²=10/5=2.0 ml², S=√2≈1.41 ml.') : bad(fb,'S²=10÷5=2, S=√2≈1.41. Usa calculadora para la raíz.');}
+function checkVarB(){const v=parseFloat(document.getElementById('varB').value),s=parseFloat(document.getElementById('sdB').value);const fb=document.getElementById('fbVarB');
+  (v===120&&Math.abs(s-10.9545)<0.05)?ok(fb,'¡Eso! S²=600/5=120, S≈10.95 ml. ¡Mucho mayor que A!') : bad(fb,'S²=600÷5=120, S=√120≈10.95.');}
+function checkDecision(){const sel=document.querySelector('input[name=maq]:checked');const fb=document.getElementById('fbDec');
+  if(!sel){bad(fb,'Elige una opción como buen gerente.');return;}
+  sel.value==='B'?ok(fb,'¡Decisión gerencial correcta! Se calibra la B. La A sigue. Ascenso ganado. 👔') : bad(fb,'Ojo: el que tiene MENOR CV es el bueno. B tiene 2.19% vs 0.28%. Se detiene la B.');}
+function showPaso(n){
+  document.querySelectorAll('.paso-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.paso-content').forEach((c,i)=>c.classList.toggle('active',i===n-1));
+  document.getElementById('s4').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function calcLibre(){
+  const raw=document.getElementById('freeData').value.split(',').map(s=>parseFloat(s.trim())).filter(x=>!isNaN(x));
+  const out=document.getElementById('outLibre');
+  if(raw.length<2){out.innerHTML='<b class=mal>❌ Escribe al menos 2 números separados por coma.</b>';return;}
+  const n=raw.length, sum=raw.reduce((a,b)=>a+b,0), mean=sum/n;
+  const sq=raw.map(x=>(x-mean)**2), ssum=sq.reduce((a,b)=>a+b,0);
+  const v=ssum/(n-1), s=Math.sqrt(v), cv=(s/mean*100);
+  const r=Math.max(...raw)-Math.min(...raw);
+  out.innerHTML=`<div class="kpi"><div><b>${mean.toFixed(2)}</b>Media x̄</div><div><b>${r.toFixed(2)}</b>Rango</div><div><b>${v.toFixed(2)}</b>Varianza S²</div><div><b>${s.toFixed(2)}</b>Desv. S</div><div><b>${cv.toFixed(2)}%</b>CV</div></div>
+  <p class="tutor">🧑‍🏫 <b>Lectura gerente:</b> tus datos varían típicamente ±${s.toFixed(2)} alrededor de ${mean.toFixed(2)} (${cv.toFixed(2)}%). ${cv<5?'✅ Proceso consistente.':'⚠️ Revisa tu proceso, hay dispersión.'}</p>`;
+  updateProgress();
+}
+// quiz
+const Q=[
+ {q:'Dos máquinas promedian 500 ml. A tiene S=1.4, B tiene S=11. ¿Cuál es más consistente?',o:['La B, porque es más grande','La A, porque su S es menor ✅','Son iguales porque promedian igual'],a:1},
+ {q:'¿Por qué dividimos la varianza muestral entre n−1?',o:['Por capricho del profe','Por grados de libertad: estima mejor a la población ✅','Para que salga más grande'],a:1},
+ {q:'CV de A=0.28% y B=2.19%. ¿Qué decides?',o:['Calibrar la B ✅','Calibrar la A','Nada, todo bien'],a:0},
+ {q:'Rango = 160 − 40. ¿Cuánto es?',o:['200','120 ✅','100'],a:1},
+ {q:'Si x̄=100 y S=5, ¿dónde cae el 95% aprox.?',o:['(95,105)','(90,110) ✅ = x̄±2S','(85,115)'],a:1},
+];
+function buildQuiz(){
+  const box=document.getElementById('quiz');box.innerHTML='';let score=0;
+  Q.forEach((item,i)=>{
+    const d=document.createElement('div');d.innerHTML='<b>'+(i+1)+'. '+item.q+'</b>';
+    item.o.forEach((op,j)=>{
+      const b=document.createElement('div');b.className='quiz-opt';b.textContent=op;
+      b.onclick=()=>{
+        if(b.classList.contains('correct')||b.classList.contains('wrong'))return;
+        if(j===item.a){b.classList.add('correct');score++;}else{b.classList.add('wrong');d.children[item.a+1].classList.add('correct');}
+        document.getElementById('nota').textContent=score+' / 5';
+        if(score===5)document.getElementById('fbFinal').textContent='🏆 ¡Eres Gerente de Calidad certificado! CV, S y varianza dominados.';
+        updateProgress();
+      };
+      d.appendChild(b);
+    });
+    box.appendChild(d);
+  });
+  document.getElementById('nota').textContent='0 / 5';
+}
+buildQuiz();
+let done=new Set();
+function updateProgress(){
+  document.querySelectorAll('.feedback.ok').length;
+  const total=12, got=Math.min(document.querySelectorAll('.feedback.ok').length,total);
+  document.getElementById('progressBar').style.width=(got/total*100)+'%';
+}
+document.querySelectorAll('.chk').forEach(c=>c.addEventListener('change',updateProgress));
+function marcarCompleto(){alert('🎉 ¡Felicidades, futuro gerente UMG! Terminaste el taller. Recuerda: menor CV = máquina ganadora. La B se calibra.');updateProgress();}
+</script>
+</body>
+</html>
