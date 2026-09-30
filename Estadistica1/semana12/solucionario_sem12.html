@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solucionario: Medidas de Dispersión — Semana 12 · UMG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --azul:#1a3a6b; --azul2:#274e8d; --celeste:#e8f1ff; --amarillo:#ffc531; --naranja:#ff7a1a;
+  --verde:#0e9f6e; --verde-claro:#e6f9f0; --rojo:#e02424; --rojo-claro:#fdecec;
+  --morado:#6c3ce0; --gris:#f4f6fb; --texto:#1e2a3a; --muted:#5b6b82;
+  --card-shadow:0 8px 28px rgba(26,58,107,.12); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--texto);background:#fafbff;line-height:1.6}
+.heading-font{font-family:'Space Grotesk','Inter',sans-serif}
+.progress-wrap{background:rgba(255,255,255,.15);height:5px;border-radius:999px;margin-top:8px;overflow:hidden}
+#progressBar{height:100%;width:0%;background:var(--amarillo);border-radius:999px;transition:width .4s}
+nav.steps{position:sticky;top:76px;z-index:40;background:#0f2a52ee;backdrop-filter:blur(6px);max-width:none;margin:0;display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.15)}
+nav.steps a{color:#fff;text-decoration:none;font-size:.78rem;white-space:nowrap;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+nav.steps a:hover{background:var(--amarillo);color:#1a3a6b}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:24px;margin:22px 0;border:1px solid #e6ebf5}
+.card h2{margin-top:0;color:var(--azul)}
+.card h3{color:var(--azul2)}
+.formula{background:#0f2a52;color:#ffe9a8;font-size:1.1rem;text-align:center;padding:14px;border-radius:14px;margin:12px 0;overflow-x:auto}
+.formula small{display:block;color:#bcd0f0;font-size:.8rem;margin-top:6px}
+.tip{background:#fff8de;border-left:6px solid var(--amarillo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tip strong{color:#7a5a00}
+.tutor{background:var(--verde-claro);border-left:6px solid var(--verde);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tutor strong{color:#06593f}
+.alerta{background:var(--rojo-claro);border-left:6px solid var(--rojo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.cocinero{border-radius:14px;padding:16px}
+.coc-A{background:#e6f9f0;border:2px solid #0e9f6e}
+.coc-B{background:#fdecec;border:2px solid #e02424}
+button{cursor:pointer;border:none;border-radius:6px;padding:11px 20px;font-size:.95rem;font-weight:700;transition:.2s}
+.btn-azul{background:var(--azul);color:#fff} .btn-azul:hover{background:var(--azul2)}
+.btn-verde{background:var(--verde);color:#fff} .btn-amarillo{background:var(--amarillo);color:#1a3a6b}
+.btn-ghost{background:#eef2f9;color:var(--azul)} .btn-naranja{background:var(--naranja);color:#fff}
+table.taller{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem}
+table.taller th{background:var(--azul);color:#fff;padding:10px}
+table.taller td,table.taller th{border:1px solid #d4ddee;padding:7px;text-align:center}
+table.taller tr:nth-child(even) td{background:#f5f8ff}
+table.taller tr.total td{background:#e8f1ff;font-weight:800}
+table.taller th.colA{background:#0e9f6e} table.taller th.colB{background:#c81e1e}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.kpi div{flex:1;min-width:140px;background:var(--gris);border-radius:12px;padding:12px;text-align:center}
+.kpi b{font-size:1.25rem;display:block;color:var(--azul)}
+.pildora{display:inline-block;background:var(--celeste);color:var(--azul);font-weight:800;border-radius:999px;padding:2px 12px;margin:2px}
+.pildora.win{background:#0e9f6e;color:#fff} .pildora.lose{background:#e02424;color:#fff}
+.ex-num{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 12px;border-radius:14px;background:var(--azul);color:#fff;font-weight:800;font-size:1.1rem}
+.paso-tag{display:inline-block;background:var(--azul);color:#fff;font-weight:800;border-radius:10px;padding:4px 12px;margin:14px 0 6px;font-size:.95rem}
+.paso-tag.v{background:var(--verde)} .paso-tag.o{background:var(--naranja)} .paso-tag.m{background:var(--morado)}
+.bar{height:12px;border-radius:999px;background:#e5e9f2;overflow:hidden;margin-top:6px}
+.bar > span{display:block;height:100%;border-radius:999px}
+.barA > span{background:#0e9f6e} .barB > span{background:#e02424}
+.veredicto{background:linear-gradient(135deg,#e6f9f0,#eef4ff);border:2px solid #0e9f6e;border-radius:14px;padding:14px;margin:12px 0}
+code{background:#eef2f9;padding:2px 6px;border-radius:6px}
+details{margin:8px 0;background:#f7f9ff;border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700;color:var(--azul)}
+footer.site-footer{background:#020617;color:#94a3b8;text-align:center;padding:2rem 1rem;font-size:.85rem;border-top:1px solid #0f172a}
+@media print{ header,nav.steps,.noprint{display:none!important} main{max-width:none} .card{box-shadow:none;break-inside:avoid} }
+</style>
+</head>
+<body>
+<!-- HEADER INSTITUCIONAL / NAVEGACIÓN (formato estándar Estadística I) -->
+<header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div class="flex items-start sm:items-center gap-3 min-w-0">
+<a href="../index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Regresar al índice general de Estadística I"><i class="fa-solid fa-arrow-left text-sm"></i></a>
+<a href="medidas-dispersion.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Volver al tutor: Medidas de Dispersión"><i class="fa-solid fa-chart-bar text-sm text-amber-400"></i></a>
+<a href="ejercicio_sem12.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Volver al laboratorio de ejercicios"><i class="fa-solid fa-pencil text-sm text-emerald-400"></i></a>
+<div class="bg-white p-1 rounded-xl shadow-lg shadow-blue-500/15 shrink-0 flex items-center justify-center">
+<img src="../../cosas/Umg.png" alt="Escudo Universidad Mariano Gálvez" class="h-9 w-auto object-contain" onerror="this.onerror=null; this.src='../../cosas/umg.png';">
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-2 text-blue-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">
+<span>Universidad Mariano Gálvez</span><span>•</span><span class="hidden sm:inline">Facultad de Ciencias de la Administración</span>
+</div>
+<h1 class="text-base sm:text-xl font-extrabold tracking-tight mt-0.5 text-white heading-font">Solucionario: Medidas de Dispersión <span class="text-xs text-slate-400 font-normal">| Semana 12</span></h1>
+<p class="text-xs text-slate-400 mt-0.5">Resolución paso a paso · 10 casos empresariales 🇬🇹 · <span class="text-amber-300 font-semibold">R · S² · S · CV %</span></p>
+<div class="flex flex-wrap gap-1.5 mt-1.5">
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">📘 UMG · Admón. Empresas 🇬🇹</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 font-semibold">✅ Solucionario docente</span>
+<a href="ejercicio_sem12.html" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/40 font-semibold">✏️ Practicar en el laboratorio</a>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/90 px-3 py-2 rounded-2xl border border-slate-800 text-right text-xs text-slate-300 hidden sm:block shrink-0 space-y-1 noprint">
+<div class="text-slate-400 text-[11px]">Muestral: siempre ÷ (n−1)</div>
+<div class="flex gap-2 justify-end">
+<button type="button" onclick="window.print()" class="text-[11px] bg-amber-400 hover:bg-amber-300 text-slate-900 px-2.5 py-1 rounded-lg transition font-bold"><i class="fa-solid fa-print mr-1"></i>Imprimir</button>
+<a href="ejercicio_sem12.html" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 py-1 rounded-lg transition">Ir al laboratorio</a>
+</div>
+</div>
+</div>
+<div class="progress-wrap"><div id="progressBar"></div></div>
+</div>
+</header>
+<nav class="steps" id="exNav">
+<a href="#metodo">📘 Método</a><a href="ejercicio_sem12.html">✏️ Laboratorio</a><a href="#ex1">Ejer. 1</a><a href="#ex2">Ejer. 2</a><a href="#ex3">Ejer. 3</a><a href="#ex4">Ejer. 4</a><a href="#ex5">Ejer. 5</a><a href="#ex6">Ejer. 6</a><a href="#ex7">Ejer. 7</a><a href="#ex8">Ejer. 8</a><a href="#ex9">Ejer. 9</a><a href="#ex10">Ejer. 10</a><a href="#resumen">🏆 Resumen</a>
+</nav>
+
+<main>
+<section class="card" id="metodo" style="background:linear-gradient(135deg,#eef4ff,#e6f9f0);padding:16px 20px">
+<h2>📘 Cómo leer este solucionario (el mismo método del laboratorio)</h2>
+<p>Cada ejercicio se resuelve con los <b>4 pasos del gerente</b>. Fíjate que en los 10 casos <b>las medias son iguales</b>: el que solo ve promedios se equivoca. La decisión está en la dispersión.</p>
+<div class="formula">R = x<sub>máx</sub> − x<sub>mín</sub> &nbsp;·&nbsp; S² = Σ(x<sub>i</sub> − x̄)² / (n−1) &nbsp;·&nbsp; S = √S² &nbsp;·&nbsp; CV = (S / x̄) × 100%<small>Muestras: SIEMPRE divide entre n−1 · Menor CV = proceso más consistente ✅ · CV &lt; 5% excelente ✅ · 5–15% vigilar ⚠️ · &gt; 15% fuera de control 🛑</small></div>
+<div class="grid2">
+<div class="tutor"><strong>🧮 Paso 1 — Media:</strong> suma todo (<code>Σxi</code>) y divide entre <code>n</code>. Es tu punto de partida <code>x̄</code>.<br><strong>📐 Paso 2 — Tablita mágica:</strong> por cada dato calcula <code>xi − x̄</code> (resta, puede dar negativa), luego <code>(xi − x̄)²</code> (potencia, el signo − desaparece), suma esa columna → <code>Σ</code>, divide entre <code>n−1</code> → <code>S²</code>, saca raíz → <code>S</code>.</div>
+<div class="tip"><strong>⚖️ Paso 3 — CV %:</strong> <code>(S ÷ x̄) × 100</code>. Es el desempatador: gana el <b>menor CV</b>.<br><strong>👔 Paso 4 — Decisión:</strong> traduce a plata: desperdicio, multa DIACO, cliente molesto, devolución. Opera con el consistente, detiene/reentrena el otro.</div>
+</div>
+<div class="tutor">✅ <strong>Truco de verificación gratis:</strong> la columna <code>xi − x̄</code> siempre suma <b>0</b>. Si no te da 0, revisa las restas antes de seguir.</div>
+</section>
+
+<!-- ============ EJERCICIO 1 ============ -->
+<section class="card" id="ex1">
+<h2><span class="ex-num">1</span> Tortillería San Juan Sacatepéquez 🌽</h2>
+<p><b>Caso:</b> Eres gerente de control de calidad. La tortilla ideal pesa 50 g. Dos turnos reportan el mismo promedio: ¿cuál hornea parejo y cuál desperdicia masa?</p>
+<p>Meta: <span class="pildora">50 g por tortilla</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Grupo A:</b><br><span class="pildora">50</span><span class="pildora">49</span><span class="pildora">51</span><span class="pildora">50</span><span class="pildora">49</span><span class="pildora">51</span></div>
+<div class="cocinero coc-B"><b>🔴 Grupo B:</b><br><span class="pildora">52</span><span class="pildora">45</span><span class="pildora">55</span><span class="pildora">43</span><span class="pildora">50</span><span class="pildora">55</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media (suma ÷ n)</div>
+<p>Grupo A: 50 + 49 + 51 + 50 + 49 + 51 = <b>300</b> ÷ 6 = <b>x̄(A) = 50.00 g</b><br>Grupo B: 52 + 45 + 55 + 43 + 50 + 55 = <b>300</b> ÷ 6 = <b>x̄(B) = 50.00 g</b> → <b>empate, seguimos al Paso 2.</b> Rango: R(A) = 51 − 49 = <b>2 g</b> · R(B) = 55 − 43 = <b>12 g</b> (primera alerta).</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita mágica: resta → potencia → suma → ÷(n−1) → raíz</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Grupo A (x̄ = 50)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>50</td><td>0</td><td>0</td></tr><tr><td>2</td><td>49</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>51</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>50</td><td>0</td><td>0</td></tr><tr><td>5</td><td>49</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>51</td><td>+1</td><td>1</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>4</td></tr></table>
+<p>S²(A) = 4 ÷ 5 = <b>0.80</b> · S(A) = √0.80 = <b>0.89 g</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Grupo B (x̄ = 50)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>52</td><td>+2</td><td>4</td></tr><tr><td>2</td><td>45</td><td>−5</td><td>25</td></tr><tr><td>3</td><td>55</td><td>+5</td><td>25</td></tr><tr><td>4</td><td>43</td><td>−7</td><td>49</td></tr><tr><td>5</td><td>50</td><td>0</td><td>0</td></tr><tr><td>6</td><td>55</td><td>+5</td><td>25</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>128</td></tr></table>
+<p>S²(B) = 128 ÷ 5 = <b>25.60</b> · S(B) = √25.60 = <b>5.06 g</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV % (el desempatador)</div>
+<p>CV(A) = (0.89 ÷ 50) × 100 = <b>1.79%</b> ✅ excelente · CV(B) = (5.06 ÷ 50) × 100 = <b>10.12%</b> ⚠️ a vigilar.</p>
+<div class="bar barA"><span style="width:15%"></span></div><small>CV A 1.79%</small>
+<div class="bar barB"><span style="width:67%"></span></div><small>CV B 10.12%</small>
+<div class="paso-tag m">👔 Paso 4 — Decisión + interpretación gerencial</div>
+<div class="veredicto"><b>🏆 Gana Grupo A.</b> Misma media (50 g), pero A se desvía solo ±0.89 g (CV 1.79%) frente a ±5.06 g de B (CV 10.12%). <b>Diagnóstico ejecutivo:</b> felicita al turno A; reentrena HOY al B: la tortilla de 43 g pierde clientes y la de 55 g regala masa todos los días. <span class="pildora win">A consistente</span> <span class="pildora lose">B fuera de control</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Tortilla de 43 g = cliente molesto 😡; de 55 g = regalas masa y pierdes pisto 💸.</div>
+</section>
+
+<!-- ============ EJERCICIO 2 ============ -->
+<section class="card" id="ex2">
+<h2><span class="ex-num">2</span> Café de Xela ☕</h2>
+<p><b>Caso:</b> Exportadora en Quetzaltenango. La bolsa premium debe pesar 454 g. Dos empacadoras promedian lo mismo. Una va a Europa: debe ser la consistente.</p>
+<p>Meta: <span class="pildora">454 g por bolsa</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Grupo A:</b><br><span class="pildora">454</span><span class="pildora">453</span><span class="pildora">455</span><span class="pildora">454</span><span class="pildora">453</span><span class="pildora">455</span></div>
+<div class="cocinero coc-B"><b>🔴 Grupo B:</b><br><span class="pildora">458</span><span class="pildora">446</span><span class="pildora">462</span><span class="pildora">444</span><span class="pildora">454</span><span class="pildora">460</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>Grupo A: 454 + 453 + 455 + 454 + 453 + 455 = <b>2724</b> ÷ 6 = <b>454.00 g</b><br>Grupo B: 458 + 446 + 462 + 444 + 454 + 460 = <b>2724</b> ÷ 6 = <b>454.00 g</b> → empate. Rango: R(A) = <b>2 g</b> · R(B) = 462 − 444 = <b>18 g</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita (resta y potencia fila por fila)</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Grupo A (x̄ = 454)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>454</td><td>0</td><td>0</td></tr><tr><td>2</td><td>453</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>455</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>454</td><td>0</td><td>0</td></tr><tr><td>5</td><td>453</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>455</td><td>+1</td><td>1</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>4</td></tr></table><p>S²(A) = 4 ÷ 5 = <b>0.80</b> · S(A) = <b>0.89 g</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Grupo B (x̄ = 454)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>458</td><td>+4</td><td>16</td></tr><tr><td>2</td><td>446</td><td>−8</td><td>64</td></tr><tr><td>3</td><td>462</td><td>+8</td><td>64</td></tr><tr><td>4</td><td>444</td><td>−10</td><td>100</td></tr><tr><td>5</td><td>454</td><td>0</td><td>0</td></tr><tr><td>6</td><td>460</td><td>+6</td><td>36</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>280</td></tr></table><p>S²(B) = 280 ÷ 5 = <b>56.00</b> · S(B) = <b>7.48 g</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = (0.89 ÷ 454) × 100 = <b>0.20%</b> ✅ · CV(B) = (7.48 ÷ 454) × 100 = <b>1.65%</b> ✅ pero 8 veces más variable.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Exporta la empacadora A; calibra la B.</b> La bolsa de 444 g provoca reclamo extranjero y la de 462 g regala café premium. A es 8× más consistente. <span class="pildora win">A exporta</span> <span class="pildora lose">B a calibración</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Bolsa baja = reclamo del comprador extranjero; bolsa alta = regalas café de exportación.</div>
+</section>
+
+<!-- ============ EJERCICIO 3 ============ -->
+<section class="card" id="ex3">
+<h2><span class="ex-num">3</span> Gaseosas en Escuintla 🥤</h2>
+<p><b>Caso:</b> Presentación de 500 ml con reclamos por llenado disparejo. Dos líneas promedian 500 ml. La DIACO vigila el contenido neto.</p>
+<p>Meta: <span class="pildora">500 ml por botella</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Línea A:</b><br><span class="pildora">500</span><span class="pildora">499</span><span class="pildora">501</span><span class="pildora">500</span><span class="pildora">499</span><span class="pildora">501</span></div>
+<div class="cocinero coc-B"><b>🔴 Línea B:</b><br><span class="pildora">508</span><span class="pildora">488</span><span class="pildora">512</span><span class="pildora">486</span><span class="pildora">502</span><span class="pildora">504</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 500 + 499 + 501 + 500 + 499 + 501 = <b>3000</b> ÷ 6 = <b>500.00 ml</b> · B: 508 + 488 + 512 + 486 + 502 + 504 = <b>3000</b> ÷ 6 = <b>500.00 ml</b>. Rango: R(A) = <b>2 ml</b> · R(B) = 512 − 486 = <b>26 ml</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Línea A (x̄ = 500)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>500</td><td>0</td><td>0</td></tr><tr><td>2</td><td>499</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>501</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>500</td><td>0</td><td>0</td></tr><tr><td>5</td><td>499</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>501</td><td>+1</td><td>1</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>4</td></tr></table><p>S²(A) = 4 ÷ 5 = <b>0.80</b> · S(A) = <b>0.89 ml</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Línea B (x̄ = 500)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>508</td><td>+8</td><td>64</td></tr><tr><td>2</td><td>488</td><td>−12</td><td>144</td></tr><tr><td>3</td><td>512</td><td>+12</td><td>144</td></tr><tr><td>4</td><td>486</td><td>−14</td><td>196</td></tr><tr><td>5</td><td>502</td><td>+2</td><td>4</td></tr><tr><td>6</td><td>504</td><td>+4</td><td>16</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>568</td></tr></table><p>S²(B) = 568 ÷ 5 = <b>113.60</b> · S(B) = <b>10.66 ml</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>0.18%</b> ✅ · CV(B) = <b>2.13%</b> ✅ pero 12× más dispersa.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 La línea A sigue operando; la B se detiene HOY.</b> Botella de 486 ml = multa DIACO; de 512 ml = derrame y producto regalado. S(B) ≈ 10.66 ml es inaceptable frente a 0.89 ml. <span class="pildora win">A opera</span> <span class="pildora lose">B detenida</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Botella de 486 ml = multa DIACO ⚖️; de 512 ml = derrame + producto regalado.</div>
+</section>
+
+<!-- ============ EJERCICIO 4 ============ -->
+<section class="card" id="ex4">
+<h2><span class="ex-num">4</span> Panadería San Martín 🥐</h2>
+<p><b>Caso:</b> El pan francés debe pesar 60 g. Dos hornos reportan el mismo promedio, pero un supermercado se queja de panes disparejos.</p>
+<p>Meta: <span class="pildora">60 g por pan</span> Muestra: <span class="pildora">n = 5</span> (ojo: se divide entre n−1 = 4)</p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Horno A:</b><br><span class="pildora">60</span><span class="pildora">59</span><span class="pildora">61</span><span class="pildora">60</span><span class="pildora">60</span></div>
+<div class="cocinero coc-B"><b>🔴 Horno B:</b><br><span class="pildora">64</span><span class="pildora">54</span><span class="pildora">66</span><span class="pildora">52</span><span class="pildora">64</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 60 + 59 + 61 + 60 + 60 = <b>300</b> ÷ 5 = <b>60.00 g</b> · B: 64 + 54 + 66 + 52 + 64 = <b>300</b> ÷ 5 = <b>60.00 g</b>. Rango: R(A) = <b>2 g</b> · R(B) = 66 − 52 = <b>14 g</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita (¡divide entre 4!)</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Horno A (x̄ = 60)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>60</td><td>0</td><td>0</td></tr><tr><td>2</td><td>59</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>61</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>60</td><td>0</td><td>0</td></tr><tr><td>5</td><td>60</td><td>0</td><td>0</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>2</td></tr></table><p>S²(A) = 2 ÷ 4 = <b>0.50</b> · S(A) = <b>0.71 g</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Horno B (x̄ = 60)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>64</td><td>+4</td><td>16</td></tr><tr><td>2</td><td>54</td><td>−6</td><td>36</td></tr><tr><td>3</td><td>66</td><td>+6</td><td>36</td></tr><tr><td>4</td><td>52</td><td>−8</td><td>64</td></tr><tr><td>5</td><td>64</td><td>+4</td><td>16</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>168</td></tr></table><p>S²(B) = 168 ÷ 4 = <b>42.00</b> · S(B) = <b>6.48 g</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>1.18%</b> ✅ · CV(B) = <b>10.80%</b> ⚠️.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Cumple el pedido con el horno A.</b> El pan de 52 g lo devuelve el cliente y el de 66 g se come tu margen. B es 9× más variable. <span class="pildora win">A entrega</span> <span class="pildora lose">B a ajuste</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Pan de 52 g = devolución del cliente; de 66 g = comes tu margen de ganancia.</div>
+</section>
+
+<!-- ============ EJERCICIO 5 ============ -->
+<section class="card" id="ex5">
+<h2><span class="ex-num">5</span> Lácteos El Oriental, Zacapa 🥛</h2>
+<p><b>Caso:</b> Envase familiar de 1000 ml. Dos dosificadores promedian igual, pero hay quejas de envases a medio llenar.</p>
+<p>Meta: <span class="pildora">1000 ml por envase</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Dosificador A:</b><br><span class="pildora">1000</span><span class="pildora">998</span><span class="pildora">1002</span><span class="pildora">1001</span><span class="pildora">999</span><span class="pildora">1000</span></div>
+<div class="cocinero coc-B"><b>🔴 Dosificador B:</b><br><span class="pildora">1010</span><span class="pildora">985</span><span class="pildora">1015</span><span class="pildora">980</span><span class="pildora">1005</span><span class="pildora">1005</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 1000 + 998 + 1002 + 1001 + 999 + 1000 = <b>6000</b> ÷ 6 = <b>1000.00 ml</b> · B: 1010 + 985 + 1015 + 980 + 1005 + 1005 = <b>6000</b> ÷ 6 = <b>1000.00 ml</b>. Rango: R(A) = <b>4 ml</b> · R(B) = 1015 − 980 = <b>35 ml</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Dosif. A (x̄ = 1000)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>1000</td><td>0</td><td>0</td></tr><tr><td>2</td><td>998</td><td>−2</td><td>4</td></tr><tr><td>3</td><td>1002</td><td>+2</td><td>4</td></tr><tr><td>4</td><td>1001</td><td>+1</td><td>1</td></tr><tr><td>5</td><td>999</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>1000</td><td>0</td><td>0</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>10</td></tr></table><p>S²(A) = 10 ÷ 5 = <b>2.00</b> · S(A) = <b>1.41 ml</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Dosif. B (x̄ = 1000)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>1010</td><td>+10</td><td>100</td></tr><tr><td>2</td><td>985</td><td>−15</td><td>225</td></tr><tr><td>3</td><td>1015</td><td>+15</td><td>225</td></tr><tr><td>4</td><td>980</td><td>−20</td><td>400</td></tr><tr><td>5</td><td>1005</td><td>+5</td><td>25</td></tr><tr><td>6</td><td>1005</td><td>+5</td><td>25</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>1000</td></tr></table><p>S²(B) = 1000 ÷ 5 = <b>200.00</b> · S(B) = <b>14.14 ml</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>0.14%</b> ✅ · CV(B) = <b>1.41%</b> ✅ pero 10× mayor.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Certifica el dosificador A; ajusta el B.</b> El envase de 980 ml es denuncia por contenido incompleto y el de 1015 ml es leche regalada a diario. <span class="pildora win">A certificado</span> <span class="pildora lose">B a ajuste</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Envase de 980 ml = denuncia por contenido incompleto; de 1015 ml = leche regalada a diario.</div>
+</section>
+
+<!-- ============ EJERCICIO 6 ============ -->
+<section class="card" id="ex6">
+<h2><span class="ex-num">6</span> Call Center Zona 10 🎧</h2>
+<p><b>Caso:</b> El tiempo meta de atención es 180 segundos. Dos equipos promedian lo mismo, pero uno tiene clientes furiosos por esperas eternas y cortes.</p>
+<p>Meta: <span class="pildora">180 s por llamada</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Equipo A:</b><br><span class="pildora">180</span><span class="pildora">178</span><span class="pildora">182</span><span class="pildora">181</span><span class="pildora">179</span><span class="pildora">180</span></div>
+<div class="cocinero coc-B"><b>🔴 Equipo B:</b><br><span class="pildora">195</span><span class="pildora">160</span><span class="pildora">205</span><span class="pildora">155</span><span class="pildora">180</span><span class="pildora">185</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 180 + 178 + 182 + 181 + 179 + 180 = <b>1080</b> ÷ 6 = <b>180.00 s</b> · B: 195 + 160 + 205 + 155 + 180 + 185 = <b>1080</b> ÷ 6 = <b>180.00 s</b>. Rango: R(A) = <b>4 s</b> · R(B) = 205 − 155 = <b>50 s</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Equipo A (x̄ = 180)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>180</td><td>0</td><td>0</td></tr><tr><td>2</td><td>178</td><td>−2</td><td>4</td></tr><tr><td>3</td><td>182</td><td>+2</td><td>4</td></tr><tr><td>4</td><td>181</td><td>+1</td><td>1</td></tr><tr><td>5</td><td>179</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>180</td><td>0</td><td>0</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>10</td></tr></table><p>S²(A) = 10 ÷ 5 = <b>2.00</b> · S(A) = <b>1.41 s</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Equipo B (x̄ = 180)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>195</td><td>+15</td><td>225</td></tr><tr><td>2</td><td>160</td><td>−20</td><td>400</td></tr><tr><td>3</td><td>205</td><td>+25</td><td>625</td></tr><tr><td>4</td><td>155</td><td>−25</td><td>625</td></tr><tr><td>5</td><td>180</td><td>0</td><td>0</td></tr><tr><td>6</td><td>185</td><td>+5</td><td>25</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>1900</td></tr></table><p>S²(B) = 1900 ÷ 5 = <b>380.00</b> · S(B) = <b>19.49 s</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>0.79%</b> ✅ · CV(B) = <b>10.83%</b> ⚠️.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 El equipo A es el modelo; el B se reentrena.</b> Llamada de 205 s = cola y abandono; de 155 s = atención a la carrera. B varía casi 14× más. <span class="pildora win">A modelo</span> <span class="pildora lose">B reentrenar</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Llamada de 205 s = cola de espera y abandono; de 155 s = atención a la carrera y mala calidad.</div>
+</section>
+
+<!-- ============ EJERCICIO 7 ============ -->
+<section class="card" id="ex7">
+<h2><span class="ex-num">7</span> Farmacia Calzada Roosevelt 💊</h2>
+<p><b>Caso:</b> El despacho debe tardar 12 minutos. Dos turnos promedian igual, pero en uno los pacientes esperan 16 y en otro salen en 7 sin explicación.</p>
+<p>Meta: <span class="pildora">12 min por despacho</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Turno A:</b><br><span class="pildora">12</span><span class="pildora">11</span><span class="pildora">13</span><span class="pildora">12</span><span class="pildora">11</span><span class="pildora">13</span></div>
+<div class="cocinero coc-B"><b>🔴 Turno B:</b><br><span class="pildora">15</span><span class="pildora">8</span><span class="pildora">16</span><span class="pildora">7</span><span class="pildora">12</span><span class="pildora">14</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 12 + 11 + 13 + 12 + 11 + 13 = <b>72</b> ÷ 6 = <b>12.00 min</b> · B: 15 + 8 + 16 + 7 + 12 + 14 = <b>72</b> ÷ 6 = <b>12.00 min</b>. Rango: R(A) = <b>2 min</b> · R(B) = 16 − 7 = <b>9 min</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Turno A (x̄ = 12)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>12</td><td>0</td><td>0</td></tr><tr><td>2</td><td>11</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>13</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>12</td><td>0</td><td>0</td></tr><tr><td>5</td><td>11</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>13</td><td>+1</td><td>1</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>4</td></tr></table><p>S²(A) = 4 ÷ 5 = <b>0.80</b> · S(A) = <b>0.89 min</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Turno B (x̄ = 12)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>15</td><td>+3</td><td>9</td></tr><tr><td>2</td><td>8</td><td>−4</td><td>16</td></tr><tr><td>3</td><td>16</td><td>+4</td><td>16</td></tr><tr><td>4</td><td>7</td><td>−5</td><td>25</td></tr><tr><td>5</td><td>12</td><td>0</td><td>0</td></tr><tr><td>6</td><td>14</td><td>+2</td><td>4</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>70</td></tr></table><p>S²(B) = 70 ÷ 5 = <b>14.00</b> · S(B) = <b>3.74 min</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV % (ojo: la media es pequeña, el CV se dispara)</div>
+<p>CV(A) = (0.89 ÷ 12) × 100 = <b>7.45%</b> ⚠️ vigilar · CV(B) = (3.74 ÷ 12) × 100 = <b>31.18%</b> 🛑 fuera de control.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Replica el turno A; intervén el B.</b> Despacho de 16 min = paciente molesto; de 7 min = riesgo de error por prisa. B cuadruplica la desviación. <span class="pildora win">A replicar</span> <span class="pildora lose">B intervenir</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Despacho de 16 min = paciente molesto; de 7 min = riesgo de error por prisa.</div>
+</section>
+
+<!-- ============ EJERCICIO 8 ============ -->
+<section class="card" id="ex8">
+<h2><span class="ex-num">8</span> Calzado en Pastores 👞</h2>
+<p><b>Caso:</b> La suela debe medir 30 mm. Dos troqueladoras promedian lo mismo, pero un lote salió con suelas frágiles y otras toscas.</p>
+<p>Meta: <span class="pildora">30 mm de suela</span> Muestra: <span class="pildora">n = 5</span> (divide entre 4)</p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Troqueladora A:</b><br><span class="pildora">30</span><span class="pildora">29</span><span class="pildora">31</span><span class="pildora">30</span><span class="pildora">30</span></div>
+<div class="cocinero coc-B"><b>🔴 Troqueladora B:</b><br><span class="pildora">33</span><span class="pildora">26</span><span class="pildora">34</span><span class="pildora">25</span><span class="pildora">32</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 30 + 29 + 31 + 30 + 30 = <b>150</b> ÷ 5 = <b>30.00 mm</b> · B: 33 + 26 + 34 + 25 + 32 = <b>150</b> ÷ 5 = <b>30.00 mm</b>. Rango: R(A) = <b>2 mm</b> · R(B) = 34 − 25 = <b>9 mm</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Troq. A (x̄ = 30)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>30</td><td>0</td><td>0</td></tr><tr><td>2</td><td>29</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>31</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>30</td><td>0</td><td>0</td></tr><tr><td>5</td><td>30</td><td>0</td><td>0</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>2</td></tr></table><p>S²(A) = 2 ÷ 4 = <b>0.50</b> · S(A) = <b>0.71 mm</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Troq. B (x̄ = 30)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>33</td><td>+3</td><td>9</td></tr><tr><td>2</td><td>26</td><td>−4</td><td>16</td></tr><tr><td>3</td><td>34</td><td>+4</td><td>16</td></tr><tr><td>4</td><td>25</td><td>−5</td><td>25</td></tr><tr><td>5</td><td>32</td><td>+2</td><td>4</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>70</td></tr></table><p>S²(B) = 70 ÷ 4 = <b>17.50</b> · S(B) = <b>4.18 mm</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>2.36%</b> ✅ · CV(B) = <b>13.94%</b> ⚠️ al borde del fuera de control.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Deja produciendo la troqueladora A.</b> Suela de 25 mm = zapato que se rompe y devuelven; de 34 mm = material desperdiciado. <span class="pildora win">A produce</span> <span class="pildora lose">B a taller</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Suela de 25 mm = zapato que se rompe y devuelven; de 34 mm = material desperdiciado.</div>
+</section>
+
+<!-- ============ EJERCICIO 9 ============ -->
+<section class="card" id="ex9">
+<h2><span class="ex-num">9</span> Retail Cemaco 🛒</h2>
+<p><b>Caso:</b> El ticket promedio es Q 250 en ambas cajas, pero una caja tiene ventas estables y la otra alterna ventas mínimas con ventas enormes (¿descuentos mal aplicados?).</p>
+<p>Meta: <span class="pildora">Q 250 ticket promedio</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Caja A:</b><br><span class="pildora">250</span><span class="pildora">245</span><span class="pildora">255</span><span class="pildora">250</span><span class="pildora">245</span><span class="pildora">255</span></div>
+<div class="cocinero coc-B"><b>🔴 Caja B:</b><br><span class="pildora">280</span><span class="pildora">200</span><span class="pildora">300</span><span class="pildora">190</span><span class="pildora">260</span><span class="pildora">270</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 250 + 245 + 255 + 250 + 245 + 255 = <b>1500</b> ÷ 6 = <b>Q 250.00</b> · B: 280 + 200 + 300 + 190 + 260 + 270 = <b>1500</b> ÷ 6 = <b>Q 250.00</b>. Rango: R(A) = <b>Q 10</b> · R(B) = 300 − 190 = <b>Q 110</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita (mira qué potencias tan grandes salen en B)</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Caja A (x̄ = 250)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>250</td><td>0</td><td>0</td></tr><tr><td>2</td><td>245</td><td>−5</td><td>25</td></tr><tr><td>3</td><td>255</td><td>+5</td><td>25</td></tr><tr><td>4</td><td>250</td><td>0</td><td>0</td></tr><tr><td>5</td><td>245</td><td>−5</td><td>25</td></tr><tr><td>6</td><td>255</td><td>+5</td><td>25</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>100</td></tr></table><p>S²(A) = 100 ÷ 5 = <b>20.00</b> · S(A) = <b>Q 4.47</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Caja B (x̄ = 250)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>280</td><td>+30</td><td>900</td></tr><tr><td>2</td><td>200</td><td>−50</td><td>2500</td></tr><tr><td>3</td><td>300</td><td>+50</td><td>2500</td></tr><tr><td>4</td><td>190</td><td>−60</td><td>3600</td></tr><tr><td>5</td><td>260</td><td>+10</td><td>100</td></tr><tr><td>6</td><td>270</td><td>+20</td><td>400</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>10000</td></tr></table><p>S²(B) = 10000 ÷ 5 = <b>2000.00</b> · S(B) = <b>Q 44.72</b></p></div>
+</div>
+<div class="tip">💡 <b>Lección clave:</b> elevar al cuadrado castiga los valores extremos. El −60 de la caja B se vuelve 3600 y domina la suma. Por eso la varianza “delata” las fugas.</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>1.79%</b> ✅ · CV(B) = <b>17.89%</b> 🛑 fuera de control.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Audita HOY la caja B.</b> Ticket de Q 190 = posible fuga o mal cobro; de Q 300 = cliente pudo pagar de más por error. La caja A es 10× más estable. <span class="pildora win">A estable</span> <span class="pildora lose">B a auditoría</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Ticket de Q 190 = posible fuga o mal cobro; de Q 300 = cliente pudo pagar de más por error.</div>
+</section>
+
+<!-- ============ EJERCICIO 10 ============ -->
+<section class="card" id="ex10">
+<h2><span class="ex-num">10</span> Snacks Tortrix 🍘</h2>
+<p><b>Caso:</b> La bolsa debe pesar 150 g. Dos selladoras promedian igual, pero el supermercado reporta bolsas infladas y bolsas vacías.</p>
+<p>Meta: <span class="pildora">150 g por bolsa</span> Muestra: <span class="pildora">n = 6</span></p>
+<div class="grid2">
+<div class="cocinero coc-A"><b>🟢 Selladora A:</b><br><span class="pildora">150</span><span class="pildora">149</span><span class="pildora">151</span><span class="pildora">150</span><span class="pildora">149</span><span class="pildora">151</span></div>
+<div class="cocinero coc-B"><b>🔴 Selladora B:</b><br><span class="pildora">156</span><span class="pildora">140</span><span class="pildora">160</span><span class="pildora">138</span><span class="pildora">152</span><span class="pildora">154</span></div>
+</div>
+<div class="paso-tag">🧮 Paso 1 — Media</div>
+<p>A: 150 + 149 + 151 + 150 + 149 + 151 = <b>900</b> ÷ 6 = <b>150.00 g</b> · B: 156 + 140 + 160 + 138 + 152 + 154 = <b>900</b> ÷ 6 = <b>150.00 g</b>. Rango: R(A) = <b>2 g</b> · R(B) = 160 − 138 = <b>22 g</b>.</p>
+<div class="paso-tag v">📐 Paso 2 — Tablita</div>
+<div class="grid2">
+<div><table class="taller"><tr><th class="colA" colspan="4">Sell. A (x̄ = 150)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>150</td><td>0</td><td>0</td></tr><tr><td>2</td><td>149</td><td>−1</td><td>1</td></tr><tr><td>3</td><td>151</td><td>+1</td><td>1</td></tr><tr><td>4</td><td>150</td><td>0</td><td>0</td></tr><tr><td>5</td><td>149</td><td>−1</td><td>1</td></tr><tr><td>6</td><td>151</td><td>+1</td><td>1</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>4</td></tr></table><p>S²(A) = 4 ÷ 5 = <b>0.80</b> · S(A) = <b>0.89 g</b></p></div>
+<div><table class="taller"><tr><th class="colB" colspan="4">Sell. B (x̄ = 150)</th></tr><tr><th>#</th><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+<tr><td>1</td><td>156</td><td>+6</td><td>36</td></tr><tr><td>2</td><td>140</td><td>−10</td><td>100</td></tr><tr><td>3</td><td>160</td><td>+10</td><td>100</td></tr><tr><td>4</td><td>138</td><td>−12</td><td>144</td></tr><tr><td>5</td><td>152</td><td>+2</td><td>4</td></tr><tr><td>6</td><td>154</td><td>+4</td><td>16</td></tr>
+<tr class="total"><td colspan="2">Σ</td><td>0 ✅</td><td>400</td></tr></table><p>S²(B) = 400 ÷ 5 = <b>80.00</b> · S(B) = <b>8.94 g</b></p></div>
+</div>
+<div class="paso-tag o">⚖️ Paso 3 — CV %</div>
+<p>CV(A) = <b>0.60%</b> ✅ · CV(B) = <b>5.96%</b> ⚠️ a vigilar.</p>
+<div class="paso-tag m">👔 Paso 4 — Decisión</div>
+<div class="veredicto"><b>🏆 Mantén la selladora A; para y calibra la B.</b> Bolsa de 138 g = multa por peso incompleto; de 160 g = producto regalado en cada bolsa. <span class="pildora win">A se mantiene</span> <span class="pildora lose">B a calibrar</span></div>
+<div class="alerta">⚖️ <b>Impacto real:</b> Bolsa de 138 g = multa por peso incompleto; de 160 g = producto regalado en cada bolsa.</div>
+</section>
+
+<!-- ============ RESUMEN ============ -->
+<section class="card" id="resumen">
+<h2>🏆 Resumen ejecutivo: los 10 veredictos</h2>
+<p>En los 10 casos la media empató. El gerente que solo mira promedios no decide nada; el que mira dispersión salva dinero, clientes y multas.</p>
+<div style="overflow-x:auto">
+<table class="taller">
+<tr><th>#</th><th>Caso</th><th>S(A)</th><th>S(B)</th><th>CV(A)</th><th>CV(B)</th><th>Ganador</th></tr>
+<tr><td>1</td><td>Tortillería 🌽</td><td>0.89 g</td><td>5.06 g</td><td>1.79%</td><td>10.12%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>2</td><td>Café Xela ☕</td><td>0.89 g</td><td>7.48 g</td><td>0.20%</td><td>1.65%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>3</td><td>Gaseosas 🥤</td><td>0.89 ml</td><td>10.66 ml</td><td>0.18%</td><td>2.13%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>4</td><td>Panadería 🥐</td><td>0.71 g</td><td>6.48 g</td><td>1.18%</td><td>10.80%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>5</td><td>Lácteos 🥛</td><td>1.41 ml</td><td>14.14 ml</td><td>0.14%</td><td>1.41%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>6</td><td>Call Center 🎧</td><td>1.41 s</td><td>19.49 s</td><td>0.79%</td><td>10.83%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>7</td><td>Farmacia 💊</td><td>0.89 min</td><td>3.74 min</td><td>7.45%</td><td>31.18%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>8</td><td>Calzado 👞</td><td>0.71 mm</td><td>4.18 mm</td><td>2.36%</td><td>13.94%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>9</td><td>Retail 🛒</td><td>Q 4.47</td><td>Q 44.72</td><td>1.79%</td><td>17.89%</td><td><span class="pildora win">A</span></td></tr>
+<tr><td>10</td><td>Tortrix 🍘</td><td>0.89 g</td><td>8.94 g</td><td>0.60%</td><td>5.96%</td><td><span class="pildora win">A</span></td></tr>
+</table>
+</div>
+<div class="kpi"><div><b>10/10</b>Gana el Grupo A (menor CV)</div><div><b>n−1</b>Siempre muestral en clase</div><div><b>Σ=0</b>Verifica tus restas</div></div>
+<div class="tutor"><strong>🎓 Mensaje del catedrático:</strong> si tus restas suman 0, tus cuadrados están bien sumados y dividiste entre <b>n−1</b>, tu S y tu CV salen solos. La estadística no es memorizar: es <b>decidir con evidencia</b> para proteger al cliente, al margen y a la empresa. — <b>Ruldin Ayala</b></div>
+<div class="noprint" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+<a href="ejercicio_sem12.html" style="text-decoration:none"><button class="btn-verde">✏️ Volver a practicar (laboratorio)</button></a>
+<a href="medidas-dispersion.html" style="text-decoration:none"><button class="btn-azul">📊 Repasar el tutor</button></a>
+<button class="btn-amarillo" onclick="window.print()">🖨️ Imprimir solucionario</button>
+</div>
+<details class="noprint"><summary>🧾 Valores exactos de referencia (2 decimales)</summary>
+<p class="text-sm">E1: ΣA=300 x̄A=50 SS=4 S²=0.80 S=0.89 CV=1.79% R=2 · ΣB=300 x̄B=50 SS=128 S²=25.60 S=5.06 CV=10.12% R=12 ·
+E2: ΣA=2724 x̄A=454 SS=4 S²=0.80 S=0.89 CV=0.20% R=2 · ΣB=2724 x̄B=454 SS=280 S²=56 S=7.48 CV=1.65% R=18 ·
+E3: ΣA=3000 x̄A=500 SS=4 S²=0.80 S=0.89 CV=0.18% R=2 · ΣB=3000 x̄B=500 SS=568 S²=113.60 S=10.66 CV=2.13% R=26 ·
+E4: ΣA=300 x̄A=60 SS=2 S²=0.50 S=0.71 CV=1.18% R=2 · ΣB=300 x̄B=60 SS=168 S²=42 S=6.48 CV=10.80% R=14 (n=5) ·
+E5: ΣA=6000 x̄A=1000 SS=10 S²=2 S=1.41 CV=0.14% R=4 · ΣB=6000 x̄B=1000 SS=1000 S²=200 S=14.14 CV=1.41% R=35 ·
+E6: ΣA=1080 x̄A=180 SS=10 S²=2 S=1.41 CV=0.79% R=4 · ΣB=1080 x̄B=180 SS=1900 S²=380 S=19.49 CV=10.83% R=50 ·
+E7: ΣA=72 x̄A=12 SS=4 S²=0.80 S=0.89 CV=7.45% R=2 · ΣB=72 x̄B=12 SS=70 S²=14 S=3.74 CV=31.18% R=9 ·
+E8: ΣA=150 x̄A=30 SS=2 S²=0.50 S=0.71 CV=2.36% R=2 · ΣB=150 x̄B=30 SS=70 S²=17.50 S=4.18 CV=13.94% R=9 (n=5) ·
+E9: ΣA=1500 x̄A=250 SS=100 S²=20 S=4.47 CV=1.79% R=10 · ΣB=1500 x̄B=250 SS=10000 S²=2000 S=44.72 CV=17.89% R=110 ·
+E10: ΣA=900 x̄A=150 SS=4 S²=0.80 S=0.89 CV=0.60% R=2 · ΣB=900 x̄B=150 SS=400 S²=80 S=8.94 CV=5.96% R=22.</p>
+</details>
+</section>
+</main>
+
+<footer class="site-footer bg-slate-950 border-t border-slate-900 py-8 mt-12">
+<div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+<div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+<a href="../index_estadistica.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-list text-blue-400"></i> Índice general de Estadística I</a>
+<a href="medidas-dispersion.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-chart-bar text-amber-400"></i> Tutor Semana 12</a>
+<a href="ejercicio_sem12.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-pencil text-emerald-400"></i> Laboratorio Semana 12</a>
+<a href="../../index.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-house text-emerald-400"></i> Portal General</a>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">Plataforma de apoyo docente diseñada por <strong class="text-blue-400 font-bold">Ruldin Ayala</strong>, catedrático | Exclusivamente para el curso de <strong>Estadística I</strong>.<br>Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).</p>
+<p class="text-[11px] text-slate-600">&copy; 2026 UMG Administración de Empresas • Semana 12: Solucionario de Medidas de Dispersión.</p>
+</div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+  document.getElementById('progressBar').style.width=p+'%';
+},{passive:true});
+// Enlace de regreso por ejercicio: cada tarjeta del solucionario enlaza a su ejercicio en el laboratorio
+for(let n=1;n<=10;n++){
+  const sec=document.getElementById('ex'+n);
+  if(!sec) continue;
+  const bar=document.createElement('div');
+  bar.className='noprint';
+  bar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px';
+  bar.innerHTML='<a href="ejercicio_sem12.html#ex'+n+'" style="text-decoration:none"><button type="button" class="btn-verde">✏️ Practicar este caso en el laboratorio (Ej. '+n+')</button></a>';
+  sec.appendChild(bar);
+}
+</script>
+</body>
+</html>
