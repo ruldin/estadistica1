@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 13: Regla Empírica, Chebyshev y Diagrama de Caja · UMG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --azul:#1a3a6b; --azul2:#274e8d; --celeste:#e8f1ff; --amarillo:#ffc531; --naranja:#ff7a1a;
+  --verde:#0e9f6e; --verde-claro:#e6f9f0; --rojo:#e02424; --rojo-claro:#fdecec;
+  --morado:#6c3ce0; --gris:#f4f6fb; --texto:#1e2a3a; --muted:#5b6b82;
+  --card-shadow:0 8px 28px rgba(26,58,107,.12); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--texto);background:#fafbff;line-height:1.6}
+.heading-font{font-family:'Space Grotesk','Inter',sans-serif}
+header.hero-bar{background:linear-gradient(135deg,#0f2a52 0%,#274e8d 70%);color:#fff}
+.progress-wrap{background:rgba(255,255,255,.22);height:5px;border-radius:999px;margin-top:8px;overflow:hidden;flex-basis:100%}
+#progressBar{height:100%;width:0%;background:var(--amarillo);border-radius:999px;transition:width .4s}
+nav.steps{position:sticky;top:76px;z-index:40;background:#0f2a52ee;backdrop-filter:blur(6px);display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.15)}
+nav.steps a{color:#fff;text-decoration:none;font-size:.78rem;white-space:nowrap;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+nav.steps a:hover{background:var(--amarillo);color:#1a3a6b}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:24px;margin:22px 0;border:1px solid #e6ebf5}
+.card h2{margin-top:0;color:var(--azul)}
+.card h3{color:var(--azul2)}
+.formula{background:#0f2a52;color:#ffe9a8;font-size:1.15rem;text-align:center;padding:16px;border-radius:14px;margin:14px 0;overflow-x:auto}
+.formula small{display:block;color:#bcd0f0;font-size:.8rem;margin-top:6px}
+.tip{background:#fff8de;border-left:6px solid var(--amarillo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tip strong{color:#7a5a00}
+.tutor{background:var(--verde-claro);border-left:6px solid var(--verde);padding:12px 14px;border-radius:10px;margin:12px 0}
+.tutor strong{color:#06593f}
+.alerta{background:var(--rojo-claro);border-left:6px solid var(--rojo);padding:12px 14px;border-radius:10px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+input[type=number],input[type=text],textarea,select{padding:10px 12px;border:2px solid #cbd5e6;border-radius:10px;font-size:1rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--azul2);box-shadow:0 0 0 3px var(--celeste)}
+button{cursor:pointer;border:none;border-radius:12px;padding:11px 18px;font-size:.95rem;font-weight:700;transition:.2s}
+.btn-azul{background:var(--azul);color:#fff} .btn-azul:hover{background:var(--azul2)}
+.btn-verde{background:var(--verde);color:#fff} .btn-amarillo{background:var(--amarillo);color:#1a3a6b}
+.btn-ghost{background:#eef2f9;color:var(--azul)} .btn-naranja{background:var(--naranja);color:#fff}
+.feedback{font-weight:700;margin-top:8px;min-height:1.4em}
+.ok{color:var(--verde)} .mal{color:var(--rojo)}
+table.taller{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem}
+table.taller th{background:var(--azul);color:#fff;padding:10px}
+table.taller td,table.taller th{border:1px solid #d4ddee;padding:8px;text-align:center}
+table.taller tr:nth-child(even) td{background:#f5f8ff}
+table.taller input{width:90px;padding:7px}
+.stepper{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}
+.paso-btn{flex:1;min-width:140px;padding:12px;border-radius:12px;background:#eef2f9;font-weight:800;color:var(--azul);border:2px solid transparent;text-align:center}
+.paso-btn.active{background:var(--azul);color:#fff}
+.paso-content{display:none} .paso-content.active{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+details{margin:8px 0;background:#f7f9ff;border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700;color:var(--azul)}
+.quiz-opt{display:block;background:#f2f5fb;border:2px solid #dbe4f3;border-radius:12px;padding:10px 14px;margin:8px 0;cursor:pointer}
+.quiz-opt:hover{border-color:var(--azul2)}
+.quiz-opt.correct{background:#d9f7e8;border-color:var(--verde)}
+.quiz-opt.wrong{background:#fddede;border-color:var(--rojo)}
+.bell-wrap{background:linear-gradient(#f7faff,#fff);border:1px solid #dbe4f3;border-radius:14px;padding:12px;text-align:center}
+footer.site-footer{background:#020617;color:#94a3b8;text-align:center;padding:2rem 1rem;font-size:.85rem;border-top:1px solid #0f172a}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
+.kpi div{flex:1;min-width:150px;background:var(--gris);border-radius:12px;padding:12px;text-align:center}
+.kpi b{font-size:1.35rem;display:block;color:var(--azul)}
+.pildora{display:inline-block;background:var(--celeste);color:var(--azul);font-weight:800;border-radius:999px;padding:2px 12px;margin:2px}
+code{background:#eef2f9;padding:2px 6px;border-radius:6px}
+.miedo{background:linear-gradient(135deg,#fff6d6,#ffe9a8);border:2px dashed #b78d00;border-radius:14px;padding:14px;margin:12px 0}
+.box-svg{width:100%;height:auto;background:#fff;border:1px solid #dbe4f3;border-radius:12px}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:800;margin:2px}
+.chip-ok{background:#d9f7e8;color:#06593f} .chip-warn{background:#fff3c4;color:#7a5a00} .chip-bad{background:#fddede;color:#8f1d1d}
+@media print{ nav.steps,.no-print{display:none!important} .card{box-shadow:none;break-inside:avoid} body{background:#fff} }
+</style>
+</head>
+<body>
+<!-- HEADER INSTITUCIONAL -->
+<header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div class="flex items-start sm:items-center gap-3 min-w-0">
+<a href="../index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition flex items-center justify-center shrink-0" title="Regresar al índice general de Estadística I">
+<i class="fa-solid fa-arrow-left text-sm"></i>
+</a>
+<div class="bg-white p-1 rounded-xl shadow-lg shadow-emerald-500/15 shrink-0 flex items-center justify-center">
+<img src="../../cosas/Umg.png" alt="Escudo UMG" class="h-9 w-auto object-contain" onerror="this.onerror=null; this.src='../../cosas/umg.png';">
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-2 text-emerald-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">
+<span>Universidad Mariano Gálvez</span><span>•</span><span class="hidden sm:inline">Facultad de Ciencias de la Administración</span>
+</div>
+<h1 class="text-base sm:text-xl font-extrabold tracking-tight mt-0.5 text-white heading-font truncate">Estadística I — Semana 13: Regla Empírica · Chebyshev · Caja</h1>
+<p class="text-xs text-slate-400 mt-0.5 truncate">¿Tus datos son campana o caos? Aprende a garantizar, verificar y cazar atípicos 📦 · <span class="text-amber-300 font-semibold">⏱️ Tiempos de atención</span></p>
+<div class="flex flex-wrap gap-1.5 mt-1.5">
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">📘 UMG · Admón. Empresas 🇬🇹</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/20 font-semibold">Semana 13</span>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30 font-semibold">Tutor paso a paso 💛</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/90 px-3 py-2 rounded-2xl border border-slate-800 text-right text-xs text-slate-300 hidden sm:block shrink-0 space-y-1">
+<div class="flex items-center justify-end gap-2">
+<span class="text-slate-400">Curso: <strong class="text-emerald-400">Estadística I</strong></span>
+<span>•</span>
+<a href="../index_estadistica.html" class="text-slate-300 hover:text-white underline decoration-emerald-500/60 underline-offset-2"><i class="fa-solid fa-list mr-1 text-emerald-400"></i>Índice general</a>
+</div>
+<div class="text-slate-500 text-[11px]">x̄ ± kS · 1 − 1/k² · C1 / Me / C3 · RIC · Outliers</div>
+</div>
+</div>
+<div class="progress-wrap mt-3" style="background:rgba(255,255,255,.15);height:5px;border-radius:999px;overflow:hidden"><div id="progressBar"></div></div>
+</div>
+</header>
+<nav class="steps">
+<a href="#s1">1. Campana vs caos</a><a href="#s2">2. Regla empírica</a><a href="#s3">3. Chebyshev</a><a href="#s4">4. Cuartiles</a><a href="#s5">5. Caso base</a><a href="#s6">6. Caso atípico</a><a href="#s7">7. Laboratorio libre</a><a href="#s8">8. Examen gerente</a>
+</nav>
+
+<main>
+<section class="card" style="background:linear-gradient(135deg,#eef4ff,#e6f9f0);padding:16px 20px">
+<b>👋 Hola, futuro gerente, soy tu tutor virtual de Semana 13.</b> Hoy medimos <b>tiempos de atención en minutos</b> en una sucursal. Te enseño 3 superpoderes: <b>1) predecir con la campana (68-95-99.7)</b>, <b>2) garantizar con Chebyshev aunque todo esté chueco (≥75%)</b> y <b>3) dibujar la caja para cazar al culpable (outlier)</b>. Sin memorizar, todo con calculadora y conteo. ✅
+</section>
+<div class="miedo">😌 <b>Si la desviación estándar te asusta, lee esto:</b> <b>S = distancia típica a la media.</b> Si S es chiquita, todos esperan casi lo mismo (buen servicio). Si S es grande, unos esperan 10 min y otros 50 min (¡clientes furiosos! 😡). Las 3 herramientas de hoy solo responden: <b>¿dónde cae la mayoría? ¿qué garantizo? ¿quién es el raro?</b></div>
+
+<!-- S1 -->
+<section id="s1" class="card">
+<h2>1️⃣ Campana 🔔 vs Caos 🌪️: ¿cuándo uso cada regla?</h2>
+<p>Eres <b>Gerente de Servicio</b>. Mides cuánto espera cada cliente. Hay dos mundos:</p>
+<div class="grid2">
+<div style="background:#e6f9f0;border:2px solid #0e9f6e;border-radius:14px;padding:16px">
+<b>🔔 Mundo campana (simétrico)</b><br>
+<small>Histograma parejo, como campana. Ej: tiempos 10–29 min del caso base.</small>
+<div class="bell-wrap" style="margin-top:8px">
+<svg viewBox="0 0 500 200" width="100%" height="170">
+<path d="M10,160 C120,160 150,20 250,20 C350,20 380,160 490,160" fill="#dff3e8" stroke="#0e9f6e" stroke-width="3"/>
+<line x1="250" y1="20" x2="250" y2="160" stroke="#0e9f6e" stroke-width="3" stroke-dasharray="6 4"/>
+<line x1="170" y1="60" x2="170" y2="160" stroke="#ffc531" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="330" y1="60" x2="330" y2="160" stroke="#ffc531" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="250" y="178" text-anchor="middle" font-size="12" font-weight="bold">x̄ (media)</text>
+<text x="250" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#0e9f6e">68% · 95% · 99.7%</text>
+</svg>
+<ul style="text-align:left;font-size:.9rem">
+<li>🟢 <b>68%</b> en <b>x̄ ± 1S</b> · 🟡 <b>95%</b> en <b>x̄ ± 2S</b> · 🔴 <b>99.7%</b> en <b>x̄ ± 3S</b></li>
+</ul>
+</div>
+<p><span class="chip chip-ok">Usa REGLA EMPÍRICA</span> <small>Predicción fina, solo si es simétrico.</small></p>
+</div>
+<div style="background:#fdecec;border:2px solid #e02424;border-radius:14px;padding:16px">
+<b>🌪️ Mundo caos (sesgado / con atípicos)</b><br>
+<small>Un cliente esperó 50 min por falla del sistema. La campana se rompe.</small>
+<div class="bell-wrap" style="margin-top:8px">
+<svg viewBox="0 0 500 200" width="100%" height="170">
+<path d="M10,160 C100,160 120,60 200,60 C280,60 300,150 490,150" fill="#fddede" stroke="#e02424" stroke-width="3"/>
+<circle cx="450" cy="140" r="7" fill="#e02424"/><text x="450" y="125" text-anchor="middle" font-size="12" font-weight="bold" fill="#e02424">50*</text>
+<text x="200" y="178" text-anchor="middle" font-size="12" font-weight="bold">mayoría aquí</text>
+</svg>
+<ul style="text-align:left;font-size:.9rem">
+<li>🛡️ <b>Chebyshev: al menos 75%</b> en <b>x̄ ± 2S</b>, <b>cualquier forma</b>.</li>
+<li>📦 <b>Caja: la mediana no se deja engañar</b>, el outlier queda al descubierto (*).</li>
+</ul>
+</div>
+<p><span class="chip chip-bad">Usa CHEBYSHEV + CAJA</span> <small>Garantía mínima + caza-atípicos.</small></p>
+</div>
+</div>
+<div class="tutor">🧑‍🏫 <b>Tutor dice:</b> Memoriza esto en 10 segundos: <b>¿Se ve como campana? → Empírica (68-95-99.7). ¿Está chueco o hay un 50 sospechoso? → Chebyshev (garantiza) + Caja (acusa al culpable).</b> Eso es todo el capítulo.</div>
+<h3>✏️ Mini-reto 1: elige tu arma</h3>
+<p>Un auditor ve el histograma y es perfectamente simétrico. ¿Qué regla le da la predicción más precisa?</p>
+<label class="quiz-opt"><input type="radio" name="arma" value="E"> Regla Empírica (68-95-99.7)</label>
+<label class="quiz-opt"><input type="radio" name="arma" value="C"> Chebyshev, porque siempre es más precisa</label>
+<button class="btn-verde" onclick="checkArma()">Revisar</button> <div id="fbArma" class="feedback"></div>
+</section>
+
+<!-- S2 -->
+<section id="s2" class="card">
+<h2>2️⃣ Regla Empírica en 1 minuto (x̄ ± k·S)</h2>
+<div class="formula">x̄ ± 1S → ~68% &nbsp;|&nbsp; x̄ ± 2S → ~95% &nbsp;|&nbsp; x̄ ± 3S → ~99.7%<small>Solo si la distribución es aproximadamente simétrica (campana)</small></div>
+<h3>🧮 Calculadora empírica (pruébala)</h3>
+<p>Escribe una media y una desviación, yo te doy los 3 intervalos:</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<label>Media x̄ <input type="number" id="empMean" value="18" step="0.01"></label>
+<label>Desv. S <input type="number" id="empS" value="5.83" step="0.01"></label>
+<button class="btn-azul" onclick="calcEmp()">Calcular intervalos ✨</button>
+</div>
+<div id="outEmp" style="margin-top:10px"></div>
+<div class="tip">💡 <b>Ejemplo chapín del PDF:</b> Línea de gaseosas con x̄=500 ml y S=1.4 ml → el 95% sale entre <code>497.2 y 502.8 ml</code>. ¡Calidad total! Si S=11 ml → entre <code>478 y 522 ml</code>. ¡Multa de la DIACO segura! ⚖️</div>
+<p><b>Reto campana:</b> Con el caso atípico (x̄=20.1 y S≈11.38), ¿entre qué valores cae aprox. el 68%? <input type="text" id="inCampana" placeholder="ej: 8.7 y 31.5"> <button class="btn-azul" onclick="checkCampana()">Revisar</button></p><div id="fbCampana" class="feedback"></div>
+</section>
+
+<!-- S3 -->
+<section id="s3" class="card">
+<h2>3️⃣ Teorema de Chebyshev 🛡️ (vale para TODO)</h2>
+<div class="formula">P(|x − x̄| &lt; k·S) ≥ 1 − 1/k²<small>k = nº de desviaciones. Para k=2: 1 − 1/4 = 3/4 = <b>al menos 75%</b> dentro de x̄ ± 2S</small></div>
+<div class="tutor">🧑‍🏫 <b>En cristiano:</b> aunque tus datos estén horribles y sesgados, <b>Chebyshev te firma un contrato</b>: “al menos el 75% está entre x̄−2S y x̄+2S”. La empírica promete ~95% pero solo si hay campana; Chebyshev promete menos (75%) pero <b>siempre cumple</b>.</div>
+<h3>🧮 Garantía según k</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+<label>k = <select id="chebK"><option value="2">2 → 75%</option><option value="3">3 → 88.9%</option><option value="4">4 → 93.75%</option></select></label>
+<label>Media x̄ <input type="number" id="chebMean" value="18" step="0.01"></label>
+<label>Desv. S <input type="number" id="chebS" value="5.83" step="0.01"></label>
+<button class="btn-azul" onclick="calcCheb()">Garantizar 🛡️</button>
+</div>
+<div id="outCheb" style="margin-top:10px"></div>
+<p><b>Pruébalo:</b> ¿Qué % garantiza Chebyshev para k=2? <input type="number" id="inCheb75" placeholder="?"> <button class="btn-azul" onclick="check('inCheb75',75,'fbCheb')">Revisar</button></p><div id="fbCheb" class="feedback"></div>
+</section>
+
+<!-- S4 -->
+<section id="s4" class="card">
+<h2>4️⃣ 📦 Cuartiles y la Caja: el detector de atípicos</h2>
+<p>Ordena tus datos y parte en 4 cuartos iguales. La caja vive entre <b>C₁ (25%)</b> y <b>C₃ (75%)</b>, con la <b>mediana (50%)</b> adentro.</p>
+<div class="formula">RIC = C₃ − C₁ &nbsp;|&nbsp; L₁ = C₁ − 1.5·RIC &nbsp;|&nbsp; L₂ = C₃ + 1.5·RIC<small>Todo valor &lt; L₁ o &gt; L₂ es <b>atípico (*)</b>. El bigote solo llega al último dato NO atípico.</small></div>
+<div class="grid2">
+<div>
+<h3>🧮 Calculadora de cuartiles (método Tukey = mitades, como tu PDF)</h3>
+<p>Pega números con comas y te muestro <b>ordenados, mitades, C₁, mediana, C₃, RIC, L₁, L₂ y outliers</b>:</p>
+<input type="text" id="qData" style="width:100%;max-width:520px" value="10, 12, 14, 15, 16, 18, 20, 22, 24, 29" placeholder="ej: 10,12,14,15,16,18,20,22,24,29">
+<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn-verde" onclick="calcQuart()">Calcular cuartiles 📦</button>
+<button class="btn-ghost" onclick="document.getElementById('qData').value='10, 12, 14, 15, 16, 18, 20, 22, 24, 50'">Probar con outlier 50 😈</button>
+</div>
+<div id="outQuart" style="margin-top:12px"></div>
+</div>
+<div>
+<h3>📏 ¿Cómo lo hago a mano? (4 pasos)</h3>
+<ol>
+<li><b>Ordena</b> de menor a mayor. Sin ordenar, todo sale mal.</li>
+<li><b>Mediana:</b> si n es par, promedia los 2 centrales; si es impar, el del centro.</li>
+<li><b>Mitades:</b> parte baja = primeros n/2 datos; parte alta = últimos n/2. (Si n impar, ignora la mediana central).</li>
+<li><b>C₁</b> = mediana de la mitad baja. <b>C₃</b> = mediana de la mitad alta. Luego <b>RIC, L₁, L₂</b>.</li>
+</ol>
+<div class="tip">💡 <b>Con n=10:</b> baja = primeros 5, alta = últimos 5. Por eso en tu PDF <code>{10,12,14,15,16} → C₁=14</code> y <code>{18,20,22,24,29} → C₃=22</code>, mediana <code>(16+18)/2=17</code>.</div>
+<p><b>Pruébalo:</b> Con esos 10 datos, RIC = <input type="number" id="inRIC" placeholder="?"> <button class="btn-azul" onclick="check('inRIC',8,'fbRIC')">Revisar</button></p><div id="fbRIC" class="feedback"></div>
+<p>L₂ = 22 + 1.5(8) = <input type="number" id="inL2" placeholder="?"> <button class="btn-azul" onclick="check('inL2',34,'fbL2')">Revisar</button></p><div id="fbL2" class="feedback"></div>
+</div>
+</div>
+</section>
+
+<!-- S5 -->
+<section id="s5" class="card">
+<h2>5️⃣ Taller Guiado: Caso base sin atípicos ⏱️ (10,12,14,15,16,18,20,22,24,29)</h2>
+<p><b>Historia:</b> Mides el tiempo de atención (min) a n=10 clientes. Sigue los 4 pasos y marca cada uno.</p>
+<div class="stepper">
+<button class="paso-btn active" onclick="showPaso(1)">Paso 1: x̄ y S 🧮</button>
+<button class="paso-btn" onclick="showPaso(2)">Paso 2: Empírica + Chebyshev 🔔🛡️</button>
+<button class="paso-btn" onclick="showPaso(3)">Paso 3: 5 números 📦</button>
+<button class="paso-btn" onclick="showPaso(4)">Paso 4: Caja + Decisión 👔</button>
+</div>
+
+<div id="paso1" class="paso-content active">
+<h3>Paso 1: Media y desviación (la base de todo)</h3>
+<p>Suma = <input type="number" id="sumBase" placeholder="180"> ÷10 = media <input type="number" id="mediaBase" placeholder="18"> <button class="btn-verde" onclick="checkPaso1Base()">Revisar</button></p><div id="fbP1Base" class="feedback"></div>
+<p>Suma de (xi−18)² = 306. Varianza = 306 ÷ 9 = <input type="number" id="varBase" placeholder="34"> ; S = √34 ≈ <input type="number" step="0.01" id="sdBase" placeholder="5.83"> <button class="btn-verde" onclick="checkVarBase()">Revisar</button></p><div id="fbVarBase" class="feedback"></div>
+<details><summary>🆘 ¿Cómo sale 306?</summary><p>(10−18)²=64, (12−18)²=36, (14−18)²=16, (15−18)²=9, (16−18)²=4, (18−18)²=0, (20−18)²=4, (22−18)²=16, (24−18)²=36, (29−18)²=121. Suma: 64+36+16+9+4+0+4+16+36+121=<b>306</b>. Divide entre <b>n−1=9</b> (muestra) → 34. Raíz → <b>5.83 min</b>.</p></details>
+<button class="btn-azul" onclick="showPaso(2)">Siguiente →</button>
+</div>
+
+<div id="paso2" class="paso-content">
+<h3>Paso 2: Verifica la Empírica y cobra la garantía Chebyshev</h3>
+<p><b>Empírica 1S:</b> 18 ± 5.83 = (12.17, 23.83). ¿Cuántos de los 10 caen dentro? <input type="number" id="cnt1S" placeholder="6"> <button class="btn-verde" onclick="check('cnt1S',6,'fbCnt1')">Revisar</button></p><div id="fbCnt1" class="feedback"></div>
+<p>6/10 = <b>60%</b>, cerquita del ~68%. <b>Empírica 2S:</b> (6.34, 29.66) → caen <input type="number" id="cnt2S" placeholder="10"> <button class="btn-verde" onclick="check('cnt2S',10,'fbCnt2')">Revisar</button></p><div id="fbCnt2" class="feedback"></div>
+<div class="tutor">🧑‍🏫 <b>Chebyshev cobra aquí:</b> garantiza <b>≥75%</b> en (6.34, 29.66). Tenemos <b>100%</b> → garantía cumplida con holgura. Si tu jefe te pide “¿me lo firmas?” le dices: <b>firmado al 75%, observado al 100%</b>. 🖊️</div>
+<button class="btn-azul" onclick="showPaso(3)">Siguiente →</button>
+</div>
+
+<div id="paso3" class="paso-content">
+<h3>Paso 3: Los 5 números (ordena → mitades → RIC → límites)</h3>
+<table class="taller"><tr><th>Mín</th><th>C₁ (baja {10,12,14,15,16})</th><th>Mediana (16+18)/2</th><th>C₃ (alta {18,20,22,24,29})</th><th>Máx</th></tr>
+<tr><td><input type="number" id="bMin" placeholder="10" style="width:70px"></td><td><input type="number" id="bQ1" placeholder="14" style="width:70px"></td><td><input type="number" id="bMed" placeholder="17" style="width:70px"></td><td><input type="number" id="bQ3" placeholder="22" style="width:70px"></td><td><input type="number" id="bMax" placeholder="29" style="width:70px"></td></tr></table>
+<button class="btn-verde" onclick="checkBase5()">Revisar 5 números</button><div id="fbBase5" class="feedback"></div>
+<p>RIC = 22−14 = <input type="number" id="bRIC" placeholder="8"> ; L₁ = 14−12 = <input type="number" id="bL1" placeholder="2"> ; L₂ = 22+12 = <input type="number" id="bL2" placeholder="34"> <button class="btn-verde" onclick="checkBaseLim()">Revisar límites</button></p><div id="fbBaseLim" class="feedback"></div>
+<div class="alerta">👔 <b>Lectura gerente:</b> ningún dato &lt; 2 ni &gt; 34 → <b>0 atípicos</b>. Bigotes llegan a los reales (10 y 29). <b>Servicio estable, sin casos escandalosos.</b></div>
+<button class="btn-azul" onclick="showPaso(4)">Ver la caja →</button>
+</div>
+
+<div id="paso4" class="paso-content">
+<h3>Paso 4: La caja dibujada + diagnóstico</h3>
+<div id="boxBase"></div>
+<div class="kpi"><div><b>17</b>Mediana (min)</div><div><b>8</b>RIC (50% central)</div><div><b>0</b>Atípicos 🎉</div><div><b>60% / 100%</b>Real en 1S / 2S</div></div>
+<div class="tutor">🧑‍🏫 <b>Diagnóstico ejecutivo:</b> Caja de 14 a 22 (8 min concentra al 50% central). Mediana 17 casi al centro → <b>simetría aceptable</b>, por eso la empírica funcionó (60%≈68%). <b>Decisión: mantener turno, felicitar al equipo, vigilar que S no crezca.</b> ☕</div>
+<button class="btn-verde" onclick="marcarCompleto()">🎓 ¡Lo logré! Marcar taller completo</button>
+</div>
+</section>
+
+<!-- S6 -->
+<section id="s6" class="card">
+<h2>6️⃣ 😈 Caso con atípico: el cliente de los 50 min (10,12,14,15,16,18,20,22,24,50)</h2>
+<p>Una falla del sistema dejó a un cliente esperando <b>50 min</b>. Mira quién sufre y quién resiste:</p>
+<div class="grid2">
+<div style="background:#fdecec;border:2px solid #e02424;border-radius:14px;padding:14px">
+<b>📉 Media (sensible, se deja engañar)</b><br>
+<code>x̄ = 201/10 = 20.1 min</code> (subió de 18 → 20.1)<br>
+<small>Un solo dato le sumó +2.1 min. ¡Peligrosa para bonos y metas!</small><br>
+<span class="chip chip-bad">No usar sola con outliers</span>
+</div>
+<div style="background:#e6f9f0;border:2px solid #0e9f6e;border-radius:14px;padding:14px">
+<b>🛡️ Mediana (robusta, no se inmuta)</b><br>
+<code>m̃ = (16+18)/2 = 17 min</code> (idéntica al caso base)<br>
+<small>Los extremos no la mueven. Por eso vive dentro de la caja.</small><br>
+<span class="chip chip-ok">Tu aliada con atípicos</span>
+</div>
+</div>
+<p><b>Pruébalo:</b> Nueva media = <input type="number" step="0.1" id="inMedia50" placeholder="20.1"> <button class="btn-azul" onclick="check('inMedia50',20.1,'fbMedia50',0.05)">Revisar</button></p><div id="fbMedia50" class="feedback"></div>
+<p>¿La mediana cambió? <label class="quiz-opt"><input type="radio" name="med50" value="no"> No, sigue en 17 (robusta)</label>
+<label class="quiz-opt"><input type="radio" name="med50" value="si"> Sí, también subió a 20.1</label>
+<button class="btn-verde" onclick="checkMed50()">Revisar</button><div id="fbMed50" class="feedback"></div>
+<h3>📦 La caja acusa al culpable</h3>
+<p>C₁=14, C₃=22, RIC=8, L₁=2, L₂=34. ¿50 es atípico? <input type="text" id="inOut50" placeholder="sí / no"> <button class="btn-azul" onclick="checkOut50()">Revisar</button></p><div id="fbOut50" class="feedback"></div>
+<div id="boxOut"></div>
+<div class="alerta">🚨 <b>Regla de oro del bigote:</b> el bigote derecho <b>NO llega a 50</b>. Se corta en el último NO atípico (<b>24</b>) y el 50 se dibuja como <b>* separado</b>. Así tu jefe ve de un vistazo: “todo normal hasta 24, y un desastre puntual en 50”.</div>
+<div class="tutor">🧑‍🏫 <b>Decisión gerente:</b> No castigues al equipo por el promedio inflado (20.1). Reporta <b>mediana 17 + outlier 50 por falla del sistema</b>, abre ticket de TI y excluye el 50 del bono del mes. Eso es administrar con estadística. 👔</div>
+</section>
+
+<!-- S7 LABORATORIO -->
+<section id="s7" class="card" style="border:2px solid var(--azul)">
+<h2>7️⃣ 🧪 Laboratorio libre: pega tu dataset y te lo resuelvo PASO A PASO</h2>
+<p>Escribe números <b>separados por comas (,)</b>. Acepto decimales y negativos. Ejemplos para un clic:</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+<button class="btn-ghost" onclick="setLab('10,12,14,15,16,18,20,22,24,29')">Caso base (sin atípicos)</button>
+<button class="btn-ghost" onclick="setLab('10,12,14,15,16,18,20,22,24,50')">Caso outlier 50</button>
+<button class="btn-ghost" onclick="setLab('45,52,48,50,47,55,49,51,53,46,60,44')">Ventas Q miles (12 datos)</button>
+<button class="btn-ghost" onclick="setLab('8.5,9.1,7.8,8.9,15.2,8.2,9.0,8.7')">Tiempos con sospechoso</button>
+</div>
+<textarea id="labData" rows="3" style="width:100%" placeholder="ej: 10, 12, 14, 15, 16, 18, 20, 22, 24, 29">10,12,14,15,16,18,20,22,24,29</textarea>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" class="no-print">
+<button class="btn-azul" onclick="calcLab()">Calcular TODO paso a paso ✨</button>
+<button class="btn-ghost" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+</div>
+<div id="outLab" style="margin-top:14px"></div>
+<div class="tip">💡 <b>Tip de parcial:</b> siempre muestra 1) ordenados, 2) x̄ y S con fórmula n−1, 3) conteo real en x̄±1S y x̄±2S, 4) C₁/Me/C₃ por mitades, 5) RIC, L₁, L₂ y lista de atípicos. Si entregas eso, el catedrático ya vio que dominas. 🎯</div>
+<h3>✍️ Mi conclusión gerencial (escríbela antes de entregar)</h3>
+<textarea id="labNotes" rows="3" style="width:100%" placeholder="Ej: La mediana es 17 min pero la media subió a 20.1 por el outlier 50. El 50% central... Mi decisión como gerente es..."></textarea>
+</section>
+
+<!-- S8 -->
+<section id="s8" class="card">
+<h2>8️⃣ 🎓 Examen de Gerente (5 preguntas, sin miedo)</h2>
+<div id="quiz"></div>
+<p><b>Tu nota:</b> <span id="nota">0 / 5</span> <button class="btn-ghost" onclick="buildQuiz()">🔄 Reintentar</button></p>
+<h3>✅ Checklist para tu parcial</h3>
+<ul class="checklist" style="list-style:none;padding:0">
+<li><input type="checkbox" class="chk"> Sé cuándo usar Empírica (campana) vs Chebyshev (todo vale).</li>
+<li><input type="checkbox" class="chk"> Calculo x̄ y S dividiendo entre <b>n−1</b>.</li>
+<li><input type="checkbox" class="chk"> Cuento % real en x̄±1S y x̄±2S y lo comparo con 68% / 95% / ≥75%.</li>
+<li><input type="checkbox" class="chk"> Hallo C₁, mediana y C₃ por <b>mitades</b>, luego RIC, L₁, L₂.</li>
+<li><input type="checkbox" class="chk"> Identifico outliers y recorto el bigote al último NO atípico + doy decisión en plata.</li>
+</ul>
+<div id="fbFinal" class="feedback"></div>
+</section>
+
+<section class="card" style="background:linear-gradient(135deg,#eef4ff,#fff8de)">
+<h2>🏫 ¿Qué entrego en clase?</h2>
+<p>Corre tu dataset en el <b>Laboratorio (paso 7)</b>, escribe tu <b>conclusión gerencial</b> (mediana vs media, % real vs 68/95, atípicos y decisión), e <b>imprime a PDF</b> con el botón de arriba. Incluye: ordenados, x̄, S, intervalos, 5 números, RIC, límites y boxplot. Eso es tu evidencia de pensamiento crítico. 📄</p>
+<div class="kpi"><div><b>x̄ ± kS</b>Empírica + Chebyshev</div><div><b>C1·Me·C3</b>Cuartiles por mitades</div><div><b>RIC·L1·L2</b>Caza-atípicos</div></div>
+</section>
+</main>
+
+<footer class="site-footer bg-slate-950 border-t border-slate-900 py-8 mt-12">
+<div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+<div class="flex flex-wrap items-center justify-center gap-2 text-xs no-print">
+<a href="../index_estadistica.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-list text-emerald-400"></i> Índice general de Estadística I</a>
+<a href="../../index.html" class="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 px-4 py-2 rounded-xl transition"><i class="fa-solid fa-house text-emerald-400"></i> Portal General</a>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+Plataforma de apoyo docente diseñada por <strong class="text-emerald-400 font-bold">Ruldin Ayala</strong>, catedrático | Exclusivamente para el curso de <strong>Estadística I</strong>.<br>
+Facultad de Ciencias de la Administración — Universidad Mariano Gálvez de Guatemala (UMG).
+</p>
+<p class="text-[11px] text-slate-600">&copy; 2026 UMG Administración de Empresas • Semana 13: Regla Empírica · Chebyshev · Diagrama de Caja — “La media se deja engañar, la mediana no.”</p>
+</div>
+</footer>
+
+<script>
+// ---------- helpers ----------
+function ok(el,msg){el.className='feedback ok';el.textContent='✅ '+msg;updateProgress();}
+function bad(el,msg){el.className='feedback mal';el.textContent='❌ '+msg;}
+function check(id,expected,fbId,tol=0.001){
+  const v=parseFloat(document.getElementById(id).value);const fb=document.getElementById(fbId);
+  if(isNaN(v)){bad(fb,'Escribe un número primero, sin miedo.');return;}
+  Math.abs(v-expected)<=tol?ok(fb,'¡Exacto! '+expected):bad(fb,'Casi... revisa. Pista: la respuesta es '+expected);
+}
+function parseData(str){
+  return str.split(',').map(s=>s.trim()).filter(s=>s!=='').map(Number).filter(x=>!isNaN(x));
+}
+function medianOf(a){
+  if(a.length===0) return NaN;
+  const s=[...a].sort((x,y)=>x-y); const n=s.length, m=Math.floor(n/2);
+  return n%2===1 ? s[m] : (s[m-1]+s[m])/2;
+}
+// Cuartiles método Tukey (mitades), igual que el PDF
+function quartilesTukey(sorted){
+  const n=sorted.length;
+  const med=medianOf(sorted);
+  const half=Math.floor(n/2);
+  const lower=sorted.slice(0,half);
+  const upper=sorted.slice(n-half);
+  return {q1:medianOf(lower), med, q3:medianOf(upper), lower, upper};
+}
+function stats(arr){
+  const n=arr.length, sorted=[...arr].sort((a,b)=>a-b);
+  const sum=arr.reduce((a,b)=>a+b,0), mean=sum/n;
+  const ss=arr.reduce((a,x)=>a+(x-mean)*(x-mean),0);
+  const vari=n>1?ss/(n-1):0, s=Math.sqrt(vari);
+  const q=quartilesTukey(sorted);
+  const ric=q.q3-q.q1, l1=q.q1-1.5*ric, l2=q.q3+1.5*ric;
+  const outs=sorted.filter(x=>x<l1||x>l2);
+  const nonOut=sorted.filter(x=>x>=l1&&x<=l2);
+  const wLow=nonOut.length?nonOut[0]:NaN, wHigh=nonOut.length?nonOut[nonOut.length-1]:NaN;
+  const c1=(a,b)=>arr.filter(x=>x>=a&&x<=b).length;
+  return {n,sorted,sum,mean,ss,vari,s,...q,ric,l1,l2,outs,wLow,wHigh,
+    cnt1:c1(mean-s,mean+s), cnt2:c1(mean-2*s,mean+2*s), cnt3:c1(mean-3*s,mean+3*s)};
+}
+const f2=v=> (isNaN(v)?'—':Number(v).toFixed(2));
+// ---------- boxplot SVG horizontal ----------
+function boxplotSVG(st, mountId, title){
+  const el=document.getElementById(mountId); if(!el) return;
+  const W=640,H=150,pad=50;
+  const vals=[...st.sorted]; if(st.outs.length===0){} // whiskers = min/max reales
+  let lo=Math.min(st.wLow, st.q1), hi=Math.max(st.wHigh, st.q3);
+  st.outs.forEach(o=>{lo=Math.min(lo,o);hi=Math.max(hi,o);});
+  if(lo===hi){lo-=1;hi+=1;}
+  const X=v=>pad+(v-lo)/(hi-lo)*(W-2*pad);
+  const yMid=80, yTop=50, yBot=110;
+  let dots='';
+  st.sorted.forEach(v=>{
+    const isOut=(v<st.l1||v>st.l2);
+    dots+=`<circle cx="${X(v)}" cy="130" r="${isOut?6:4}" fill="${isOut?'#e02424':'#274e8d'}" opacity="${isOut?1:.55}">${'<title>'+v+(isOut?' * atípico':'')+'</title>'}</circle>`;
+  });
+  let outMarks='';
+  st.outs.forEach(v=>{ outMarks+=`<text x="${X(v)}" y="38" text-anchor="middle" font-size="16" font-weight="bold" fill="#e02424">*</text><text x="${X(v)}" y="148" text-anchor="middle" font-size="10" fill="#e02424">${v}</text>`; });
+  el.innerHTML=`<p style="font-weight:800;color:#1a3a6b;margin:6px 0">${title}</p>
+  <svg class="box-svg" viewBox="0 0 ${W} 165">
+    <line x1="${X(st.wLow)}" y1="${yMid}" x2="${X(st.q1)}" y2="${yMid}" stroke="#1a3a6b" stroke-width="2"/>
+    <line x1="${X(st.q3)}" y1="${yMid}" x2="${X(st.wHigh)}" y2="${yMid}" stroke="#1a3a6b" stroke-width="2"/>
+    <line x1="${X(st.wLow)}" y1="${yTop+10}" x2="${X(st.wLow)}" y2="${yBot-10}" stroke="#1a3a6b" stroke-width="2"/>
+    <line x1="${X(st.wHigh)}" y1="${yTop+10}" x2="${X(st.wHigh)}" y2="${yBot-10}" stroke="#1a3a6b" stroke-width="2"/>
+    <rect x="${X(st.q1)}" y="${yTop}" width="${Math.max(2,X(st.q3)-X(st.q1))}" height="${yBot-yTop}" fill="#e8f1ff" stroke="#1a3a6b" stroke-width="2.5" rx="6"/>
+    <line x1="${X(st.med)}" y1="${yTop}" x2="${X(st.med)}" y2="${yBot}" stroke="#e02424" stroke-width="3"/>
+    ${dots}${outMarks}
+    <text x="${X(st.wLow)}" y="30" text-anchor="middle" font-size="11" font-weight="bold">mín ${st.wLow}</text>
+    <text x="${X(st.q1)}" y="30" text-anchor="middle" font-size="11" fill="#1a3a6b">C1 ${f2(st.q1)}</text>
+    <text x="${X(st.med)}" y="30" text-anchor="middle" font-size="11" font-weight="bold" fill="#e02424">Me ${f2(st.med)}</text>
+    <text x="${X(st.q3)}" y="30" text-anchor="middle" font-size="11" fill="#1a3a6b">C3 ${f2(st.q3)}</text>
+    <text x="${X(st.wHigh)}" y="30" text-anchor="middle" font-size="11" font-weight="bold">máx ${st.wHigh}</text>
+  </svg>
+  <p style="font-size:.82rem;color:#5b6b82">Caja de C1 a C3 (RIC=${f2(st.ric)}), línea roja = mediana. Bigotes hasta el último NO atípico (${st.wLow} y ${st.wHigh}). ${st.outs.length?('Atípicos (*) '+st.outs.join(', ')+' fuera de ['+f2(st.l1)+', '+f2(st.l2)+'].'):'Sin atípicos: límites ['+f2(st.l1)+', '+f2(st.l2)+'] contienen todo.'}</p>`;
+}
+// ---------- S1,S2,S3 ----------
+function checkArma(){const s=document.querySelector('input[name=arma]:checked');const fb=document.getElementById('fbArma');
+  if(!s){bad(fb,'Elige una opción.');return;} s.value==='E'?ok(fb,'¡Correcto! Campana → Empírica (más precisa). Chebyshev es el seguro para todo terreno.') : bad(fb,'Ojo: Chebyshev siempre vale, pero la Empírica es más fina cuando SÍ hay campana.');}
+function calcEmp(){
+  const m=parseFloat(document.getElementById('empMean').value), s=parseFloat(document.getElementById('empS').value);
+  const out=document.getElementById('outEmp');
+  if(isNaN(m)||isNaN(s)||s<=0){out.innerHTML='<b class=mal>❌ Escribe media y S válida (S>0).</b>';return;}
+  out.innerHTML=`<div class="kpi"><div><b>(${(m-s).toFixed(2)}, ${(m+s).toFixed(2)})</b>🟢 ~68% en x̄±1S</div><div><b>(${(m-2*s).toFixed(2)}, ${(m+2*s).toFixed(2)})</b>🟡 ~95% en x̄±2S</div><div><b>(${(m-3*s).toFixed(2)}, ${(m+3*s).toFixed(2)})</b>🔴 ~99.7% en x̄±3S</div></div>`;
+  updateProgress();
+}
+function checkCampana(){const t=document.getElementById('inCampana').value;const fb=document.getElementById('fbCampana');
+  if(/8\.?7/.test(t)&&/31\.?5/.test(t))ok(fb,'¡Bien! 20.1±11.38 → (8.72, 31.48). Ese es el 68%.');else bad(fb,'Fórmula: (x̄−S, x̄+S) = (20.1−11.38, 20.1+11.38) = (8.72, 31.48).');}
+function calcCheb(){
+  const k=parseFloat(document.getElementById('chebK').value), m=parseFloat(document.getElementById('chebMean').value), s=parseFloat(document.getElementById('chebS').value);
+  const out=document.getElementById('outCheb');
+  if(isNaN(k)||isNaN(m)||isNaN(s)||s<=0){out.innerHTML='<b class=mal>❌ Revisa los valores.</b>';return;}
+  const pct=(1-1/(k*k))*100, lo=m-k*s, hi=m+k*s;
+  out.innerHTML=`<div class="kpi"><div><b>${pct.toFixed(2)}%</b>Garantía mínima</div><div><b>(${lo.toFixed(2)}, ${hi.toFixed(2)})</b>Intervalo x̄±${k}S</div></div>
+  <p class="tutor">🧑‍🏫 <b>Léelo en voz alta:</b> “Garantizo que <b>al menos el ${pct.toFixed(2)}%</b> de los datos está entre <b>${lo.toFixed(2)} y ${hi.toFixed(2)}</b>, sin importar la forma.” Para k=2 es el famoso <b>≥75%</b> de tu PDF.</p>`;
+  updateProgress();
+}
+// ---------- S4 cuartiles ----------
+function calcQuart(){
+  const arr=parseData(document.getElementById('qData').value);
+  const out=document.getElementById('outQuart');
+  if(arr.length<4){out.innerHTML='<b class=mal>❌ Escribe al menos 4 números separados por coma.</b>';return;}
+  const st=stats(arr);
+  out.innerHTML=`<p><b>Ordenados (n=${st.n}):</b> ${st.sorted.join(', ')}</p>
+  <p><b>Mitad baja:</b> {${st.lower.join(', ')}} → <b>C1 = ${f2(st.q1)}</b> &nbsp;|&nbsp; <b>Mediana = ${f2(st.med)}</b> &nbsp;|&nbsp; <b>Mitad alta:</b> {${st.upper.join(', ')}} → <b>C3 = ${f2(st.q3)}</b></p>
+  <div class="kpi"><div><b>${f2(st.ric)}</b>RIC = C3−C1</div><div><b>${f2(st.l1)}</b>L1 = C1−1.5·RIC</div><div><b>${f2(st.l2)}</b>L2 = C3+1.5·RIC</div><div><b>${st.outs.length?st.outs.join(', '):'ninguno 🎉'}</b>Atípicos</div></div>`;
+  updateProgress();
+}
+// ---------- S5 ----------
+function showPaso(n){
+  document.querySelectorAll('.paso-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  document.querySelectorAll('.paso-content').forEach((c,i)=>c.classList.toggle('active',i===n-1));
+}
+function checkPaso1Base(){const s=parseFloat(document.getElementById('sumBase').value),m=parseFloat(document.getElementById('mediaBase').value);const fb=document.getElementById('fbP1Base');
+  (s===180&&m===18)?ok(fb,'Perfecto. Suma 180, media 18 min.') : bad(fb,'Debe ser suma=180 y media=18. Suma con calma: 10+12+14+15+16+18+20+22+24+29=180.');}
+function checkVarBase(){const v=parseFloat(document.getElementById('varBase').value),s=parseFloat(document.getElementById('sdBase').value);const fb=document.getElementById('fbVarBase');
+  (v===34&&Math.abs(s-5.83)<0.03)?ok(fb,'¡Genial! S²=306/9=34, S≈5.83 min.') : bad(fb,'S²=306÷9=34, S=√34≈5.83. ¡Ojo! divide entre n−1=9.');}
+function checkBase5(){
+  const g={bMin:10,bQ1:14,bMed:17,bQ3:22,bMax:29};let mal=[];
+  for(const k in g){if(parseFloat(document.getElementById(k).value)!==g[k])mal.push(k);}
+  const fb=document.getElementById('fbBase5');
+  mal.length===0?ok(fb,'¡5 números perfectos! 10 · 14 · 17 · 22 · 29.') : bad(fb,'Revisa: '+mal.join(', ')+'. C1=mediana de {10,12,14,15,16}=14; Me=(16+18)/2=17; C3=mediana de {18,20,22,24,29}=22.');
+}
+function checkBaseLim(){
+  const r=parseFloat(document.getElementById('bRIC').value),l1=parseFloat(document.getElementById('bL1').value),l2=parseFloat(document.getElementById('bL2').value);
+  const fb=document.getElementById('fbBaseLim');
+  (r===8&&l1===2&&l2===34)?ok(fb,'¡Límites perfectos! RIC=8, L1=2, L2=34. Cero atípicos.') : bad(fb,'RIC=22−14=8; L1=14−12=2; L2=22+12=34.');
+}
+// ---------- S6 ----------
+function checkMed50(){const s=document.querySelector('input[name=med50]:checked');const fb=document.getElementById('fbMed50');
+  if(!s){bad(fb,'Elige una opción.');return;} s.value==='no'?ok(fb,'¡Exacto! La mediana resiste: sigue en 17. Por eso la caja no se deforma.') : bad(fb,'No: la mediana usa posiciones centrales (16 y 18), el 50 no la toca. Sigue en 17.');}
+function checkOut50(){const t=document.getElementById('inOut50').value.toLowerCase();const fb=document.getElementById('fbOut50');
+  /s[ií]/.test(t)?ok(fb,'¡Sí! 50 > L2=34 → atípico (*). El bigote se corta en 24.') : bad(fb,'Sí es atípico: 50 sobrepasa L2=34. Regla: fuera de [L1,L2] = outlier.');}
+// ---------- S7 laboratorio ----------
+function setLab(t){document.getElementById('labData').value=t;calcLab();}
+function calcLab(){
+  const arr=parseData(document.getElementById('labData').value);
+  const out=document.getElementById('outLab');
+  if(arr.length<4){out.innerHTML='<b class=mal>❌ Escribe al menos 4 números separados por coma (,).</b>';return;}
+  const st=stats(arr);
+  const p1=(st.cnt1/st.n*100).toFixed(1), p2=(st.cnt2/st.n*100).toFixed(1), p3=(st.cnt3/st.n*100).toFixed(1);
+  const diffL=Math.abs((st.med-st.q1)-(st.q3-st.med));
+  const sim=diffL<st.ric*0.15?'aprox. SIMÉTRICA 🔔 (la empírica aplica bien)':'SESGO '+(st.q3-st.med>st.med-st.q1?'a la DERECHA ➡️ (cola alta, cuidado con atípicos altos)':'a la IZQUIERDA ⬅️');
+  const diag = st.outs.length===0
+    ? `✅ <b>Sin atípicos.</b> Todo cae en [${f2(st.l1)}, ${f2(st.l2)}]. Proceso estable: reporta <b>x̄=${f2(st.mean)}</b> con confianza y monitorea S=${f2(st.s)}.`
+    : `🚨 <b>${st.outs.length} atípico(s): ${st.outs.join(', ')}</b> fuera de [${f2(st.l1)}, ${f2(st.l2)}]. El bigote se recorta a [${st.wLow}, ${st.wHigh}]. Reporta la <b>mediana ${f2(st.med)}</b> (robusta) y audita cada atípico antes de promediar.`;
+  out.innerHTML=`
+  <h3>Paso 1 · Orden y conteo</h3>
+  <p><b>n=${st.n}</b> · Ordenados: ${st.sorted.join(', ')} · Mín ${st.sorted[0]} · Máx ${st.sorted[st.n-1]}</p>
+  <h3>Paso 2 · Media y desviación (muestra, n−1)</h3>
+  <p>x̄ = ${st.sum.toFixed(2)}/${st.n} = <b>${f2(st.mean)}</b> · Σ(xi−x̄)² = <b>${st.ss.toFixed(2)}</b> · S² = ${st.ss.toFixed(2)}/${st.n-1} = <b>${f2(st.vari)}</b> · S = √S² = <b>${f2(st.s)}</b></p>
+  <div class="kpi"><div><b>(${f2(st.mean-st.s)}, ${f2(st.mean+st.s)})</b>🟢 x̄±1S → real ${st.cnt1}/${st.n} = ${p1}% (≈68%)</div><div><b>(${f2(st.mean-2*st.s)}, ${f2(st.mean+2*st.s)})</b>🟡 x̄±2S → real ${st.cnt2}/${st.n} = ${p2}% (≈95% · Chebyshev ≥75%)</div><div><b>(${f2(st.mean-3*st.s)}, ${f2(st.mean+3*st.s)})</b>🔴 x̄±3S → real ${st.cnt3}/${st.n} = ${p3}% (≈99.7%)</div></div>
+  <h3>Paso 3 · Cuartiles por mitades (Tukey)</h3>
+  <p>Baja {${st.lower.join(', ')}} → <b>C1=${f2(st.q1)}</b> · Mediana=<b>${f2(st.med)}</b> · Alta {${st.upper.join(', ')}} → <b>C3=${f2(st.q3)}</b> · <b>RIC=${f2(st.ric)}</b> · L1=${f2(st.l1)} · L2=${f2(st.l2)} · Bigotes reales: [${st.wLow}, ${st.wHigh}]</p>
+  <div id="boxLab"></div>
+  <h3>Paso 4 · Diagnóstico ejecutivo 👔</h3>
+  <div class="tutor">🧑‍🏫 <b>Forma:</b> ${sim}. <b>Chebyshev:</b> garantizaba ≥75% en (${f2(st.mean-2*st.s)}, ${f2(st.mean+2*st.s)}); observado <b>${p2}%</b> → ${parseFloat(p2)>=75?'cumple ✔':'¡OJO! revisa cálculos, Chebyshev nunca falla'}. <b>Empírica:</b> 1S dio ${p1}% (≈68%) y 2S dio ${p2}% (≈95%) → ${Math.abs(parseFloat(p1)-68)<15?'coherente con campana':'señal de asimetría/atípicos'}.<br>${diag}</div>`;
+  boxplotSVG(st,'boxLab','📦 Tu diagrama de caja (horizontal)');
+  updateProgress();
+}
+// ---------- S8 quiz ----------
+const Q=[
+ {q:'¿Cuándo puedes usar la Regla Empírica (68-95-99.7)?',o:['Siempre, con cualquier dato','Solo si la distribución es aprox. simétrica (campana) ✅','Solo si hay outliers'],a:1},
+ {q:'Chebyshev con k=2 garantiza…',o:['Exactamente el 95%','Al menos el 75% en x̄±2S, con cualquier forma ✅','El 100% siempre'],a:1},
+ {q:'Con {10,12,14,15,16,18,20,22,24,29}, ¿C1, mediana y C3 (mitades)?',o:['14 · 17 · 22 ✅','15 · 18 · 20','12 · 17 · 24'],a:0},
+ {q:'Si RIC=8, C1=14, C3=22. ¿L2 y es 50 atípico?',o:['L2=30, no es atípico','L2=34 y 50>34 → sí es atípico ✅','L2=36, tal vez'],a:1},
+ {q:'El dato 50 cambia la media de 18 a 20.1 pero la mediana sigue en 17. ¿Qué reportas?',o:['Solo la media 20.1','Mediana 17 + outlier 50 por falla, auditar TI ✅','Nada, todo está bien'],a:1},
+];
+function buildQuiz(){
+  const box=document.getElementById('quiz');box.innerHTML='';let score=0;
+  Q.forEach((item,i)=>{
+    const d=document.createElement('div');d.innerHTML='<b>'+(i+1)+'. '+item.q+'</b>';
+    item.o.forEach((op,j)=>{
+      const b=document.createElement('div');b.className='quiz-opt';b.textContent=op;
+      b.onclick=()=>{
+        if(b.classList.contains('correct')||b.classList.contains('wrong'))return;
+        if(j===item.a){b.classList.add('correct');score++;}else{b.classList.add('wrong');d.children[item.a+1].classList.add('correct');}
+        document.getElementById('nota').textContent=score+' / 5';
+        if(score===5)document.getElementById('fbFinal').textContent='🏆 ¡Gerente certificado Semana 13! Campana, garantía y caja dominadas.';
+        updateProgress();
+      };
+      d.appendChild(b);
+    });
+    box.appendChild(d);
+  });
+  document.getElementById('nota').textContent='0 / 5';
+}
+buildQuiz();
+function updateProgress(){
+  const total=14, got=Math.min(document.querySelectorAll('.feedback.ok').length,total);
+  document.getElementById('progressBar').style.width=(got/total*100)+'%';
+}
+document.querySelectorAll('.chk').forEach(c=>c.addEventListener('change',updateProgress));
+function marcarCompleto(){alert('🎉 ¡Felicidades, futuro gerente UMG! Dominaste x̄±kS, Chebyshev ≥75% y la caja con RIC. Recuerda: la media se deja engañar, la mediana no.');updateProgress();}
+// renders iniciales
+calcEmp(); calcCheb();
+boxplotSVG(stats([10,12,14,15,16,18,20,22,24,29]),'boxBase','📦 Caso base: caja 14–22, Me=17, bigotes 10 y 29, sin *');
+boxplotSVG(stats([10,12,14,15,16,18,20,22,24,50]),'boxOut','📦 Caso atípico: misma caja, bigote derecho cortado en 24 y * en 50');
+</script>
+</body>
+</html>
