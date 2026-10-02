@@ -1,0 +1,2903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AndriuX ERP - Simulador Gerencial Universitario | Botas de Cuero El Artesano S.A.</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Ocultar contenedor de reporte oficial en pantalla interactiva */
+    #print-report-container {
+      display: none;
+    }
+
+    /* Estilos formales de impresión profesional (@media print) */
+    @media print {
+      /* Ocultar toda la interfaz visual interactiva */
+      .no-print, header, nav, main, footer, #notification-toast, #student-modal, #student-header-banner, #global-production-alert {
+        display: none !important;
+      }
+
+      /* Mostrar reporte oficial ocupando el 100% de la página */
+      #print-report-container {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 8mm 10mm !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 9.5pt;
+        line-height: 1.35;
+      }
+      #print-report-container * {
+        visibility: visible !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .page-break {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        page-break-inside: auto !important;
+      }
+
+      tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+      }
+
+      th, td {
+        border-color: #cbd5e1 !important;
+      }
+    }
+
+    /* Animaciones suaves */
+    .fade-in {
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- ========================================== -->
+  <!-- 1. ENCABEZADO FIJO DE IDENTIFICACIÓN       -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20 gap-3">
+        
+        <!-- Logo y Nombre del ERP -->
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-700 via-indigo-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-indigo-200">
+            <i class="fa-solid fa-layer-group text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-700 to-indigo-600 bg-clip-text text-transparent">AndriuX</span>
+              <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-50 text-brand-700 border border-brand-200">ERP 2.5 EdTech</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium hidden sm:block">
+              Simulador Gerencial &bull; <span class="font-semibold text-slate-700">Botas de Cuero El Artesano S.A.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Área Derecha: Identificación del Estudiante, Caja y Acciones -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          
+          <!-- Distintivo Visual del Estudiante Activo (Visible tras registrarse) -->
+          <div id="student-badge-active" class="hidden sm:flex items-center bg-slate-50 border border-slate-200 hover:border-brand-300 rounded-xl px-3 py-1.5 shadow-sm transition cursor-pointer" onclick="openStudentModal()" title="Clic para editar tus datos personales">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mr-2.5 font-bold text-xs border border-emerald-300">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="text-left text-xs leading-tight">
+              <div class="flex items-center space-x-1.5">
+                <span id="badge-student-name" class="font-bold text-slate-800 truncate max-w-[140px]">Estudiante</span>
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Sesión activa"></span>
+              </div>
+              <div class="text-[11px] text-slate-500">
+                Carnet: <span id="badge-student-carnet" class="font-semibold text-slate-700">---</span> &bull; 
+                Sec: <span id="badge-student-sec" class="font-semibold text-slate-700">---</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-pen-to-square text-slate-400 hover:text-brand-600 text-xs ml-2"></i>
+          </div>
+
+          <!-- Botón de apertura modal si no se ha configurado -->
+          <button id="student-btn-prompt" onclick="openStudentModal()" class="flex items-center space-x-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-sm transition animate-pulse">
+            <i class="fa-solid fa-id-card"></i>
+            <span>Ingresar Datos Alumno</span>
+          </button>
+
+          <!-- Saldo en Caja Rápido -->
+          <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-xl hidden md:flex items-center space-x-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+            <div class="text-xs">
+              <div class="text-[10px] uppercase font-bold text-emerald-600 tracking-wider">Caja Disponible</div>
+              <div id="header-cash-display" class="font-bold text-sm text-emerald-900">Q 25,000.00</div>
+            </div>
+          </div>
+
+          <!-- Botón de Exportar Reporte de Simulación -->
+          <button onclick="generateAndPrintReport()" class="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-600 to-indigo-700 hover:from-brand-700 hover:to-indigo-800 text-white font-medium text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-md shadow-brand-500/20 transition-all transform active:scale-95" title="Exportar Reporte Formal en PDF / Imprimir">
+            <i class="fa-solid fa-file-pdf text-sm"></i>
+            <span class="hidden md:inline">Generar y Exportar Reporte</span>
+            <span class="md:hidden">Reporte</span>
+          </button>
+
+          <!-- Enlace de retorno a la guía teórica y actividad en clase -->
+          <a href="../Semana13ERP.html#actividad" class="inline-flex items-center space-x-1.5 text-slate-500 hover:text-brand-700 hover:border-brand-300 text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:bg-brand-50 transition" title="Volver a la guía teórica y a la Actividad en Clase de Semana 13">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden md:inline">Guía y actividad</span>
+          </a>
+
+          <!-- Botón Reiniciar Simulación -->
+          <button onclick="resetSimulation()" class="text-slate-400 hover:text-rose-600 p-2 rounded-lg hover:bg-rose-50 transition text-xs" title="Reiniciar Simulación a Valores Iniciales">
+            <i class="fa-solid fa-rotate-right text-base"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- FORMULARIO SUPERIOR DE REGISTRO DIRECTO DEL ALUMNO -->
+    <!-- (Visible prominentemente si no se han guardado datos)-->
+    <!-- ================================================== -->
+    <div id="student-header-banner" class="bg-gradient-to-r from-indigo-900 via-brand-800 to-indigo-950 text-white border-t border-indigo-700 py-3 px-4 shadow-inner">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-2.5 flex-shrink-0">
+          <div class="w-8 h-8 rounded-lg bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-sm shadow">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div>
+            <div class="font-bold text-amber-300 uppercase tracking-wider text-[11px]">Identificación Requerida del Estudiante</div>
+            <div class="text-slate-200 text-[11px]">Ingresa tus datos académicos para vincular cada transacción y habilitar la entrega oficial:</div>
+          </div>
+        </div>
+
+        <form id="inline-student-form" onsubmit="saveStudentInfoFromBanner(event)" class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full md:w-auto">
+          <input type="text" id="banner-student-name" required placeholder="Nombre Completo *" class="text-xs rounded-lg bg-white/10 text-white placeholder-slate-300 border border-white/20 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400 w-full sm:w-56">
+          <input type="text" id="banner-student-carnet" required placeholder="Carnet / Registro *" class="text-xs rounded-lg bg-white/10 text-white placeholder-slate-300 border border-white/20 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400 w-full sm:w-36">
+          <input type="text" id="banner-student-sec" required placeholder="Sección / Jornada *" class="text-xs rounded-lg bg-white/10 text-white placeholder-slate-300 border border-white/20 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400 w-full sm:w-36">
+          <button type="submit" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-3.5 py-1.5 rounded-lg shadow transition flex-shrink-0 whitespace-nowrap">
+            <i class="fa-solid fa-check mr-1"></i> Activar Sesión
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Barra de Navegación por Pestañas / Módulos -->
+    <div class="bg-slate-100 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto py-2 text-xs sm:text-sm font-medium" aria-label="Tabs">
+          <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 bg-white text-brand-700 shadow-sm border border-slate-200">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </button>
+          <button onclick="switchTab('ventas')" id="tab-ventas" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-cash-register"></i>
+            <span>1. Ventas &amp; CRM</span>
+            <span id="badge-sales-alert" class="hidden ml-1 px-1.5 py-0.2 text-[10px] bg-rose-500 text-white rounded-full">!</span>
+          </button>
+          <button onclick="switchTab('produccion')" id="tab-produccion" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-industry"></i>
+            <span>2. Producción (BOM)</span>
+            <span id="badge-prod-req-count" class="hidden ml-1 px-1.5 py-0.2 text-[10px] bg-amber-500 text-white rounded-full">0</span>
+          </button>
+          <button onclick="switchTab('inventario')" id="tab-inventario" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>3. Compras &amp; Stock</span>
+            <span id="badge-low-stock-count" class="hidden ml-1 px-1.5 py-0.2 text-[10px] bg-rose-500 text-white rounded-full">!</span>
+          </button>
+          <button onclick="switchTab('auditoria')" id="tab-auditoria" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-receipt"></i>
+            <span>4. Auditoría (TPS Log)</span>
+            <span id="badge-log-count" class="ml-1 px-1.5 py-0.2 text-[10px] bg-slate-200 text-slate-700 rounded-full">0</span>
+          </button>
+          <button onclick="switchTab('evaluacion')" id="tab-evaluacion" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>5. Evaluación Académica</span>
+            <span id="badge-eval-status" class="ml-1 w-2 h-2 rounded-full bg-amber-400"></span>
+          </button>
+          <button onclick="switchTab('reporte')" id="tab-reporte" class="tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60">
+            <i class="fa-solid fa-print"></i>
+            <span>6. Reporte Oficial</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- BANNER DE REQUERIMIENTOS A PRODUCCIÓN       -->
+  <!-- ========================================== -->
+  <div id="global-production-alert" class="hidden bg-rose-50 border-b border-rose-200 text-rose-800 px-4 py-2.5 text-xs sm:text-sm no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base animate-bounce"></i>
+        <span><strong>Alerta ERP de Stockout:</strong> Hay pedidos de venta transferidos a Producción debido a falta de calzado en inventario.</span>
+      </div>
+      <button onclick="switchTab('produccion')" class="text-xs bg-rose-600 hover:bg-rose-700 text-white px-3 py-1 rounded-md font-semibold transition">
+        Atender en Producción &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CONTENEDOR PRINCIPAL DE CONTENIDO          -->
+  <!-- ========================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 no-print">
+
+    <!-- TAB 0: DASHBOARD INTEGRADO -->
+    <section id="view-dashboard" class="space-y-6 fade-in">
+      <!-- Welcome Hero / Contexto Empresarial -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-white pointer-events-none">
+          <i class="fa-solid fa-shoe-prints"></i>
+        </div>
+        <div class="relative z-10 max-w-3xl">
+          <div class="flex items-center space-x-2 text-xs font-semibold text-amber-400 uppercase tracking-widest mb-1">
+            <i class="fa-solid fa-building-user"></i>
+            <span>Caso de Estudio Gerencial Universitario</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Botas de Cuero El Artesano S.A.</h1>
+          <p class="mt-2 text-sm text-slate-300 leading-relaxed">
+            PYME guatemalteca fabricante de calzado industrial y de montaña. Como administrador en este simulador ERP <strong>AndriuX</strong>, experimentarás cómo cada decisión de ventas, producción y compras se sincroniza en tiempo real en los inventarios, la tesorería y el libro mayor (TPS).
+          </p>
+          <div class="mt-4 flex flex-wrap items-center gap-3 text-xs">
+            <span class="inline-flex items-center bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+              <i class="fa-solid fa-coins text-amber-400 mr-1.5"></i> Moneda: <strong>Quetzales (Q)</strong>
+            </span>
+            <span class="inline-flex items-center bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+              <i class="fa-solid fa-network-wired text-indigo-400 mr-1.5"></i> Integración: <strong>Tiempo Real Multimódulo</strong>
+            </span>
+            <span class="inline-flex items-center bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+              <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> Arquitectura: <strong>TPS Log Auditado</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guía de la Actividad en Clase (navegación en ambos sentidos con Semana13ERP) -->
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="text-xs text-indigo-900 leading-relaxed">
+          <span class="font-bold uppercase tracking-wider text-[11px] text-indigo-700 flex items-center mb-1">
+            <i class="fa-solid fa-list-check mr-1.5"></i>
+            Actividad en Clase · Semana 13
+          </span>
+          Sigue las 5 fases en la guía teórica: identificación → pedido de 20 pares a <strong>Constructora Las Charcas</strong> → stock crítico y producción → compras a <strong>Tenería San Miguel</strong> → respuestas y reporte <strong>Sección_Carnet_ActividadERP.pdf</strong>.
+        </div>
+        <a href="../Semana13ERP.html#actividad" class="flex-shrink-0 inline-flex items-center space-x-2 bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-300 font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Ver instrucciones de la actividad</span>
+        </a>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1: Saldo en Caja -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Caja / Tesorería</span>
+            <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i class="fa-solid fa-wallet text-base"></i>
+            </div>
+          </div>
+          <div id="kpi-cash" class="text-2xl font-black text-slate-800 mt-2">Q 25,000.00</div>
+          <div class="mt-1 flex items-center text-xs text-slate-500">
+            <span>Capital disponible en bancos</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: Ventas Totales -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ventas Facturadas</span>
+            <div class="w-9 h-9 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
+              <i class="fa-solid fa-chart-line text-base"></i>
+            </div>
+          </div>
+          <div id="kpi-sales-amount" class="text-2xl font-black text-slate-800 mt-2">Q 0.00</div>
+          <div class="mt-1 flex items-center text-xs text-slate-500">
+            <span id="kpi-sales-qty">0 pares entregados</span>
+          </div>
+        </div>
+
+        <!-- KPI 3: Valoración Inventario PT -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Stock Productos (PT)</span>
+            <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i class="fa-solid fa-boxes-stacked text-base"></i>
+            </div>
+          </div>
+          <div id="kpi-pt-total-pairs" class="text-2xl font-black text-slate-800 mt-2">43 pares</div>
+          <div class="mt-1 flex items-center text-xs text-slate-500">
+            <span>Valuación Venta: <strong id="kpi-pt-valuation" class="text-slate-700">Q 19,550.00</strong></span>
+          </div>
+        </div>
+
+        <!-- KPI 4: Valoración Inventario MP -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Materia Prima (MP)</span>
+            <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+              <i class="fa-solid fa-warehouse text-base"></i>
+            </div>
+          </div>
+          <div id="kpi-mp-valuation" class="text-2xl font-black text-slate-800 mt-2">Q 16,200.00</div>
+          <div class="mt-1 flex items-center text-xs text-slate-500">
+            <span>Costo total en almacén</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accesos Rápidos de Flujo Gerencial -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center">
+          <i class="fa-solid fa-diagram-project text-brand-600 mr-2"></i>
+          Ciclo Operativo del ERP AndriuX &bull; Acciones Rápidas
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="switchTab('ventas')" class="group text-left p-4 rounded-xl border border-slate-200 hover:border-brand-400 bg-slate-50/50 hover:bg-brand-50/30 transition flex items-start space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-indigo-100 text-brand-700 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+              <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-slate-800 group-hover:text-brand-700">1. Registrar Venta a Cliente</div>
+              <p class="text-xs text-slate-500 mt-1">Factura calzado terminado. Valida stock y alimenta el ingreso a caja.</p>
+            </div>
+          </button>
+
+          <button onclick="switchTab('produccion')" class="group text-left p-4 rounded-xl border border-slate-200 hover:border-amber-400 bg-slate-50/50 hover:bg-amber-50/30 transition flex items-start space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+              <i class="fa-solid fa-gears text-lg"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-slate-800 group-hover:text-amber-700">2. Emitir Orden Producción</div>
+              <p class="text-xs text-slate-500 mt-1">Transforma cuero, suelas e hilo en botas mediante la receta BOM.</p>
+            </div>
+          </button>
+
+          <button onclick="switchTab('inventario')" class="group text-left p-4 rounded-xl border border-slate-200 hover:border-emerald-400 bg-slate-50/50 hover:bg-emerald-50/30 transition flex items-start space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+              <i class="fa-solid fa-cart-shopping text-lg"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-slate-800 group-hover:text-emerald-700">3. Comprar Materia Prima</div>
+              <p class="text-xs text-slate-500 mt-1">Reabastece insumos desde proveedores clave cuando haya bajo stock.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen de Requerimientos y Últimos Movimientos -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Requerimientos Pendientes de Producción -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-bell text-rose-500 mr-2"></i>
+              Requerimientos de Producción (Stockouts)
+            </h3>
+            <span id="badge-requirements-counter" class="text-xs px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-600">0 pendientes</span>
+          </div>
+          <div id="dashboard-requirements-list" class="space-y-2.5 max-h-56 overflow-y-auto text-xs">
+            <!-- Inyectado por JS -->
+            <p class="text-slate-400 text-center py-6">No hay alertas de stockout pendientes. El inventario responde a las ventas actuales.</p>
+          </div>
+        </div>
+
+        <!-- Últimas Transacciones del TPS -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center">
+              <i class="fa-solid fa-clock-rotate-left text-brand-600 mr-2"></i>
+              Últimas Transacciones (TPS Log)
+            </h3>
+            <button onclick="switchTab('auditoria')" class="text-xs text-brand-600 hover:text-brand-800 font-semibold">Ver Libro Completo &rarr;</button>
+          </div>
+          <div id="dashboard-recent-logs" class="space-y-2 max-h-56 overflow-y-auto text-xs">
+            <!-- Inyectado por JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: VENTAS Y CRM -->
+    <section id="view-ventas" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-cash-register text-brand-600 mr-2"></i>
+            Módulo 1: Ventas y Relación con Clientes (CRM)
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Registra órdenes de venta, descuenta producto terminado e incrementa el flujo de caja automáticamente.</p>
+        </div>
+        <div class="text-xs bg-indigo-50 border border-indigo-200 text-brand-800 rounded-lg px-3 py-1.5 self-start">
+          <i class="fa-solid fa-circle-info mr-1"></i> Valida stock en tiempo real
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Formulario de Venta -->
+        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100 flex items-center">
+            <i class="fa-solid fa-file-signature text-brand-600 mr-2"></i>
+            Nueva Orden de Venta
+          </h3>
+
+          <form id="sales-form" onsubmit="handleSaleSubmit(event)" class="space-y-4">
+            <!-- Cliente -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cliente Solicitante *</label>
+              <select id="sale-client" required class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="" disabled selected>Seleccione un cliente registrado...</option>
+                <option value="Constructora Las Charcas">Constructora Las Charcas</option>
+                <option value="Distribuidora El Calzado">Distribuidora El Calzado</option>
+                <option value="Suministros Industriales Z.11">Suministros Industriales Z.11</option>
+              </select>
+            </div>
+
+            <!-- Producto -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Producto Terminado a Vender *</label>
+              <select id="sale-product" required onchange="updateSaleProductDetails()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="" disabled selected>Seleccione el modelo de bota...</option>
+                <!-- Opciones dinámicas -->
+              </select>
+            </div>
+
+            <!-- Información del producto seleccionado -->
+            <div id="sale-product-info-box" class="hidden p-3.5 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Precio Unitario de Venta:</span>
+                <span id="sale-unit-price" class="font-bold text-slate-800 text-sm">Q 0.00</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Stock Actual en Bodega:</span>
+                <span id="sale-current-stock" class="font-bold px-2 py-0.5 rounded text-xs">0 pares</span>
+              </div>
+            </div>
+
+            <!-- Cantidad a Vender -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cantidad de Pares a Facturar *</label>
+              <div class="relative">
+                <input type="number" id="sale-qty" min="1" required placeholder="Ej: 5" oninput="calculateSaleTotal()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 pr-16 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <span class="absolute right-3 top-2 text-xs text-slate-400 font-medium">pares</span>
+              </div>
+            </div>
+
+            <!-- Resumen Financiero de la Venta -->
+            <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4">
+              <div class="flex justify-between items-center text-xs text-indigo-900 mb-1">
+                <span>Subtotal Bruto:</span>
+                <span id="sale-calc-subtotal" class="font-semibold">Q 0.00</span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-indigo-900 mb-2">
+                <span>Impuesto / Facturación:</span>
+                <span class="font-semibold">Incluido (12% IVA)</span>
+              </div>
+              <div class="border-t border-indigo-200/60 pt-2 flex justify-between items-center">
+                <span class="text-sm font-bold text-brand-900">Total a Ingresar en Caja:</span>
+                <span id="sale-calc-total" class="text-lg font-black text-brand-700">Q 0.00</span>
+              </div>
+            </div>
+
+            <!-- Botón Confirmar Venta -->
+            <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold py-2.5 px-4 rounded-xl shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-check-circle"></i>
+              <span>Procesar Venta y Emitir Factura</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Panel Lateral: Disponibilidad de Productos Terminados -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center">
+              <i class="fa-solid fa-cubes text-amber-500 mr-2"></i>
+              Disponibilidad de Productos (PT)
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Verifica la capacidad de entrega inmediata antes de facturar.</p>
+            <div id="sales-catalog-list" class="space-y-3">
+              <!-- Inyectado por JS -->
+            </div>
+          </div>
+
+          <!-- Cuadro Educativo ERP: Integración Ventas-Inventario-Finanzas -->
+          <div class="bg-brand-900 text-brand-50 rounded-xl p-4 shadow-sm text-xs leading-relaxed">
+            <div class="font-bold text-amber-300 flex items-center mb-1 text-sm">
+              <i class="fa-solid fa-lightbulb mr-2"></i> Lección ERP: Impacto Multilateral
+            </div>
+            Al confirmar una venta en AndriuX, el sistema ejecuta tres efectos simultáneos sin intervención manual:
+            <ul class="list-disc list-inside mt-2 space-y-1 text-brand-100">
+              <li><strong>Almacén:</strong> Reduce las existencias de PT de inmediato.</li>
+              <li><strong>Tesorería:</strong> Registra el cobro en Caja / Bancos en tiempo real.</li>
+              <li><strong>Producción:</strong> Si el stock es insuficiente, levanta un pedido interno a manufactura.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PRODUCCIÓN Y FABRICACIÓN -->
+    <section id="view-produccion" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-industry text-amber-600 mr-2"></i>
+            Módulo 2: Producción y Fabricación (BOM)
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Emite órdenes de producción. El sistema valida y descuenta materias primas según la receta industrial e incrementa productos terminados.</p>
+        </div>
+        <div class="text-xs bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-1.5 self-start">
+          <i class="fa-solid fa-blender-phone mr-1"></i> Bill of Materials (BOM) Automatizado
+        </div>
+      </div>
+
+      <!-- Alertas de Requerimientos de Ventas en Producción -->
+      <div id="prod-requirements-container" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-xs font-bold uppercase text-amber-900 flex items-center">
+            <i class="fa-solid fa-bell-concierge mr-1.5 text-amber-600"></i>
+            Requerimientos Generados desde Ventas (Pedidos Pendientes)
+          </h4>
+          <span class="text-xs text-amber-700">Haz clic en "Precargar OP" para fabricar el calzado faltante</span>
+        </div>
+        <div id="prod-requirements-cards" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+          <!-- Inyectado por JS -->
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Formulario de Emisión de Orden de Producción -->
+        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100 flex items-center">
+            <i class="fa-solid fa-hammer text-amber-600 mr-2"></i>
+            Emitir Orden de Producción (OP)
+          </h3>
+
+          <form id="prod-form" onsubmit="handleProductionSubmit(event)" class="space-y-4">
+            <!-- Producto a Fabricar -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Producto Terminado a Fabricar *</label>
+              <select id="prod-product" required onchange="updateProdPreview()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="" disabled selected>Seleccione el producto a confeccionar...</option>
+                <!-- Inyectado por JS -->
+              </select>
+            </div>
+
+            <!-- Cantidad a Producir -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cantidad de Pares a Producir *</label>
+              <div class="relative">
+                <input type="number" id="prod-qty" min="1" required placeholder="Ej: 10" oninput="updateProdPreview()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 pr-16 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <span class="absolute right-3 top-2 text-xs text-slate-400 font-medium">pares</span>
+              </div>
+            </div>
+
+            <!-- Previsualización de Requerimientos de BOM (Materia Prima Necesaria) -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center">
+                  <i class="fa-solid fa-clipboard-list text-amber-600 mr-1.5"></i>
+                  Explosión de Materiales (BOM) Requerida
+                </span>
+                <span id="prod-feasibility-badge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">
+                  Esperando selección
+                </span>
+              </div>
+
+              <!-- Tabla de explosión de insumos -->
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead>
+                    <tr class="text-slate-500 border-b border-slate-200">
+                      <th class="pb-2 font-semibold">Insumo Requerido</th>
+                      <th class="pb-2 font-semibold text-center">Por Par</th>
+                      <th class="pb-2 font-semibold text-center">Total Req.</th>
+                      <th class="pb-2 font-semibold text-center">En Bodega</th>
+                      <th class="pb-2 font-semibold text-right">Factibilidad</th>
+                    </tr>
+                  </thead>
+                  <tbody id="prod-bom-table-body" class="divide-y divide-slate-100">
+                    <tr>
+                      <td colspan="5" class="py-4 text-center text-slate-400">Selecciona producto y cantidad para calcular la explosión de materiales.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Notificación de déficit de materia prima si falta algo -->
+              <div id="prod-shortage-alert" class="hidden mt-3 p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-800 flex items-start space-x-2">
+                <i class="fa-solid fa-circle-exclamation text-rose-600 mt-0.5"></i>
+                <div class="flex-1">
+                  <span class="font-bold">Materia prima insuficiente:</span>
+                  <span id="prod-shortage-details">No es posible fabricar la cantidad solicitada.</span>
+                  <div class="mt-2">
+                    <button type="button" onclick="switchTab('inventario')" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-2.5 py-1 rounded text-xs transition">
+                      <i class="fa-solid fa-cart-plus mr-1"></i> Ir a Compras de Materia Prima
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón Ejecutar Fabricación -->
+            <button id="btn-submit-production" type="submit" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-gear"></i>
+              <span>Procesar y Ejecutar Orden de Producción</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Panel Lateral: Fichas Técnicas de Receta (BOM) y Stock MP -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- Tarjeta de Receta Oficial BOM -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center">
+              <i class="fa-solid fa-scroll text-amber-600 mr-2"></i>
+              Receta de Fabricación (BOM) Oficial
+            </h3>
+            <p class="text-xs text-slate-500 mb-3">Estándar técnico de consumo para calzado industrial:</p>
+            
+            <div class="bg-amber-50/60 border border-amber-200 rounded-lg p-3 text-xs space-y-2">
+              <div class="font-bold text-amber-900 border-b border-amber-200 pb-1">
+                Bota Industrial Dieléctrica (1 Par):
+              </div>
+              <ul class="space-y-1 text-slate-700">
+                <li class="flex items-center justify-between">
+                  <span><i class="fa-solid fa-rug text-amber-700 mr-1.5"></i> Cuero Vacuno:</span>
+                  <span class="font-bold">2.0 m²</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span><i class="fa-solid fa-shoe-prints text-slate-700 mr-1.5"></i> Suelas de Goma:</span>
+                  <span class="font-bold">1.0 par</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span><i class="fa-solid fa-circle-dot text-indigo-700 mr-1.5"></i> Hilo Industrial y Ojales:</span>
+                  <span class="font-bold">1.0 unidad</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Capacidad máxima teórica según stock actual (Análisis de Cuello de Botella) -->
+            <div class="mt-4 pt-3 border-t border-slate-100">
+              <div class="text-xs font-bold text-slate-700 uppercase mb-2">Capacidad Máxima Inmediata:</div>
+              <div id="prod-max-capacity-info" class="text-xs text-slate-600 space-y-1">
+                <!-- Inyectado por JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Stock Actual de Materias Primas -->
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center">
+              <i class="fa-solid fa-boxes-stacked text-purple-600 mr-2"></i>
+              Stock de Materias Primas en Bodega
+            </h3>
+            <div id="prod-mp-quick-stock" class="space-y-2.5 text-xs">
+              <!-- Inyectado por JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: COMPRAS E INVENTARIOS -->
+    <section id="view-inventario" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-boxes-stacked text-emerald-600 mr-2"></i>
+            Módulo 3: Compras e Inventarios
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Supervisa en tiempo real las materias primas y productos terminados. Emite órdenes de compra a proveedores descontando saldo bancario.</p>
+        </div>
+        <div class="text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg px-3 py-1.5 self-start">
+          <i class="fa-solid fa-shield-virus mr-1"></i> Control de Stock Mínimo y Reabastecimiento
+        </div>
+      </div>
+
+      <!-- GRID DE INVENTARIOS EN TIEMPO REAL -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Tarjeta Inventario Materias Primas (MP) -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-warehouse text-purple-600 mr-2"></i>
+                Inventario de Materias Primas (MP)
+              </h3>
+              <p class="text-xs text-slate-500">Insumos para producción de calzado</p>
+            </div>
+            <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-200">
+              Valuación: <span id="mp-total-cost-val">Q 0.00</span>
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-500 border-b border-slate-200 bg-slate-50/50">
+                  <th class="py-2 px-2 font-semibold">Materia Prima</th>
+                  <th class="py-2 px-2 font-semibold text-center">Stock</th>
+                  <th class="py-2 px-2 font-semibold text-center">Costo Unit.</th>
+                  <th class="py-2 px-2 font-semibold text-center">Subtotal</th>
+                  <th class="py-2 px-2 font-semibold text-right">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-mp-table-body" class="divide-y divide-slate-100">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tarjeta Inventario Productos Terminados (PT) -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                <i class="fa-solid fa-cubes text-amber-500 mr-2"></i>
+                Inventario de Productos Terminados (PT)
+              </h3>
+              <p class="text-xs text-slate-500">Calzado listo para despacho comercial</p>
+            </div>
+            <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+              Valuación: <span id="pt-total-cost-val">Q 0.00</span>
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-500 border-b border-slate-200 bg-slate-50/50">
+                  <th class="py-2 px-2 font-semibold">Producto Terminado</th>
+                  <th class="py-2 px-2 font-semibold text-center">Stock</th>
+                  <th class="py-2 px-2 font-semibold text-center">Precio Vta.</th>
+                  <th class="py-2 px-2 font-semibold text-center">Valor Total</th>
+                  <th class="py-2 px-2 font-semibold text-right">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-pt-table-body" class="divide-y divide-slate-100">
+                <!-- Inyectado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO DE COMPRA DE MATERIA PRIMA A PROVEEDORES -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center">
+          <i class="fa-solid fa-truck-ramp-box text-emerald-600 mr-2"></i>
+          Emitir Orden de Compra de Materia Prima (Reabastecimiento)
+        </h3>
+        <p class="text-xs text-slate-500 mb-4">Adquiere insumos para reabastecer el inventario cuando los niveles sean bajos. El importe total se debitará de la tesorería de la empresa.</p>
+
+        <form id="purchase-form" onsubmit="handlePurchaseSubmit(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <!-- Materia Prima a Comprar -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Materia Prima a Comprar *</label>
+            <select id="purchase-material" required onchange="handlePurchaseMaterialChange()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="" disabled selected>Seleccione material...</option>
+              <!-- Inyectado por JS -->
+            </select>
+          </div>
+
+          <!-- Proveedor Autorizado -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Proveedor Autorizado *</label>
+            <select id="purchase-supplier" required class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="" disabled selected>Seleccione proveedor...</option>
+              <option value="Tenería San Miguel">Tenería San Miguel</option>
+              <option value="Suelas y Polímeros de Guatemala">Suelas y Polímeros de Guatemala</option>
+            </select>
+          </div>
+
+          <!-- Cantidad -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cantidad a Adquirir *</label>
+            <input type="number" id="purchase-qty" min="1" required placeholder="Ej: 50" oninput="calculatePurchaseTotal()" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+
+          <!-- Total Estimado y Botón -->
+          <div>
+            <div class="text-[11px] text-slate-500 mb-1 flex justify-between">
+              <span>Costo Total a Pagar:</span>
+              <span id="purchase-total-cost-display" class="font-bold text-emerald-800 text-sm">Q 0.00</span>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold py-2 px-3 rounded-lg shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-1.5 text-xs">
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span>Autorizar Orden y Pagar</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 4: AUDITORÍA Y LIBRO MAYOR (TPS LOG) -->
+    <section id="view-auditoria" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-receipt text-brand-600 mr-2"></i>
+            Módulo 4: Auditoría y Libro Mayor (TPS Log)
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">
+            Sistema de Procesamiento de Transacciones (TPS): Cada evento de negocio genera una traza inmutable con impacto contable e inventario.
+          </p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <!-- Filtro de Módulo -->
+          <select id="tps-module-filter" onchange="renderTpsLogs()" class="text-xs rounded-lg border border-slate-300 px-2.5 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="ALL">Todos los Módulos</option>
+            <option value="VENTAS">Módulo Ventas</option>
+            <option value="PRODUCCION">Módulo Producción</option>
+            <option value="COMPRAS">Módulo Compras</option>
+            <option value="SISTEMA">Módulo Sistema</option>
+          </select>
+          <button onclick="clearTpsFilter()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200">
+            Limpiar Filtro
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen Estadístico del TPS -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div class="bg-white p-3 rounded-xl border border-slate-200">
+          <div class="text-slate-400 uppercase font-semibold text-[10px]">Total Registros TPS</div>
+          <div id="tps-total-count" class="text-lg font-bold text-slate-800">1</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200">
+          <div class="text-slate-400 uppercase font-semibold text-[10px]">Ingresos Facturados</div>
+          <div id="tps-total-inflows" class="text-lg font-bold text-emerald-600">Q 0.00</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200">
+          <div class="text-slate-400 uppercase font-semibold text-[10px]">Egresos por Compras</div>
+          <div id="tps-total-outflows" class="text-lg font-bold text-rose-600">Q 0.00</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200">
+          <div class="text-slate-400 uppercase font-semibold text-[10px]">Variación Neta Caja</div>
+          <div id="tps-net-cash" class="text-lg font-bold text-slate-800">Q 0.00</div>
+        </div>
+      </div>
+
+      <!-- Tabla del Libro Mayor / TPS -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="py-3 px-3.5">Folio / Hora</th>
+                <th class="py-3 px-3">Módulo</th>
+                <th class="py-3 px-4">Descripción de la Transacción</th>
+                <th class="py-3 px-3 text-right">Flujo Caja (Q)</th>
+                <th class="py-3 px-3">Variación Inventarios</th>
+                <th class="py-3 px-3 text-center">Responsable</th>
+              </tr>
+            </thead>
+            <tbody id="tps-logs-tbody" class="divide-y divide-slate-100">
+              <!-- Inyectado por JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: EVALUACIÓN Y RESPUESTAS DEL ESTUDIANTE -->
+    <section id="view-evaluacion" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-graduation-cap text-indigo-600 mr-2"></i>
+            Módulo 5: Evaluación e Ingesta de Respuestas del Estudiante
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">
+            Redacta tus conclusiones analíticas durante la clase. Estas respuestas se integrarán automáticamente en el Reporte Oficial descargable.
+            <a href="../Semana13ERP.html#actividad" class="text-brand-700 hover:text-brand-900 font-semibold underline underline-offset-2">Ver instrucciones de la Actividad en Clase</a>
+          </p>
+        </div>
+        <div class="text-xs bg-indigo-50 border border-indigo-200 text-indigo-800 rounded-lg px-3 py-1.5 self-start">
+          <i class="fa-solid fa-floppy-disk mr-1"></i> Auto-guardado local activo
+        </div>
+      </div>
+
+      <!-- Pregunta 1 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex items-start space-x-3 mb-3">
+          <div class="w-7 h-7 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
+            1
+          </div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-slate-900">
+              Pregunta de Análisis 1: Base de Datos Centralizada y Existencias Físicas
+            </h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              <strong>¿De qué manera la base de datos centralizada del ERP evitó que vendieran productos sin existencia física en la fábrica?</strong>
+            </p>
+            <div class="bg-slate-50 border-l-4 border-brand-500 p-2.5 rounded text-[11px] text-slate-500 mt-2">
+              <strong class="text-brand-800">Pista Teórica:</strong> Piensa en la validación de stock en tiempo real: el sistema descuenta, alerta y deriva a producción cuando no hay existencias, evitando vender "en falso" como ocurriría con archivos aislados de Excel.
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <textarea id="eval-answer-1" rows="5" oninput="saveEvaluationAnswers()" placeholder="Escribe aquí tu análisis detallado para el docente..." class="w-full text-xs sm:text-sm rounded-lg border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 leading-relaxed"></textarea>
+          <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1.5">
+            <span id="eval-count-1">0 palabras</span>
+            <span id="eval-saved-1" class="text-emerald-600 font-medium hidden"><i class="fa-solid fa-check mr-1"></i>Guardado automáticamente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pregunta 2 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex items-start space-x-3 mb-3">
+          <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
+            2
+          </div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-slate-900">
+              Pregunta de Análisis 2: Reabastecimiento y Cumplimiento de Entregas
+            </h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              <strong>¿Cómo impacta el tiempo de reabastecimiento de materia prima (compras) en el cumplimiento de las fechas de entrega al cliente final?</strong>
+            </p>
+            <div class="bg-slate-50 border-l-4 border-amber-500 p-2.5 rounded text-[11px] text-slate-500 mt-2">
+              <strong class="text-amber-800">Pista Teórica:</strong> Relaciona la explosión de materiales (BOM) con el ciclo compra → producción → entrega: si el Cuero Vacuno o las Suelas de Goma tardan en llegar, la orden de fabricación y el despacho a Constructora Las Charcas se retrasan.
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <textarea id="eval-answer-2" rows="5" oninput="saveEvaluationAnswers()" placeholder="Escribe aquí tu análisis sobre reabastecimiento, producción y fechas de entrega..." class="w-full text-xs sm:text-sm rounded-lg border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-amber-500 leading-relaxed"></textarea>
+          <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1.5">
+            <span id="eval-count-2">0 palabras</span>
+            <span id="eval-saved-2" class="text-emerald-600 font-medium hidden"><i class="fa-solid fa-check mr-1"></i>Guardado automáticamente</span>
+          </div>
+        </div>
+      </div>
+
+            <!-- Pregunta 3 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex items-start space-x-3 mb-3">
+          <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
+            3
+          </div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-slate-900">
+              Evaluación Técnica 3: Investigación de Mercado de ERP (Tiers, Marcas, CAPEX y OPEX)
+            </h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              <strong>Los estudiantes deben de investigar por lo menos 6 marcas comerciales de ERP (2 por cada tier visto en clase), y el costo tanto en Capex como Opex.</strong>
+            </p>
+            <div class="bg-slate-50 border-l-4 border-indigo-500 p-2.5 rounded text-[11px] text-slate-500 mt-2 space-y-1">
+              <div><strong class="text-indigo-800">Guía de Tiers y Análisis de Costos:</strong></div>
+              <div>&bull; <strong>Tier 1 (Grandes Corporaciones Globales):</strong> Investigar 2 marcas (ej. SAP S/4HANA, Oracle ERP Cloud, Microsoft Dynamics 365 F&O). Detallar inversión inicial en licencias/servidores/consultoría (CAPEX) vs mantenimiento/suscripción/nube anual (OPEX).</div>
+              <div>&bull; <strong>Tier 2 (Medianas Empresas / PYMES en crecimiento):</strong> Investigar 2 marcas (ej. SAP Business One, Epicor Kinetic, Infor CloudSuite, Sage X3). Comparar costo de implantación inicial (CAPEX) vs licencias mensuales por usuario/soporte (OPEX).</div>
+              <div>&bull; <strong>Tier 3 (Pequeñas y Microempresas):</strong> Investigar 2 marcas (ej. Odoo, Zoho ERP, Holded, Alegra). Analizar esquemas de bajo o nulo CAPEX (software como servicio - SaaS) y costo de suscripción mensual recurrente (OPEX).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <textarea id="eval-answer-3" rows="6" oninput="saveEvaluationAnswers()" placeholder="Escribe aquí tu informe técnico con las 6 marcas comerciales de ERP (2 de Tier 1, 2 de Tier 2, 2 de Tier 3) y el desglose de costos en CAPEX y OPEX..." class="w-full text-xs sm:text-sm rounded-lg border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed"></textarea>
+          <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1.5">
+            <span id="eval-count-3">0 palabras</span>
+            <span id="eval-saved-3" class="text-emerald-600 font-medium hidden"><i class="fa-solid fa-check mr-1"></i>Guardado automáticamente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de acción para completar y generar reporte -->
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h4 class="text-sm font-bold text-indigo-900">¿Listo para exportar y entregar tu simulación?</h4>
+          <p class="text-xs text-indigo-700 mt-0.5">Puedes revisar la vista previa formal o generar directamente el archivo en PDF para entrega al docente.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="switchTab('reporte')" class="bg-white hover:bg-slate-50 text-indigo-700 border border-indigo-300 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i class="fa-solid fa-eye mr-1.5"></i> Vista Previa
+          </button>
+          <button onclick="generateAndPrintReport()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2">
+            <i class="fa-solid fa-print"></i>
+            <span>Exportar Reporte (PDF)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: REPORTE OFICIAL EN PANTALLA (VISTA PREVIA) -->
+    <section id="view-reporte" class="hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-file-invoice text-indigo-600 mr-2"></i>
+            Vista Previa del Reporte Académico Oficial
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">
+            Revisa cómo luce tu informe antes de imprimirlo o guardarlo como archivo PDF.
+          </p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="switchTab('evaluacion')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-semibold border border-slate-300 transition">
+            <i class="fa-solid fa-pen mr-1"></i> Editar Respuestas
+          </button>
+          <button onclick="generateAndPrintReport()" class="text-xs sm:text-sm bg-gradient-to-r from-brand-600 to-indigo-700 hover:from-brand-700 hover:to-indigo-800 text-white px-4 py-2 rounded-xl font-bold shadow-md transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-print"></i>
+            <span>Imprimir / Descargar PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor del Reporte Estilo Hoja de Papel -->
+      <div class="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-2xl shadow-xl border border-slate-200 text-slate-800 text-xs space-y-6">
+        
+        <!-- Encabezado de la Hoja -->
+        <div class="border-b-2 border-slate-800 pb-4 flex justify-between items-start">
+          <div>
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Universidad Mariano Gálvez &bull; Facultad de Ciencias Económicas</div>
+            <h1 class="text-2xl font-black text-slate-900 uppercase">Simulador ERP AndriuX</h1>
+            <p class="text-xs font-semibold text-slate-700">Informe Oficial de Simulación de Sistemas de Información Gerencial</p>
+            <p class="text-[11px] text-slate-500">Caso: <strong>Botas de Cuero El Artesano S.A.</strong></p>
+          </div>
+          <div class="text-right text-[11px]">
+            <span class="font-bold text-slate-700">Fecha y Hora de Cierre:</span>
+            <div id="preview-report-timestamp" class="font-mono text-slate-600 font-semibold">---</div>
+            <div class="text-[10px] text-slate-400 mt-1">ID Auditoría: <span id="preview-audit-id" class="font-mono font-bold text-slate-600">AND-0000</span></div>
+          </div>
+        </div>
+
+        <!-- Ficha del Alumno -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div class="text-[10px] uppercase font-bold text-slate-500 mb-2 border-b border-slate-200 pb-1">1. Identificación del Estudiante Evaluado</div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div>
+              <span class="text-slate-400 block text-[10px] uppercase">Nombre Completo:</span>
+              <span id="preview-student-name" class="font-bold text-slate-900 text-sm">---</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] uppercase">Carnet / Registro:</span>
+              <span id="preview-student-carnet" class="font-bold text-slate-900 text-sm">---</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] uppercase">Sección / Jornada:</span>
+              <span id="preview-student-sec" class="font-bold text-slate-900 text-sm">---</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Balance Financiero y de Inventario -->
+        <div>
+          <div class="text-[10px] uppercase font-bold text-slate-500 mb-2 border-b border-slate-200 pb-1">2. Balance General y Cierre de Inventarios</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 block text-[10px] uppercase">Saldo Final en Caja:</span>
+              <span id="preview-fin-cash" class="text-sm font-black text-slate-900">Q 0.00</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 block text-[10px] uppercase">Ventas Facturadas:</span>
+              <span id="preview-fin-sales" class="text-sm font-black text-emerald-600">Q 0.00</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 block text-[10px] uppercase">Compras de Insumos:</span>
+              <span id="preview-fin-purchases" class="text-sm font-black text-rose-600">Q 0.00</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-400 block text-[10px] uppercase">Valuación Total Stock:</span>
+              <span id="preview-fin-inventory-val" class="text-sm font-black text-slate-900">Q 0.00</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- MP -->
+            <div>
+              <h4 class="font-bold text-slate-700 uppercase text-[10px] mb-1">Inventario Materias Primas (MP):</h4>
+              <table class="w-full border border-slate-200 text-left text-[11px]">
+                <thead class="bg-slate-100">
+                  <tr>
+                    <th class="p-1.5 border-b">Insumo</th>
+                    <th class="p-1.5 border-b text-center">Stock</th>
+                    <th class="p-1.5 border-b text-center">Costo U.</th>
+                    <th class="p-1.5 border-b text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="preview-mp-tbody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+            <!-- PT -->
+            <div>
+              <h4 class="font-bold text-slate-700 uppercase text-[10px] mb-1">Inventario Productos Terminados (PT):</h4>
+              <table class="w-full border border-slate-200 text-left text-[11px]">
+                <thead class="bg-slate-100">
+                  <tr>
+                    <th class="p-1.5 border-b">Producto</th>
+                    <th class="p-1.5 border-b text-center">Stock</th>
+                    <th class="p-1.5 border-b text-center">Precio Vta.</th>
+                    <th class="p-1.5 border-b text-right">Valor Venta</th>
+                  </tr>
+                </thead>
+                <tbody id="preview-pt-tbody" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TPS Log en la Vista Previa -->
+        <div>
+          <div class="text-[10px] uppercase font-bold text-slate-500 mb-2 border-b border-slate-200 pb-1">3. Libro Mayor de Transacciones Procesadas (TPS Log)</div>
+          <div class="overflow-x-auto">
+            <table class="w-full border border-slate-200 text-left text-[11px]">
+              <thead class="bg-slate-100">
+                <tr>
+                  <th class="p-1.5 border-b">Hora</th>
+                  <th class="p-1.5 border-b">Módulo</th>
+                  <th class="p-1.5 border-b">Descripción de la Operación</th>
+                  <th class="p-1.5 border-b text-right">Flujo Caja</th>
+                  <th class="p-1.5 border-b">Efecto en Inventario</th>
+                </tr>
+              </thead>
+              <tbody id="preview-tps-tbody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Respuestas del Estudiante en Vista Previa -->
+        <div>
+          <div class="text-[10px] uppercase font-bold text-slate-500 mb-2 border-b border-slate-200 pb-1">4. Respuestas de Evaluación y Análisis del Estudiante</div>
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">Pregunta 1: ¿De qué manera la base de datos centralizada del ERP evitó que vendieran productos sin existencia física en la fábrica?</span>
+              <p id="preview-answer-1" class="text-slate-700 whitespace-pre-wrap leading-relaxed italic bg-white p-2.5 rounded border border-slate-200">(Sin respuesta ingresada)</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">Pregunta 2: ¿Cómo impacta el tiempo de reabastecimiento de materia prima (compras) en el cumplimiento de las fechas de entrega al cliente final?</span>
+              <p id="preview-answer-2" class="text-slate-700 whitespace-pre-wrap leading-relaxed italic bg-white p-2.5 rounded border border-slate-200">(Sin respuesta ingresada)</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">Pregunta 3 (Informe de Evaluación Técnica): Investigación de 6 marcas comerciales de ERP (2 por cada Tier) y costos CAPEX vs OPEX.</span>
+              <p id="preview-answer-3" class="text-slate-700 whitespace-pre-wrap leading-relaxed italic bg-white p-2.5 rounded border border-slate-200">(Sin respuesta ingresada)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Firmas en Vista Previa -->
+        <div class="pt-8 border-t border-slate-300 grid grid-cols-2 gap-12 text-center text-xs">
+          <div>
+            <div class="border-b border-slate-400 pb-8 mb-2"></div>
+            <div id="preview-signature-student-name" class="font-bold text-slate-800">Firma del Estudiante</div>
+            <div class="text-[10px] text-slate-500">Alumno Evaluado</div>
+          </div>
+          <div>
+            <div class="border-b border-slate-400 pb-8 mb-2"></div>
+            <div class="font-bold text-slate-800">Ruldin Ayala / Catedrático del Curso</div>
+            <div class="text-[10px] text-slate-500">Sistemas de Información Gerencial</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: REGISTRO DE DATOS DEL ESTUDIANTE    -->
+  <!-- ========================================== -->
+  <div id="student-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all fade-in">
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg font-bold">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Identificación del Estudiante</h3>
+          <p class="text-xs text-slate-500">Datos obligatorios para la acreditación de la práctica</p>
+        </div>
+      </div>
+
+      <form id="student-form" onsubmit="saveStudentInfo(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre Completo del Alumno *</label>
+          <input type="text" id="modal-student-name" required placeholder="Ej: Juan Carlos Pérez González" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Carnet / Número de Registro *</label>
+          <input type="text" id="modal-student-carnet" required placeholder="Ej: 2024-00123" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Sección / Jornada *</label>
+          <input type="text" id="modal-student-sec" required placeholder="Ej: Sección A - Jornada Matutina" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+
+        <div class="pt-2 flex items-center justify-end space-x-3">
+          <button type="button" onclick="closeStudentModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">
+            Cerrar
+          </button>
+          <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md transition">
+            Guardar y Activar Sesión
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: NOTIFICACIONES / TOASTS GENERALES   -->
+  <!-- ========================================== -->
+  <div id="notification-toast" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 translate-y-24 opacity-0 pointer-events-none no-print">
+    <div id="toast-inner" class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-800 flex items-center space-x-3 text-xs max-w-sm">
+      <span id="toast-icon" class="text-base text-emerald-400"><i class="fa-solid fa-circle-check"></i></span>
+      <span id="toast-message" class="font-medium">Mensaje informativo</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PLANTILLA FORMAL DE REPORTE PARA IMPRESIÓN OFICIAL (PDF)     -->
+  <!-- (Se activa y renderiza limpiamente al invocar window.print())-->
+  <!-- ============================================================ -->
+  <div id="print-report-container">
+    <!-- Encabezado Institucional Oficial -->
+    <div class="border-b-2 border-slate-900 pb-3 mb-5">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="text-[9pt] uppercase tracking-wider text-slate-500 font-bold">Universidad Mariano Gálvez &bull; Facultad de Ciencias Económicas</div>
+          <h1 class="text-xl font-black tracking-tight text-slate-900 uppercase">Simulador ERP AndriuX</h1>
+          <p class="text-xs font-bold text-slate-800">Informe Oficial de Simulación de Sistemas de Información Gerencial</p>
+          <p class="text-[9pt] text-slate-600">Empresa: <strong>Botas de Cuero El Artesano S.A.</strong></p>
+        </div>
+        <div class="text-right text-[8.5pt]">
+          <div class="font-bold text-slate-800">Fecha y Hora de Emisión:</div>
+          <div id="print-report-timestamp" class="text-slate-700 font-mono font-semibold">---</div>
+          <div class="text-[8pt] text-slate-500 mt-0.5">ID Auditoría: <span id="print-audit-id" class="font-mono font-bold">AND-0000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Ficha de Identificación del Alumno -->
+    <div class="bg-slate-50 border border-slate-300 rounded p-3 mb-5 text-[9pt]">
+      <div class="font-bold text-slate-800 uppercase tracking-wider mb-1.5 border-b border-slate-200 pb-1 text-[8.5pt]">
+        1. Ficha de Identificación del Estudiante Evaluado
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <span class="text-slate-500 block text-[8pt] uppercase font-semibold">Nombre Completo:</span>
+          <span id="print-student-name" class="font-bold text-slate-900 text-[9.5pt]">No especificado</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[8pt] uppercase font-semibold">Carnet / Registro:</span>
+          <span id="print-student-carnet" class="font-bold text-slate-900 text-[9.5pt]">No especificado</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block text-[8pt] uppercase font-semibold">Sección / Jornada:</span>
+          <span id="print-student-sec" class="font-bold text-slate-900 text-[9.5pt]">No especificado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Balance Final de Finanzas e Inventarios -->
+    <div class="mb-5">
+      <div class="text-[9pt] font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-300 pb-1">
+        2. Balance de Cierre de Simulación (Finanzas e Inventarios)
+      </div>
+      
+      <!-- Resumen Financiero -->
+      <div class="grid grid-cols-4 gap-2 text-[8.5pt] mb-3">
+        <div class="border border-slate-200 p-2 rounded bg-slate-50">
+          <div class="text-slate-500 text-[7.5pt] uppercase font-semibold">Saldo Final Caja:</div>
+          <div id="print-fin-cash" class="text-[10pt] font-black text-slate-900">Q 0.00</div>
+        </div>
+        <div class="border border-slate-200 p-2 rounded bg-slate-50">
+          <div class="text-slate-500 text-[7.5pt] uppercase font-semibold">Ingresos Facturados:</div>
+          <div id="print-fin-sales" class="text-[10pt] font-black text-slate-900">Q 0.00</div>
+        </div>
+        <div class="border border-slate-200 p-2 rounded bg-slate-50">
+          <div class="text-slate-500 text-[7.5pt] uppercase font-semibold">Egresos Compras MP:</div>
+          <div id="print-fin-purchases" class="text-[10pt] font-black text-slate-900">Q 0.00</div>
+        </div>
+        <div class="border border-slate-200 p-2 rounded bg-slate-50">
+          <div class="text-slate-500 text-[7.5pt] uppercase font-semibold">Valuación Inventarios:</div>
+          <div id="print-fin-inventory-val" class="text-[10pt] font-black text-slate-900">Q 0.00</div>
+        </div>
+      </div>
+
+      <!-- Tablas de Stock Final -->
+      <div class="grid grid-cols-2 gap-3 text-[8.5pt]">
+        <div>
+          <div class="font-bold text-slate-700 uppercase text-[8pt] mb-1">Inventario Materias Primas (MP):</div>
+          <table class="w-full border border-slate-300 text-left text-[8pt]">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="p-1 border-b">Insumo</th>
+                <th class="p-1 border-b text-center">Stock</th>
+                <th class="p-1 border-b text-center">Costo U.</th>
+                <th class="p-1 border-b text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="print-mp-tbody">
+              <!-- Inyectado por JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="font-bold text-slate-700 uppercase text-[8pt] mb-1">Inventario Productos Terminados (PT):</div>
+          <table class="w-full border border-slate-300 text-left text-[8pt]">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="p-1 border-b">Producto</th>
+                <th class="p-1 border-b text-center">Stock</th>
+                <th class="p-1 border-b text-center">Precio U.</th>
+                <th class="p-1 border-b text-right">Valor Venta</th>
+              </tr>
+            </thead>
+            <tbody id="print-pt-tbody">
+              <!-- Inyectado por JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Registro TPS de Transacciones Realizadas -->
+    <div class="mb-5">
+      <div class="text-[9pt] font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-300 pb-1">
+        3. Libro Mayor de Transacciones Procesadas (TPS Log)
+      </div>
+      <table class="w-full border border-slate-300 text-left text-[8pt]">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-1 border-b">Hora</th>
+            <th class="p-1 border-b">Módulo</th>
+            <th class="p-1 border-b">Descripción de la Operación</th>
+            <th class="p-1 border-b text-right">Flujo Caja</th>
+            <th class="p-1 border-b">Efecto en Inventario</th>
+          </tr>
+        </thead>
+        <tbody id="print-tps-tbody" class="divide-y divide-slate-200">
+          <!-- Inyectado por JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. Respuestas del Estudiante a las Preguntas de Evaluación -->
+    <div class="mb-6 page-break">
+      <div class="text-[9pt] font-bold text-slate-800 uppercase tracking-wider mb-3 border-b border-slate-300 pb-1">
+        4. Evaluación y Respuestas de Análisis del Estudiante
+      </div>
+
+      <div class="space-y-3 text-[9pt]">
+        <div class="border border-slate-300 rounded p-3 bg-slate-50">
+          <div class="font-bold text-slate-900 mb-1">
+            Pregunta 1: ¿De qué manera la base de datos centralizada del ERP evitó que vendieran productos sin existencia física en la fábrica?
+          </div>
+          <div class="text-[8pt] text-slate-500 uppercase font-semibold mb-1">Respuesta del Alumno:</div>
+          <div id="print-answer-1" class="text-slate-800 whitespace-pre-wrap leading-relaxed bg-white p-2.5 rounded border border-slate-200 italic">
+            (Sin respuesta ingresada)
+          </div>
+        </div>
+
+        <div class="border border-slate-300 rounded p-3 bg-slate-50">
+          <div class="font-bold text-slate-900 mb-1">
+            Pregunta 2: ¿Cómo impacta el tiempo de reabastecimiento de materia prima (compras) en el cumplimiento de las fechas de entrega al cliente final?
+          </div>
+          <div class="text-[8pt] text-slate-500 uppercase font-semibold mb-1">Respuesta del Alumno:</div>
+          <div id="print-answer-2" class="text-slate-800 whitespace-pre-wrap leading-relaxed bg-white p-2.5 rounded border border-slate-200 italic">
+            (Sin respuesta ingresada)
+          </div>
+        </div>
+
+        <div class="border border-slate-300 rounded p-3 bg-slate-50">
+          <div class="font-bold text-slate-900 mb-1">
+            Pregunta 3 (Informe de Evaluación Técnica): Investigación de 6 marcas comerciales de ERP (2 por cada Tier visto en clase) y análisis de costos en CAPEX y OPEX.
+          </div>
+          <div class="text-[8pt] text-slate-500 uppercase font-semibold mb-1">Respuesta del Alumno:</div>
+          <div id="print-answer-3" class="text-slate-800 whitespace-pre-wrap leading-relaxed bg-white p-2.5 rounded border border-slate-200 italic">
+            (Sin respuesta ingresada)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firmas Formales y Calificación -->
+    <div class="mt-8 pt-6 border-t border-slate-400 grid grid-cols-2 gap-10 text-center text-[8.5pt]">
+      <div>
+        <div class="border-b border-slate-500 pb-6 mb-2"></div>
+        <div class="font-bold text-slate-800" id="print-signature-student-name">Firma del Estudiante</div>
+        <div class="text-[7.5pt] text-slate-500">Alumno Evaluado</div>
+      </div>
+      <div>
+        <div class="border-b border-slate-500 pb-6 mb-2"></div>
+        <div class="font-bold text-slate-800">Ruldin Ayala / Catedrático del Curso</div>
+        <div class="text-[7.5pt] text-slate-500">Sistemas de Información Gerencial</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT DEL SISTEMA ERP ANDRIUX         -->
+  <!-- ========================================== -->
+  <script>
+    /**
+     * ANDRIUX ERP - SIMULADOR GERENCIAL
+     * Botas de Cuero El Artesano S.A.
+     * Desarrollado para estudiantes universitarios de Administración de Empresas
+     */
+
+    // --- ESTADO GLOBAL DE LA APLICACIÓN ---
+    const ERP_STATE = {
+      // Identificación del Estudiante
+      student: {
+        name: '',
+        carnet: '',
+        section: '',
+        isConfigured: false
+      },
+
+      // Finanzas (Caja / Bancos inicial: Q 25,000.00 para permitir compras de MP)
+      finances: {
+        cash: 25000.00,
+        totalSales: 0.00,
+        totalPurchases: 0.00,
+        pairsSold: 0
+      },
+
+      // Materias Primas (MP) - Dataset oficial según ERP.MD
+      rawMaterials: {
+        cuero: {
+          id: 'cuero',
+          name: 'Cuero Vacuno',
+          stock: 150, // m²
+          unit: 'm²',
+          cost: 80, // Q80/m²
+          minStock: 40,
+          supplier: 'Tenería San Miguel'
+        },
+        suelas: {
+          id: 'suelas',
+          name: 'Suelas de Goma',
+          stock: 80, // pares
+          unit: 'pares',
+          cost: 40, // Q40/par
+          minStock: 25,
+          supplier: 'Suelas y Polímeros de Guatemala'
+        },
+        hilo: {
+          id: 'hilo',
+          name: 'Hilo Industrial y Ojales',
+          stock: 100, // unidades
+          unit: 'unidades',
+          cost: 10, // Q10/unidad
+          minStock: 30,
+          supplier: 'Suelas y Polímeros de Guatemala'
+        }
+      },
+
+      // Productos Terminados (PT) - Dataset oficial según ERP.MD
+      finishedGoods: {
+        bota_dielectrica: {
+          id: 'bota_dielectrica',
+          name: 'Bota Industrial Dieléctrica',
+          stock: 15, // pares
+          price: 450, // Q450/par
+          minStock: 10,
+          bom: {
+            cuero: 2, // 2 m²
+            suelas: 1, // 1 par
+            hilo: 1   // 1 unidad
+          }
+        },
+        bota_montana: {
+          id: 'bota_montana',
+          name: 'Bota de Montaña Cuero Premium',
+          stock: 8, // pares
+          price: 650, // Q650/par
+          minStock: 5,
+          bom: {
+            cuero: 2.5,
+            suelas: 1,
+            hilo: 1
+          }
+        },
+        bota_casual: {
+          id: 'bota_casual',
+          name: 'Bota Casual Urbana',
+          stock: 20, // pares
+          price: 380, // Q380/par
+          minStock: 10,
+          bom: {
+            cuero: 1.5,
+            suelas: 1,
+            hilo: 1
+          }
+        }
+      },
+
+      // Clientes y Proveedores precargados según ERP.MD
+      clients: [
+        "Constructora Las Charcas",
+        "Distribuidora El Calzado",
+        "Suministros Industriales Z.11"
+      ],
+      suppliers: [
+        "Tenería San Miguel",
+        "Suelas y Polímeros de Guatemala"
+      ],
+
+      // Requerimientos Pendientes generados por Stockout
+      productionRequirements: [],
+
+      // Libro Mayor y Auditoría TPS (Transaction Processing System)
+      tpsLogs: [],
+
+      // Respuestas del Estudiante
+      evaluation: {
+        question1: '',
+        question2: '',
+        question3: ''
+      }
+    };
+
+    // --- FORMATEADOR DE MONEDA Y NÚMEROS ---
+    const formatQ = (amount) => `Q ${Number(amount).toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    const getNowFormatted = () => {
+      const now = new Date();
+      return now.toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    };
+
+    const getFullDateTime = () => {
+      const now = new Date();
+      return now.toLocaleDateString('es-GT', { 
+        year: 'numeric', month: 'long', day: 'numeric', 
+        hour: '2-digit', minute: '2-digit', second: '2-digit' 
+      });
+    };
+
+    // --- LOGGING TPS (SISTEMA DE PROCESAMIENTO DE TRANSACCIONES) ---
+    function logTransaction(module, description, cashDelta, inventoryDelta) {
+      const newLog = {
+        id: `TX-${1000 + ERP_STATE.tpsLogs.length + 1}`,
+        time: getNowFormatted(),
+        timestamp: new Date().toISOString(),
+        module: module, // 'VENTAS' | 'PRODUCCION' | 'COMPRAS' | 'SISTEMA'
+        description: description,
+        cashDelta: cashDelta, // Number: positivo (+) o negativo (-)
+        inventoryDelta: inventoryDelta, // String describiendo variación
+        responsible: ERP_STATE.student.name || 'Estudiante (Sin registrar)'
+      };
+
+      ERP_STATE.tpsLogs.unshift(newLog); // Al inicio para ver el más reciente
+      renderTpsLogs();
+      renderDashboardRecentLogs();
+      updateKPICards();
+    }
+
+    // --- INICIALIZACIÓN DE LA APLICACIÓN ---
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStudentFromStorage();
+      loadEvaluationFromStorage();
+
+      // Registro inicial en el Libro Mayor
+      logTransaction(
+        'SISTEMA',
+        'Apertura de Ejercicio Contable: Carga de Catálogos Iniciales (MP, PT y Saldo de Caja Q25,000)',
+        25000.00,
+        'MP: 150m² Cuero, 80p Suelas, 100u Hilo | PT: 15p Ind., 8p Mont., 20p Cas.'
+      );
+
+      populateSelectOptions();
+      renderAllViews();
+
+      // Enlace profundo desde la guía Semana13ERP (ej. #view-evaluacion): abrir la pestaña correspondiente
+      (function handleDeepLink(){
+        const h = (window.location.hash || '').replace('#','');
+        const map = { 'view-dashboard':'dashboard','view-ventas':'ventas','view-produccion':'produccion','view-inventario':'inventario','view-auditoria':'auditoria','view-evaluacion':'evaluacion','view-reporte':'reporte' };
+        if (map[h] && typeof switchTab === 'function') { switchTab(map[h]); }
+      })();
+      window.addEventListener('hashchange', () => {
+        const h = (window.location.hash || '').replace('#','');
+        const map = { 'view-dashboard':'dashboard','view-ventas':'ventas','view-produccion':'produccion','view-inventario':'inventario','view-auditoria':'auditoria','view-evaluacion':'evaluacion','view-reporte':'reporte' };
+        if (map[h] && typeof switchTab === 'function') { switchTab(map[h]); }
+      });
+
+      // Si no hay estudiante registrado, abrir modal de bienvenida si no se ha usado el banner
+      if (!ERP_STATE.student.isConfigured) {
+        document.getElementById('student-header-banner').classList.remove('hidden');
+      } else {
+        document.getElementById('student-header-banner').classList.add('hidden');
+      }
+    });
+
+    // --- POBLAR SELECTORES HTML ---
+    function populateSelectOptions() {
+      // 1. Selector de productos para Ventas
+      const saleSelect = document.getElementById('sale-product');
+      if (saleSelect) {
+        saleSelect.innerHTML = '<option value="" disabled selected>Seleccione el modelo de bota...</option>';
+        Object.values(ERP_STATE.finishedGoods).forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = `${p.name} - ${formatQ(p.price)}/par`;
+          saleSelect.appendChild(opt);
+        });
+      }
+
+      // 2. Selector de productos para Producción
+      const prodSelect = document.getElementById('prod-product');
+      if (prodSelect) {
+        prodSelect.innerHTML = '<option value="" disabled selected>Seleccione el producto a confeccionar...</option>';
+        Object.values(ERP_STATE.finishedGoods).forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name;
+          prodSelect.appendChild(opt);
+        });
+      }
+
+      // 3. Selector de materias primas para Compras
+      const purSelect = document.getElementById('purchase-material');
+      if (purSelect) {
+        purSelect.innerHTML = '<option value="" disabled selected>Seleccione material...</option>';
+        Object.values(ERP_STATE.rawMaterials).forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = `${m.name} (${formatQ(m.cost)} / ${m.unit})`;
+          purSelect.appendChild(opt);
+        });
+      }
+    }
+
+    // --- RENDERIZADO GLOBAL DE VISTAS ---
+    function renderAllViews() {
+      updateKPICards();
+      renderSalesCatalog();
+      renderInventoryTables();
+      renderProductionTab();
+      renderRequirements();
+      renderTpsLogs();
+      updatePreviewReport();
+    }
+
+    // --- ACTUALIZACIÓN DE INDICADORES (KPIs) ---
+    function updateKPICards() {
+      // Saldo en caja
+      const cashEl = document.getElementById('kpi-cash');
+      const headerCashEl = document.getElementById('header-cash-display');
+      if (cashEl) cashEl.textContent = formatQ(ERP_STATE.finances.cash);
+      if (headerCashEl) headerCashEl.textContent = formatQ(ERP_STATE.finances.cash);
+
+      // Ventas
+      const salesAmtEl = document.getElementById('kpi-sales-amount');
+      const salesQtyEl = document.getElementById('kpi-sales-qty');
+      if (salesAmtEl) salesAmtEl.textContent = formatQ(ERP_STATE.finances.totalSales);
+      if (salesQtyEl) salesQtyEl.textContent = `${ERP_STATE.finances.pairsSold} pares entregados`;
+
+      // Inventario PT
+      let totalPTPairs = 0;
+      let totalPTValuation = 0;
+      Object.values(ERP_STATE.finishedGoods).forEach(p => {
+        totalPTPairs += p.stock;
+        totalPTValuation += (p.stock * p.price);
+      });
+      const ptPairsEl = document.getElementById('kpi-pt-total-pairs');
+      const ptValEl = document.getElementById('kpi-pt-valuation');
+      if (ptPairsEl) ptPairsEl.textContent = `${totalPTPairs} pares`;
+      if (ptValEl) ptValEl.textContent = formatQ(totalPTValuation);
+
+      // Inventario MP
+      let totalMPCost = 0;
+      let lowStockCount = 0;
+      Object.values(ERP_STATE.rawMaterials).forEach(m => {
+        totalMPCost += (m.stock * m.cost);
+        if (m.stock <= m.minStock) lowStockCount++;
+      });
+      const mpValEl = document.getElementById('kpi-mp-valuation');
+      if (mpValEl) mpValEl.textContent = formatQ(totalMPCost);
+
+      // Badge de bajo stock en tabs
+      const lowStockBadge = document.getElementById('badge-low-stock-count');
+      if (lowStockBadge) {
+        if (lowStockCount > 0) {
+          lowStockBadge.textContent = `${lowStockCount} bajo`;
+          lowStockBadge.classList.remove('hidden');
+        } else {
+          lowStockBadge.classList.add('hidden');
+        }
+      }
+
+      // Valuaciones detalladas en el módulo Compras
+      const mpCostValEl = document.getElementById('mp-total-cost-val');
+      const ptCostValEl = document.getElementById('pt-total-cost-val');
+      if (mpCostValEl) mpCostValEl.textContent = formatQ(totalMPCost);
+      if (ptCostValEl) ptCostValEl.textContent = formatQ(totalPTValuation);
+    }
+
+    // --- MÓDULO 1: VENTAS Y CRM ---
+    function updateSaleProductDetails() {
+      const select = document.getElementById('sale-product');
+      const productId = select.value;
+      const product = ERP_STATE.finishedGoods[productId];
+      const box = document.getElementById('sale-product-info-box');
+
+      if (!product) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      box.classList.remove('hidden');
+      document.getElementById('sale-unit-price').textContent = `${formatQ(product.price)} / par`;
+      const stockEl = document.getElementById('sale-current-stock');
+      stockEl.textContent = `${product.stock} pares disponibles`;
+
+      if (product.stock > product.minStock) {
+        stockEl.className = 'font-bold px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-800';
+      } else if (product.stock > 0) {
+        stockEl.className = 'font-bold px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-800';
+      } else {
+        stockEl.className = 'font-bold px-2 py-0.5 rounded text-xs bg-rose-100 text-rose-800';
+      }
+
+      calculateSaleTotal();
+    }
+
+    function calculateSaleTotal() {
+      const select = document.getElementById('sale-product');
+      const qtyInput = document.getElementById('sale-qty');
+      const productId = select.value;
+      const qty = parseInt(qtyInput.value) || 0;
+
+      const subtotalEl = document.getElementById('sale-calc-subtotal');
+      const totalEl = document.getElementById('sale-calc-total');
+
+      if (!productId || qty <= 0) {
+        subtotalEl.textContent = 'Q 0.00';
+        totalEl.textContent = 'Q 0.00';
+        return;
+      }
+
+      const product = ERP_STATE.finishedGoods[productId];
+      const total = product.price * qty;
+      subtotalEl.textContent = formatQ(total);
+      totalEl.textContent = formatQ(total);
+    }
+
+    function handleSaleSubmit(e) {
+      e.preventDefault();
+      
+      // Validación previa de estudiante
+      if (!ERP_STATE.student.isConfigured) {
+        showToast('Debes ingresar tu nombre, carnet y sección antes de realizar transacciones.', 'warning');
+        openStudentModal();
+        return;
+      }
+
+      const client = document.getElementById('sale-client').value;
+      const productId = document.getElementById('sale-product').value;
+      const qty = parseInt(document.getElementById('sale-qty').value);
+
+      if (!client || !productId || !qty || qty <= 0) {
+        showToast('Por favor completa todos los campos de venta correctamente.', 'warning');
+        return;
+      }
+
+      const product = ERP_STATE.finishedGoods[productId];
+
+      // Verificación de stock disponible
+      if (product.stock >= qty) {
+        // Stock suficiente: descontar PT e ingresar dinero a caja
+        product.stock -= qty;
+        const totalIncome = product.price * qty;
+        ERP_STATE.finances.cash += totalIncome;
+        ERP_STATE.finances.totalSales += totalIncome;
+        ERP_STATE.finances.pairsSold += qty;
+
+        // Registrar en TPS Log
+        logTransaction(
+          'VENTAS',
+          `Venta facturada a ${client}: ${qty} pares de "${product.name}" a ${formatQ(product.price)} c/u.`,
+          totalIncome,
+          `PT [${product.name}]: -${qty} pares (Quedan: ${product.stock})`
+        );
+
+        showToast(`¡Venta procesada con éxito! +${formatQ(totalIncome)} ingresados a Caja.`, 'success');
+        document.getElementById('sales-form').reset();
+        document.getElementById('sale-product-info-box').classList.add('hidden');
+        document.getElementById('sale-calc-subtotal').textContent = 'Q 0.00';
+        document.getElementById('sale-calc-total').textContent = 'Q 0.00';
+
+        renderAllViews();
+      } else {
+        // STOCK INSUFICIENTE: Generar alerta de requerimiento a Producción
+        const missingUnits = qty - product.stock;
+        
+        // Crear requerimiento para producción
+        const requirement = {
+          id: `REQ-${Date.now().toString().slice(-4)}`,
+          client: client,
+          productId: productId,
+          productName: product.name,
+          requestedQty: qty,
+          currentStock: product.stock,
+          missingQty: missingUnits,
+          timestamp: getNowFormatted()
+        };
+
+        ERP_STATE.productionRequirements.push(requirement);
+
+        // Registrar alerta en TPS
+        logTransaction(
+          'VENTAS',
+          `STOCKOUT / Requerimiento a Planta: Pedido de ${client} (${qty} pares de "${product.name}") no completado. Déficit: ${missingUnits} pares.`,
+          0,
+          `Requerimiento emitido a producción: ${missingUnits} pares de "${product.name}"`
+        );
+
+        showToast(`Stock insuficiente en bodega (Hay ${product.stock} de ${qty} pares solicitados). Se generó un Requerimiento a Producción por ${missingUnits} pares.`, 'error');
+
+        renderRequirements();
+        renderAllViews();
+      }
+    }
+
+    function renderSalesCatalog() {
+      const container = document.getElementById('sales-catalog-list');
+      if (!container) return;
+
+      container.innerHTML = Object.values(ERP_STATE.finishedGoods).map(p => {
+        let badgeColor = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+        let statusText = 'Stock Óptimo';
+        if (p.stock <= 0) {
+          badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+          statusText = 'Agotado';
+        } else if (p.stock <= p.minStock) {
+          badgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
+          statusText = 'Bajo Stock';
+        }
+
+        return `
+          <div class="p-3 rounded-lg border border-slate-200 bg-slate-50/50 flex items-center justify-between">
+            <div>
+              <div class="font-bold text-xs text-slate-800">${p.name}</div>
+              <div class="text-[11px] text-slate-500">Precio Venta: <strong class="text-slate-700">${formatQ(p.price)}</strong></div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-black text-slate-900 block">${p.stock} pares</span>
+              <span class="text-[10px] px-2 py-0.2 rounded-full border font-semibold ${badgeColor}">${statusText}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- REQUERIMIENTOS DE PRODUCCIÓN ---
+    function renderRequirements() {
+      const globalAlert = document.getElementById('global-production-alert');
+      const badgeReqCount = document.getElementById('badge-prod-req-count');
+      const badgeSalesAlert = document.getElementById('badge-sales-alert');
+      const dashboardReqList = document.getElementById('dashboard-requirements-list');
+      const reqCounter = document.getElementById('badge-requirements-counter');
+      const prodReqContainer = document.getElementById('prod-requirements-container');
+      const prodReqCards = document.getElementById('prod-requirements-cards');
+
+      const count = ERP_STATE.productionRequirements.length;
+
+      if (count > 0) {
+        if (globalAlert) globalAlert.classList.remove('hidden');
+        if (badgeReqCount) {
+          badgeReqCount.textContent = count;
+          badgeReqCount.classList.remove('hidden');
+        }
+        if (badgeSalesAlert) badgeSalesAlert.classList.remove('hidden');
+        if (reqCounter) reqCounter.textContent = `${count} pendiente(s)`;
+      } else {
+        if (globalAlert) globalAlert.classList.add('hidden');
+        if (badgeReqCount) badgeReqCount.classList.add('hidden');
+        if (badgeSalesAlert) badgeSalesAlert.classList.add('hidden');
+        if (reqCounter) reqCounter.textContent = '0 pendientes';
+      }
+
+      // En el dashboard
+      if (dashboardReqList) {
+        if (count === 0) {
+          dashboardReqList.innerHTML = `<p class="text-slate-400 text-center py-6">No hay alertas de stockout pendientes. El inventario responde a las ventas actuales.</p>`;
+        } else {
+          dashboardReqList.innerHTML = ERP_STATE.productionRequirements.map((r, idx) => `
+            <div class="p-2.5 rounded-lg border border-rose-200 bg-rose-50 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-rose-900 flex items-center">
+                  <i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-600"></i>
+                  ${r.productName}
+                </div>
+                <div class="text-[11px] text-rose-700">
+                  Cliente: <strong>${r.client}</strong> &bull; Solicitó: ${r.requestedQty} p &bull; Stock: ${r.currentStock} p
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="bg-rose-600 text-white font-bold text-xs px-2 py-0.5 rounded">Faltan ${r.missingQty}</span>
+                <button onclick="handleProduceRequirement(${idx})" class="block mt-1 text-[11px] font-semibold text-brand-700 hover:underline">
+                  Fabricar &rarr;
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // En la pestaña Producción
+      if (prodReqContainer && prodReqCards) {
+        if (count === 0) {
+          prodReqContainer.classList.add('hidden');
+        } else {
+          prodReqContainer.classList.remove('hidden');
+          prodReqCards.innerHTML = ERP_STATE.productionRequirements.map((r, idx) => `
+            <div class="bg-white p-3 rounded-lg border border-amber-300 shadow-sm flex items-center justify-between">
+              <div>
+                <div class="font-bold text-xs text-slate-800">${r.productName}</div>
+                <div class="text-[11px] text-slate-500">
+                  Requerido por: <strong>${r.client}</strong> (${r.timestamp})
+                </div>
+                <div class="text-xs text-rose-600 font-bold mt-0.5">
+                  Déficit a cubrir: ${r.missingQty} pares
+                </div>
+              </div>
+              <button onclick="handleProduceRequirement(${idx})" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-sm transition">
+                <i class="fa-solid fa-industry mr-1"></i> Precargar OP
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function handleProduceRequirement(reqIndex) {
+      const req = ERP_STATE.productionRequirements[reqIndex];
+      if (!req) return;
+      switchTab('produccion');
+      prefillProductionOrder(req.productId, req.missingQty);
+      showToast(`Orden precargada para fabricar ${req.missingQty} pares de "${req.productName}"`, 'info');
+    }
+
+    function prefillProductionOrder(productId, qty) {
+      const prodSelect = document.getElementById('prod-product');
+      const prodQty = document.getElementById('prod-qty');
+      if (prodSelect) prodSelect.value = productId;
+      if (prodQty) prodQty.value = qty;
+      updateProdPreview();
+    }
+
+    // --- MÓDULO 2: PRODUCCIÓN Y FABRICACIÓN (BOM) ---
+    function updateProdPreview() {
+      const prodSelect = document.getElementById('prod-product');
+      const qtyInput = document.getElementById('prod-qty');
+      const productId = prodSelect.value;
+      const qty = parseInt(qtyInput.value) || 0;
+
+      const tbody = document.getElementById('prod-bom-table-body');
+      const badge = document.getElementById('prod-feasibility-badge');
+      const shortageAlert = document.getElementById('prod-shortage-alert');
+      const shortageDetails = document.getElementById('prod-shortage-details');
+      const btnSubmit = document.getElementById('btn-submit-production');
+
+      if (!productId || qty <= 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">Selecciona producto y cantidad para calcular la explosión de materiales.</td></tr>`;
+        badge.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600';
+        badge.textContent = 'Esperando selección';
+        shortageAlert.classList.add('hidden');
+        if (btnSubmit) btnSubmit.disabled = false;
+        return;
+      }
+
+      const product = ERP_STATE.finishedGoods[productId];
+      let allFeasible = true;
+      let shortageMessages = [];
+
+      const rowsHtml = Object.entries(product.bom).map(([matKey, unitReq]) => {
+        const material = ERP_STATE.rawMaterials[matKey];
+        const totalReq = unitReq * qty;
+        const availableStock = material.stock;
+        const isSufficient = availableStock >= totalReq;
+
+        if (!isSufficient) {
+          allFeasible = false;
+          const missing = (totalReq - availableStock).toFixed(1);
+          shortageMessages.push(`${material.name} (Faltan ${missing} ${material.unit})`);
+        }
+
+        const statusBadge = isSufficient 
+          ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">✅ Suficiente</span>`
+          : `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-bold">❌ Déficit (-${(totalReq - availableStock).toFixed(1)})</span>`;
+
+        return `
+          <tr class="py-1.5 ${!isSufficient ? 'bg-rose-50/50' : ''}">
+            <td class="py-2 font-medium text-slate-800">${material.name}</td>
+            <td class="py-2 text-center text-slate-600">${unitReq} ${material.unit}</td>
+            <td class="py-2 text-center font-bold ${!isSufficient ? 'text-rose-600' : 'text-slate-800'}">${totalReq} ${material.unit}</td>
+            <td class="py-2 text-center text-slate-600">${availableStock} ${material.unit}</td>
+            <td class="py-2 text-right">${statusBadge}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = rowsHtml;
+
+      if (allFeasible) {
+        badge.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+        badge.textContent = '✅ Factible para Fabricación';
+        shortageAlert.classList.add('hidden');
+        if (btnSubmit) {
+          btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      } else {
+        badge.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300';
+        badge.textContent = '❌ Materia Prima Insuficiente';
+        shortageAlert.classList.remove('hidden');
+        shortageDetails.textContent = `Se detectó desabastecimiento en: ${shortageMessages.join(', ')}.`;
+      }
+    }
+
+    function handleProductionSubmit(e) {
+      e.preventDefault();
+
+      if (!ERP_STATE.student.isConfigured) {
+        showToast('Debes ingresar tus datos de alumno antes de ejecutar órdenes de producción.', 'warning');
+        openStudentModal();
+        return;
+      }
+
+      const productId = document.getElementById('prod-product').value;
+      const qty = parseInt(document.getElementById('prod-qty').value);
+
+      if (!productId || !qty || qty <= 0) {
+        showToast('Por favor ingresa una cantidad válida a producir.', 'warning');
+        return;
+      }
+
+      const product = ERP_STATE.finishedGoods[productId];
+
+      // Validar si hay materia prima suficiente para cada insumo del BOM
+      let canProduce = true;
+      let missingMaterials = [];
+
+      for (const [matKey, unitReq] of Object.entries(product.bom)) {
+        const material = ERP_STATE.rawMaterials[matKey];
+        const totalReq = unitReq * qty;
+        if (material.stock < totalReq) {
+          canProduce = false;
+          missingMaterials.push(`${material.name} (Requiere ${totalReq} ${material.unit}, stock: ${material.stock} ${material.unit})`);
+        }
+      }
+
+      if (!canProduce) {
+        showToast(`Imposible fabricar por falta de insumos: ${missingMaterials.join(' | ')}`, 'error');
+        return;
+      }
+
+      // Descontar materias primas
+      let materialsDeductedDesc = [];
+      for (const [matKey, unitReq] of Object.entries(product.bom)) {
+        const material = ERP_STATE.rawMaterials[matKey];
+        const totalReq = unitReq * qty;
+        material.stock -= totalReq;
+        materialsDeductedDesc.push(`-${totalReq} ${material.unit} ${material.name}`);
+      }
+
+      // Incrementar producto terminado
+      product.stock += qty;
+
+      // Actualizar requerimientos pendientes de producción de este producto
+      let remainingProduced = qty;
+      let satisfiedClients = [];
+      ERP_STATE.productionRequirements = ERP_STATE.productionRequirements.filter(r => {
+        if (r.productId === productId && remainingProduced > 0) {
+          if (remainingProduced >= r.missingQty) {
+            remainingProduced -= r.missingQty;
+            satisfiedClients.push(`${r.client} (${r.missingQty} pares)`);
+            return false; // Requerimiento completamente satisfecho
+          } else {
+            r.missingQty -= remainingProduced;
+            remainingProduced = 0;
+            return true; // Sigue pendiente parcialmente
+          }
+        }
+        return true;
+      });
+
+      // Registrar en el TPS Log
+      logTransaction(
+        'PRODUCCION',
+        `Orden de Fabricación Procesada: Confección de ${qty} pares de "${product.name}".`,
+        0,
+        `MP: [${materialsDeductedDesc.join(', ')}] &rarr; PT [${product.name}]: +${qty} pares`
+      );
+
+      showToast(`¡Producción exitosa! Fabricados +${qty} pares de "${product.name}".`, 'success');
+
+      if (satisfiedClients.length > 0) {
+        showToast(`¡Requerimientos cubiertos para: ${satisfiedClients.join(', ')}! Ya puedes despachar las ventas.`, 'info');
+      }
+
+      document.getElementById('prod-form').reset();
+      updateProdPreview();
+      renderAllViews();
+    }
+
+    function renderProductionTab() {
+      // Stock rápido de MP en panel lateral de producción
+      const quickStockContainer = document.getElementById('prod-mp-quick-stock');
+      if (quickStockContainer) {
+        quickStockContainer.innerHTML = Object.values(ERP_STATE.rawMaterials).map(m => {
+          let statusBadge = m.stock <= m.minStock 
+            ? `<span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded">Bajo Stock</span>`
+            : `<span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Normal</span>`;
+          return `
+            <div class="flex items-center justify-between p-2 rounded bg-slate-50 border border-slate-200">
+              <span class="font-medium text-slate-800">${m.name}:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-black text-slate-900">${m.stock} ${m.unit}</span>
+                ${statusBadge}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Capacidad máxima inmediata para Bota Industrial Dieléctrica (Análisis de Cuello de Botella)
+      const capacityInfo = document.getElementById('prod-max-capacity-info');
+      if (capacityInfo) {
+        const botaInd = ERP_STATE.finishedGoods.bota_dielectrica;
+        const maxByCuero = Math.floor(ERP_STATE.rawMaterials.cuero.stock / botaInd.bom.cuero);
+        const maxBySuelas = Math.floor(ERP_STATE.rawMaterials.suelas.stock / botaInd.bom.suelas);
+        const maxByHilo = Math.floor(ERP_STATE.rawMaterials.hilo.stock / botaInd.bom.hilo);
+        const bottleneck = Math.min(maxByCuero, maxBySuelas, maxByHilo);
+
+        let bottleneckName = 'Ninguno';
+        if (bottleneck === maxByCuero) bottleneckName = 'Cuero Vacuno';
+        else if (bottleneck === maxBySuelas) bottleneckName = 'Suelas de Goma';
+        else if (bottleneck === maxByHilo) bottleneckName = 'Hilo Industrial y Ojales';
+
+        capacityInfo.innerHTML = `
+          <div class="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-200">
+            <span>Bota Industrial Dieléctrica:</span>
+            <span class="font-bold text-slate-900">${bottleneck} pares posibles</span>
+          </div>
+          <div class="text-[11px] text-slate-500 mt-1">
+            Insumo limitante (Cuello de botella actual): <strong class="text-rose-600">${bottleneckName}</strong>
+          </div>
+        `;
+      }
+    }
+
+    // --- MÓDULO 3: COMPRAS E INVENTARIOS ---
+    function handlePurchaseMaterialChange() {
+      const matId = document.getElementById('purchase-material').value;
+      const supplierSelect = document.getElementById('purchase-supplier');
+      if (matId && ERP_STATE.rawMaterials[matId]) {
+        supplierSelect.value = ERP_STATE.rawMaterials[matId].supplier;
+      }
+      calculatePurchaseTotal();
+    }
+
+    function renderInventoryTables() {
+      // 1. Tabla de Materias Primas (MP)
+      const mpTbody = document.getElementById('inventory-mp-table-body');
+      if (mpTbody) {
+        mpTbody.innerHTML = Object.values(ERP_STATE.rawMaterials).map(m => {
+          const subtotal = m.stock * m.cost;
+          const isLow = m.stock <= m.minStock;
+          const statusBadge = isLow 
+            ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 animate-pulse">Bajo Stock</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">Óptimo</span>`;
+
+          return `
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-2.5 px-2 font-bold text-slate-800">
+                ${m.name}
+                <div class="text-[10px] text-slate-400 font-normal">Prov: ${m.supplier}</div>
+              </td>
+              <td class="py-2.5 px-2 text-center font-black ${isLow ? 'text-rose-600' : 'text-slate-800'}">
+                ${m.stock} ${m.unit}
+              </td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">${formatQ(m.cost)}</td>
+              <td class="py-2.5 px-2 text-center font-bold text-slate-800">${formatQ(subtotal)}</td>
+              <td class="py-2.5 px-2 text-right">${statusBadge}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Tabla de Productos Terminados (PT)
+      const ptTbody = document.getElementById('inventory-pt-table-body');
+      if (ptTbody) {
+        ptTbody.innerHTML = Object.values(ERP_STATE.finishedGoods).map(p => {
+          const subtotal = p.stock * p.price;
+          const isLow = p.stock <= p.minStock;
+          const statusBadge = isLow 
+            ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Reorden</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">Disponible</span>`;
+
+          return `
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-2.5 px-2 font-bold text-slate-800">${p.name}</td>
+              <td class="py-2.5 px-2 text-center font-black ${isLow ? 'text-amber-600' : 'text-slate-800'}">
+                ${p.stock} pares
+              </td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">${formatQ(p.price)}</td>
+              <td class="py-2.5 px-2 text-center font-bold text-slate-800">${formatQ(subtotal)}</td>
+              <td class="py-2.5 px-2 text-right">${statusBadge}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    function calculatePurchaseTotal() {
+      const matSelect = document.getElementById('purchase-material');
+      const qtyInput = document.getElementById('purchase-qty');
+      const displayEl = document.getElementById('purchase-total-cost-display');
+
+      const matId = matSelect.value;
+      const qty = parseInt(qtyInput.value) || 0;
+
+      if (!matId || qty <= 0) {
+        displayEl.textContent = 'Q 0.00';
+        return 0;
+      }
+
+      const material = ERP_STATE.rawMaterials[matId];
+      const total = material.cost * qty;
+      displayEl.textContent = formatQ(total);
+      return total;
+    }
+
+    function handlePurchaseSubmit(e) {
+      e.preventDefault();
+
+      if (!ERP_STATE.student.isConfigured) {
+        showToast('Debes ingresar tus datos de alumno antes de emitir compras.', 'warning');
+        openStudentModal();
+        return;
+      }
+
+      const supplier = document.getElementById('purchase-supplier').value;
+      const matId = document.getElementById('purchase-material').value;
+      const qty = parseInt(document.getElementById('purchase-qty').value);
+
+      if (!supplier || !matId || !qty || qty <= 0) {
+        showToast('Completa correctamente los datos de la orden de compra.', 'warning');
+        return;
+      }
+
+      const material = ERP_STATE.rawMaterials[matId];
+      const totalCost = material.cost * qty;
+
+      // Validación de fondos en caja
+      if (ERP_STATE.finances.cash < totalCost) {
+        showToast(`Fondos insuficientes en Caja. Se requieren ${formatQ(totalCost)} pero el saldo actual es de ${formatQ(ERP_STATE.finances.cash)}.`, 'error');
+        return;
+      }
+
+      // Descontar caja e incrementar inventario de materia prima
+      ERP_STATE.finances.cash -= totalCost;
+      ERP_STATE.finances.totalPurchases += totalCost;
+      material.stock += qty;
+
+      // Registrar en TPS Log
+      logTransaction(
+        'COMPRAS',
+        `Orden de Compra a ${supplier}: ${qty} ${material.unit} de "${material.name}" a ${formatQ(material.cost)} c/u.`,
+        -totalCost,
+        `MP [${material.name}]: +${qty} ${material.unit} (Total en bodega: ${material.stock})`
+      );
+
+      showToast(`¡Compra autorizada! +${qty} ${material.unit} de ${material.name} recibidos. Descontados ${formatQ(totalCost)} de Caja.`, 'success');
+
+      document.getElementById('purchase-form').reset();
+      document.getElementById('purchase-total-cost-display').textContent = 'Q 0.00';
+
+      renderAllViews();
+    }
+
+    // --- MÓDULO 4: AUDITORÍA Y LIBRO MAYOR (TPS LOG) ---
+    function renderTpsLogs() {
+      const tbody = document.getElementById('tps-logs-tbody');
+      const filter = document.getElementById('tps-module-filter') ? document.getElementById('tps-module-filter').value : 'ALL';
+      const badgeCount = document.getElementById('badge-log-count');
+      const tpsTotalCount = document.getElementById('tps-total-count');
+      const tpsInflows = document.getElementById('tps-total-inflows');
+      const tpsOutflows = document.getElementById('tps-total-outflows');
+      const tpsNetCash = document.getElementById('tps-net-cash');
+
+      if (badgeCount) badgeCount.textContent = ERP_STATE.tpsLogs.length;
+      if (tpsTotalCount) tpsTotalCount.textContent = ERP_STATE.tpsLogs.length;
+      if (tpsInflows) tpsInflows.textContent = formatQ(ERP_STATE.finances.totalSales);
+      if (tpsOutflows) tpsOutflows.textContent = formatQ(ERP_STATE.finances.totalPurchases);
+      if (tpsNetCash) {
+        const net = ERP_STATE.finances.totalSales - ERP_STATE.finances.totalPurchases;
+        tpsNetCash.textContent = formatQ(net);
+        tpsNetCash.className = net >= 0 ? 'text-lg font-bold text-emerald-600' : 'text-lg font-bold text-rose-600';
+      }
+
+      if (!tbody) return;
+
+      const filteredLogs = filter === 'ALL' 
+        ? ERP_STATE.tpsLogs 
+        : ERP_STATE.tpsLogs.filter(l => l.module === filter);
+
+      if (filteredLogs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400">No hay transacciones registradas para este filtro.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredLogs.map(l => {
+        let moduleBadge = '';
+        if (l.module === 'VENTAS') moduleBadge = '<span class="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded font-bold">Ventas</span>';
+        else if (l.module === 'PRODUCCION') moduleBadge = '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">Producción</span>';
+        else if (l.module === 'COMPRAS') moduleBadge = '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Compras</span>';
+        else moduleBadge = '<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-bold">Sistema</span>';
+
+        let cashClass = 'text-slate-400';
+        let cashText = '---';
+        if (l.cashDelta > 0) {
+          cashClass = 'text-emerald-600 font-bold';
+          cashText = `+${formatQ(l.cashDelta)}`;
+        } else if (l.cashDelta < 0) {
+          cashClass = 'text-rose-600 font-bold';
+          cashText = `-${formatQ(Math.abs(l.cashDelta))}`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-2.5 px-3.5">
+              <span class="font-mono text-slate-700 font-bold">${l.id}</span>
+              <div class="text-[10px] text-slate-400">${l.time}</div>
+            </td>
+            <td class="py-2.5 px-3">${moduleBadge}</td>
+            <td class="py-2.5 px-4 font-medium text-slate-800">${l.description}</td>
+            <td class="py-2.5 px-3 text-right font-mono ${cashClass}">${cashText}</td>
+            <td class="py-2.5 px-3 text-slate-600 text-[11px]">${l.inventoryDelta || 'Sin variación'}</td>
+            <td class="py-2.5 px-3 text-center text-[11px] text-slate-500 font-medium">${l.responsible}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function clearTpsFilter() {
+      const select = document.getElementById('tps-module-filter');
+      if (select) select.value = 'ALL';
+      renderTpsLogs();
+    }
+
+    function renderDashboardRecentLogs() {
+      const container = document.getElementById('dashboard-recent-logs');
+      if (!container) return;
+
+      const topLogs = ERP_STATE.tpsLogs.slice(0, 5);
+      if (topLogs.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-center py-4">Sin transacciones registradas.</p>`;
+        return;
+      }
+
+      container.innerHTML = topLogs.map(l => `
+        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200">
+          <div class="truncate mr-2">
+            <span class="font-bold text-slate-700">[${l.module}]</span>
+            <span class="text-slate-600 ml-1">${l.description}</span>
+          </div>
+          <span class="text-[10px] text-slate-400 flex-shrink-0 font-mono">${l.time}</span>
+        </div>
+      `).join('');
+    }
+
+    // --- MÓDULO 5: EVALUACIÓN Y RESPUESTAS DEL ALUMNO ---
+    function saveEvaluationAnswers() {
+      const ans1 = document.getElementById('eval-answer-1').value;
+      const ans2 = document.getElementById('eval-answer-2').value;
+      const ans3 = document.getElementById('eval-answer-3') ? document.getElementById('eval-answer-3').value : '';
+
+      ERP_STATE.evaluation.question1 = ans1;
+      ERP_STATE.evaluation.question2 = ans2;
+      ERP_STATE.evaluation.question3 = ans3;
+
+      // Actualizar contadores de palabras
+      const count1 = ans1.trim() ? ans1.trim().split(/\s+/).length : 0;
+      const count2 = ans2.trim() ? ans2.trim().split(/\s+/).length : 0;
+      const count3 = ans3.trim() ? ans3.trim().split(/\s+/).length : 0;
+
+      if (document.getElementById('eval-count-1')) document.getElementById('eval-count-1').textContent = `${count1} palabras redactadas`;
+      if (document.getElementById('eval-count-2')) document.getElementById('eval-count-2').textContent = `${count2} palabras redactadas`;
+      if (document.getElementById('eval-count-3')) document.getElementById('eval-count-3').textContent = `${count3} palabras redactadas`;
+
+      // Badge en tab
+      const evalBadge = document.getElementById('badge-eval-status');
+      if (evalBadge) {
+        if (count1 > 5 && count2 > 5 && count3 > 5) {
+          evalBadge.className = 'ml-1 w-2 h-2 rounded-full bg-emerald-500';
+        } else {
+          evalBadge.className = 'ml-1 w-2 h-2 rounded-full bg-amber-400';
+        }
+      }
+
+      // Feedback visual
+      const saved1 = document.getElementById('eval-saved-1');
+      const saved2 = document.getElementById('eval-saved-2');
+      const saved3 = document.getElementById('eval-saved-3');
+      if (saved1 && saved2) {
+        saved1.classList.remove('hidden');
+        saved2.classList.remove('hidden');
+        if (saved3) saved3.classList.remove('hidden');
+        setTimeout(() => {
+          saved1.classList.add('hidden');
+          saved2.classList.add('hidden');
+          if (saved3) saved3.classList.add('hidden');
+        }, 1500);
+      }
+
+      // Guardar en localStorage
+      try {
+        localStorage.setItem('andriux_eval_q1', ans1);
+        localStorage.setItem('andriux_eval_q2', ans2);
+        localStorage.setItem('andriux_eval_q3', ans3);
+      } catch (err) {
+        console.warn('Storage error:', err);
+      }
+
+      updatePreviewReport();
+    }
+
+    function loadEvaluationFromStorage() {
+      try {
+        const q1 = localStorage.getItem('andriux_eval_q1') || '';
+        const q2 = localStorage.getItem('andriux_eval_q2') || '';
+        const q3 = localStorage.getItem('andriux_eval_q3') || '';
+        ERP_STATE.evaluation.question1 = q1;
+        ERP_STATE.evaluation.question2 = q2;
+        ERP_STATE.evaluation.question3 = q3;
+
+        const el1 = document.getElementById('eval-answer-1');
+        const el2 = document.getElementById('eval-answer-2');
+        const el3 = document.getElementById('eval-answer-3');
+        if (el1) el1.value = q1;
+        if (el2) el2.value = q2;
+        if (el3) el3.value = q3;
+
+        const count1 = q1.trim() ? q1.trim().split(/\s+/).length : 0;
+        const count2 = q2.trim() ? q2.trim().split(/\s+/).length : 0;
+        const count3 = q3.trim() ? q3.trim().split(/\s+/).length : 0;
+        if (document.getElementById('eval-count-1')) document.getElementById('eval-count-1').textContent = `${count1} palabras redactadas`;
+        if (document.getElementById('eval-count-2')) document.getElementById('eval-count-2').textContent = `${count2} palabras redactadas`;
+        if (document.getElementById('eval-count-3')) document.getElementById('eval-count-3').textContent = `${count3} palabras redactadas`;
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    // --- IDENTIFICACIÓN DEL ESTUDIANTE ---
+    function openStudentModal() {
+      document.getElementById('modal-student-name').value = ERP_STATE.student.name || '';
+      document.getElementById('modal-student-carnet').value = ERP_STATE.student.carnet || '';
+      document.getElementById('modal-student-sec').value = ERP_STATE.student.section || '';
+      document.getElementById('student-modal').classList.remove('hidden');
+    }
+
+    function closeStudentModal() {
+      document.getElementById('student-modal').classList.add('hidden');
+    }
+
+    function saveStudentInfo(e) {
+      e.preventDefault();
+      const name = document.getElementById('modal-student-name').value.trim();
+      const carnet = document.getElementById('modal-student-carnet').value.trim();
+      const sec = document.getElementById('modal-student-sec').value.trim();
+
+      if (!name || !carnet || !sec) {
+        showToast('Por favor completa todos tus datos de estudiante.', 'warning');
+        return;
+      }
+
+      applyStudentData(name, carnet, sec);
+      closeStudentModal();
+    }
+
+    function saveStudentInfoFromBanner(e) {
+      e.preventDefault();
+      const name = document.getElementById('banner-student-name').value.trim();
+      const carnet = document.getElementById('banner-student-carnet').value.trim();
+      const sec = document.getElementById('banner-student-sec').value.trim();
+
+      if (!name || !carnet || !sec) {
+        showToast('Por favor completa todos tus datos de estudiante.', 'warning');
+        return;
+      }
+
+      applyStudentData(name, carnet, sec);
+    }
+
+    function applyStudentData(name, carnet, sec) {
+      ERP_STATE.student.name = name;
+      ERP_STATE.student.carnet = carnet;
+      ERP_STATE.student.section = sec;
+      ERP_STATE.student.isConfigured = true;
+
+      try {
+        localStorage.setItem('andriux_student_data', JSON.stringify(ERP_STATE.student));
+      } catch (err) {
+        console.warn(err);
+      }
+
+      updateStudentBadge();
+      updatePreviewReport();
+      document.getElementById('student-header-banner').classList.add('hidden');
+      showToast(`¡Sesión activada con éxito para ${name}!`, 'success');
+    }
+
+    function updateStudentBadge() {
+      const activeBadge = document.getElementById('student-badge-active');
+      const promptBtn = document.getElementById('student-btn-prompt');
+      const banner = document.getElementById('student-header-banner');
+
+      if (ERP_STATE.student.isConfigured) {
+        if (activeBadge) activeBadge.classList.remove('hidden');
+        if (promptBtn) promptBtn.classList.add('hidden');
+        if (banner) banner.classList.add('hidden');
+
+        document.getElementById('badge-student-name').textContent = ERP_STATE.student.name;
+        document.getElementById('badge-student-carnet').textContent = ERP_STATE.student.carnet;
+        document.getElementById('badge-student-sec').textContent = ERP_STATE.student.section;
+      } else {
+        if (activeBadge) activeBadge.classList.add('hidden');
+        if (promptBtn) promptBtn.classList.remove('hidden');
+        if (banner) banner.classList.remove('hidden');
+      }
+    }
+
+    function loadStudentFromStorage() {
+      try {
+        const stored = localStorage.getItem('andriux_student_data');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.name && parsed.carnet && parsed.section) {
+            ERP_STATE.student = parsed;
+            ERP_STATE.student.isConfigured = true;
+            updateStudentBadge();
+            document.getElementById('banner-student-name').value = parsed.name;
+            document.getElementById('banner-student-carnet').value = parsed.carnet;
+            document.getElementById('banner-student-sec').value = parsed.section;
+          }
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    // --- NAVEGACIÓN ENTRE PESTAÑAS (TABS) ---
+    function switchTab(targetTab) {
+      const tabs = ['dashboard', 'ventas', 'produccion', 'inventario', 'auditoria', 'evaluacion', 'reporte'];
+
+      tabs.forEach(tab => {
+        const view = document.getElementById(`view-${tab}`);
+        const btn = document.getElementById(`tab-${tab}`);
+
+        if (tab === targetTab) {
+          if (view) view.classList.remove('hidden');
+          if (btn) {
+            btn.className = 'tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 bg-white text-brand-700 shadow-sm border border-slate-200';
+          }
+        } else {
+          if (view) view.classList.add('hidden');
+          if (btn) {
+            btn.className = 'tab-btn px-3 py-2 rounded-lg font-semibold flex items-center space-x-2 text-slate-600 hover:text-brand-600 hover:bg-white/60';
+          }
+        }
+      });
+
+      // Refrescar vistas pertinentes
+      if (targetTab === 'auditoria') renderTpsLogs();
+      if (targetTab === 'produccion') updateProdPreview();
+      if (targetTab === 'inventario') renderInventoryTables();
+      if (targetTab === 'reporte') updatePreviewReport();
+    }
+
+    // --- ACTUALIZACIÓN DE VISTA PREVIA DEL REPORTE (TAB 6) ---
+    function updatePreviewReport() {
+      const tsEl = document.getElementById('preview-report-timestamp');
+      if (!tsEl) return;
+
+      tsEl.textContent = getFullDateTime();
+      document.getElementById('preview-audit-id').textContent = `AND-${Date.now().toString().slice(-6)}`;
+      document.getElementById('preview-student-name').textContent = ERP_STATE.student.name || '(Sin registrar)';
+      document.getElementById('preview-student-carnet').textContent = ERP_STATE.student.carnet || '---';
+      document.getElementById('preview-student-sec').textContent = ERP_STATE.student.section || '---';
+      document.getElementById('preview-signature-student-name').textContent = ERP_STATE.student.name ? `${ERP_STATE.student.name}\n(Carnet: ${ERP_STATE.student.carnet})` : 'Firma del Estudiante';
+
+      document.getElementById('preview-fin-cash').textContent = formatQ(ERP_STATE.finances.cash);
+      document.getElementById('preview-fin-sales').textContent = formatQ(ERP_STATE.finances.totalSales);
+      document.getElementById('preview-fin-purchases').textContent = formatQ(ERP_STATE.finances.totalPurchases);
+
+      let totalVal = 0;
+      Object.values(ERP_STATE.rawMaterials).forEach(m => totalVal += (m.stock * m.cost));
+      Object.values(ERP_STATE.finishedGoods).forEach(p => totalVal += (p.stock * p.price));
+      document.getElementById('preview-fin-inventory-val').textContent = formatQ(totalVal);
+
+      // Tabla MP
+      const mpTbody = document.getElementById('preview-mp-tbody');
+      if (mpTbody) {
+        mpTbody.innerHTML = Object.values(ERP_STATE.rawMaterials).map(m => `
+          <tr class="border-b">
+            <td class="p-1 font-medium">${m.name}</td>
+            <td class="p-1 text-center font-bold">${m.stock} ${m.unit}</td>
+            <td class="p-1 text-center text-slate-600">${formatQ(m.cost)}</td>
+            <td class="p-1 text-right font-bold text-slate-800">${formatQ(m.stock * m.cost)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Tabla PT
+      const ptTbody = document.getElementById('preview-pt-tbody');
+      if (ptTbody) {
+        ptTbody.innerHTML = Object.values(ERP_STATE.finishedGoods).map(p => `
+          <tr class="border-b">
+            <td class="p-1 font-medium">${p.name}</td>
+            <td class="p-1 text-center font-bold">${p.stock} pares</td>
+            <td class="p-1 text-center text-slate-600">${formatQ(p.price)}</td>
+            <td class="p-1 text-right font-bold text-slate-800">${formatQ(p.stock * p.price)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Tabla TPS
+      const tpsTbody = document.getElementById('preview-tps-tbody');
+      if (tpsTbody) {
+        tpsTbody.innerHTML = ERP_STATE.tpsLogs.map(l => {
+          let cashStr = '---';
+          if (l.cashDelta > 0) cashStr = `+${formatQ(l.cashDelta)}`;
+          else if (l.cashDelta < 0) cashStr = `-${formatQ(Math.abs(l.cashDelta))}`;
+
+          return `
+            <tr class="border-b hover:bg-slate-50">
+              <td class="p-1.5 font-mono text-[10px] text-slate-500">${l.time}</td>
+              <td class="p-1.5 font-bold text-slate-700">${l.module}</td>
+              <td class="p-1.5 text-slate-800">${l.description}</td>
+              <td class="p-1.5 text-right font-mono font-bold">${cashStr}</td>
+              <td class="p-1.5 text-slate-600 text-[10px]">${l.inventoryDelta || '-'}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Respuestas
+      const q1Val = ERP_STATE.evaluation.question1.trim();
+      const q2Val = ERP_STATE.evaluation.question2.trim();
+      const q3Val = (ERP_STATE.evaluation.question3 || '').trim();
+      if (document.getElementById('preview-answer-1')) document.getElementById('preview-answer-1').textContent = q1Val || '(El estudiante aún no ha redactado su respuesta a esta pregunta)';
+      if (document.getElementById('preview-answer-2')) document.getElementById('preview-answer-2').textContent = q2Val || '(El estudiante aún no ha redactado su respuesta a esta pregunta)';
+      if (document.getElementById('preview-answer-3')) document.getElementById('preview-answer-3').textContent = q3Val || '(El estudiante aún no ha redactado su respuesta a esta pregunta)';
+    }
+
+    // --- GENERAR Y EXPORTAR REPORTE OFICIAL (WINDOW.PRINT) ---
+    function generateAndPrintReport() {
+      // 1. Validar que el estudiante haya ingresado sus datos
+      if (!ERP_STATE.student.isConfigured) {
+        showToast('Antes de generar el reporte oficial, ingresa tu Nombre Completo, Carnet y Sección.', 'warning');
+        openStudentModal();
+        return;
+      }
+
+      // Sincronizar respuestas
+      saveEvaluationAnswers();
+
+      // 2. Poblar datos del encabezado oficial de impresión
+      const timestamp = getFullDateTime();
+      const auditId = `AND-${Date.now().toString().slice(-6)}`;
+      document.getElementById('print-report-timestamp').textContent = timestamp;
+      document.getElementById('print-audit-id').textContent = auditId;
+      document.getElementById('print-student-name').textContent = ERP_STATE.student.name;
+      document.getElementById('print-student-carnet').textContent = ERP_STATE.student.carnet;
+      document.getElementById('print-student-sec').textContent = ERP_STATE.student.section;
+      document.getElementById('print-signature-student-name').textContent = `${ERP_STATE.student.name}\n(Carnet: ${ERP_STATE.student.carnet})`;
+
+      // 3. Poblar balance de finanzas
+      document.getElementById('print-fin-cash').textContent = formatQ(ERP_STATE.finances.cash);
+      document.getElementById('print-fin-sales').textContent = formatQ(ERP_STATE.finances.totalSales);
+      document.getElementById('print-fin-purchases').textContent = formatQ(ERP_STATE.finances.totalPurchases);
+
+      let totalVal = 0;
+      Object.values(ERP_STATE.rawMaterials).forEach(m => totalVal += (m.stock * m.cost));
+      Object.values(ERP_STATE.finishedGoods).forEach(p => totalVal += (p.stock * p.price));
+      document.getElementById('print-fin-inventory-val').textContent = formatQ(totalVal);
+
+      // 4. Poblar tabla MP para impresión
+      const printMpTbody = document.getElementById('print-mp-tbody');
+      printMpTbody.innerHTML = Object.values(ERP_STATE.rawMaterials).map(m => `
+        <tr class="border-b">
+          <td class="p-1 font-medium">${m.name}</td>
+          <td class="p-1 text-center font-bold">${m.stock} ${m.unit}</td>
+          <td class="p-1 text-center">${formatQ(m.cost)}</td>
+          <td class="p-1 text-right font-bold">${formatQ(m.stock * m.cost)}</td>
+        </tr>
+      `).join('');
+
+      // 5. Poblar tabla PT para impresión
+      const printPtTbody = document.getElementById('print-pt-tbody');
+      printPtTbody.innerHTML = Object.values(ERP_STATE.finishedGoods).map(p => `
+        <tr class="border-b">
+          <td class="p-1 font-medium">${p.name}</td>
+          <td class="p-1 text-center font-bold">${p.stock} pares</td>
+          <td class="p-1 text-center">${formatQ(p.price)}</td>
+          <td class="p-1 text-right font-bold">${formatQ(p.stock * p.price)}</td>
+        </tr>
+      `).join('');
+
+      // 6. Poblar historial completo del TPS Log
+      const printTpsTbody = document.getElementById('print-tps-tbody');
+      printTpsTbody.innerHTML = ERP_STATE.tpsLogs.map(l => {
+        let cashStr = '---';
+        if (l.cashDelta > 0) cashStr = `+${formatQ(l.cashDelta)}`;
+        else if (l.cashDelta < 0) cashStr = `-${formatQ(Math.abs(l.cashDelta))}`;
+
+        return `
+          <tr class="border-b">
+            <td class="p-1 font-mono text-[7.5pt]">${l.time}</td>
+            <td class="p-1 font-bold">${l.module}</td>
+            <td class="p-1">${l.description}</td>
+            <td class="p-1 text-right font-mono font-bold">${cashStr}</td>
+            <td class="p-1 text-[7.5pt]">${l.inventoryDelta || '-'}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // 7. Poblar respuestas de la evaluación
+      const q1Val = ERP_STATE.evaluation.question1.trim();
+      const q2Val = ERP_STATE.evaluation.question2.trim();
+      const q3Val = (ERP_STATE.evaluation.question3 || '').trim();
+      if (document.getElementById('print-answer-1')) document.getElementById('print-answer-1').textContent = q1Val || '(El estudiante no ingresó respuesta a esta pregunta)';
+      if (document.getElementById('print-answer-2')) document.getElementById('print-answer-2').textContent = q2Val || '(El estudiante no ingresó respuesta a esta pregunta)';
+      if (document.getElementById('print-answer-3')) document.getElementById('print-answer-3').textContent = q3Val || '(El estudiante no ingresó respuesta a esta pregunta)';
+
+      // 8. Activar diálogo de impresión del navegador
+      window.print();
+    }
+
+    // --- REINICIAR SIMULACIÓN ---
+    function resetSimulation() {
+      if (!confirm('¿Deseas reiniciar los inventarios, finanzas y libro mayor a los valores iniciales del caso de estudio? (Tus datos de estudiante y respuestas redactadas se conservarán).')) {
+        return;
+      }
+
+      ERP_STATE.finances = {
+        cash: 25000.00,
+        totalSales: 0.00,
+        totalPurchases: 0.00,
+        pairsSold: 0
+      };
+
+      ERP_STATE.rawMaterials.cuero.stock = 150;
+      ERP_STATE.rawMaterials.suelas.stock = 80;
+      ERP_STATE.rawMaterials.hilo.stock = 100;
+
+      ERP_STATE.finishedGoods.bota_dielectrica.stock = 15;
+      ERP_STATE.finishedGoods.bota_montana.stock = 8;
+      ERP_STATE.finishedGoods.bota_casual.stock = 20;
+
+      ERP_STATE.productionRequirements = [];
+      ERP_STATE.tpsLogs = [];
+
+      logTransaction(
+        'SISTEMA',
+        'Reinicio de Ejercicio: Inventarios y finanzas restaurados a los valores iniciales (Caja Q25,000, MP 150m²/80p/100u, PT 15p/8p/20p)',
+        25000.00,
+        'Inventarios y saldos reiniciados a valores por defecto'
+      );
+
+      renderAllViews();
+      showToast('Simulación reiniciada a valores iniciales.', 'info');
+    }
+
+    // --- SISTEMA DE NOTIFICACIONES TOAST ---
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('notification-toast');
+      const inner = document.getElementById('toast-inner');
+      const icon = document.getElementById('toast-icon');
+      const msg = document.getElementById('toast-message');
+
+      msg.textContent = message;
+
+      if (type === 'success') {
+        inner.className = 'bg-emerald-900 text-white px-4 py-3 rounded-xl shadow-xl border border-emerald-700 flex items-center space-x-3 text-xs max-w-sm';
+        icon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+      } else if (type === 'error') {
+        inner.className = 'bg-rose-950 text-white px-4 py-3 rounded-xl shadow-xl border border-rose-800 flex items-center space-x-3 text-xs max-w-sm';
+        icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-400"></i>';
+      } else if (type === 'warning') {
+        inner.className = 'bg-amber-950 text-white px-4 py-3 rounded-xl shadow-xl border border-amber-800 flex items-center space-x-3 text-xs max-w-sm';
+        icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>';
+      } else {
+        inner.className = 'bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center space-x-3 text-xs max-w-sm';
+        icon.innerHTML = '<i class="fa-solid fa-circle-info text-brand-400"></i>';
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

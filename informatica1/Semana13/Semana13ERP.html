@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 13 · Sistemas Empresariales ERP | Informática I - UMG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--bg:#0B0F19;--panel:#111827;--line:#1f2937;--cyan:#22d3ee;--violet:#a78bfa;--emerald:#34d399;--amber:#fbbf24}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#e2e8f0;margin:0}
+.heading-font{font-family:'Space Grotesk',sans-serif}
+.progress-bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#22d3ee,#818cf8,#34d399);z-index:100}
+/* NAV */
+.navbar{position:sticky;top:0;z-index:50;background:rgba(2,6,23,.92);backdrop-filter:blur(10px);border-bottom:1px solid #1e293b}
+.nav-inner{max-width:1200px;margin:auto;display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem}
+.logo{font-weight:800;font-size:1.05rem}.logo span{background:linear-gradient(90deg,#22d3ee,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{color:#94a3b8;font-weight:500}
+.nav-links{display:flex;gap:.4rem;margin-left:auto;align-items:center;flex-wrap:wrap}
+.nav-links a{color:#cbd5e1;text-decoration:none;font-size:.78rem;padding:.45rem .7rem;border-radius:.6rem;border:1px solid transparent}
+.nav-links a:hover{background:#0f172a;border-color:#1e293b;color:#fff}
+.btn-back-menu{background:#0f172a;border:1px solid #334155!important;color:#e2e8f0!important;font-weight:700}
+.hamburger{display:none;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:.6rem;padding:.4rem .7rem;margin-left:auto}
+@media(max-width:900px){.nav-links{display:none;flex-direction:column;align-items:stretch;width:100%}.nav-links.open{display:flex}.hamburger{display:block}}
+/* HERO */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid #1e293b;background:radial-gradient(900px 400px at 15% 0%,rgba(34,211,238,.14),transparent),radial-gradient(900px 420px at 85% 10%,rgba(129,140,248,.16),transparent),#0B0F19}
+.hero-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:1.2rem;padding:2.2rem 1rem 1.6rem}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#67e8f9;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);padding:.35rem .7rem;border-radius:999px}
+.hero h1{font-size:clamp(1.7rem,4vw,2.9rem);line-height:1.05;margin:.7rem 0}
+.hl{background:linear-gradient(90deg,#22d3ee,#a78bfa,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{color:#94a3b8;font-size:.95rem;line-height:1.6}
+.hero-stats{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.hstat{background:rgba(15,23,42,.8);border:1px solid #1e293b;border-radius:1rem;padding:.7rem 1rem;min-width:120px;text-align:center}
+.hstat b{font-size:1.3rem;display:block}.hstat span{font-size:.68rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em}
+.hero-cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:.8rem;padding:.75rem 1.1rem;font-weight:800;font-size:.85rem;text-decoration:none;border:1px solid #334155;cursor:pointer;transition:.2s}
+.btn.primary{background:linear-gradient(90deg,#06b6d4,#6366f1);color:#020617;border:none;box-shadow:0 8px 30px rgba(34,211,238,.25)}
+.btn.primary:hover{transform:translateY(-2px)}
+.btn.ghost{background:#0f172a;color:#e2e8f0}.btn.ghost:hover{border-color:#22d3ee}
+.btn.small{padding:.5rem .8rem;font-size:.78rem}
+.btn.amber{background:linear-gradient(90deg,#f59e0b,#f97316);color:#1c0a00;border:none}
+.console{background:#020617;border:1px solid #1e293b;border-radius:1.2rem;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.term-head{display:flex;gap:.4rem;align-items:center;padding:.6rem .9rem;background:#0f172a;color:#94a3b8;font-size:.75rem;border-bottom:1px solid #1e293b}
+.term-head span{width:10px;height:10px;border-radius:50%;background:#334155;display:inline-block}
+.term-body{padding:1rem;font-family:ui-monospace,monospace;font-size:.8rem;line-height:1.7;color:#cbd5e1;min-height:220px}
+.ok{color:#34d399;font-weight:700}.warn{color:#fbbf24;font-weight:700}.bad{color:#f87171;font-weight:700}.cy{color:#22d3ee}
+.blink{animation:bl 1.1s infinite}@keyframes bl{50%{opacity:.25}}
+.flowdots{display:flex;gap:.35rem;margin-top:.7rem;flex-wrap:wrap}
+.fdot{font-size:.68rem;font-weight:800;padding:.3rem .6rem;border-radius:999px;background:#0f172a;border:1px solid #334155;color:#94a3b8}
+.fdot.on{background:rgba(52,211,153,.15);border-color:#34d399;color:#6ee7b7}
+/* SECTIONS */
+.section{max-width:1200px;margin:auto;padding:1.6rem 1rem}
+.section.alt{background:linear-gradient(180deg,rgba(15,23,42,.6),rgba(11,15,25,0));border-top:1px solid #111c33;border-bottom:1px solid #111c33}
+.mision{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#020617;background:linear-gradient(90deg,#22d3ee,#a78bfa);padding:.3rem .7rem;border-radius:.6rem;margin-bottom:.5rem}
+.section h2{font-size:1.35rem;margin:.2rem 0 .4rem}.section h2 small{color:#64748b;font-weight:500;font-size:.8rem}
+.lead{color:#94a3b8;font-size:.9rem;line-height:1.65;max-width:900px}
+.card{background:rgba(15,23,42,.75);border:1px solid #1e293b;border-radius:1.1rem;padding:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:850px){.grid2{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}@media(max-width:850px){.grid3{grid-template-columns:1fr}}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}@media(max-width:900px){.grid4{grid-template-columns:1fr 1fr}}@media(max-width:560px){.grid4{grid-template-columns:1fr}}
+.flip{perspective:900px;cursor:pointer}.flip-inner{transition:transform .6s;transform-style:preserve-3d;position:relative;min-height:170px}
+.flip.on .flip-inner{transform:rotateY(180deg)}
+.face{backface-visibility:hidden;position:absolute;inset:0;padding:1rem;border-radius:1rem;border:1px solid #1e293b;display:flex;flex-direction:column;justify-content:center}
+.face.front{background:#0f172a}.face.back{background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(129,140,248,.15));transform:rotateY(180deg)}
+.pill{font-size:.65rem;font-weight:800;padding:.2rem .55rem;border-radius:999px;display:inline-block}
+.timeline{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
+.tnode{flex:1;min-width:180px;background:#0f172a;border:1px solid #1e293b;border-radius:1rem;padding:.9rem;cursor:pointer;transition:.2s;position:relative}
+.tnode:hover{border-color:#22d3ee;transform:translateY(-2px)}.tnode.active{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+.tnode .yr{font-size:.65rem;font-weight:800;color:#22d3ee;letter-spacing:.08em}
+table.cmp{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.8rem}
+table.cmp th,table.cmp td{border:1px solid #1e293b;padding:.6rem;text-align:left;vertical-align:top}
+table.cmp th{background:#0f172a;color:#67e8f9}
+.o2c{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.step{flex:1;min-width:140px;background:#0f172a;border:2px dashed #334155;border-radius:1rem;padding:.8rem;text-align:center;cursor:pointer;transition:.2s}
+.step.lit{border-style:solid;border-color:#34d399;background:rgba(52,211,153,.1)}
+.step.badx{border-color:#f87171;background:rgba(248,113,113,.08)}
+.step b{display:block;font-size:.85rem}.step small{color:#94a3b8;font-size:.7rem}
+.ledger{font-family:ui-monospace,monospace;font-size:.78rem;background:#020617;border:1px solid #1e293b;border-radius:.9rem;padding:.9rem;line-height:1.7}
+.kpi{background:linear-gradient(135deg,#0f172a,#111c33);border:1px solid #1e293b;border-radius:1rem;padding:.9rem;text-align:center}
+.kpi b{font-size:1.25rem;display:block}.kpi span{font-size:.68rem;color:#94a3b8}
+input,select,textarea{width:100%;background:#020617;border:1px solid #334155;color:#e2e8f0;border-radius:.7rem;padding:.65rem .8rem;font-size:.85rem;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+label.lbl{font-size:.72rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;display:block;margin:.6rem 0 .3rem}
+.sectabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.sectab{padding:.55rem .9rem;border-radius:.8rem;background:#0f172a;border:1px solid #334155;color:#cbd5e1;font-size:.8rem;font-weight:700;cursor:pointer}
+.sectab.on{background:linear-gradient(90deg,#06b6d4,#6366f1);color:#020617;border-color:transparent}
+.quizopt{display:block;width:100%;text-align:left;margin:.35rem 0;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:.7rem;padding:.6rem .8rem;font-size:.83rem;cursor:pointer}
+.quizopt:hover{border-color:#22d3ee}.quizopt.good{border-color:#34d399;background:rgba(52,211,153,.12)}.quizopt.badb{border-color:#f87171;background:rgba(248,113,113,.1)}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.6rem;letter-spacing:.05em}
+.sticky-act{position:sticky;top:64px;z-index:30;background:rgba(2,6,23,.95);border:1px solid #1e293b;border-radius:1rem;padding:.7rem 1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;backdrop-filter:blur(8px)}
+footer{border-top:1px solid #1e293b;color:#64748b;font-size:.78rem;text-align:center;padding:1.5rem 1rem}
+.toast{position:fixed;bottom:18px;right:18px;background:#0f172a;border:1px solid #22d3ee;color:#e2e8f0;padding:.8rem 1rem;border-radius:.9rem;font-size:.82rem;z-index:200;box-shadow:0 10px 40px rgba(0,0,0,.5);display:none;max-width:320px}
+.bar{height:10px;background:#020617;border:1px solid #1e293b;border-radius:999px;overflow:hidden}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,#22d3ee,#818cf8);transition:width .5s}
+.tagxp{background:rgba(52,211,153,.12);border:1px solid #34d399;color:#6ee7b7;font-size:.7rem;font-weight:800;padding:.25rem .6rem;border-radius:999px}
+details{border:1px solid #1e293b;border-radius:.9rem;background:#0f172a;padding:.8rem 1rem;margin:.5rem 0}
+summary{cursor:pointer;font-weight:700;font-size:.88rem}
+.print-note{font-size:.75rem;color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="navbar"><div class="nav-inner">
+<a href="../index_informatica.html" class="btn-back-menu btn small">← Menú</a>
+<div class="logo">🏭 <span>ERPChapín</span> <small>UMG · Admón</small></div>
+<div class="nav-links" id="navLinks">
+<a href="#ti-si">TI vs SI</a><a href="#evolucion">Evolución</a><a href="#o2c">Order-to-Cash</a><a href="#sat">SAT·FEL</a><a href="#nube">Cloud</a><a href="#quiz">Quiz</a><a href="#actividad">📝 Actividad</a><a href="#glosario">📘 Glosario</a>
+</div>
+<button class="hamburger" id="hamburger">☰</button>
+</div></nav>
+
+<header class="hero">
+<div class="hero-grid">
+<div>
+<div class="badge">🎓 UMG · Informática I · Semana 13 · Cap. 11 ERP</div>
+<h1 class="heading-font">El ERP es la <span class="hl">columna vertebral</span> de la empresa 🇬🇹</h1>
+<p class="subtitle">De las <strong>islas de información</strong> (Excel suelto en cada sucursal) al <strong>dato único</strong> en tiempo real. Aprende como <strong>gerente</strong>: cómo un pedido mueve inventario, dispara producción y compras, y queda auditado en el TPS — y practícalo en la actividad con el simulador <strong>Andriux · Botas de Cuero El Artesano S.A.</strong></p>
+<div class="hero-stats">
+<div class="hstat"><b id="statXP">0</b><span>XP Gerencial</span></div>
+<div class="hstat"><b>8</b><span>Estaciones</span></div>
+<div class="hstat"><b>📝</b><span>Actividad Andriux</span></div>
+<div class="hstat"><b>Q</b><span>Decisiones en GTQ</span></div>
+</div>
+<div class="hero-cta">
+<a href="#ti-si" class="btn primary"><i class="fa-solid fa-rocket"></i> Empezar estación 1</a>
+<a href="#actividad" class="btn ghost"><i class="fa-solid fa-flask"></i> Ir a la actividad en clase</a>
+</div>
+<p class="print-note" style="margin-top:.7rem">💡 Toca todo: tarjetas que se voltean, simuladores con sliders, pasos que se iluminan. Ganas XP mientras exploras.</p>
+</div>
+<div class="console">
+<div class="term-head"><span></span><span></span><span></span> erp-live.exe — Botas de Cuero El Artesano S.A.</div>
+<div class="term-body" id="termBody">
+<div>> pedido #Q-2026-184 recibido en Xela... <span class="cy">validando crédito + stock_</span></div>
+<div>> crédito cliente: <span class="ok">aprobado Q45,000 ✓</span> · stock: <span class="warn">12% descalce ⚠</span></div>
+<div>> FEL certificada SAT... <span class="ok">CAE-2026-8891 ✓ 0.4s</span></div>
+<div>> inventario −120 cajas · CxC +Q18,400 · caja <span class="ok">▲ flujo</span></div>
+<div class="blink">> TU MISIÓN: que todo esto sea automático, no en Excel _</div>
+<div class="flowdots" id="heroDots">
+<span class="fdot on">Pedido</span><span class="fdot">Stock</span><span class="fdot">Despacho</span><span class="fdot">FEL</span><span class="fdot">Cobro</span>
+</div>
+<button class="btn small primary" style="margin-top:.8rem" onclick="document.getElementById('o2c').scrollIntoView({behavior:'smooth'})">Quiero automatizarlo ⚡</button>
+</div>
+</div>
+</div>
+</header>
+
+<!-- DATOS ALUMNO (oculto temporalmente a solicitud del docente) -->
+<section class="section" id="datos" hidden style="display:none">
+<div class="card">
+<h3 class="heading-font" style="margin:0 0 .3rem">🧾 Ficha del estudiante <small style="color:#64748b;font-weight:500">— se imprime en tu PDF</small></h3>
+<div class="grid4">
+<div><label class="lbl">Nombre completo</label><input id="alNombre" placeholder="Ej. María Fernanda López" oninput="saveFicha()"></div>
+<div><label class="lbl">Carnet</label><input id="alCarnet" placeholder="Ej. 2026-00123" oninput="saveFicha()"></div>
+<div><label class="lbl">Sección / Jornada</label><input id="alSeccion" placeholder="Ej. A · Plan Sábado" oninput="saveFicha()"></div>
+<div><label class="lbl">Fecha</label><input id="alFecha" type="date" oninput="saveFicha()"></div>
+</div>
+<p class="print-note">Se guarda automáticamente en este navegador. Sin ficha completa no se genera el PDF.</p>
+</div>
+</section>
+
+<!-- 1 TI vs SI -->
+<section class="section" id="ti-si">
+<div class="mision">Estación 1 · Fundamento que sí sale en el parcial</div>
+<h2>TI ≠ SI: el ERP es un proyecto <span class="hl">de personas</span>, no de fierros <small>toca para voltear</small></h2>
+<p class="lead"><strong>TI</strong> = hardware + software + redes (lo instrumental). <strong>SI</strong> = TI + personas + procesos + datos (lo sociotécnico). Un ERP fracasa si se compra como "un programa más" y triunfa si se gestiona como cambio de procesos. <strong>Pensamiento sistémico:</strong> inputs → transformación → outputs + <em>feedback</em>.</p>
+<div class="grid3" style="margin-top:.9rem">
+<div class="flip" onclick="this.classList.toggle('on');gainXP(10,this)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(34,211,238,.15);color:#67e8f9">TI · Tecnología</span><h3>💻 ¿Qué es TI?</h3><p style="color:#94a3b8;font-size:.83rem">Toca para ver el ejemplo del Quetzal…</p></div><div class="face back"><b>Servidor + hojas de cálculo en cada bodega.</b><p style="font-size:.82rem">El Quetzal YA tiene TI (3 PCs, un servidor viejo). Y aun así tiene 12% de descalce. El fierro no ordenó la casa.</p></div></div></div>
+<div class="flip" onclick="this.classList.toggle('on');gainXP(10,this)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(167,139,250,.15);color:#c4b5fd">SI · Sistema</span><h3>🧩 ¿Qué es SI?</h3><p style="color:#94a3b8;font-size:.83rem">Toca para ver el cambio real…</p></div><div class="face back"><b>Personas + procesos + dato único.</b><p style="font-size:.82rem">El ERP obliga a que ventas, bodega y contabilidad usen EL MISMO dato y el MISMO flujo. Eso es reestructurar el trabajo humano.</p></div></div></div>
+<div class="flip" onclick="this.classList.toggle('on');gainXP(10,this)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(52,211,153,.15);color:#6ee7b7">Sistémico · Feedback</span><h3>🔁 Bucle de retroalimentación</h3><p style="color:#94a3b8;font-size:.83rem">Toca para ver el loop…</p></div><div class="face back"><b>Stock bajo → alerta → compra → reposición.</b><p style="font-size:.82rem">Sin feedback: la bodega de Escuintla se queda sin azúcar 3 días. Con ERP: el sistema dispara la orden solo.</p></div></div></div>
+</div>
+<div class="card" style="margin-top:1rem">
+<h3 style="margin:.2rem 0">🎯 Mini-reto (+20 XP)</h3>
+<p style="font-size:.87rem">El gerente dice: "Compremos computadoras más rápidas y se arregla el inventario". ¿Qué error comete?</p>
+<button class="quizopt" onclick="miniQuiz(this,false,'Casi: más velocidad no elimina 3 Excels distintos con 3 cifras distintas.')">a) No cotizó suficientes marcas</button>
+<button class="quizopt" onclick="miniQuiz(this,true,'¡Exacto! Confunde TI con SI: el problema es de procesos y dato único, no de fierros.')">b) Confunde TI con SI: cree que es problema de fierros, no de procesos y datos</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'Al revés: el ERP exige cambiar procesos, no conservarlos.')">c) Debería conservar los procesos manuales intactos</button>
+<div id="miniFb1" style="font-size:.85rem;margin-top:.5rem"></div>
+</div>
+</section>
+
+<!-- 2 EVOLUCION -->
+<section class="section alt" id="evolucion">
+<div class="mision">Estación 2 · De islas al dato único</div>
+<h2>Evolución: TPS → MRP → ERP <small>toca cada era</small></h2>
+<div class="timeline">
+<div class="tnode active" onclick="evo(0,this)"><div class="yr">1960–80 · TPS</div><b>🧾 Islas de información</b><p style="font-size:.78rem;color:#94a3b8">Nómina y facturación aisladas. Cada depto. su archivo.</p></div>
+<div class="tnode" onclick="evo(1,this)"><div class="yr">1980–90 · MRP I y II</div><b>🏭 Inventario + producción</b><p style="font-size:.78rem;color:#94a3b8">Control estático de materiales y planta. Aún sin finanzas integradas.</p></div>
+<div class="tnode" onclick="evo(2,this)"><div class="yr">2000–2026 · ERP</div><b>🌐 Todo integrado</b><p style="font-size:.78rem;color:#94a3b8">Un DBMS, módulos que se hablan en tiempo real.</p></div>
+</div>
+<div class="card" id="evoDetail" style="margin-top:.8rem">👆 Toca una era para ver su dolor gerencial. Empieza en TPS: 3 bodegas, 3 Excels, 3 "verdades".</div>
+<div class="card" style="margin-top:.8rem">
+<h3 style="margin:.2rem 0">⚔️ Comparador: Islas vs ERP <span class="tagxp">+15 XP al explorar</span></h3>
+<label class="lbl">Mueve el slider: 0 = todo en islas · 100 = ERP total</label>
+<input type="range" id="rngInteg" min="0" max="100" value="20" oninput="integCalc()">
+<div class="grid2" style="margin-top:.7rem">
+<div><small style="color:#94a3b8">Nivel de integración: <b id="integVal" class="cy">20%</b></small><div class="bar"><div id="integFill" style="width:20%"></div></div><div id="integVerdict" style="margin-top:.6rem;font-size:.85rem"></div></div>
+<div style="font-size:.8rem;color:#94a3b8" id="integTable">—</div>
+</div>
+</div>
+</section>
+
+<!-- 3 DATO UNICO -->
+<section class="section" id="dato">
+<div class="mision">Estación 3 · DBMS + Single Source of Truth</div>
+<h2>Un solo dato, cero pleitos <small>edítalo y mira la magia</small></h2>
+<p class="lead">Con islas: ventas dice Q18,400, contabilidad dice Q17,900. ¿A quién le cree el gerente? Con ERP hay <strong>una sola definición lógica</strong> del cliente, del ítem y del precio (integridad + ACID).</p>
+<div class="grid2">
+<div class="card">
+<label class="lbl">Precio único del quintal de azúcar (Q) — cámbialo</label>
+<input type="number" id="precioUnico" value="345" min="200" max="600" oninput="datoUnico()">
+<div class="grid3" style="margin-top:.7rem">
+<div class="kpi"><span>Ventas ve</span><b id="kVentas" class="cy">Q345</b></div>
+<div class="kpi"><span>Bodega valúa a</span><b id="kBodega" class="cy">Q345</b></div>
+<div class="kpi"><span>Contabilidad registra</span><b id="kConta" class="cy">Q345</b></div>
+</div>
+<p class="print-note" style="margin-top:.5rem">Sin ERP cada uno tendría su Excel y su cifra. Con ERP: un cambio → todo el sistema se actualiza (validación atómica).</p>
+</div>
+<div class="card">
+<h3 style="margin:.2rem 0">🧪 Laboratorio de redundancia</h3>
+<p style="font-size:.83rem">Simula 3 capturas duplicadas del mismo pedido (el error clásico de islas):</p>
+<button class="btn small ghost" onclick="duplicar()">+ Capturar el pedido otra vez</button>
+<button class="btn small ghost" onclick="resetDup()">Reiniciar</button>
+<div class="ledger" id="dupLog" style="margin-top:.6rem">pedidos_registrados = 1 · cifra única ✓</div>
+</div>
+</div>
+</section>
+
+<!-- 4 O2C -->
+<section class="section alt" id="o2c">
+<div class="mision">Estación 4 · El corazón del capítulo (Order-to-Cash)</div>
+<h2>Simulador Order-to-Cash <small>ordena los 5 pasos tocándolos en secuencia</small></h2>
+<p class="lead">Cada evento físico genera su asiento contable <strong>automático</strong>. Toca los pasos en orden (1→5). Si fallas, el ERP te bloquea como bloquearía un crédito excedido.</p>
+<div class="o2c" id="o2cSteps">
+<div class="step" data-i="1" onclick="o2cClick(this)"><b>1️⃣ Cotización y Pedido</b><small>Ventas + CRM · valida margen y crédito</small></div>
+<div class="step" data-i="2" onclick="o2cClick(this)"><b>2️⃣ Reserva de Stock</b><small>Inventarios · hard allocation + reorden</small></div>
+<div class="step" data-i="3" onclick="o2cClick(this)"><b>3️⃣ Despacho</b><small>Bodega · baja stock, sube COGS</small></div>
+<div class="step" data-i="4" onclick="o2cClick(this)"><b>4️⃣ Factura FEL</b><small>Contabilidad · ingreso + CxC + débito fiscal</small></div>
+<div class="step" data-i="5" onclick="o2cClick(this)"><b>5️⃣ Cobro</b><small>Tesorería · liquida CxC, sube caja</small></div>
+</div>
+<div class="grid2">
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b>📒 Asiento automático</b><button class="btn small ghost" onclick="o2cReset()">Reiniciar</button></div><div class="ledger" id="ledger">Esperando pedido… toca el paso 1️⃣</div><div id="o2cFb" style="font-size:.85rem;margin-top:.5rem"></div></div>
+<div class="card">
+<h3 style="margin:.2rem 0">⚖️ Dilema Dell vs. Apple (+20 XP)</h3>
+<p style="font-size:.83rem"><strong>Dell</strong> frenó el ERP estándar para no perder su <em>build-to-order</em>. <strong>Apple</strong> lo adoptó porque su ventaja está en diseño/marca, no en el back-office. ¿Cuándo estandarizar te mata?</p>
+<button class="quizopt" onclick="miniQuiz(this,true,'¡Exacto! Si tu ventaja ES el proceso (como Dell), no lo cambies por la plantilla del software. Estandariza lo que no te diferencia.')">a) Cuando tu ventaja competitiva vive en ese proceso operativo</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'Al revés: si tu ventaja es marca/diseño (Apple), el ERP te hace eficiente sin dañarte.')">b) Siempre que el software sea caro</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'No: más módulos no es mejor si destruyen lo que te hace único.')">c) Nunca: hay que activar todos los módulos siempre</button>
+<div id="miniFb2" style="font-size:.85rem;margin-top:.4rem"></div>
+</div>
+</div>
+</section>
+
+<!-- 5 SAT -->
+<section class="section" id="sat">
+<div class="mision">Estación 5 · Localización Guatemala: SAT + FEL</div>
+<h2>Sin FEL no hay venta legal <small>certifica una factura en vivo</small></h2>
+<div class="grid2">
+<div class="card">
+<h3 style="margin:.2rem 0">🧾 Tubería FEL (5 clics)</h3>
+<div class="o2c" style="flex-direction:column">
+<button class="quizopt" id="fel1" onclick="felStep(1)">1 · Generar XML / DTE del pedido Q18,400</button>
+<button class="quizopt" id="fel2" onclick="felStep(2)">2 · Firmar digitalmente la transacción</button>
+<button class="quizopt" id="fel3" onclick="felStep(3)">3 · Autenticar vía OAuth con SAT / Certificador</button>
+<button class="quizopt" id="fel4" onclick="felStep(4)">4 · Recibir CAE en milisegundos</button>
+<button class="quizopt" id="fel5" onclick="felStep(5)">5 · Asentar en libros digitales + retenciones ISR/IVA</button>
+</div>
+<div id="felFb" style="font-size:.85rem"></div>
+</div>
+<div class="card">
+<h3 style="margin:.2rem 0">🏭 ¿Qué módulo pesa más según tu sector?</h3>
+<div class="sectabs">
+<button class="sectab on" onclick="sector(0,this)">🌾 Agroindustria</button>
+<button class="sectab" onclick="sector(1,this)">🛒 Retail</button>
+<button class="sectab" onclick="sector(2,this)">🏭 Manufactura</button>
+<button class="sectab" onclick="sector(3,this)">💼 Servicios</button>
+</div>
+<div id="sectorDetail" style="font-size:.85rem;line-height:1.6"></div>
+</div>
+</div>
+</section>
+
+<!-- 6 NUBE + IA -->
+<section class="section alt" id="nube">
+<div class="mision">Estación 6 · Hacia 2026: Cloud, IA, IoT y blindaje</div>
+<h2>CapEx vs OpEx + IA que previene fallas <small>mueve los números</small></h2>
+<div class="grid2">
+<div class="card">
+<h3 style="margin:.2rem 0">💰 Calculadora TCO a 3 años (miles de Q)</h3>
+<label class="lbl">On-Premise: servidores + licencias + mantenimiento (CapEx inicial)</label>
+<input type="range" id="tcoCap" min="50" max="600" value="380" oninput="tco()"><small>CapEx: <b id="tcoCapV">Q380k</b></small>
+<label class="lbl">Cloud SaaS: suscripción por usuario / mes (Q por usuario)</label>
+<input type="range" id="tcoSaaS" min="100" max="1200" value="450" oninput="tco()"><small>Cuota: <b id="tcoSaaSV">Q450</b> × 25 usuarios × 36 meses</small>
+<div class="ledger" id="tcoOut" style="margin-top:.6rem"></div>
+<p class="print-note">Regla gerente: SaaS convierte CapEx en OpEx predecible. Pero ojo al <em>vendor lock-in</em> y a la conectividad en Escuintla/Xela.</p>
+</div>
+<div class="card">
+<h3 style="margin:.2rem 0">🤖 IA + IoT en el ERP (toca cada caso)</h3>
+<div class="grid3">
+<div class="tnode" onclick="iotCase(0,this)"><b>🔧 Mantenimiento predictivo</b><p style="font-size:.75rem;color:#94a3b8">Sensor vibra → IA ordena preventivo.</p></div>
+<div class="tnode" onclick="iotCase(1,this)"><b>📄 Facturas que se leen solas</b><p style="font-size:.75rem;color:#94a3b8">Visión + NLP contabiliza sin digitar.</p></div>
+<div class="tnode" onclick="iotCase(2,this)"><b>📦 Reorden autónomo</b><p style="font-size:.75rem;color:#94a3b8">RFID dispara la compra al llegar al mínimo.</p></div>
+</div>
+<div id="iotDetail" class="ledger" style="margin-top:.6rem">Toca un caso para ver el flujo dato → decisión → estrategia.</div>
+<h3 style="margin:.8rem 0 .2rem">🔐 RBAC: ¿quién puede ver qué?</h3>
+<label class="lbl">Rol del colaborador</label>
+<select id="rbacRol" onchange="rbac()"><option value="bodega">Jefe de bodega (Escuintla)</option><option value="ventas">Vendedora (Xela)</option><option value="contador">Contadora general</option><option value="admin">Administradora TI</option></select>
+<div id="rbacOut" style="font-size:.82rem;margin-top:.5rem"></div>
+</div>
+</div>
+<div class="card" style="margin-top:1rem">
+<h3 style="margin:.2rem 0">🌊 Curva de Rogers: ¿a quién convences primero?</h3>
+<div class="grid4" id="rogersRow">
+<div class="tnode" onclick="rogers(0,this)"><b>💡 Innovadores</b><small>2.5% · pruébalos como piloto</small></div>
+<div class="tnode" onclick="rogers(1,this)"><b>📣 Adoptantes tempranos</b><small>13.5% · tus evangelizadores ⭐</small></div>
+<div class="tnode" onclick="rogers(2,this)"><b>👥 Mayoría temprana</b><small>34% · sigue al ejemplo</small></div>
+<div class="tnode" onclick="rogers(3,this)"><b>🐢 Mayoría tardía + rezagados</b><small>50% · jefes de bodega veteranos</small></div>
+</div>
+<div id="rogersFb" style="font-size:.85rem;margin-top:.5rem;color:#94a3b8">Pista: no empieces peleando con los rezagados. Empieza con tus aliados.</div>
+</div>
+</section>
+
+<!-- QUIZ -->
+<section class="section" id="quiz">
+<div class="mision">Estación 7 · Repaso interactivo</div>
+<h2>Quiz relámpago (5 pts) <small>autoevaluación inmediata</small></h2>
+<div class="card" id="quizBox"></div>
+<div style="margin-top:.6rem;display:flex;gap:.6rem;flex-wrap:wrap">
+<button class="btn small primary" onclick="calificarQuiz()">Calificar quiz</button>
+<span class="tagxp" id="quizScore">Sin calificar</span>
+</div>
+</section>
+
+<!-- ACTIVIDAD EN CLASE · enlazada con el simulador Andriux -->
+<section class="section" id="actividad">
+<div class="mision">Actividad en clase · Simulador ERP Andriux</div>
+<h2>📝 Actividad en Clase: del pedido a la entrega <small>Botas de Cuero El Artesano S.A.</small></h2>
+<p class="lead">Esta actividad se realiza en el <strong>simulador ERP Andriux</strong> (Ventas → Inventarios → Producción → Compras → Auditoría → Evaluación → Reporte). Sigue las fases en orden y deja tus respuestas escritas dentro del simulador para exportarlas en el reporte final.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin:.9rem 0">
+<a href="ErpAndriux/index.html" target="_blank" rel="noopener" class="btn primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir simulador Andriux</a>
+<a href="ErpAndriux/index.html#view-evaluacion" target="_blank" rel="noopener" class="btn ghost"><i class="fa-solid fa-pen"></i> Ir a Preguntas de Análisis</a>
+</div>
+<div class="grid2">
+<div class="card">
+<h3 class="heading-font">🚀 Fase de Inicio e Identificación</h3>
+<ol style="font-size:.85rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>Ingresen a la URL del simulador ERP desde su navegador web.</li>
+<li>Completen los datos de identificación obligatorios: <strong>Nombre Completo, Carnet y Sección</strong>.</li>
+</ol>
+</div>
+<div class="card">
+<h3 class="heading-font">🧾 Fase Operativa · Registro de Pedido de Ventas</h3>
+<ol style="font-size:.85rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>Diríjanse al <strong>Módulo de Ventas</strong> e ingresen una orden para el cliente <strong>"Constructora Las Charcas"</strong> por <strong>20 pares de Bota Industrial Dieléctrica</strong>.</li>
+<li>Observen el comportamiento del sistema:
+<ul style="margin-top:.3rem">
+<li>Verifiquen el <strong>Módulo de Inventarios</strong> para comprobar cuántos pares de botas quedaron disponibles.</li>
+<li>Consulten el <strong>Registro de Auditoría (Log)</strong> para verificar la actualización automática de la transacción.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div class="grid2" style="margin-top:1rem">
+<div class="card">
+<h3 class="heading-font">🏭 Fase de Producción y Reabastecimiento de Materia Prima</h3>
+<ol style="font-size:.85rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>Intenten ingresar una <strong>segunda venta por 10 pares adicionales</strong> del mismo producto para simular un agotamiento de existencias (Stock Crítico).</li>
+<li>Pasen al <strong>Módulo de Producción</strong> y emitan una orden de fabricación para reponer las botas faltantes.</li>
+<li>Si el sistema indica que no hay suficiente <strong>Cuero Vacuno</strong> o <strong>Suelas de Goma</strong>, vayan al <strong>Módulo de Compras</strong>, registren un pedido de materia prima al proveedor <strong>"Tenería San Miguel"</strong> y ejecuten nuevamente la producción.</li>
+</ol>
+</div>
+<div class="card">
+<h3 class="heading-font">💡 Fase de Análisis Gerencial e Ingreso de Respuestas</h3>
+<p style="font-size:.85rem;color:#cbd5e1">Vayan a la sección de <strong>Preguntas de Análisis</strong> e ingresen sus respuestas redactadas directamente en los campos habilitados:</p>
+<ol style="font-size:.85rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>¿De qué manera la base de datos centralizada del ERP evitó que vendieran productos sin existencia física en la fábrica?</li>
+<li>¿Cómo impacta el tiempo de reabastecimiento de materia prima (compras) en el cumplimiento de las fechas de entrega al cliente final?</li>
+</ol>
+</div>
+</div>
+<div class="card" style="margin-top:1rem;border-color:#34d399">
+<h3 class="heading-font">📄 Fase de Exportación y Entrega</h3>
+<ol style="font-size:.85rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>Presionen el botón <strong>"Generar y Exportar Reporte de Simulación"</strong>.</li>
+<li>Verifiquen que la vista previa contenga sus <strong>datos personales, la bitácora transaccional y las respuestas escritas</strong>.</li>
+<li>Guarden el archivo en formato PDF (<strong>Sección_Carnet_ActividadERP.pdf</strong>) o imprímanlo para adjuntarlo a la plataforma de evaluación del curso.</li>
+</ol>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem">
+<a href="ErpAndriux/index.html" target="_blank" rel="noopener" class="btn primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir simulador para iniciar</a>
+</div>
+</div>
+</section>
+
+<!-- GLOSARIO (se conserva; pendiente de nuevas indicaciones del docente) -->
+<section class="section alt" id="glosario">
+<div class="mision">Referencia del capítulo · 9 términos clave</div>
+<h2>📘 Glosario rápido <small>base para la próxima actualización</small></h2>
+<p class="lead">Términos esenciales del capítulo de Sistemas Empresariales (ERP). Este apartado se ampliará según las nuevas indicaciones del docente.</p>
+<div class="card">
+<div style="font-size:.85rem;line-height:1.8;color:#cbd5e1">
+<b>ERP:</b> SI integrado que automatiza flujos operativos-financieros sobre un DBMS único. · <b>Módulo:</b> pieza funcional que comparte el mismo dato en tiempo real. · <b>FEL:</b> factura electrónica obligatoria ante SAT (XML+DTE+CAE). · <b>SAT:</b> ente fiscal de Guatemala (web services + OAuth). · <b>Cloud ERP / SaaS:</b> ERP en la nube por suscripción (OpEx). · <b>Integridad:</b> exactitud y coherencia del dato (ACID). · <b>Audit trail:</b> rastro indeleble de quién cambió qué y cuándo. · <b>TCO:</b> costo total de propiedad del sistema. · <b>RBAC:</b> acceso por roles con mínimo privilegio.
+</div>
+</div>
+</section>
+
+<footer>Hecho con 💙 pedagógico por <b style="color:#e2e8f0">Ruldin Ayala</b> · Informática I · UMG · Semana 13 ERP · 2026 · Montos en Quetzales con fines didácticos.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== Estado global (100% cliente) =====
+let XP=0, o2cNext=1, felNext=1, quizPts=0;
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600)}
+function gainXP(n,el){if(el&&el._xp)return;if(el)el._xp=true;XP+=n;if($('statXP'))$('statXP').textContent=XP;toast(`+${n} XP gerencial ⚡ (total ${XP})`)}
+function miniQuiz(btn,ok,msg){[...btn.parentElement.querySelectorAll('.quizopt')].forEach(b=>{b.classList.remove('good','badb')});btn.classList.add(ok?'good':'badb');const fb=btn.parentElement.querySelector('div[id^="miniFb"]');if(fb){fb.innerHTML=(ok?'✅ ':'❌ ')+msg}if(ok)gainXP(20,btn);}
+// Progreso lectura
+window.addEventListener('scroll',()=>{const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;$('progressBar').style.width=p+'%';});
+$('hamburger').onclick=()=>$('navLinks').classList.toggle('open');
+// Ficha persistente (sección oculta temporalmente; se conserva por compatibilidad)
+function saveFicha(){if(!$('alNombre'))return;localStorage.setItem('erp13-ficha',JSON.stringify({n:$('alNombre').value,c:$('alCarnet').value,s:$('alSeccion').value,f:$('alFecha').value}))}
+(function(){try{const d=JSON.parse(localStorage.getItem('erp13-ficha')||'{}');if(!$('alNombre'))return;if(d.n)$('alNombre').value=d.n;if(d.c)$('alCarnet').value=d.c;if(d.s)$('alSeccion').value=d.s;if(d.f)$('alFecha').value=d.f;}catch(e){}if($('alFecha'))$('alFecha').value=$('alFecha').value||new Date().toISOString().slice(0,10);})();
+// --- Evolución ---
+const EVO=[
+'🧾 <b>TPS — Islas:</b> cada sucursal captura su Excel. Ventas Q18,400 vs contabilidad Q17,900. Cierre el día 20, FEL 72h tarde. Costo oculto: reprocesos y pleitos.',
+'🏭 <b>MRP I/II — Fábrica ordenada, empresa partida:</b> ya controlas insumos y producción, pero finanzas sigue digitando a mano lo que bodega ya movió. El dato aún no es único.',
+'🌐 <b>ERP — Dato único:</b> un pedido valida crédito + reserva stock + dispara compra + descuenta inventario + emite FEL + crea CxC. Todo en segundos, todo auditable.'];
+function evo(i,el){document.querySelectorAll('.tnode').forEach(t=>t.classList.remove('active'));el.classList.add('active');$('evoDetail').innerHTML=EVO[i];gainXP(5,el)}
+// --- Integrador ---
+function integCalc(){const v=+$('rngInteg').value;$('integVal').textContent=v+'%';$('integFill').style.width=v+'%';
+let verdict,tabla;
+if(v<35){verdict='<span class="bad">🔴 Zona islas:</span> múltiples DB, reprocesos, FEL tardía, cierre día 20.';tabla='BD: 3 Excels · Consistencia: baja · Visibilidad: diferida · Costo integración: alto';}
+else if(v<70){verdict='<span class="warn">🟡 Zona híbrida:</span> piloto ERP en capital + Excels en interior. Mejora parcial, riesgo de doble captura.';tabla='BD: mixta · Consistencia: media · Visibilidad: semanal · Requiere sincronización offline';}
+else{verdict='<span class="ok">🟢 Zona ERP:</span> DBMS único, dashboards en vivo, FEL en segundos, auditoría total.';tabla='BD: unificada · Consistencia: alta (ACID) · Visibilidad: tiempo real · Mantenimiento centralizado';}
+$('integVerdict').innerHTML=verdict;$('integTable').innerHTML='<b style="color:#e2e8f0">Arquitectura:</b> '+tabla;gainXP(2)}
+// --- Dato único ---
+function datoUnico(){const v=$('precioUnico').value||0;['kVentas','kBodega','kBodega','kConta'].forEach(()=>{});$('kVentas').textContent='Q'+v;$('kBodega').textContent='Q'+v;$('kConta').textContent='Q'+v;}
+let dupN=1;function duplicar(){dupN++;$('dupLog').innerHTML=`pedidos_registrados = ${dupN} · <span class="bad">cifra TRIPLICADA ✗ sobrevalúas inventario y CxC</span><br>Con ERP: el DBMS rechaza el duplicado por clave única ✓`;if(dupN===3)gainXP(10,$('dupLog'))}
+function resetDup(){dupN=1;$('dupLog').innerHTML='pedidos_registrados = 1 · cifra única ✓'}
+// --- O2C ---
+const LEDG={1:'① PEDIDO Q-184 · cliente verificado: crédito OK · margen 22% ✓<br><span class="cy">→ CxC aún no nace; solo compromiso comercial</span>',2:'② RESERVA · 120 cajas comprometidas (hard allocation) · stock neto bajo mínimo → <span class="warn">sugerencia de compra al proveedor ⚠</span>',3:'③ DESPACHO · bodega −120 cajas · <span class="warn">Inventario −Q / COGS +Q</span> · pedido pasa a "entregado"',4:'④ FEL · ingreso reconocido · <span class="ok">CxC +Q18,400 · débito fiscal IVA + libros SAT ✓</span>',5:'⑤ COBRO · cliente paga → <span class="ok">CxC liquidada · caja/bancos ▲ flujo de efectivo</span> · ¡ciclo cerrado! 🎉'};
+function o2cClick(el){const i=+el.dataset.i;
+if(i===o2cNext){el.classList.add('lit');$('ledger').innerHTML=LEDG[i];o2cNext++;
+document.querySelectorAll('#heroDots .fdot').forEach((d,k)=>d.classList.toggle('on',k<o2cNext));
+if(o2cNext>5){$('o2cFb').innerHTML='✅ <b>¡Flujo perfecto!</b> Cada paso físico creó su asiento automático. Así se elimina la digitación diferida. +30 XP';gainXP(30,el);heroWin();}
+else{$('o2cFb').innerHTML=`✅ Paso ${i} correcto. Ahora toca el paso ${o2cNext}…`;gainXP(5,el);}
+}else{el.classList.add('badx');setTimeout(()=>el.classList.remove('badx'),600);$('o2cFb').innerHTML=`❌ El ERP <b>bloquea</b> ese movimiento: primero va el paso ${o2cNext} (como bloquearía vender sin stock ni crédito).`}}
+function o2cReset(){o2cNext=1;document.querySelectorAll('#o2cSteps .step').forEach(s=>s.classList.remove('lit'));$('ledger').textContent='Esperando pedido… toca el paso 1️⃣';$('o2cFb').textContent='';}
+function heroWin(){const t=$('termBody');t.innerHTML+='<div>> ciclo Order-to-Cash <span class="ok">cerrado sin Excel ✓</span></div>'}
+// --- FEL ---
+function felStep(i){if(i!==felNext){toast(`Primero completa el paso ${felNext} de la tubería FEL`);return}
+$( 'fel'+i).classList.add('good');felNext++;
+const msgs={1:'✅ XML/DTE generado bajo esquema FEL.',2:'✅ Firma digital sellada a nivel transacción.',3:'✅ OAuth con SAT/Certificador: token válido.',4:'✅ CAE-2026-8891 recibido en 0.4s. ¡Factura legal!',5:'✅ Libros Compras/Ventas/Diario/Mayor + retenciones ISR/IVA asentados.'};
+$('felFb').innerHTML=msgs[i];gainXP(6,$('fel'+i));if(i===5)$('felFb').innerHTML+=' 🎉 <b>72 horas → 0.4 segundos.</b> Ese es el argumento para la junta.';}
+// --- Sectores ---
+const SEC=[
+'🌾 <b>Agroindustria</b> (azúcar, café, banano): trazabilidad por lote + báscula + acopio. Módulos: Inventarios, Mantenimiento, Compras, SCM. Gana: exportación sin rechazos.',
+'🛒 <b>Retail</b> (como El Quetzal): omnicanal + POS + multibodega + FEL masiva. Módulos: Ventas, POS, Inventarios, CxC. Gana: rotación y cero quiebres.',
+'🏭 <b>Manufactura:</b> BOM + órdenes + costeo real + mermas. Módulos: Producción/MRP, Costos, Calidad. Gana: menos desperdicio de insumo importado.',
+'💼 <b>Servicios:</b> proyectos + horas facturables + facturación recurrente. Módulos: Proyectos, Facturación, RRHH. Gana: rentabilidad por cliente.'];
+function sector(i,el){document.querySelectorAll('.sectab').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('sectorDetail').innerHTML=SEC[i];gainXP(5,el)}
+$('sectorDetail').innerHTML=SEC[1];
+// --- TCO ---
+function tco(){const cap=+$('tcoCap').value, saas=+$('tcoSaaS').value;
+$('tcoCapV').textContent='Q'+cap+'k';$('tcoSaaSV').textContent='Q'+saas;
+const onPrem=cap*1000+3*45000, saasT=saas*25*36; // mantenimiento anual estimado Q45k
+const win=onPrem<saasT?'ON-PREMISE más barato a 3 años (pero inmoviliza caja)':'SAAS más barato a 3 años (y preserva flujo)';
+$('tcoOut').innerHTML=`On-Premise 3a ≈ Q${onPrem.toLocaleString()} (CapEx + Q45k/año soporte)<br>SaaS 3a ≈ Q${saasT.toLocaleString()} (OpEx puro)<br>→ <span class="ok">${win}</span>`}
+tco();
+// --- IoT + RBAC + Rogers ---
+const IOT=['🔧 <b>Predictivo:</b> sensor vibración ingenio → IA detecta anomalía → orden preventiva automática. Dato ERP → escenario BI → estrategia: cero paros en zafra.','📄 <b>Documentos inteligentes:</b> visión lee factura del proveedor, NLP valida precio vs orden. Sin digitación, sin error humano.','📦 <b>Reorden autónomo:</b> RFID pesa la tarima; al tocar el mínimo dispara la OC al proveedor. Cadena que se autorregula.'];
+function iotCase(i,el){document.querySelectorAll('#nube .tnode').forEach(t=>{if(t.parentElement&&t.parentElement.classList.contains('grid3'))t.classList.remove('active')});el.classList.add('active');$('iotDetail').innerHTML=IOT[i];gainXP(6,el)}
+function rbac(){const r=$('rbacRol').value;const m={bodega:'📦 <b>Bodega:</b> ve stock y despachos. <span class="bad">NO ve</span> nómina ni costos. (mínimo privilegio)',ventas:'🧾 <b>Ventas:</b> crea pedidos y consulta crédito. <span class="bad">NO modifica</span> asientos contables.',contador:'📒 <b>Contadora:</b> ve mayor y CxC/CxP + audit trail. <span class="bad">NO administra</span> usuarios.',admin:'🛠 <b>TI:</b> administra roles y respaldos (TLS 1.3 + AES-256, RTO mínimo). <span class="warn">Todo queda en audit trail.</span>'};$('rbacOut').innerHTML=m[r];}
+rbac();
+function rogers(i,el){const msgs=['💡 Piloto con innovadores (bodega joven de Guate) para probar el modo offline sin riesgo.','📣 ¡Esa es la jugada! Los <b>adoptantes tempranos</b> (vendedora de Xela + auxiliar contable) evangelizan y vencen a la mayoría tardía. +15 XP','👥 La mayoría temprana sigue cuando ve que la FEL sale en segundos, no en 72h.','🐢 No pelees primero con rezagados: dales capacitación ligada a desempeño + incentivos, no discursos.'];$('rogersFb').innerHTML=msgs[i];if(i===1)gainXP(15,el);else gainXP(4,el)}
+// --- Quiz ---
+const QUIZ=[
+{q:'1 · El ERP debe gestionarse como proyecto de…',o:['Solo TI (comprar fierros)','SI: tecnología + personas + procesos + datos','Solo marketing'],a:1},
+{q:'2 · El "dato único" se logra con…',o:['Tres Excels por sucursal','Un DBMS unificado con integridad ACID','Más impresoras'],a:1},
+{q:'3 · Dell frenó su ERP porque…',o:['No tenía dinero','Su ventaja era el proceso build-to-order y la plantilla lo destruiría','Odiaba la tecnología'],a:1},
+{q:'4 · Para FEL en Guatemala el ERP necesita…',o:['Fax y papel carbón','XML/DTE + firma + OAuth + CAE + libros SAT','Solo buena voluntad'],a:1},
+{q:'5 · Frente a internet inestable en Escuintla/Xela conviene…',o:['Big Bang sin contingencia','Despliegue por fases + modo offline con sincronización','Seguir en papel para siempre'],a:1}];
+$('quizBox').innerHTML=QUIZ.map((x,i)=>`<div style="margin:.7rem 0"><b>${x.q}</b>${x.o.map((op,j)=>`<button class="quizopt" data-q="${i}" data-o="${j}" onclick="qSel(this)">${op}</button>`).join('')}</div>`).join('');
+function qSel(b){const q=+b.dataset.q;[...document.querySelectorAll(`[data-q="${q}"]`)].forEach(x=>x.classList.remove('good','badb'));const ok=+b.dataset.o===QUIZ[q].a;b.classList.add(ok?'good':'badb');b._ok=ok;}
+function calificarQuiz(){let pts=0;QUIZ.forEach((x,i)=>{const sel=document.querySelector(`[data-q="${i}"].good`);if(sel)pts++});quizPts=pts;$('quizScore').textContent=`Quiz: ${pts}/5`;gainXP(pts*4,$('quizScore'));toast(`Quiz: ${pts}/5`);}
+</script>
+</body>
+</html>
