@@ -116,6 +116,15 @@ code{background:#eef2f9;padding:2px 6px;border-radius:6px}
 </nav>
 
 <main>
+<section class="card" id="ident" style="border:2px solid var(--amarillo);background:linear-gradient(135deg,#fffdf0,#eef4ff)">
+<h2 style="margin:0 0 6px">🪪 Identificación del estudiante (sale en tu PDF)</h2>
+<p style="margin:0 0 10px;color:#5b6b82;font-size:.9rem">Escribe tu <b>nombre completo y nº de carnet antes</b> de trabajar. Aparecerán en el laboratorio y en la impresión / PDF para identificar tu entrega.</p>
+<div class="grid2">
+<label>Nombre completo<br><input type="text" id="estNombre" style="width:100%;max-width:480px" placeholder="Ej: María López" oninput="syncIdent()" autocomplete="name"></label>
+<label>Nº de carnet<br><input type="text" id="estCarnet" style="width:100%;max-width:280px" placeholder="Ej: 2024-01-1234" oninput="syncIdent()" autocomplete="off"></label>
+</div>
+<p id="identResumen" style="margin:10px 0 0;background:#fff;border:1px dashed #b78d00;border-radius:10px;padding:8px 12px">👤 Estudiante: <b id="identNombre">___</b> &nbsp;·&nbsp; 🪪 Carnet: <b id="identCarnet">___</b></p>
+</section>
 <section class="card" style="background:linear-gradient(135deg,#eef4ff,#e6f9f0);padding:16px 20px">
 <b>👋 Hola, futuro gerente, soy tu tutor virtual de Semana 13.</b> Hoy medimos <b>tiempos de atención en minutos</b> en una sucursal. Te enseño 3 superpoderes: <b>1) predecir con la campana (68-95-99.7)</b>, <b>2) garantizar con Chebyshev aunque todo esté chueco (≥75%)</b> y <b>3) dibujar la caja para cazar al culpable (outlier)</b>. Sin memorizar, todo con calculadora y conteo. ✅
 </section>
@@ -320,7 +329,7 @@ code{background:#eef2f9;padding:2px 6px;border-radius:6px}
 <textarea id="labData" rows="3" style="width:100%" placeholder="ej: 10, 12, 14, 15, 16, 18, 20, 22, 24, 29">10,12,14,15,16,18,20,22,24,29</textarea>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" class="no-print">
 <button class="btn-azul" onclick="calcLab()">Calcular TODO paso a paso ✨</button>
-<button class="btn-ghost" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+<button class="btn-ghost" onclick="imprimirLab()">🖨️ Imprimir / Guardar PDF</button>
 </div>
 <div id="outLab" style="margin-top:14px"></div>
 <div class="tip">💡 <b>Tip de parcial:</b> siempre muestra 1) ordenados, 2) x̄ y S con fórmula n−1, 3) conteo real en x̄±1S y x̄±2S, 4) C₁/Me/C₃ por mitades, 5) RIC, L₁, L₂ y lista de atípicos. Si entregas eso, el catedrático ya vio que dominas. 🎯</div>
@@ -406,6 +415,33 @@ function stats(arr){
     cnt1:c1(mean-s,mean+s), cnt2:c1(mean-2*s,mean+2*s), cnt3:c1(mean-3*s,mean+3*s)};
 }
 const f2=v=> (isNaN(v)?'—':Number(v).toFixed(2));
+// ---------- identificación estudiante (nombre + carnet para el PDF) ----------
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function getIdent(){
+  const nEl=document.getElementById('estNombre'), cEl=document.getElementById('estCarnet');
+  return {nombre:(nEl&&nEl.value||'').trim(), carnet:(cEl&&cEl.value||'').trim()};
+}
+function syncIdent(){
+  const {nombre, carnet}=getIdent();
+  const rn=document.getElementById('identNombre'), rc=document.getElementById('identCarnet');
+  if(rn) rn.textContent=nombre||'___';
+  if(rc) rc.textContent=carnet||'___';
+  const ln=document.getElementById('labIdentNombre'), lc=document.getElementById('labIdentCarnet');
+  if(ln) ln.textContent=nombre||'___';
+  if(lc) lc.textContent=carnet||'___';
+}
+function imprimirLab(){
+  syncIdent();
+  const {nombre, carnet}=getIdent();
+  if(!nombre||!carnet){
+    alert('⚠️ Escribe tu nombre completo y nº de carnet en la caja de arriba para que tu PDF salga identificado.');
+    document.getElementById('ident').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!document.getElementById('outLab').innerHTML.trim()){calcLab();}
+  else{syncIdent();}
+  window.print();
+}
 // ---------- boxplot SVG horizontal ----------
 function boxplotSVG(st, mountId, title){
   const el=document.getElementById(mountId); if(!el) return;
@@ -498,12 +534,52 @@ function checkMed50(){const s=document.querySelector('input[name=med50]:checked'
 function checkOut50(){const t=document.getElementById('inOut50').value.toLowerCase();const fb=document.getElementById('fbOut50');
   /s[ií]/.test(t)?ok(fb,'¡Sí! 50 > L2=34 → atípico (*). El bigote se corta en 24.') : bad(fb,'Sí es atípico: 50 sobrepasa L2=34. Regla: fuera de [L1,L2] = outlier.');}
 // ---------- S7 laboratorio ----------
+// Histograma de frecuencias (Sturges) para decidir Empírica vs Chebyshev antes del Paso 1
+function histLabSVG(st){
+  const n=st.n, vals=st.sorted;
+  const min=vals[0], max=vals[n-1];
+  let k=Math.ceil(1+3.322*Math.log10(n));
+  if(!isFinite(k)) k=4;
+  k=Math.max(4,Math.min(8,k));
+  if(max===min) k=1;
+  const range=(max-min)||1;
+  const w=range/k;
+  const bins=[];
+  for(let i=0;i<k;i++) bins.push({lo:min+i*w, hi:min+(i+1)*w, c:0});
+  vals.forEach(v=>{ let idx=Math.floor((v-min)/w); if(idx>=k)idx=k-1; if(idx<0)idx=0; bins[idx].c++; });
+  const maxC=Math.max(...bins.map(b=>b.c),1);
+  const W=640,H=215,padL=46,padR=16,padT=30,padB=54;
+  const cw=(W-padL-padR)/k;
+  const X=v=>padL+(v-min)/range*(W-padL-padR);
+  let bars='';
+  bins.forEach((b,i)=>{
+    const h=(H-padT-padB)*b.c/maxC;
+    const x=padL+i*cw+4, y=H-padB-h, bw=cw-8;
+    const pct=(b.c/n*100).toFixed(1);
+    bars+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(2,bw).toFixed(1)}" height="${Math.max(2,h).toFixed(1)}" fill="${b.c===maxC?'#0e9f6e':'#274e8d'}" opacity="0.85" rx="6"><title>${f2(b.lo)} a ${f2(b.hi)}: ${b.c} datos (${pct}%)</title></rect>`
+    +`<text x="${(x+bw/2).toFixed(1)}" y="${(y-6).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="800" fill="#1a3a6b">${b.c}</text>`
+    +`<text x="${(x+bw/2).toFixed(1)}" y="${(H-padB+16).toFixed(1)}" text-anchor="middle" font-size="9.5" fill="#5b6b82">${f2(b.lo)}–${f2(b.hi)}</text>`
+    +`<text x="${(x+bw/2).toFixed(1)}" y="${(H-padB+30).toFixed(1)}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1a3a6b">${pct}%</text>`;
+  });
+  const xm=Math.min(Math.max(X(st.mean),padL),W-padR);
+  const xme=Math.min(Math.max(X(st.med),padL),W-padR);
+  return `<div class="bell-wrap"><svg viewBox="0 0 ${W} ${H}" width="100%" height="220" role="img" aria-label="Histograma de frecuencias del dataset">
+    <line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#94a3b8" stroke-width="1.5"/>
+    ${bars}
+    <line x1="${xm.toFixed(1)}" y1="${padT-6}" x2="${xm.toFixed(1)}" y2="${H-padB}" stroke="#1a3a6b" stroke-width="2.5" stroke-dasharray="7 4"/>
+    <line x1="${xme.toFixed(1)}" y1="${padT-6}" x2="${xme.toFixed(1)}" y2="${H-padB}" stroke="#e02424" stroke-width="2.5"/>
+    <text x="${xm.toFixed(1)}" y="14" text-anchor="middle" font-size="11" font-weight="800" fill="#1a3a6b">x̄ ${f2(st.mean)}</text>
+    <text x="${xme.toFixed(1)}" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#e02424">Me ${f2(st.med)}</text>
+  </svg>
+  <p style="font-size:.82rem;color:#5b6b82;margin:6px 0 0">Barras = nº de datos por intervalo (k=${k} por Sturges, n=${n}). Línea azul punteada = media x̄ · Línea roja = mediana. Barra verde = intervalo con más datos. Pasa el puntero sobre cada barra para ver el conteo.</p></div>`;
+}
 function setLab(t){document.getElementById('labData').value=t;calcLab();}
 function calcLab(){
   const arr=parseData(document.getElementById('labData').value);
   const out=document.getElementById('outLab');
   if(arr.length<4){out.innerHTML='<b class=mal>❌ Escribe al menos 4 números separados por coma (,).</b>';return;}
   const st=stats(arr);
+  const {nombre, carnet}=getIdent();
   const p1=(st.cnt1/st.n*100).toFixed(1), p2=(st.cnt2/st.n*100).toFixed(1), p3=(st.cnt3/st.n*100).toFixed(1);
   const diffL=Math.abs((st.med-st.q1)-(st.q3-st.med));
   const sim=diffL<st.ric*0.15?'aprox. SIMÉTRICA 🔔 (la empírica aplica bien)':'SESGO '+(st.q3-st.med>st.med-st.q1?'a la DERECHA ➡️ (cola alta, cuidado con atípicos altos)':'a la IZQUIERDA ⬅️');
@@ -511,6 +587,10 @@ function calcLab(){
     ? `✅ <b>Sin atípicos.</b> Todo cae en [${f2(st.l1)}, ${f2(st.l2)}]. Proceso estable: reporta <b>x̄=${f2(st.mean)}</b> con confianza y monitorea S=${f2(st.s)}.`
     : `🚨 <b>${st.outs.length} atípico(s): ${st.outs.join(', ')}</b> fuera de [${f2(st.l1)}, ${f2(st.l2)}]. El bigote se recorta a [${st.wLow}, ${st.wHigh}]. Reporta la <b>mediana ${f2(st.med)}</b> (robusta) y audita cada atípico antes de promediar.`;
   out.innerHTML=`
+  <p style="background:#fff8de;border:1px dashed #b78d00;border-radius:10px;padding:8px 12px">👤 Estudiante: <b id="labIdentNombre">${esc(nombre)}</b> &nbsp;·&nbsp; 🪪 Carnet: <b id="labIdentCarnet">${esc(carnet)}</b> &nbsp;·&nbsp; 📅 Semana 13 · Regla Empírica · Chebyshev · Caja</p>
+  <h3>Paso 0 · Histograma: ¿campana 🔔 o sesgo 🌪️? Mira antes de decidir</h3>
+  ${histLabSVG(st)}
+  <div class="${sim.includes('SIMÉTRICA') && st.outs.length===0 ? 'tutor' : 'alerta'}">${sim.includes('SIMÉTRICA') && st.outs.length===0 ? '🔔 <b>Lectura visual:</b> barras altas al centro y parejas a los lados, x̄≈Me. <b>Es campana → la Regla Empírica (68-95-99.7) sí aplica bien.</b>' : '🌪️ <b>Lectura visual:</b> hay cola larga o barra aislada (mira x̄ separada de Me'+(st.outs.length?', más atípico(s) '+st.outs.join(', '):'')+'). <b>No es campana → no confíes en 68-95-99.7; usa Chebyshev (≥75% garantizado) + Caja para cazar al culpable.</b>'}<br><small>Regla rápida: si x̄ y Me casi se tocan y no hay * → campana (Empírica). Si x̄ se jala lejos de Me o hay barra solitaria → sesgado (Chebyshev).</small></div>
   <h3>Paso 1 · Orden y conteo</h3>
   <p><b>n=${st.n}</b> · Ordenados: ${st.sorted.join(', ')} · Mín ${st.sorted[0]} · Máx ${st.sorted[st.n-1]}</p>
   <h3>Paso 2 · Media y desviación (muestra, n−1)</h3>
@@ -526,11 +606,11 @@ function calcLab(){
 }
 // ---------- S8 quiz ----------
 const Q=[
- {q:'¿Cuándo puedes usar la Regla Empírica (68-95-99.7)?',o:['Siempre, con cualquier dato','Solo si la distribución es aprox. simétrica (campana) ✅','Solo si hay outliers'],a:1},
- {q:'Chebyshev con k=2 garantiza…',o:['Exactamente el 95%','Al menos el 75% en x̄±2S, con cualquier forma ✅','El 100% siempre'],a:1},
- {q:'Con {10,12,14,15,16,18,20,22,24,29}, ¿C1, mediana y C3 (mitades)?',o:['14 · 17 · 22 ✅','15 · 18 · 20','12 · 17 · 24'],a:0},
- {q:'Si RIC=8, C1=14, C3=22. ¿L2 y es 50 atípico?',o:['L2=30, no es atípico','L2=34 y 50>34 → sí es atípico ✅','L2=36, tal vez'],a:1},
- {q:'El dato 50 cambia la media de 18 a 20.1 pero la mediana sigue en 17. ¿Qué reportas?',o:['Solo la media 20.1','Mediana 17 + outlier 50 por falla, auditar TI ✅','Nada, todo está bien'],a:1},
+ {q:'¿Cuándo puedes usar la Regla Empírica (68-95-99.7)?',o:['Siempre, con cualquier dato','Solo si la distribución es aprox. simétrica (campana)','Solo si hay outliers'],a:1},
+ {q:'Chebyshev con k=2 garantiza…',o:['Exactamente el 95%','Al menos el 75% en x̄±2S, con cualquier forma','El 100% siempre'],a:1},
+ {q:'Con {10,12,14,15,16,18,20,22,24,29}, ¿C1, mediana y C3 (mitades)?',o:['14 · 17 · 22','15 · 18 · 20','12 · 17 · 24'],a:0},
+ {q:'Si RIC=8, C1=14, C3=22. ¿L2 y es 50 atípico?',o:['L2=30, no es atípico','L2=34 y 50>34 → sí es atípico','L2=36, tal vez'],a:1},
+ {q:'El dato 50 cambia la media de 18 a 20.1 pero la mediana sigue en 17. ¿Qué reportas?',o:['Solo la media 20.1','Mediana 17 + outlier 50 por falla, auditar TI','Nada, todo está bien'],a:1},
 ];
 function buildQuiz(){
   const box=document.getElementById('quiz');box.innerHTML='';let score=0;
