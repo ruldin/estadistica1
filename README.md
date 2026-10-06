@@ -126,7 +126,28 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Agentes ReAct:** Simulador del ciclo cognitivo de automatización (Pensamiento, Acción, Observación, Respuesta).
       - **Gobernanza:** Mitigación de Shadow AI, supervisión humana y marcos normativos.
 
-16. 📦 **`vendor/` (Librerías locales):**
+16. 🌐 **`informatica1/Semana9/Semana9Informatica.html` (Semana 9: Redes y Telecomunicaciones GT):**
+    - Conceptos de redes LAN vs WAN, medios de transmisión guiados e inalámbricos, simulador interactivo "Arma tu Red", caso Farmacia Nebaj, ejercicio en parejas y autoevaluación gerencial.
+
+17. 🛡️ **`informatica1/Semana10/Semana10Ciberseguridad.html` (Semana 10: Ciberseguridad e Integridad de la Información):**
+    - Fundamentos de seguridad corporativa, vectores de ataque, mentoría con IA (Mentor Amigo) y tarea individual "La Silla del Gerente" con exportación PDF.
+
+18. 🔐 **`informatica1/Semana11/Semana11CiberSeguridad2.html` (Semana 11: Herramientas de Seguridad y Privacidad):**
+    - Autenticación multifactor, cifrado, VPN, backups 3-2-1, simulación de controles y taller práctico para administradores.
+
+19. 🏭 **`informatica1/Semana13/Semana13ERP.html` y `ErpAndriux/` (Semana 13: Sistemas Empresariales ERP):**
+    - Fundamentos del ERP como columna vertebral corporativa, estaciones interactivas (TI vs SI, dato único, tubería FEL ante SAT), y simulador gerencial "Andriux" (caso Botas de Cuero El Artesano S.A.) con ciclo Order-to-Cash, producción, compras y reporte oficial PDF.
+
+20. 🏢 **`informatica1/Semana14/Semana14CRM_SCM.html` (Semana 14: Simulador CRM & SCM Integrado en Tiempo Real):**
+    - **Caso Práctico:** Desarrolladora Inmobiliaria Las Américas S.A. (Venta en preventa de apartamentos en Zona 10 y logística de materiales de construcción).
+    - **Flujo Guiado en 5 Fases (Stepper Wizard de 30-40 minutos):**
+      - **Fase 1 (CRM):** Captura omnicanal de prospectos (llamada, sala de ventas, correo, web), resolución del cliente anónimo, selección de modelo residencial (Confort, Ejecutivo, Familiar, Penthouse), perfil de ingresos y checklist digital de precalificación.
+      - **Fase 2 (CRM):** Cotizador hipotecario en tiempo real (enganche, plazo, tasa, seguro FHA e IUSI), transmisión B2B/EDI a Banco Industrial / Banrural, dictamen emitido por FHA y hito de cierre de venta con creación de costos de cambio (*switching costs*).
+      - **Fase 3 (SCM):** Detonación automática de insumos (concreto estructural, acero corrugado grado 60, porcelanato, ventanería, grifería) sin reingreso manual de datos, y laboratorio de la complejidad multiplicativa ($N = P \times F \times D$) con simulador dinámico en SVG.
+      - **Fase 4 (SCM):** Órdenes B2B vía EDI a proveedores nacionales líderes (Cementos Progreso, Aceros de Guatemala, Samboro) y simulador de ruteo vial en la Ciudad de Guatemala evaluando restricciones PMT y Cuesta de Villalobos (diurno vs nocturno consolidado).
+      - **Fase 5 (TPS & Reporte):** Bitácora transaccional TPS en tiempo real, preguntas de análisis crítico gerencial y descarga del **"Expediente de Cierre de Venta y Orden de Suministro"** en PDF con membrete institucional UMG, datos del alumno y token de auditoría.
+
+21. 📦 **`vendor/` (Librerías locales):**
     - `chart.umd.min.js`
     - `chartjs-plugin-datalabels.min.js`
     - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.

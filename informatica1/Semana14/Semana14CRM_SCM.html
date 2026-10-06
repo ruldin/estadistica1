@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 14 · Simulador CRM & SCM Zona 10 (Actividad) | Informática I · UMG</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body{font-family:'Inter',sans-serif;background:#0B0F19;color:#f1f5f9}
+.heading-font{font-family:'Space Grotesk',sans-serif}
+.card{background:#111827;border:1px solid #1f2937;border-radius:1rem}
+.stepbtn.on{background:linear-gradient(135deg,#6366f1,#06b6d4);color:#020617;border-color:transparent}
+.stepbtn.done{border-color:#34d399;color:#a7f3d0}
+input,select,textarea{background:#020617!important;border:1px solid #263349!important;color:#e2e8f0!important;border-radius:.65rem!important}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#22d3ee!important;box-shadow:0 0 0 2px rgba(34,211,238,.25)}
+.btn-p{background:linear-gradient(135deg,#6366f1,#06b6d4);color:#020617;font-weight:800}
+.btn-p:hover{filter:brightness(1.1)}
+.tag{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .55rem;border-radius:.55rem}
+.tbl th{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;text-align:left;padding:.5rem .6rem;background:#0f172a}
+.tbl td{padding:.5rem .6rem;border-top:1px solid #1e293b;font-size:.76rem;vertical-align:top}
+.toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#020617;border:1px solid #22d3ee;color:#e2e8f0;padding:.6rem 1rem;border-radius:.8rem;font-size:.78rem;display:none;z-index:90;max-width:92vw}
+#print-report{display:none}
+@media print{
+  body{background:#fff!important;color:#000!important}
+  body *{visibility:hidden}
+  #print-report,#print-report *{visibility:visible}
+  #print-report{display:block!important;position:absolute;inset:0 0 0 0;background:#fff;color:#111;padding:18px}
+  #app,#topnav,.toast{display:none!important}
+  .sheet{box-shadow:none!important;border:1px solid #999!important}
+  a{color:#000!important;text-decoration:none!important}
+}
+.fade{animation:fd .3s ease}@keyframes fd{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pipe-col{min-height:120px}
+.bar{height:.55rem;border-radius:99px;background:#1e293b;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#34d399,#22d3ee);border-radius:99px}
+.kpi-num{font-size:1.35rem;font-weight:800}
+details>summary{cursor:pointer}
+.route-anim{stroke-dasharray:8 6;animation:dash 1.2s linear infinite}@keyframes dash{to{stroke-dashoffset:-14}}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav id="topnav" class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur border-b border-slate-800">
+<div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+<div class="flex items-center gap-3">
+<img src="logo.png" alt="UMG" class="w-10 h-10 rounded-xl object-cover border border-slate-700" onerror="this.style.display='none'">
+<div>
+<div class="text-[10px] font-bold tracking-widest text-cyan-400 uppercase heading-font">Informática I · Semana 14 · UMG</div>
+<h1 class="text-sm sm:text-base font-extrabold heading-font">CRM &amp; SCM Integrado · Desarrolladora Zona 10</h1>
+</div>
+</div>
+<div class="flex items-center gap-2 text-xs">
+<a href="Semana14GuiaCRM_SCM.html" class="px-3 py-2 rounded-xl border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/10"><i class="fa-solid fa-book-open mr-1 text-indigo-400"></i><span class="hidden sm:inline">Guía de conceptos</span><span class="sm:hidden">Guía</span></a>
+<a href="../index_informatica.html" class="px-3 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white"><i class="fa-solid fa-house mr-1 text-cyan-400"></i>Portal</a>
+<button onclick="resetDB()" class="px-3 py-2 rounded-xl border border-rose-500/40 text-rose-300 hover:bg-rose-500/10"><i class="fa-solid fa-trash-can mr-1"></i>Reiniciar</button>
+</div>
+</div>
+</nav>
+
+<div id="app" class="max-w-7xl mx-auto px-4 py-5 space-y-5">
+<!-- HERO + MISIÓN -->
+<header class="card p-5 sm:p-6 space-y-4 border-cyan-500/30" style="box-shadow:0 0 30px rgba(34,211,238,.08)">
+<div class="flex flex-wrap items-center gap-2">
+<span class="tag bg-indigo-500/15 text-indigo-300 border border-indigo-500/30"><i class="fa-solid fa-building mr-1"></i>Caso: Las Américas S.A. · Preventa Zona 10</span>
+<span class="tag bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-users mr-1"></i>Actividad en parejas · 30–40 min</span>
+<span class="tag bg-amber-500/15 text-amber-300 border border-amber-500/30"><i class="fa-solid fa-database mr-1"></i>100% local · base del navegador (localStorage)</span>
+</div>
+<h2 class="text-xl sm:text-2xl font-black heading-font">Del primer “¿me llama?” al camión en obra: vive el flujo <span class="text-cyan-300">CRM → FHA → SCM → EDI → Ruteo</span></h2>
+<p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Primero lean la <a href="Semana14GuiaCRM_SCM.html" class="text-indigo-300 underline">Guía de conceptos</a>. Luego, en pareja: el <b>Piloto</b> opera el CRM (fases 1–2) y el <b>Copiloto</b> el SCM (fases 3–4); el reporte (fase 5) lo redactan juntos. Captura un prospecto (resuelve el <b>misterio del cliente anónimo</b>), cotiza, arma el expediente <b>BI/Banrural + FHA</b>, cierra la venta y observa cómo <b>la venta dispara sola la orden de insumos</b>. Transmite por <b>EDI/B2B</b> a Cementos Progreso y programa el despacho esquivando a la PMT y la Cuesta de Villalobos. Todo queda en tu <b>bitácora TPS</b> y se exporta al <b>Expediente de Cierre + Orden de Suministro (PDF)</b>.</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+<div class="card p-4 bg-slate-950/60">
+<div class="text-[11px] uppercase font-bold text-slate-400 mb-1"><i class="fa-solid fa-user-graduate mr-1 text-cyan-400"></i>Ficha del estudiante (sale en el PDF)</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+<input id="alNombre" placeholder="Nombre completo" oninput="saveAlumno()">
+<input id="alCarnet" placeholder="Carnet / Registro" oninput="saveAlumno()">
+<input id="alSeccion" placeholder="Sección / Jornada" oninput="saveAlumno()">
+<input id="alFecha" type="date" oninput="saveAlumno()">
+</div>
+</div>
+<div class="card p-4 bg-slate-950/60">
+<div class="text-[11px] uppercase font-bold text-slate-400 mb-1"><i class="fa-solid fa-list-check mr-1 text-indigo-400"></i>Avance de la misión</div>
+<div class="bar"><i id="progBar" style="width:0%"></i></div>
+<p id="progTxt" class="text-[11px] text-slate-400 mt-1">0% · Empieza capturando tu prospecto</p>
+<div class="flex flex-wrap gap-1.5 mt-2 text-[10px]">
+<span id="ck1" class="tag bg-slate-800 text-slate-400">1 Prospecto</span>
+<span id="ck2" class="tag bg-slate-800 text-slate-400">2 Cierre+FHA</span>
+<span id="ck3" class="tag bg-slate-800 text-slate-400">3 Orden+EDI</span>
+<span id="ck4" class="tag bg-slate-800 text-slate-400">4 Ruta</span>
+<span id="ck5" class="tag bg-slate-800 text-slate-400">5 Reporte</span>
+</div>
+</div>
+</div>
+</header>
+
+<!-- STEPPER -->
+<div class="card p-3 flex gap-2 overflow-x-auto" id="stepper">
+<button data-s="1" onclick="go(1)" class="stepbtn on shrink-0 px-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold"><i class="fa-solid fa-address-card mr-1"></i>1 · Captura CRM</button>
+<button data-s="2" onclick="go(2)" class="stepbtn shrink-0 px-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold"><i class="fa-solid fa-file-invoice-dollar mr-1"></i>2 · Cotización y Cierre</button>
+<button data-s="3" onclick="go(3)" class="stepbtn shrink-0 px-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold"><i class="fa-solid fa-boxes-stacked mr-1"></i>3 · Inventario y EDI</button>
+<button data-s="4" onclick="go(4)" class="stepbtn shrink-0 px-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold"><i class="fa-solid fa-truck-fast mr-1"></i>4 · Ruteo y Logística</button>
+<button data-s="5" onclick="go(5)" class="stepbtn shrink-0 px-4 py-2.5 rounded-xl border border-slate-700 text-xs font-bold"><i class="fa-solid fa-file-pdf mr-1"></i>5 · Bitácora y Reporte</button>
+</div>
+
+<!-- ============ FASE 1 ============ -->
+<section id="fase1" class="fstep space-y-4 fade">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+<div class="card p-4 space-y-3 lg:col-span-1">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-address-card mr-1 text-cyan-400"></i>Captura y calificación del prospecto</h3>
+<p class="text-[11px] text-slate-400">Registra cada punto de contacto (llamada, correo, visita, digital). El <b>lead scoring</b> califica solo. Sin prospecto no hay venta: el CRM existe para que nadie sea un “misterio”.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm" id="prospectForm">
+<div class="sm:col-span-2"><label class="block text-xs font-bold text-slate-300 mb-1" for="pNombre">Nombre completo del prospecto *</label><input id="pNombre" placeholder="Ej. María Fernanda López" class="w-full px-3 py-2.5 text-sm"></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pTelefono">Teléfono / WhatsApp</label><input id="pTelefono" placeholder="Ej. 5551-2345" class="w-full px-3 py-2.5 text-sm"></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pEmail">Correo electrónico</label><input id="pEmail" placeholder="Ej. cliente@correo.com" class="w-full px-3 py-2.5 text-sm"></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pCanal">Canal de contacto (¿por dónde llegó?)</label><select id="pCanal" class="w-full px-3 py-2.5 text-sm"><option value="Llamada">📞 Llamada</option><option value="Correo">✉️ Correo</option><option value="Visita sala de ventas">🏢 Visita sala de ventas</option><option value="Digital / Redes">📱 Digital / Redes</option><option value="Referido">🤝 Referido</option></select></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pModeloInt">Modelo de apartamento de interés</label><select id="pModeloInt" class="w-full px-3 py-2.5 text-sm"><option value="Confort">Modelo Confort · Q950,000</option><option value="Ejecutivo">Modelo Ejecutivo · Q1,350,000</option><option value="Familiar">Modelo Familiar · Q1,850,000</option><option value="Penthouse">Penthouse · Q3,200,000</option></select></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pIngresos">Rango de ingresos comprobables</label><select id="pIngresos" class="w-full px-3 py-2.5 text-sm"><option value="Q15-25k">Ingresos Q15–25k</option><option value="Q25-40k">Ingresos Q25–40k</option><option value="Q40k+">Ingresos Q40k+</option><option value="Sin comprobar">Sin comprobar</option></select></div>
+<div><label class="block text-xs font-bold text-slate-300 mb-1" for="pEnganche">Enganche disponible</label><select id="pEnganche" class="w-full px-3 py-2.5 text-sm"><option value="10%">Enganche disponible 10%</option><option value="20%" selected>Enganche disponible 20%</option><option value="30%">Enganche disponible 30%+</option></select></div>
+<div class="sm:col-span-2"><label class="block text-xs font-bold text-slate-300 mb-1" for="pUrgencia">Nivel de urgencia de compra</label><select id="pUrgencia" class="w-full px-3 py-2.5 text-sm"><option value="Alta">Urgencia: Alta (entrega &lt; 6 meses)</option><option value="Media" selected>Urgencia: Media</option><option value="Baja">Urgencia: Baja (solo explora)</option></select></div>
+<label class="flex items-center gap-2 text-sm text-slate-200 sm:col-span-2 bg-slate-950/60 border border-slate-700 rounded-xl px-3 py-2.5"><input type="checkbox" id="pFidel" checked class="w-5 h-5">Aceptó tarjeta de fidelización “Vecino 10” (resuelve el misterio del anónimo)</label>
+</div>
+<button id="btnSaveProspecto" onclick="addProspecto()" class="btn-p w-full py-3 rounded-xl text-sm"><i class="fa-solid fa-user-plus mr-1"></i>Registrar en el CRM (crea TPS)</button>
+<button id="btnCancelEdit" onclick="cancelEdit()" class="hidden w-full py-2.5 rounded-xl text-sm border border-slate-500 text-slate-300"><i class="fa-solid fa-xmark mr-1"></i>Cancelar edición</button>
+<div class="card p-3 bg-slate-950/70 text-[11px] text-slate-300"><b class="text-amber-300">💡 Misterio del efectivo:</b> si el cliente pagaba el apartado en efectivo sin identificarse, el TPS lo veía como “anónimo”. Al aceptar la tarjeta, cada compra queda ligada a su perfil → nace el <b>costo de cambio</b>: se va con la competencia y pierde su historial, su tasa preferencial y su seguimiento.</div>
+</div>
+<div class="lg:col-span-2 space-y-4">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="kpis"></div>
+<div class="card p-4">
+<div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-users-viewfinder mr-1 text-indigo-400"></i>Cartera de prospectos (CRM real: alta, edición, avance, baja)</h3>
+<input id="q" placeholder="🔍 Buscar…" class="text-xs px-3 py-1.5 w-44" oninput="renderProspectos()">
+</div>
+<div class="overflow-x-auto"><table class="w-full tbl"><thead><tr><th>Cliente / canal</th><th>Interés</th><th>Scoring</th><th>Etapa (embudo)</th><th>Acciones</th></tr></thead><tbody id="prosTbody"></tbody></table></div>
+</div>
+<div class="card p-4">
+<h3 class="font-bold heading-font text-sm mb-2"><i class="fa-solid fa-filter-circle-dollar mr-1 text-emerald-400"></i>Embudo de ventas (pipeline) — avanza con ▶</h3>
+<div id="pipeline" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[11px]"></div>
+</div>
+<div class="card p-4">
+<h3 class="font-bold heading-font text-sm mb-1"><i class="fa-solid fa-phone-volume mr-1 text-amber-400"></i>Bitácora de puntos de contacto del seleccionado</h3>
+<div class="flex gap-2 text-xs flex-wrap">
+<select id="cTipo"><option>Llamada de seguimiento</option><option>Correo con brochure</option><option>Visita a apartamento modelo</option><option>Queja / objeción de precio</option><option>Servicio posventa</option></select>
+<input id="cNota" placeholder="Nota del contacto…" class="flex-1 min-w-[180px] text-xs px-3 py-2">
+<button onclick="addContacto()" class="btn-p px-4 py-2 rounded-xl text-xs">Registrar</button>
+</div>
+<ul id="contactLog" class="mt-2 space-y-1 text-[11px] text-slate-300"></ul>
+</div>
+</div>
+</div>
+<div class="flex justify-end"><button onclick="go(2)" class="btn-p px-5 py-2.5 rounded-xl text-xs">Siguiente: Cotización y Cierre <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+</section>
+
+<!-- ============ FASE 2 ============ -->
+<section id="fase2" class="fstep hidden space-y-4 fade">
+<div class="card p-4">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-file-invoice-dollar mr-1 text-emerald-400"></i>2 · Cotización hipotecaria + expediente digital + cierre FHA</h3>
+<p class="text-[11px] text-slate-400">Elige el prospecto activo, cotiza con enganche/plazo/banco, completa el expediente (100% para transmitir por EDI), precalifica en el banco y gestiona el FHA. Al aprobarse, el CRM cambia solo a <b>Cierre de Venta</b> y <b>dispara la orden SCM</b>. Al cambiar de prospecto, el formulario se limpia y carga los datos del nuevo.</p>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-3">
+<div class="space-y-2 text-xs">
+<label class="text-[11px] text-slate-400">Prospecto activo</label>
+<select id="cotProspecto" onchange="onCotProspecto()"></select>
+<label class="text-[11px] text-slate-400">Modelo (precio duro en código)</label>
+<select id="cotModelo" onchange="cotizar()"><option value="Confort">Confort · 68 m² · Q950,000</option><option value="Ejecutivo" selected>Ejecutivo · 95 m² · Q1,350,000</option><option value="Familiar">Familiar · 125 m² · Q1,850,000</option><option value="Penthouse">Penthouse · 180 m² · Q3,200,000</option></select>
+<div class="grid grid-cols-2 gap-2">
+<div><label class="text-[11px] text-slate-400">Enganche %</label><select id="cotEnganche" onchange="cotizar()"><option>10</option><option selected>20</option><option>30</option><option>40</option></select></div>
+<div><label class="text-[11px] text-slate-400">Plazo (años)</label><select id="cotPlazo" onchange="cotizar()"><option>15</option><option selected>20</option><option>25</option></select></div>
+</div>
+<label class="text-[11px] text-slate-400">Banco (B2B/EDI)</label>
+<select id="cotBanco" onchange="cotizar()"><option>Banco Industrial</option><option>Banrural</option></select>
+<button onclick="guardarCotizacion()" class="btn-p w-full py-2.5 rounded-xl text-xs"><i class="fa-solid fa-floppy-disk mr-1"></i>Guardar cotización en el CRM</button>
+</div>
+<div class="card p-4 bg-slate-950/60">
+<div class="text-[11px] uppercase font-bold text-slate-400">Cotización en vivo</div>
+<div id="cotOut" class="text-xs space-y-1 mt-1"></div>
+<div class="bar mt-2"><i id="cotBar" style="width:40%"></i></div>
+<p class="text-[11px] text-slate-400 mt-1">Cuota estimada con tasa 7.5% anual + seguro FHA 0.45% anual prorrateado. Fórmula: <span class="font-mono">C = P·i/(1-(1+i)^-n)</span></p>
+</div>
+<div class="card p-4 bg-slate-950/60 text-xs space-y-2">
+<div class="text-[11px] uppercase font-bold text-slate-400">📁 Expediente digital (precalificación)</div>
+<label class="flex gap-2 items-center"><input type="checkbox" class="exp w-4 h-4" value="DPI vigente" onchange="expProgress()"> DPI vigente y legible</label>
+<label class="flex gap-2 items-center"><input type="checkbox" class="exp w-4 h-4" value="Constancia de ingresos" onchange="expProgress()"> Constancia de ingresos / estados de cuenta 3 meses</label>
+<label class="flex gap-2 items-center"><input type="checkbox" class="exp w-4 h-4" value="Formulario FHA" onchange="expProgress()"> Formulario FHA + solicitud de seguro hipotecario</label>
+<label class="flex gap-2 items-center"><input type="checkbox" class="exp w-4 h-4" value="Autorización buró" onchange="expProgress()"> Autorización de consulta al buró + firma del prospecto</label>
+<div class="bar"><i id="expBar" style="width:0%"></i></div>
+<p id="expTxt" class="text-[11px] text-slate-400">0% · Faltan documentos para transmitir por EDI.</p>
+<div class="flex gap-2 flex-wrap">
+<button onclick="enviarBanco()" class="btn-p px-4 py-2 rounded-xl text-xs"><i class="fa-solid fa-paper-plane mr-1"></i>Transmitir EDI al banco</button>
+<button onclick="gestionarFHA()" class="px-4 py-2 rounded-xl text-xs border border-amber-500/40 text-amber-300"><i class="fa-solid fa-shield-halved mr-1"></i>Gestionar FHA</button>
+</div>
+<div id="bancoOut" class="text-[11px] text-slate-300"></div>
+<button onclick="cerrarVenta()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 hover:brightness-110"><i class="fa-solid fa-key mr-1"></i>Cerrar venta (escrituración + posventa)</button>
+</div>
+</div>
+</div>
+<div class="flex justify-between"><button onclick="go(1)" class="px-5 py-2.5 rounded-xl text-xs border border-slate-600">← Atrás</button><button onclick="go(3)" class="btn-p px-5 py-2.5 rounded-xl text-xs">Siguiente: Inventario y EDI <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+</section>
+
+<!-- ============ FASE 3 ============ -->
+<section id="fase3" class="fstep hidden space-y-4 fade">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="card p-4 space-y-3">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-boxes-stacked mr-1 text-amber-400"></i>3a · La venta dispara el SCM (sin redigitar)</h3>
+<p class="text-[11px] text-slate-400">Cada cierre explota su <b>BOM</b> (lista de materiales) y crea la orden de insumos. Prueba cambiar el modelo vendido y mira cómo cambia la orden.</p>
+<div class="flex gap-2 text-xs flex-wrap items-end">
+<div><label class="text-[11px] text-slate-400">Modelo a abastecer</label><select id="bomModelo" onchange="renderBOM()"><option>Confort</option><option selected>Ejecutivo</option><option>Familiar</option><option>Penthouse</option></select></div>
+<div><label class="text-[11px] text-slate-400">Unidades vendidas</label><select id="bomQty" onchange="renderBOM()"><option>1</option><option>2</option><option>3</option></select></div>
+<button onclick="dispararOrden()" class="btn-p px-4 py-2 rounded-xl text-xs"><i class="fa-solid fa-bolt mr-1"></i>Disparar orden SCM</button>
+</div>
+<div class="overflow-x-auto"><table class="w-full tbl"><thead><tr><th>Insumo</th><th>Proveedor sugerido</th><th>Cant./apto</th><th>Total</th><th>Stock Bárcenas</th><th>Estado</th></tr></thead><tbody id="bomTbody"></tbody></table></div>
+<div class="card p-3 bg-slate-950/70 text-[11px]"><b class="text-emerald-300">Mejor práctica:</b> visibilidad total del inventario — el ERP/SCM descuenta al reservar y alerta el faltante antes de que la obra se detenga.</div>
+<h3 class="font-bold heading-font text-sm pt-1"><i class="fa-solid fa-arrow-right-arrow-left mr-1 text-cyan-400"></i>3b · Transmisión EDI/B2B a proveedores</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" id="ediCards"></div>
+<button onclick="transmitirTodoEDI()" class="btn-p w-full py-2.5 rounded-xl text-xs"><i class="fa-solid fa-satellite-dish mr-1"></i>Transmitir todas las órdenes EDI pendientes</button>
+<ul id="ediLog" class="text-[11px] text-slate-300 space-y-1"></ul>
+</div>
+<div class="card p-4 space-y-3">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-diagram-project mr-1 text-purple-400"></i>3c · Laboratorio: complejidad multiplicativa N = P × F × D</h3>
+<p class="text-[11px] text-slate-400">Mueve los nodos y mira por qué el SCM existe: cada nodo nuevo <b>multiplica</b>, no suma, los enlaces que hay que coordinar.</p>
+<div class="grid grid-cols-3 gap-2 text-xs">
+<div><label class="text-[11px] text-slate-400">Proveedores (<span id="vP">3</span>)</label><input type="range" id="rP" min="1" max="8" value="3" class="w-full" oninput="calcN()"></div>
+<div><label class="text-[11px] text-slate-400">Plantas/Fabricantes (<span id="vF">1</span>)</label><input type="range" id="rF" min="1" max="4" value="1" class="w-full" oninput="calcN()"></div>
+<div><label class="text-[11px] text-slate-400">Distribuidores (<span id="vD">2</span>)</label><input type="range" id="rD" min="1" max="8" value="2" class="w-full" oninput="calcN()"></div>
+</div>
+<div class="text-center py-2"><div class="text-[11px] text-slate-400">Enlaces operativos</div><div id="nOut" class="text-4xl font-black heading-font text-purple-300">6</div><div id="nFormula" class="text-[11px] font-mono text-slate-400">N = 3 × 1 × 2 = 6</div><div id="nRisk" class="tag inline-block mt-1 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Riesgo bajo · coordinable manual</div></div>
+<svg id="netSvg" viewBox="0 0 400 160" class="w-full h-40 bg-slate-950/70 rounded-xl border border-slate-800"></svg>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<button onclick="setN(2,1,2)" class="px-3 py-2 rounded-xl border border-slate-600">Caso guía: 2×1×2=4</button>
+<button onclick="setN(4,2,4)" class="px-3 py-2 rounded-xl border border-slate-600">Caso expandido: 4×2×4=32</button>
+</div>
+<div class="card p-3 bg-slate-950/70 text-[11px] text-slate-300">Con <b id="nRiskTxt">6 enlaces</b>, un Excel aún respira. Con <b>32</b>, sin SCM/EDI hay quiebres, duplicados y sobrecosto de bodega. <b class="text-cyan-300">Tu red actual de la obra aparece aquí.</b></div>
+</div>
+</div>
+<div class="flex justify-between"><button onclick="go(2)" class="px-5 py-2.5 rounded-xl text-xs border border-slate-600">← Atrás</button><button onclick="go(4)" class="btn-p px-5 py-2.5 rounded-xl text-xs">Siguiente: Ruteo y Logística <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+</section>
+
+<!-- ============ FASE 4 ============ -->
+<section id="fase4" class="fstep hidden space-y-4 fade">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="card p-4 space-y-3">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-truck-fast mr-1 text-orange-400"></i>4 · Ruteo y logística GT (Bárcenas → Zona 10)</h3>
+<p class="text-[11px] text-slate-400">La CA-9 Sur y la <b>Cuesta de Villalobos</b> mandan. La PMT restringe pesados <b>5–9h y 16–20h</b>. Compara despacho diurno vs <b>nocturno consolidado</b>.</p>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<div><label class="text-[11px] text-slate-400">Origen</label><select id="rtOrigen" onchange="calcRuta()"><option>Planta Bárcenas (Cementos Progreso)</option><option>Bodega Amatitlán (acabados)</option><option>Puerto Quetzal (importado)</option></select></div>
+<div><label class="text-[11px] text-slate-400">Destino</label><select id="rtDestino" onchange="calcRuta()"><option>Obra Zona 10 · Torre Confort</option><option>Obra Zona 10 · Torre Ejecutiva</option><option>Sala de ventas Zona 14</option></select></div>
+<div><label class="text-[11px] text-slate-400">Ventana de despacho</label><select id="rtHora" onchange="calcRuta()"><option value="diurno">Diurno 10:00 (pico PMT)</option><option value="nocturno" selected>Nocturno 22:00 (consolidado)</option><option value="madrugada">Madrugada 04:00</option></select></div>
+<div><label class="text-[11px] text-slate-400">Camiones</label><select id="rtCam" onchange="calcRuta()"><option value="1">1 camión (parcial)</option><option value="2" selected>2 camiones (consolidado)</option><option value="3">3 camiones (obra total)</option></select></div>
+</div>
+<svg viewBox="0 0 400 150" class="w-full h-36 bg-slate-950/70 rounded-xl border border-slate-800">
+<line x1="20" y1="110" x2="380" y2="30" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+<line id="routeLine" x1="20" y1="110" x2="380" y2="30" stroke="#22d3ee" stroke-width="3" class="route-anim" stroke-linecap="round"/>
+<circle cx="20" cy="110" r="8" fill="#f59e0b"/><text x="8" y="132" fill="#94a3b8" font-size="9">BÁRCENAS</text>
+<circle cx="200" cy="70" r="7" fill="#ef4444"/><text x="172" y="92" fill="#fca5a5" font-size="9">⚠ Villalobos</text>
+<circle cx="380" cy="30" r="8" fill="#34d399"/><text x="348" y="52" fill="#94a3b8" font-size="9">ZONA 10</text>
+</svg>
+<div id="rutaOut" class="text-xs card p-3 bg-slate-950/70"></div>
+<button onclick="confirmarDespacho()" class="btn-p w-full py-2.5 rounded-xl text-xs"><i class="fa-solid fa-circle-check mr-1"></i>Confirmar despacho y registrar en bitácora</button>
+</div>
+<div class="card p-4 space-y-3">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-shield-halved mr-1 text-emerald-400"></i>Stock de seguridad + posventa CRM</h3>
+<div class="grid grid-cols-3 gap-2 text-center">
+<div class="card p-3 bg-slate-950/70"><div class="text-[10px] text-slate-400 uppercase">Demanda/día</div><div class="kpi-num text-cyan-300" id="ssDem">—</div></div>
+<div class="card p-3 bg-slate-950/70"><div class="text-[10px] text-slate-400 uppercase">Lead time EDI</div><div class="kpi-num text-amber-300" id="ssLead">—</div></div>
+<div class="card p-3 bg-slate-950/70"><div class="text-[10px] text-slate-400 uppercase">Stock seguridad</div><div class="kpi-num text-emerald-300" id="ssStock">—</div></div>
+</div>
+<p class="text-[11px] text-slate-400">Fórmula didáctica: <span class="font-mono">SS = demanda diaria × días de interrupción vial (Villalobos ≈ 2)</span>. El SCM sincronizado con el TPS redirige rutas o reprograma desde subsedes.</p>
+<div class="card p-3 bg-slate-950/70 text-xs space-y-2">
+<div class="text-[11px] uppercase font-bold text-slate-400">Servicio posventa (el CRM no termina en la firma)</div>
+<select id="pvTipo"><option>Garantía de acabados (12 meses)</option><option>Mantenimiento preventivo</option><option>Llamada de seguimiento 30 días</option><option>Queja de entrega</option></select>
+<input id="pvNota" placeholder="Compromiso posventa…" class="w-full text-xs px-3 py-2">
+<button onclick="addPosventa()" class="btn-p w-full py-2 rounded-xl text-xs">Agendar posventa (sube el costo de cambio)</button>
+<ul id="posList" class="text-[11px] text-slate-300 space-y-1"></ul>
+</div>
+</div>
+</div>
+<div class="flex justify-between"><button onclick="go(3)" class="px-5 py-2.5 rounded-xl text-xs border border-slate-600">← Atrás</button><button onclick="go(5)" class="btn-p px-5 py-2.5 rounded-xl text-xs">Siguiente: Bitácora y Reporte <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+</section>
+
+<!-- ============ FASE 5 ============ -->
+<section id="fase5" class="fstep hidden space-y-4 fade">
+<div class="card p-4">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-brain mr-1 text-purple-400"></i>5 · Pensamiento crítico gerencial (escríbelo: sale en el PDF)</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs mt-2">
+<div><label class="text-[11px] text-slate-400">P1 · ¿Cómo resolvió tu CRM el “misterio del cliente anónimo” y qué costo de cambio creaste?</label><textarea id="q1" rows="3" class="w-full px-3 py-2" oninput="saveResp()"></textarea></div>
+<div><label class="text-[11px] text-slate-400">P2 · ¿Por qué la venta disparó sola la orden SCM? ¿Qué pasa si redigitas a mano?</label><textarea id="q2" rows="3" class="w-full px-3 py-2" oninput="saveResp()"></textarea></div>
+<div><label class="text-[11px] text-slate-400">P3 · Con N = P×F×D, ¿qué aprendiste al pasar de 4 a 32 enlaces?</label><textarea id="q3" rows="3" class="w-full px-3 py-2" oninput="saveResp()"></textarea></div>
+<div><label class="text-[11px] text-slate-400">P4 · ¿Despacho diurno o nocturno consolidado por Villalobos/PMT? Justifica con tu cálculo.</label><textarea id="q4" rows="3" class="w-full px-3 py-2" oninput="saveResp()"></textarea></div>
+<div class="sm:col-span-2 card p-3 bg-indigo-950/40 border-indigo-500/30"><label class="text-xs text-indigo-200 font-bold">P5 · Investigación en clase 🔍: investiga los tipos de CRM comerciales que existen, cuáles son los mejores, pon 4 marcas comerciales de importancia y su costo o modelo de negocio, y evalúa también cuáles son open source. Escríbelo aquí:</label><textarea id="q5" rows="4" class="w-full px-3 py-2 mt-2" placeholder="Ej. 1) Salesforce Sales Cloud (comercial, desde ~US$25/usuario/mes)... 2) HubSpot CRM... 3) Zoho CRM... 4) Microsoft Dynamics 365... Open source: SuiteCRM, Odoo CRM, EspoCRM, VTiger..." oninput="saveResp()"></textarea></div>
+</div>
+</div>
+<div class="card p-4">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<h3 class="font-bold heading-font text-sm"><i class="fa-solid fa-book-open mr-1 text-cyan-400"></i>Bitácora transaccional (TPS Log) — todo lo que hicieron en clase</h3>
+<span id="tpsCount" class="tag bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">0 eventos</span>
+</div>
+<div class="overflow-x-auto mt-2"><table class="w-full tbl"><thead><tr><th>Hora</th><th>Módulo</th><th>Evento</th><th>Detalle</th></tr></thead><tbody id="tpsTbody"></tbody></table></div>
+<div class="flex flex-wrap gap-2 mt-3">
+<button onclick="previewReport()" class="btn-p px-5 py-2.5 rounded-xl text-xs"><i class="fa-solid fa-eye mr-1"></i>Vista previa del expediente</button>
+<button onclick="doPrint()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950"><i class="fa-solid fa-print mr-1"></i>Imprimir / Descargar PDF</button>
+<span class="text-[11px] text-slate-400 self-center">Nombre sugerido: <b id="fname" class="font-mono text-slate-200">Sección_Carnet_ActividadCRM_SCM.pdf</b> · Igual que la Semana 13: usa “Guardar como PDF”.</span>
+</div>
+<div id="previewBox" class="hidden mt-3 sheet bg-white text-slate-800 rounded-2xl p-6 text-xs space-y-4"></div>
+</div>
+<div class="flex justify-between"><button onclick="go(4)" class="px-5 py-2.5 rounded-xl text-xs border border-slate-600">← Atrás</button><button onclick="doPrint()" class="btn-p px-5 py-2.5 rounded-xl text-xs"><i class="fa-solid fa-graduation-cap mr-1"></i>Entregar mi expediente</button></div>
+</section>
+
+<footer class="text-center text-[11px] text-slate-500 pt-2">Hecho con 💙 pedagógico por <b class="text-slate-300">Ruldin Ayala</b> · Informática I · UMG · Semana 14 CRM &amp; SCM · 2026 · Montos en Quetzales con fines didácticos.</footer>
+</div>
+
+<!-- REPORTE IMPRIMIBLE -->
+<div id="print-report"><div class="sheet bg-white rounded-xl border p-6 space-y-4" id="printBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATOS DUROS ================= */
+const PRECIOS={Confort:950000,Ejecutivo:1350000,Familiar:1850000,Penthouse:3200000};
+const AREAS={Confort:'68 m² · 2 hab',Ejecutivo:'95 m² · 3 hab',Familiar:'125 m² · 3 hab + estudio',Penthouse:'180 m² · 4 hab + roof'};
+const BOM={
+Confort:[['Concreto premezclado 3000 PSI','Cementos Progreso',42,'m³'],['Acero de refuerzo','Aceros de Guatemala',55,'qq'],['Porcelanato nacional','Samboro',68,'m²'],['Ventanería aluminio + vidrio','Vitrum GT',18,'m²'],['Grifería y loza','Importador Sur',4,'juegos']],
+Ejecutivo:[['Concreto premezclado 3000 PSI','Cementos Progreso',58,'m³'],['Acero de refuerzo','Aceros de Guatemala',76,'qq'],['Porcelanato nacional','Samboro',95,'m²'],['Ventanería aluminio + vidrio','Vitrum GT',26,'m²'],['Grifería y loza','Importador Sur',5,'juegos']],
+Familiar:[['Concreto premezclado 3000 PSI','Cementos Progreso',74,'m³'],['Acero de refuerzo','Aceros de Guatemala',98,'qq'],['Porcelanato nacional','Samboro',125,'m²'],['Ventanería aluminio + vidrio','Vitrum GT',34,'m²'],['Grifería y loza','Importador Sur',6,'juegos']],
+Penthouse:[['Concreto premezclado 3000 PSI','Cementos Progreso',110,'m³'],['Acero de refuerzo','Aceros de Guatemala',145,'qq'],['Porcelanato importado','Importador Sur',180,'m²'],['Ventanería premium','Vitrum GT',52,'m²'],['Grifería y loza premium','Importador Sur',8,'juegos']]};
+const STOCK0={'Concreto premezclado 3000 PSI':120,'Acero de refuerzo':180,'Porcelanato nacional':200,'Porcelanato importado':150,'Ventanería aluminio + vidrio':60,'Ventanería premium':40,'Grifería y loza':25,'Grifería y loza premium':18};
+const LEAD={'Cementos Progreso':1,'Aceros de Guatemala':2,'Samboro':3,'Vitrum GT':4,'Importador Sur':6};
+const ETAPAS=['Nuevo','Contactado','Cotizado','Precalificado','Aprobado FHA','Cierre de Venta'];
+const KEY='crm_scm14_db_v1';
+/* ================= ESTADO ================= */
+let DB=null;
+function blank(){return{prospectos:[],tps:[],ordenes:[],edi:[],despachos:[],posventa:[],alumno:{n:'',c:'',s:'',f:''},resp:{q1:'',q2:'',q3:'',q4:'',q5:''},sel:null,seq:1};}
+function load(){try{DB=JSON.parse(localStorage.getItem(KEY))||blank();}catch(e){DB=blank();}if(!DB.seq)DB.seq=1;if(!DB.resp)DB.resp={q1:'',q2:'',q3:'',q4:'',q5:''};if(DB.resp.q5===undefined)DB.resp.q5='';}
+function save(){localStorage.setItem(KEY,JSON.stringify(DB));}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600);}
+function now(){return new Date().toLocaleString('es-GT',{hour12:false});}
+function logTPS(mod,ev,det){DB.tps.push({h:now(),mod,ev,det});save();renderTPS();updateProg();}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function money(n){return 'Q '+Number(n).toLocaleString('es-GT',{minimumFractionDigits:2,maximumFractionDigits:2});}
+/* ================= NAV ================= */
+function go(n){document.querySelectorAll('.fstep').forEach(s=>s.classList.add('hidden'));document.getElementById('fase'+n).classList.remove('hidden');document.querySelectorAll('#stepper .stepbtn').forEach(b=>{b.classList.toggle('on',+b.dataset.s===n);if(+b.dataset.s<n)b.classList.add('done');});window.scrollTo({top:0,behavior:'smooth'});}
+/* ================= CRM ================= */
+function score(p){let s=40;if(p.ingresos==='Q40k+')s+=25;else if(p.ingresos==='Q25-40k')s+=15;else if(p.ingresos==='Q15-25k')s+=5;if(p.enganche.startsWith('30'))s+=15;else if(p.enganche.startsWith('20'))s+=8;if(p.urgencia==='Alta')s+=12;else if(p.urgencia==='Media')s+=6;if(p.fidel)s+=8;return Math.min(100,s);}
+let editingId=null;
+function formData(){return{nombre:document.getElementById('pNombre').value.trim(),tel:document.getElementById('pTelefono').value,email:document.getElementById('pEmail').value,canal:document.getElementById('pCanal').value,modelo:document.getElementById('pModeloInt').value,ingresos:document.getElementById('pIngresos').value,enganche:document.getElementById('pEnganche').value,urgencia:document.getElementById('pUrgencia').value,fidel:document.getElementById('pFidel').checked};}
+function clearForm(){document.getElementById('pNombre').value='';document.getElementById('pTelefono').value='';document.getElementById('pEmail').value='';document.getElementById('pCanal').value='Llamada';document.getElementById('pModeloInt').value='Confort';document.getElementById('pIngresos').value='Q15-25k';document.getElementById('pEnganche').value='20%';document.getElementById('pUrgencia').value='Media';document.getElementById('pFidel').checked=true;}
+function addProspecto(){const d=formData();if(!d.nombre){toast('Escribe el nombre del prospecto.');return;}
+if(editingId){const p=DB.prospectos.find(x=>x.id===editingId);Object.assign(p,d);p.sc=score(p);p.contactos.push({t:now(),tipo:'Edición de ficha',nota:'Datos del prospecto actualizados'});logTPS('CRM','Edita '+p.id,p.nombre+' · datos actualizados · scoring '+p.sc);editingId=null;document.getElementById('btnSaveProspecto').innerHTML='<i class="fa-solid fa-user-plus mr-1"></i>Registrar en el CRM (crea TPS)';document.getElementById('btnCancelEdit').classList.add('hidden');clearForm();save();renderProspectos();renderCotSel();toast('✅ Cambios guardados en '+p.id+'.');return;}
+const p={id:'P-'+String(DB.seq++).padStart(3,'0'),...d,etapa:'Nuevo',contactos:[{t:now(),tipo:'Captura '+d.canal,nota:'Alta en CRM sala Zona 10'}],cot:null,banco:null,fha:null};
+p.sc=score(p);DB.prospectos.push(p);DB.sel=p.id;logTPS('CRM','Alta de prospecto '+p.id,p.nombre+' · '+p.canal+' · scoring '+p.sc+' · '+(p.fidel?'identificado con tarjeta':'ANÓNIMO (misterio sin resolver)'));clearForm();renderProspectos();renderCotSel();toast('✅ Prospecto '+p.id+' registrado.');}
+function editP(id){const p=DB.prospectos.find(x=>x.id===id);if(!p)return;DB.sel=id;editingId=id;
+document.getElementById('pNombre').value=p.nombre;document.getElementById('pTelefono').value=p.tel||'';document.getElementById('pEmail').value=p.email||'';document.getElementById('pCanal').value=p.canal;document.getElementById('pModeloInt').value=p.modelo;document.getElementById('pIngresos').value=p.ingresos;document.getElementById('pEnganche').value=p.enganche;document.getElementById('pUrgencia').value=p.urgencia;document.getElementById('pFidel').checked=!!p.fidel;
+document.getElementById('btnSaveProspecto').innerHTML='<i class="fa-solid fa-floppy-disk mr-1"></i>Guardar cambios de '+p.id;document.getElementById('btnCancelEdit').classList.remove('hidden');
+document.getElementById('prospectForm').scrollIntoView({behavior:'smooth',block:'center'});toast('✎ Editando '+p.id+': modifica y pulsa Guardar cambios.');}
+function cancelEdit(){editingId=null;clearForm();document.getElementById('btnSaveProspecto').innerHTML='<i class="fa-solid fa-user-plus mr-1"></i>Registrar en el CRM (crea TPS)';document.getElementById('btnCancelEdit').classList.add('hidden');}
+function renderProspectos(){const q=(document.getElementById('q').value||'').toLowerCase();const tb=document.getElementById('prosTbody');const list=DB.prospectos.filter(p=>(p.nombre+p.id+p.etapa).toLowerCase().includes(q));
+tb.innerHTML=list.length?list.map(p=>{const col=p.sc>=75?'text-emerald-300':p.sc>=55?'text-amber-300':'text-rose-300';const ei=ETAPAS.indexOf(p.etapa);
+return `<tr class="${DB.sel===p.id?'bg-cyan-400/25 outline outline-2 outline-cyan-300':''}"><td><b>${esc(p.nombre)}</b> <span class="font-mono text-slate-500">${p.id}</span><br><span class="text-slate-400">${esc(p.canal)} · ${esc(p.modelo)} · ${p.fidel?'💳 identificado':'👻 anónimo'}</span></td><td class="text-slate-300">${money(PRECIOS[p.modelo]||0)}<br><span class="text-slate-500">${esc(p.ingresos)} · enganche ${esc(p.enganche)}</span></td><td><b class="${col}">${p.sc}</b><div class="bar w-16 mt-1"><i style="width:${p.sc}%"></i></div></td><td><span class="tag bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">${esc(p.etapa)}</span></td><td><div class="flex gap-1 flex-wrap"><button onclick="selP('${p.id}')" class="px-2 py-1 rounded-lg border border-cyan-500/40 text-cyan-300 text-[11px]">Ver</button><button onclick="editP('${p.id}')" class="px-2 py-1 rounded-lg border border-amber-500/40 text-amber-300 text-[11px]">✎ Editar</button>${ei<ETAPAS.length-1?`<button onclick="advP('${p.id}')" class="px-2 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[11px]">▶</button>`:''}<button onclick="delP('${p.id}')" class="px-2 py-1 rounded-lg border border-rose-500/40 text-rose-300 text-[11px]">✕</button></div></td></tr>`;}).join(''):'<tr><td colspan="5" class="text-center text-slate-500">Sin prospectos. Registra el primero ☝️</td></tr>';
+const tot=DB.prospectos.length,cie=DB.prospectos.filter(p=>p.etapa==='Cierre de Venta').length;const conv=tot?Math.round(cie/tot*100):0;const avg=tot?Math.round(DB.prospectos.reduce((a,p)=>a+p.sc,0)/tot):0;
+document.getElementById('kpis').innerHTML=[['👥 Cartera',tot,'text-cyan-300'],['🏆 Cierres',cie,'text-emerald-300'],['📈 Conversión',conv+'%','text-indigo-300'],['⭐ Scoring medio',avg,'text-amber-300']].map(k=>`<div class="card p-3 bg-slate-950/70 text-center"><div class="text-[10px] uppercase text-slate-400">${k[0]}</div><div class="kpi-num ${k[2]}">${k[1]}</div></div>`).join('');
+document.getElementById('pipeline').innerHTML=ETAPAS.map(e=>{const n=DB.prospectos.filter(p=>p.etapa===e);return `<div class="card p-2 bg-slate-950/60 pipe-col"><div class="font-bold text-indigo-300">${e} <span class="text-slate-500">(${n.length})</span></div>${n.map(p=>`<div class="mt-1 p-1.5 rounded-lg bg-slate-900 border border-slate-700 cursor-pointer hover:border-cyan-400" onclick="selP('${p.id}')">${esc(p.nombre.split(' ')[0])} <span class="text-slate-500">${p.id}</span></div>`).join('')||'<div class="text-slate-600 mt-1">—</div>'}</div>`;}).join('');
+renderContacts();}
+function selP(id){DB.sel=id;save();renderProspectos();}
+function advP(id){const p=DB.prospectos.find(x=>x.id===id);const i=ETAPAS.indexOf(p.etapa);if(i<ETAPAS.length-1){p.etapa=ETAPAS[i+1];p.contactos.push({t:now(),tipo:'Avance de etapa',nota:'→ '+p.etapa});logTPS('CRM','Avanza '+p.id,p.nombre+' → '+p.etapa);renderProspectos();}}
+function delP(id){if(!confirm('¿Eliminar '+id+' de la cartera?'))return;DB.prospectos=DB.prospectos.filter(p=>p.id!==id);logTPS('CRM','Baja '+id,'Prospecto descartado (limpieza de cartera)');renderProspectos();renderCotSel();}
+function addContacto(){const p=DB.prospectos.find(x=>x.id===DB.sel);if(!p){toast('Selecciona un prospecto (botón Ver).');return;}const t=document.getElementById('cTipo').value,n=document.getElementById('cNota').value||'Seguimiento registrado';p.contactos.push({t:now(),tipo:t,nota:n});if(p.etapa==='Nuevo')p.etapa='Contactado';logTPS('CRM','Contacto '+p.id,t+' · '+n);document.getElementById('cNota').value='';save();renderProspectos();}
+function renderContacts(){const p=DB.prospectos.find(x=>x.id===DB.sel);document.getElementById('contactLog').innerHTML=p?p.contactos.map(c=>`<li class="card p-2 bg-slate-950/60">🕒 ${c.t} · <b class="text-cyan-300">${esc(c.tipo)}</b> — ${esc(c.nota)}</li>`).join(''):'<li class="text-slate-500">Selecciona un prospecto para ver sus contactos.</li>';}
+/* ================= COTIZACIÓN + FHA ================= */
+function cuota(monto,anual,anios){const i=anual/12/100,n=anios*12;return monto*i/(1-Math.pow(1+i,-n));}
+function renderCotSel(){const s=document.getElementById('cotProspecto');s.innerHTML=DB.prospectos.map(p=>`<option value="${p.id}" ${DB.sel===p.id?'selected':''}>${p.id} · ${esc(p.nombre)} (${esc(p.etapa)})</option>`).join('')||'<option value="">— sin prospectos —</option>';if(!DB.sel&&DB.prospectos[0])DB.sel=DB.prospectos[0].id;syncCotForm();}
+function onCotProspecto(){DB.sel=document.getElementById('cotProspecto').value;save();syncCotForm();renderProspectos();const p=DB.prospectos.find(x=>x.id===DB.sel);toast(p?'👤 Ahora trabajas con '+p.id+' · '+p.nombre+'.':'Sin prospecto seleccionado.');}
+function syncCotForm(){const p=DB.prospectos.find(x=>x.id===DB.sel);
+document.querySelectorAll('.exp').forEach(b=>b.checked=false);
+document.getElementById('bancoOut').innerHTML='';
+if(!p){cotizar();expProgress();return;}
+document.getElementById('cotModelo').value=p.cot?p.cot.modelo:p.modelo;
+document.getElementById('cotEnganche').value=p.cot?String(p.cot.enganche):p.enganche.replace('%','');
+document.getElementById('cotPlazo').value=p.cot?String(p.cot.plazo):'20';
+document.getElementById('cotBanco').value=p.cot?p.cot.banco:'Banco Industrial';
+if(p.banco){document.querySelectorAll('.exp').forEach(b=>b.checked=true);
+document.getElementById('bancoOut').innerHTML=`📡 Expediente de <b>${p.id}</b> ya transmitido a <b>${p.banco.banco}</b>: <b>${p.banco.res}</b>${p.fha?` · 🛡️ FHA ${p.fha.poliza} APROBADO`:''}.`;}
+cotizar();expProgress();}
+function cotizar(){const id=document.getElementById('cotProspecto').value;DB.sel=id;const m=document.getElementById('cotModelo').value,e=+document.getElementById('cotEnganche').value,pl=+document.getElementById('cotPlazo').value,b=document.getElementById('cotBanco').value;const precio=PRECIOS[m];const eng=precio*e/100,fin=precio-eng,c=cuota(fin,7.5,pl),fha=fin*0.0045/12,tot=c+fha;
+document.getElementById('cotOut').innerHTML=`<div class="flex justify-between"><span class="text-slate-400">Precio ${m} (${AREAS[m]})</span><b>${money(precio)}</b></div><div class="flex justify-between"><span class="text-slate-400">Enganche ${e}%</span><b class="text-amber-300">${money(eng)}</b></div><div class="flex justify-between"><span class="text-slate-400">Monto a financiar (${b})</span><b class="text-cyan-300">${money(fin)}</b></div><div class="flex justify-between"><span class="text-slate-400">Cuota ${pl} años @7.5%</span><b>${money(c)}</b></div><div class="flex justify-between"><span class="text-slate-400">Seguro FHA/mes</span><b>${money(fha)}</b></div><div class="flex justify-between text-sm pt-1 border-t border-slate-700"><span>Cuota total estimada</span><b class="text-emerald-300">${money(tot)}</b></div>`;
+document.getElementById('cotBar').style.width=Math.min(100,e*2.2)+'%';}
+function guardarCotizacion(){const p=DB.prospectos.find(x=>x.id===DB.sel);if(!p){toast('Primero captura un prospecto.');go(1);return;}p.modelo=document.getElementById('cotModelo').value;p.cot={modelo:p.modelo,enganche:+document.getElementById('cotEnganche').value,plazo:+document.getElementById('cotPlazo').value,banco:document.getElementById('cotBanco').value,cuotaTxt:document.getElementById('cotOut').innerText};if(ETAPAS.indexOf(p.etapa)<2)p.etapa='Cotizado';p.contactos.push({t:now(),tipo:'Cotización emitida',nota:p.modelo+' · enganche '+p.cot.enganche+'% · '+p.cot.banco});logTPS('CRM','Cotización '+p.id,p.modelo+' '+money(PRECIOS[p.modelo])+' · eng '+p.cot.enganche+'% · '+p.cot.plazo+'a · '+p.cot.banco);save();renderProspectos();toast('💾 Cotización guardada.');}
+function expProgress(){const boxes=[...document.querySelectorAll('.exp')];const n=boxes.filter(b=>b.checked).length;document.getElementById('expBar').style.width=(n/4*100)+'%';document.getElementById('expTxt').textContent=n===4?'100% · Listo para transmitir por EDI al banco.':(n/4*100)+'% · Faltan documentos para transmitir por EDI.';}
+function enviarBanco(){const p=DB.prospectos.find(x=>x.id===DB.sel);if(!p||!p.cot){toast('Guarda primero la cotización.');return;}const docs=[...document.querySelectorAll('.exp')].filter(b=>b.checked).map(b=>b.value);if(docs.length<4){toast('Expediente incompleto: marca los 4 documentos.');return;}
+const ok=p.sc>=55&&p.cot.enganche>=20;p.banco={docs,res:ok?'PREAPROBADO':'OBSERVADO',banco:p.cot.banco};if(ETAPAS.indexOf(p.etapa)<3)p.etapa='Precalificado';
+document.getElementById('bancoOut').innerHTML=`📡 EDI → <b>${p.cot.banco}</b>: expediente ${p.id} transmitido (DPI+ingresos+FHA+buró).<br>🏦 Respuesta del banco: <b class="${ok?'text-emerald-300':'text-rose-300'}">${p.banco.res}</b> ${ok?'· tasa 7.5% reservada 15 días.':'· scoring bajo o enganche <20%: solicita codeudor o mayor enganche.'}`;
+logTPS('CRM/B2B','EDI expediente '+p.id,'→ '+p.cot.banco+' · '+docs.join(', ')+' · Respuesta: '+p.banco.res);save();renderProspectos();}
+function gestionarFHA(){const p=DB.prospectos.find(x=>x.id===DB.sel);if(!p||!p.banco){toast('Primero transmite el expediente al banco.');return;}if(p.banco.res!=='PREAPROBADO'){toast('El banco observó el caso: corrige enganche/scoring.');return;}
+p.fha={poliza:'FHA-'+Math.floor(100000+Math.random()*899999),dictamen:'APROBADO'};p.etapa='Aprobado FHA';p.contactos.push({t:now(),tipo:'FHA aprobado',nota:'Póliza '+p.fha.poliza});
+document.getElementById('bancoOut').innerHTML+=`<br>🛡️ <b class="text-emerald-300">FHA APROBADO</b> · póliza ${p.fha.poliza} · seguro hipotecario emitido. El CRM ya puede pasar a <b>Cierre de Venta</b>.`;
+logTPS('CRM/FHA','Dictamen '+p.id,'Póliza '+p.fha.poliza+' APROBADO · listo para escriturar');save();renderProspectos();toast('🛡️ FHA aprobado.');}
+function cerrarVenta(){const p=DB.prospectos.find(x=>x.id===DB.sel);if(!p){toast('Selecciona un prospecto.');return;}if(!p.fha){toast('Aún falta la aprobación FHA (flujo: cotizar → EDI banco → FHA).');return;}
+p.etapa='Cierre de Venta';p.contactos.push({t:now(),tipo:'Cierre de venta',nota:'Escrituración programada + posventa activada'});logTPS('CRM','CIERRE '+p.id,p.nombre+' · '+p.modelo+' '+money(PRECIOS[p.modelo])+' · escrituración en 15 días · costo de cambio creado (historial+tasa+acompañamiento)');
+document.getElementById('bomModelo').value=p.modelo;dispararOrden(true);save();renderProspectos();toast('🎉 ¡Venta cerrada! La orden SCM se disparó sola.');}
+/* ================= SCM ================= */
+function stockOf(ins){const usado=DB.ordenes.reduce((a,o)=>a+(o.insumos[ins]||0),0);return STOCK0[ins]-usado;}
+function renderBOM(){const m=document.getElementById('bomModelo').value,q=+document.getElementById('bomQty').value;document.getElementById('bomTbody').innerHTML=BOM[m].map(r=>{const tot=r[2]*q,st=stockOf(r[0]);const ok=st>=tot;return `<tr><td><b>${r[0]}</b><br><span class="text-slate-500">BOM: ${r[2]} ${r[3]}/apto</span></td><td class="text-slate-400">${r[1]}</td><td class="text-center">${r[2]} ${r[3]}</td><td class="text-center"><b>${tot}</b> ${r[3]}</td><td class="text-center">${st}</td><td>${ok?'<span class="tag bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">OK</span>':'<span class="tag bg-rose-500/15 text-rose-300 border border-rose-500/30">FALTANTE</span>'}</td></tr>`;}).join('');}
+function dispararOrden(auto){const m=document.getElementById('bomModelo').value,q=+document.getElementById('bomQty').value;const ins={};BOM[m].forEach(r=>ins[r[0]]=(ins[r[0]]||0)+r[2]*q);
+const falt=BOM[m].filter(r=>stockOf(r[0])<r[2]*q).map(r=>r[0]);const o={id:'OC-'+String(DB.ordenes.length+1).padStart(3,'0'),h:now(),modelo:m,qty:q,insumos:ins,estado:falt.length?'PARCIAL (faltante)':'RESERVADA',edi:'PENDIENTE'};DB.ordenes.push(o);
+logTPS('SCM','Orden '+o.id+' ('+(auto?'auto por cierre':'manual')+')',m+' ×'+q+' · '+Object.entries(ins).map(e=>e[0]+': '+e[1]).join(' · ')+(falt.length?' · ⚠ FALTANTE: '+falt.join(', '):' · stock suficiente'));save();renderBOM();renderEDI();calcSS();toast('📦 '+o.id+' creada: '+o.estado);}
+function renderEDI(){const provs=[...new Set([].concat(...Object.values(BOM).map(a=>a.map(r=>r[1]))))];
+document.getElementById('ediCards').innerHTML=provs.map(p=>{const done=DB.edi.filter(e=>e.prov===p).length;
+return `<div class="card p-3 bg-slate-950/70"><b>${p}</b><div class="text-slate-400">Lead time: ${LEAD[p]} día(s) · EDI estándar</div><div class="text-[11px] mt-1">${done?'<span class="text-emerald-300">✔ '+done+' transmisión(es)</span>':'<span class="text-slate-500">Sin transmisiones aún</span>'}</div><button onclick="ediProv('${p}')" class="mt-2 w-full py-1.5 rounded-xl text-[11px] font-bold border border-cyan-500/40 text-cyan-300">Transmitir EDI → ${p}</button></div>`;}).join('');
+document.getElementById('ediLog').innerHTML=DB.edi.map(e=>`<li>📡 ${e.h} · <b>${e.prov}</b>: ${e.det}</li>`).join('')||'<li class="text-slate-500">Aún sin transmisiones EDI.</li>';}
+function ediProv(prov){const pendientes=DB.ordenes.filter(o=>o.edi!=='TRANSMITIDA');if(!pendientes.length){toast('No hay órdenes pendientes de EDI. Dispara una orden primero.');return;}
+pendientes.forEach(o=>o.edi='TRANSMITIDA');DB.edi.push({h:now(),prov,det:pendientes.map(o=>o.id).join(', ')+' · OC confirmada · entrega en '+LEAD[prov]+' día(s)'});logTPS('SCM/EDI','Transmisión B2B → '+prov,pendientes.map(o=>o.id).join(', ')+' confirmada(s)');save();renderEDI();calcSS();toast('📡 EDI transmitido a '+prov+'.');}
+function transmitirTodoEDI(){['Cementos Progreso','Aceros de Guatemala','Samboro'].forEach(p=>{if(DB.ordenes.some(o=>o.edi!=='TRANSMITIDA'))ediProv(p);});}
+function calcN(){const P=+document.getElementById('rP').value,F=+document.getElementById('rF').value,D=+document.getElementById('rD').value;document.getElementById('vP').textContent=P;document.getElementById('vF').textContent=F;document.getElementById('vD').textContent=D;const N=P*F*D;document.getElementById('nOut').textContent=N;document.getElementById('nFormula').textContent=`N = ${P} × ${F} × ${D} = ${N}`;
+const r=document.getElementById('nRisk');if(N<=6){r.textContent='Riesgo bajo · coordinable manual';r.className='tag inline-block mt-1 bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';}else if(N<=16){r.textContent='Riesgo medio · exige SCM básico';r.className='tag inline-block mt-1 bg-amber-500/15 text-amber-300 border border-amber-500/30';}else{r.textContent='Riesgo alto · exige SCM + EDI avanzado';r.className='tag inline-block mt-1 bg-rose-500/15 text-rose-300 border border-rose-500/30';}
+document.getElementById('nRiskTxt').textContent=N+' enlaces';
+const svg=document.getElementById('netSvg');let h='';const y1=i=>30+i*(100/Math.max(1,P-1||1)),y2=i=>30+i*(100/Math.max(1,D-1||1));
+for(let i=0;i<P;i++)h+=`<circle cx="40" cy="${y1(i)}" r="9" fill="#6366f1"/><text x="28" y="${y1(i)+3}" font-size="8" fill="#fff">${i+1}</text>`;
+for(let i=0;i<F;i++)h+=`<rect x="185" y="${55+i*28}" width="30" height="18" rx="4" fill="#06b6d4"/>`;
+for(let i=0;i<D;i++)h+=`<circle cx="360" cy="${y2(i)}" r="9" fill="#34d399"/>`;
+for(let i=0;i<P;i++)for(let j=0;j<F;j++)h+=`<line x1="49" y1="${y1(i)}" x2="185" y2="${64+j*28}" stroke="#334155" stroke-width="1"/>`;
+for(let j=0;j<F;j++)for(let k=0;k<D;k++)h+=`<line x1="215" y1="${64+j*28}" x2="351" y2="${y2(k)}" stroke="#334155" stroke-width="1"/>`;
+h+=`<text x="20" y="152" font-size="9" fill="#94a3b8">Proveedores (${P})</text><text x="175" y="152" font-size="9" fill="#94a3b8">Plantas (${F})</text><text x="320" y="152" font-size="9" fill="#94a3b8">Distrib (${D})</text>`;
+svg.innerHTML=h;}
+function setN(p,f,d){document.getElementById('rP').value=p;document.getElementById('rF').value=f;document.getElementById('rD').value=d;calcN();logTPS('SCM/LAB','Simula N='+p*f*d,`P=${p} F=${f} D=${d}`);}
+/* ================= RUTA ================= */
+function calcRuta(){const h=document.getElementById('rtHora').value,cam=+document.getElementById('rtCam').value,org=document.getElementById('rtOrigen').value;
+let base=org.includes('Quetzal')?150:45;let extra=h==='diurno'?55:(h==='madrugada'?10:-5);let t=base+extra;let costo=cam*850+(h==='diurno'?600:0)+(org.includes('Quetzal')?2200:0);let riesgo=h==='diurno'?'ALTO · PMT 16–20h + Villalobos congestionado · probabilidad de incumplimiento 65%':(h==='nocturno'?'BAJO · ventana libre PMT · Villalobos fluido · incumplimiento <10%':'MEDIO-BAJO · madrugada libre pero con costo de horas extra');
+document.getElementById('rutaOut').innerHTML=`<b>Ruta:</b> ${esc(org)} → ${esc(document.getElementById('rtDestino').value)}<br>⏱️ <b>${t} min</b> por camión · 🚛 ${cam} camión(es) · 💰 <b>${money(costo)}</b> flete total<br>⚠️ Riesgo: <b class="${h==='nocturno'?'text-emerald-300':'text-amber-300'}">${riesgo}</b><br>💡 Recomendación: <b class="text-cyan-300">${h==='nocturno'?'despacho nocturno consolidado: 1 viaje, menos diésel, sin multa PMT':'cambia a nocturno 22:00 y consolida carga'}</b>`;
+document.getElementById('routeLine').setAttribute('stroke',h==='nocturno'?'#34d399':'#f59e0b');
+return{t,costo,riesgo};}
+function confirmarDespacho(){const r=calcRuta();const d={h:now(),org:document.getElementById('rtOrigen').value,dest:document.getElementById('rtDestino').value,vent:document.getElementById('rtHora').value,cam:document.getElementById('rtCam').value,t:r.t,costo:r.costo};DB.despachos.push(d);logTPS('SCM/LOG','Despacho confirmado',d.org+' → '+d.dest+' · '+d.vent+' · '+d.cam+' camión(es) · '+d.t+' min · '+money(d.costo));save();calcSS();toast('🚛 Despacho registrado en bitácora.');}
+function calcSS(){const ordenes=DB.ordenes.length||1;const dem=(0.6*ordenes).toFixed(1);document.getElementById('ssDem').textContent=dem+' u/d';document.getElementById('ssLead').textContent='2–6 d';document.getElementById('ssStock').textContent=(dem*2).toFixed(1)+' u';}
+function addPosventa(){const t=document.getElementById('pvTipo').value,n=document.getElementById('pvNota').value||'Compromiso registrado';DB.posventa.push({h:now(),t,n});logTPS('CRM/POSVENTA',t,n);document.getElementById('pvNota').value='';save();renderPos();toast('💛 Posventa agendada: sube el costo de cambio.');}
+function renderPos(){document.getElementById('posList').innerHTML=DB.posventa.map(p=>`<li class="card p-2 bg-slate-950/60">🛎️ ${p.h} · <b>${esc(p.t)}</b> — ${esc(p.n)}</li>`).join('')||'<li class="text-slate-500">Sin tickets posventa aún.</li>';}
+/* ================= ALUMNO / RESP / TPS ================= */
+function saveAlumno(){DB.alumno={n:document.getElementById('alNombre').value,c:document.getElementById('alCarnet').value,s:document.getElementById('alSeccion').value,f:document.getElementById('alFecha').value};save();document.getElementById('fname').textContent=`${DB.alumno.s||'Sección'}_${DB.alumno.c||'Carnet'}_ActividadCRM_SCM.pdf`;}
+function saveResp(){DB.resp={q1:document.getElementById('q1').value,q2:document.getElementById('q2').value,q3:document.getElementById('q3').value,q4:document.getElementById('q4').value,q5:document.getElementById('q5').value};save();updateProg();}
+function renderTPS(){document.getElementById('tpsCount').textContent=DB.tps.length+' eventos';document.getElementById('tpsTbody').innerHTML=DB.tps.map(t=>`<tr><td class="font-mono text-slate-400 whitespace-nowrap">${t.h}</td><td><span class="tag bg-slate-800 text-slate-300">${esc(t.mod)}</span></td><td class="font-semibold">${esc(t.ev)}</td><td class="text-slate-400">${esc(t.det)}</td></tr>`).join('')||'<tr><td colspan="4" class="text-center text-slate-500">Sin eventos: cada clic crea bitácora.</td></tr>';}
+function updateProg(){let p=0;if(DB.prospectos.length)p+=20;if(DB.prospectos.some(x=>x.fha))p+=20;if(DB.ordenes.length)p+=20;if(DB.despachos.length)p+=20;if(DB.resp.q1&&DB.resp.q2&&DB.resp.q3&&DB.resp.q4&&DB.resp.q5)p+=20;
+document.getElementById('progBar').style.width=p+'%';document.getElementById('progTxt').textContent=p+'% · '+(p===100?'¡Listo para el PDF! 🎓':p>=60?'Bien: cierra logística y escribe tu análisis':'Sigue el stepper 1→5');
+const ck=(id,on)=>{const e=document.getElementById(id);e.className='tag '+(on?'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30':'bg-slate-800 text-slate-400');};
+ck('ck1',DB.prospectos.length>0);ck('ck2',DB.prospectos.some(x=>x.fha));ck('ck3',DB.ordenes.length>0&&DB.edi.length>0);ck('ck4',DB.despachos.length>0);ck('ck5',p===100);}
+/* ================= REPORTE ================= */
+function reportHTML(){const a=DB.alumno;const cierres=DB.prospectos.filter(p=>p.etapa==='Cierre de Venta');const ventas=DB.prospectos.filter(p=>p.fha);
+const ords=DB.ordenes.map(o=>`<tr><td style="border:1px solid #999;padding:4px">${o.id} · ${o.h}</td><td style="border:1px solid #999;padding:4px">${o.modelo} ×${o.qty}</td><td style="border:1px solid #999;padding:4px">${Object.entries(o.insumos).map(e=>e[0]+': <b>'+e[1]+'</b>').join('<br>')}</td><td style="border:1px solid #999;padding:4px">${o.estado} · EDI ${o.edi}</td></tr>`).join('')||'<tr><td colspan="4" style="border:1px solid #999;padding:4px">Sin órdenes (cierra una venta para disparar el SCM).</td></tr>';
+return `<div style="display:flex;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:8px">
+<div><div style="font-size:10px;color:#555">UNIVERSIDAD MARIANO GÁLVEZ · INFORMÁTICA I · SEMANA 14</div>
+<h1 style="font-size:20px;margin:0">EXPEDIENTE DE CIERRE DE VENTA Y ORDEN DE SUMINISTRO</h1>
+<div style="font-size:11px">Desarrolladora Inmobiliaria Las Américas S.A. · Preventa Zona 10 · Enfoque CRM → SCM → EDI → Logística</div></div>
+<div style="text-align:right;font-size:10px">Fecha: <b>${esc(a.f||'—')}</b><br>Código auditoría: <b>CRM14-${String(DB.tps.length).padStart(4,'0')}</b><br>Eventos bitácora: <b>${DB.tps.length}</b></div></div>
+<div style="background:#f1f5f9;border:1px solid #999;padding:8px;font-size:11px"><b>1 · ESTUDIANTE:</b> ${esc(a.n||'—')} · Carnet: <b>${esc(a.c||'—')}</b> · Sección: <b>${esc(a.s||'—')}</b></div>
+<div style="font-size:11px"><b>2 · CARTERA CRM:</b> ${DB.prospectos.length} prospecto(s) · ${ventas.length} con FHA · ${cierres.length} cierre(s).<br>${DB.prospectos.map(p=>`• ${p.id} ${esc(p.nombre)} · ${p.canal} · ${p.modelo} ${money(PRECIOS[p.modelo])} · scoring ${p.sc} · etapa <b>${p.etapa}</b>${p.cot?` · cuota ${money(cuota(PRECIOS[p.modelo]*(1-p.cot.enganche/100),7.5,p.cot.plazo))}/mes ${p.cot.plazo}a ${p.cot.banco}`:''}${p.fha?` · FHA ${p.fha.poliza}`:''}`).join('<br>')||'Sin prospectos.'}</div>
+<div style="font-size:11px"><b>3 · EXPEDIENTE BANCARIO + FHA:</b><br>${DB.prospectos.filter(p=>p.banco).map(p=>`• ${p.id}: EDI → ${p.banco.banco} · ${p.banco.res}${p.fha?' · FHA '+p.fha.poliza+' APROBADO':''}`).join('<br>')||'Sin transmisiones (completa expediente 4/4 en Fase 2).'}</div>
+<div style="font-size:11px"><b>4 · ÓRDENES SCM (disparo automático por venta):</b><table style="width:100%;border-collapse:collapse;font-size:10px"><tr><th style="border:1px solid #999;padding:4px;background:#eee">Orden</th><th style="border:1px solid #999;padding:4px;background:#eee">Modelo</th><th style="border:1px solid #999;padding:4px;background:#eee">Insumos</th><th style="border:1px solid #999;padding:4px;background:#eee">Estado</th></tr>${ords}</table></div>
+<div style="font-size:11px"><b>5 · EDI/B2B:</b><br>${DB.edi.map(e=>`• ${e.h} → ${e.prov}: ${e.det}`).join('<br>')||'Sin EDI.'}<br><b>6 · DESPACHOS:</b><br>${DB.despachos.map(d=>`• ${d.h}: ${d.org} → ${d.dest} · ${d.vent} · ${d.cam} camión(es) · ${d.t} min · ${money(d.costo)}`).join('<br>')||'Sin despachos.'}<br><b>7 · POSVENTA:</b><br>${DB.posventa.map(p=>`• ${p.h} ${p.t}: ${p.n}`).join('<br>')||'Sin tickets.'}</div>
+<div style="font-size:11px"><b>8 · ANÁLISIS GERENCIAL DEL ESTUDIANTE:</b><br><b>P1 Anónimo→costo de cambio:</b> ${esc(DB.resp.q1||'—')}<br><b>P2 Venta dispara SCM:</b> ${esc(DB.resp.q2||'—')}<br><b>P3 N=P×F×D:</b> ${esc(DB.resp.q3||'—')}<br><b>P4 Ruta PMT/Villalobos:</b> ${esc(DB.resp.q4||'—')}<br><b>P5 Investigación CRM comerciales vs open source:</b> ${esc(DB.resp.q5||'—')}</div>
+<div style="font-size:10px"><b>9 · BITÁCORA TPS COMPLETA:</b><table style="width:100%;border-collapse:collapse;font-size:9px"><tr><th style="border:1px solid #999;padding:3px;background:#eee">Hora</th><th style="border:1px solid #999;padding:3px;background:#eee">Módulo</th><th style="border:1px solid #999;padding:3px;background:#eee">Evento</th><th style="border:1px solid #999;padding:3px;background:#eee">Detalle</th></tr>${DB.tps.map(t=>`<tr><td style="border:1px solid #999;padding:3px">${t.h}</td><td style="border:1px solid #999;padding:3px">${esc(t.mod)}</td><td style="border:1px solid #999;padding:3px">${esc(t.ev)}</td><td style="border:1px solid #999;padding:3px">${esc(t.det)}</td></tr>`).join('')}</table></div>
+<div style="font-size:10px;color:#333;border-top:1px solid #111;padding-top:6px">Declaro que esta bitácora refleja mi trabajo en clase (30–40 min). Firma: ________________________ · Catedrático: <b>Ruldin Ayala</b> · Montos en GTQ con fines didácticos.</div>`;}
+function previewReport(){if(!DB.alumno.n||!DB.alumno.c){toast('Completa Nombre y Carnet para el reporte.');return;}document.getElementById('printBody').innerHTML=reportHTML();const box=document.getElementById('previewBox');box.innerHTML=reportHTML();box.classList.remove('hidden');box.scrollIntoView({behavior:'smooth'});logTPS('REPORTE','Vista previa','Expediente + bitácora generados');}
+function doPrint(){if(!DB.alumno.n||!DB.alumno.c){toast('Completa Nombre y Carnet para el reporte.');return;}document.getElementById('printBody').innerHTML=reportHTML();document.title=(DB.alumno.s||'Sección')+'_'+(DB.alumno.c||'Carnet')+'_ActividadCRM_SCM';logTPS('REPORTE','Imprime PDF',document.title+'.pdf');window.print();}
+function resetDB(){if(!confirm('¿Borrar toda la simulación de este navegador?'))return;localStorage.removeItem(KEY);location.reload();}
+/* ================= INIT ================= */
+load();document.getElementById('alNombre').value=DB.alumno.n||'';document.getElementById('alCarnet').value=DB.alumno.c||'';document.getElementById('alSeccion').value=DB.alumno.s||'';document.getElementById('alFecha').value=DB.alumno.f||new Date().toISOString().slice(0,10);
+['q1','q2','q3','q4','q5'].forEach(k=>document.getElementById(k).value=DB.resp[k]||'');
+if(!DB.tps.length)DB.tps.push({h:now(),mod:'SISTEMA',ev:'Sesión iniciada',det:'Simulador CRM & SCM Zona 10 · base local lista'});
+save();saveAlumno();renderProspectos();renderCotSel();renderBOM();renderEDI();renderPos();renderTPS();calcN();calcRuta();calcSS();updateProg();saveResp();
+</script>
+</body>
+</html>

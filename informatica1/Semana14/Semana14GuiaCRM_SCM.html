@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es-GT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semana 14 · Guía CRM & SCM | Informática I - UMG</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--bg:#0B0F19;--panel:#111827;--line:#1f2937;--cyan:#22d3ee;--violet:#a78bfa;--emerald:#34d399;--amber:#fbbf24}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#e2e8f0;margin:0}
+.heading-font{font-family:'Space Grotesk',sans-serif}
+.progress-bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#22d3ee,#818cf8,#34d399);z-index:100}
+.navbar{position:sticky;top:0;z-index:50;background:rgba(2,6,23,.92);backdrop-filter:blur(10px);border-bottom:1px solid #1e293b}
+.nav-inner{max-width:1200px;margin:auto;display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem}
+.logo{font-weight:800;font-size:1.05rem}.logo span{background:linear-gradient(90deg,#22d3ee,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{color:#94a3b8;font-weight:500}
+.nav-links{display:flex;gap:.4rem;margin-left:auto;align-items:center;flex-wrap:wrap}
+.nav-links a{color:#cbd5e1;text-decoration:none;font-size:.78rem;padding:.45rem .7rem;border-radius:.6rem;border:1px solid transparent}
+.nav-links a:hover{background:#0f172a;border-color:#1e293b;color:#fff}
+.btn-back-menu{background:#0f172a;border:1px solid #334155!important;color:#e2e8f0!important;font-weight:700}
+.hamburger{display:none;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:.6rem;padding:.4rem .7rem;margin-left:auto}
+@media(max-width:900px){.nav-links{display:none;flex-direction:column;align-items:stretch;width:100%}.nav-links.open{display:flex}.hamburger{display:block}}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid #1e293b;background:radial-gradient(900px 400px at 15% 0%,rgba(34,211,238,.14),transparent),radial-gradient(900px 420px at 85% 10%,rgba(129,140,248,.16),transparent),#0B0F19}
+.hero-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:1.2rem;padding:2.2rem 1rem 1.6rem}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#67e8f9;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);padding:.35rem .7rem;border-radius:999px}
+.hero h1{font-size:clamp(1.7rem,4vw,2.9rem);line-height:1.05;margin:.7rem 0}
+.hl{background:linear-gradient(90deg,#22d3ee,#a78bfa,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{color:#94a3b8;font-size:.95rem;line-height:1.6}
+.hero-stats{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.hstat{background:rgba(15,23,42,.8);border:1px solid #1e293b;border-radius:1rem;padding:.7rem 1rem;min-width:120px;text-align:center}
+.hstat b{font-size:1.3rem;display:block}.hstat span{font-size:.68rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em}
+.hero-cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:.8rem;padding:.75rem 1.1rem;font-weight:800;font-size:.85rem;text-decoration:none;border:1px solid #334155;cursor:pointer;transition:.2s}
+.btn.primary{background:linear-gradient(90deg,#06b6d4,#6366f1);color:#020617;border:none;box-shadow:0 8px 30px rgba(34,211,238,.25)}
+.btn.primary:hover{transform:translateY(-2px)}
+.btn.ghost{background:#0f172a;color:#e2e8f0}.btn.ghost:hover{border-color:#22d3ee}
+.btn.small{padding:.5rem .8rem;font-size:.78rem}
+.btn.amber{background:linear-gradient(90deg,#f59e0b,#f97316);color:#1c0a00;border:none}
+.console{background:#020617;border:1px solid #1e293b;border-radius:1.2rem;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.term-head{display:flex;gap:.4rem;align-items:center;padding:.6rem .9rem;background:#0f172a;color:#94a3b8;font-size:.75rem;border-bottom:1px solid #1e293b}
+.term-head span{width:10px;height:10px;border-radius:50%;background:#334155;display:inline-block}
+.term-body{padding:1rem;font-family:ui-monospace,monospace;font-size:.8rem;line-height:1.7;color:#cbd5e1;min-height:220px}
+.ok{color:#34d399;font-weight:700}.warn{color:#fbbf24;font-weight:700}.bad{color:#f87171;font-weight:700}.cy{color:#22d3ee}
+.blink{animation:bl 1.1s infinite}@keyframes bl{50%{opacity:.25}}
+.flowdots{display:flex;gap:.35rem;margin-top:.7rem;flex-wrap:wrap}
+.fdot{font-size:.68rem;font-weight:800;padding:.3rem .6rem;border-radius:999px;background:#0f172a;border:1px solid #334155;color:#94a3b8}
+.fdot.on{background:rgba(52,211,153,.15);border-color:#34d399;color:#6ee7b7}
+.section{max-width:1200px;margin:auto;padding:1.6rem 1rem}
+.section.alt{background:linear-gradient(180deg,rgba(15,23,42,.6),rgba(11,15,25,0));border-top:1px solid #111c33;border-bottom:1px solid #111c33}
+.mision{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#020617;background:linear-gradient(90deg,#22d3ee,#a78bfa);padding:.3rem .7rem;border-radius:.6rem;margin-bottom:.5rem}
+.section h2{font-size:1.35rem;margin:.2rem 0 .4rem}.section h2 small{color:#64748b;font-weight:500;font-size:.8rem}
+.lead{color:#94a3b8;font-size:.9rem;line-height:1.65;max-width:900px}
+.card{background:rgba(15,23,42,.75);border:1px solid #1e293b;border-radius:1.1rem;padding:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:850px){.grid2{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}@media(max-width:850px){.grid3{grid-template-columns:1fr}}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}@media(max-width:900px){.grid4{grid-template-columns:1fr 1fr}}@media(max-width:560px){.grid4{grid-template-columns:1fr}}
+.flip{perspective:900px;cursor:pointer}.flip-inner{transition:transform .6s;transform-style:preserve-3d;position:relative;min-height:180px}
+.flip.on .flip-inner{transform:rotateY(180deg)}
+.face{backface-visibility:hidden;position:absolute;inset:0;padding:1rem;border-radius:1rem;border:1px solid #1e293b;display:flex;flex-direction:column;justify-content:center}
+.face.front{background:#0f172a}.face.back{background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(129,140,248,.15));transform:rotateY(180deg)}
+.pill{font-size:.65rem;font-weight:800;padding:.2rem .55rem;border-radius:999px;display:inline-block}
+.tnode{flex:1;min-width:180px;background:#0f172a;border:1px solid #1e293b;border-radius:1rem;padding:.9rem;cursor:pointer;transition:.2s;position:relative}
+.tnode:hover{border-color:#22d3ee;transform:translateY(-2px)}.tnode.active{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+.tnode .yr{font-size:.65rem;font-weight:800;color:#22d3ee;letter-spacing:.08em}
+table.cmp{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.8rem}
+table.cmp th,table.cmp td{border:1px solid #1e293b;padding:.6rem;text-align:left;vertical-align:top}
+table.cmp th{background:#0f172a;color:#67e8f9}
+.o2c{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.step{flex:1;min-width:140px;background:#0f172a;border:2px dashed #334155;border-radius:1rem;padding:.8rem;text-align:center;cursor:pointer;transition:.2s}
+.step.lit{border-style:solid;border-color:#34d399;background:rgba(52,211,153,.1)}
+.step.badx{border-color:#f87171;background:rgba(248,113,113,.08)}
+.step b{display:block;font-size:.85rem}.step small{color:#94a3b8;font-size:.7rem}
+.ledger{font-family:ui-monospace,monospace;font-size:.78rem;background:#020617;border:1px solid #1e293b;border-radius:.9rem;padding:.9rem;line-height:1.7}
+.kpi{background:linear-gradient(135deg,#0f172a,#111c33);border:1px solid #1e293b;border-radius:1rem;padding:.9rem;text-align:center}
+.kpi b{font-size:1.25rem;display:block}.kpi span{font-size:.68rem;color:#94a3b8}
+input,select,textarea{width:100%;background:#020617;border:1px solid #334155;color:#e2e8f0;border-radius:.7rem;padding:.65rem .8rem;font-size:.85rem;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+label.lbl{font-size:.72rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;display:block;margin:.6rem 0 .3rem}
+.sectabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.sectab{padding:.55rem .9rem;border-radius:.8rem;background:#0f172a;border:1px solid #334155;color:#cbd5e1;font-size:.8rem;font-weight:700;cursor:pointer}
+.sectab.on{background:linear-gradient(90deg,#06b6d4,#6366f1);color:#020617;border-color:transparent}
+.quizopt{display:block;width:100%;text-align:left;margin:.35rem 0;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:.7rem;padding:.6rem .8rem;font-size:.83rem;cursor:pointer}
+.quizopt:hover{border-color:#22d3ee}.quizopt.good{border-color:#34d399;background:rgba(52,211,153,.12)}.quizopt.badb{border-color:#f87171;background:rgba(248,113,113,.1)}
+.sticky-act{position:sticky;top:64px;z-index:30;background:rgba(2,6,23,.95);border:1px solid #1e293b;border-radius:1rem;padding:.7rem 1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;backdrop-filter:blur(8px)}
+footer{border-top:1px solid #1e293b;color:#64748b;font-size:.78rem;text-align:center;padding:1.5rem 1rem}
+.toast{position:fixed;bottom:18px;right:18px;background:#0f172a;border:1px solid #22d3ee;color:#e2e8f0;padding:.8rem 1rem;border-radius:.9rem;font-size:.82rem;z-index:200;box-shadow:0 10px 40px rgba(0,0,0,.5);display:none;max-width:320px}
+.bar{height:10px;background:#020617;border:1px solid #1e293b;border-radius:999px;overflow:hidden}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,#22d3ee,#818cf8);transition:width .5s}
+.tagxp{background:rgba(52,211,153,.12);border:1px solid #34d399;color:#6ee7b7;font-size:.7rem;font-weight:800;padding:.25rem .6rem;border-radius:999px}
+details{border:1px solid #1e293b;border-radius:.9rem;background:#0f172a;padding:.8rem 1rem;margin:.5rem 0}
+summary{cursor:pointer;font-weight:700;font-size:.88rem}
+.touch{min-height:150px}
+.touch.seen{border-color:#34d399}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="navbar"><div class="nav-inner">
+<a href="../index_informatica.html" class="btn-back-menu btn small">← Menú</a>
+<div class="logo">🏢 <span>CRM·SCM Chapín</span> <small>UMG · Admón</small></div>
+<div class="nav-links" id="navLinks">
+<a href="#marco">Marco</a><a href="#crm">CRM</a><a href="#scm">SCM + N</a><a href="#gt">Logística GT</a><a href="#flujo">Flujo Z10</a><a href="#quiz">Quiz</a><a href="#actividad">👥 Actividad parejas</a><a href="#glosario">📘 Glosario</a>
+</div>
+<button class="hamburger" id="hamburger">☰</button>
+</div></nav>
+
+<header class="hero">
+<div class="hero-grid">
+<div>
+<div class="badge">🎓 UMG · Informática I · Semana 14 · Cap. CRM & SCM</div>
+<h1 class="heading-font">Del <span class="hl">cliente misterioso</span> al camión en obra 🇬🇹</h1>
+<p class="subtitle">Aprende como <strong>gerente</strong>: cómo el <strong>CRM</strong> convierte visitas anónimas en clientes fieles (con costos de cambio), cómo el <strong>SCM + EDI</strong> coordina proveedores sin redigitar nada, y cómo todo aterriza en una <strong>desarrolladora de Zona 10</strong> con Banco Industrial, Banrural y FHA. Al final, la <strong>actividad en parejas con simulador y reporte PDF</strong>.</p>
+<div class="hero-stats">
+<div class="hstat"><b id="statXP">0</b><span>XP Gerencial</span></div>
+<div class="hstat"><b>6</b><span>Estaciones</span></div>
+<div class="hstat"><b>👥</b><span>Actividad en parejas</span></div>
+<div class="hstat"><b>Q</b><span>Decisiones en GTQ</span></div>
+</div>
+<div class="hero-cta">
+<a href="#marco" class="btn primary"><i class="fa-solid fa-rocket"></i> Empezar estación 1</a>
+<a href="#actividad" class="btn ghost"><i class="fa-solid fa-users"></i> Ir a la actividad en parejas</a>
+</div>
+</div>
+<div class="console">
+<div class="term-head"><span></span><span></span><span></span>&nbsp; tps_zona10.exe — bitácora en vivo</div>
+<div class="term-body" id="termBody">> sistema listo…<br>> toca las estaciones y gana XP gerencial ⚡<br>> <span class="blink">▌</span></div>
+<div class="flowdots" id="heroDots"><span class="fdot">1 Marco</span><span class="fdot">2 CRM</span><span class="fdot">3 SCM</span><span class="fdot">4 GT</span><span class="fdot">5 Flujo</span><span class="fdot">6 Quiz</span></div>
+</div>
+</div>
+</header>
+
+<!-- EST 1 · MARCO -->
+<section class="section" id="marco">
+<div class="mision">Estación 1 · Marco teórico</div>
+<h2>🧠 CRM y SCM: el motor de la ventaja competitiva <small>§1 guía</small></h2>
+<p class="lead">CRM y SCM no son "programas para automatizar": son el motor que convierte procesos en <strong>ventaja competitiva sostenible</strong>. Coordinan decisiones en los <strong>3 niveles gerenciales</strong>. Toca cada tarjeta para voltearla (+10 XP c/u).</p>
+<div class="grid3" style="margin-top:1rem">
+<div class="flip" onclick="flip(this,20)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(34,211,238,.15);color:#67e8f9">NIVEL OPERATIVO</span><h3 class="heading-font">🧾 TPS: el día a día</h3><p style="font-size:.8rem;color:#94a3b8">Cada venta, cada pago, cada llamada queda registrada. Sin TPS no hay dato. Toca para ver el ejemplo.</p></div><div class="face back"><b>Ejemplo Zona 10 👇</b><p style="font-size:.8rem">El asesor registra la visita del prospecto, la cotización impresa y el apartado de Q5,000. Todo entra al TPS… pero si pagó en efectivo y no se identificó, el sistema solo ve <b>"cliente anónimo"</b>. 👻</p></div></div></div>
+<div class="flip" onclick="flip(this,20)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(167,139,250,.15);color:#c4b5fd">NIVEL TÁCTICO</span><h3 class="heading-font">📊 MIS + ERP: control</h3><p style="font-size:.8rem;color:#94a3b8">Reportes, tableros y módulos integrados para supervisar metas. Toca para ver el ejemplo.</p></div><div class="face back"><b>Ejemplo Zona 10 👇</b><p style="font-size:.8rem">El gerente ve en su tablero: 12 prospectos, 4 cotizados, 1 aprobado FHA, stock de concreto para 2 apartamentos. <b>Controla sin llamar a bodega.</b></p></div></div></div>
+<div class="flip" onclick="flip(this,20)"><div class="flip-inner"><div class="face front"><span class="pill" style="background:rgba(52,211,153,.15);color:#6ee7b7">NIVEL ESTRATÉGICO</span><h3 class="heading-font">♟️ Escenarios + fidelización</h3><p style="font-size:.8rem;color:#94a3b8">Modelar futuros y amarrar clientes rentables a largo plazo. Toca para ver el ejemplo.</p></div><div class="face back"><b>Ejemplo Zona 10 👇</b><p style="font-size:.8rem">¿Y si lanzo la Torre II? El CRM dice qué modelo se vende más; el SCM dice si Cementos Progreso aguanta el ritmo. <b>Decides con datos, no con corazonadas.</b></p></div></div></div>
+</div>
+<div class="card" style="margin-top:1rem;border-color:#f59e0b">
+<h3 class="heading-font">🎓 Nota del catedrático</h3>
+<p style="font-size:.85rem;color:#cbd5e1;line-height:1.7">"La tecnología por sí sola <b>no</b> genera ventaja competitiva. Su función como futuros administradores es diseñar procesos (<b>BPM</b>) eficientes y alineados a la estrategia, usando los sistemas como <b>catalizadores de valor</b>." — <b>Ruldin Ayala</b></p>
+</div>
+<div class="card" style="margin-top:1rem">
+<h3 class="heading-font">🕵️ Demo: el misterio del cliente anónimo</h3>
+<p style="font-size:.83rem;color:#94a3b8">Don Chepe aparta con Q5,000 en efectivo. ¿Qué ve el sistema?</p>
+<div class="sectabs"><button class="sectab on" onclick="misterio(0,this)">Sin tarjeta de fidelización</button><button class="sectab" onclick="misterio(1,this)">Con tarjeta "Vecino 10" 💳</button></div>
+<div class="ledger" id="misterioOut">registro TPS: { cliente: <span class="bad">"ANÓNIMO"</span>, historial: null, seguimiento: imposible }<br><span class="bad">✗ El marketing no sabe quién es. La posventa no existe. Cero costo de cambio.</span></div>
+</div>
+</section>
+
+<!-- EST 2 · CRM -->
+<section class="section alt" id="crm">
+<div class="mision">Estación 2 · CRM a fondo</div>
+<h2>💼 CRM: todas las interacciones, un solo perfil <small>§1.1 guía</small></h2>
+<p class="lead">Un CRM centraliza <strong>registrar → rastrear → analizar</strong> cada punto de contacto para construir relaciones rentables a largo plazo. Toca los 6 puntos de contacto (+10 XP c/u).</p>
+<div class="grid3" id="touchGrid" style="margin-top:1rem">
+<div class="card touch" onclick="seen(this)"><b>📞 Llamadas telefónicas</b><p style="font-size:.78rem;color:#94a3b8">Solicitudes, presupuestos y consultas del call center. Primera huella del prospecto.</p></div>
+<div class="card touch" onclick="seen(this)"><b>🧾 Emisión de cotizaciones</b><p style="font-size:.78rem;color:#94a3b8">Propuestas económicas con seguimiento del ciclo de venta: ¿la abrió? ¿respondió? ¿negoció?</p></div>
+<div class="card touch" onclick="seen(this)"><b>🏢 Visitas presenciales</b><p style="font-size:.78rem;color:#94a3b8">Sala de ventas, mostrador o cita corporativa. El canal no rompe la continuidad.</p></div>
+<div class="card touch" onclick="seen(this)"><b>✉️ Correos electrónicos</b><p style="font-size:.78rem;color:#94a3b8">Trazabilidad escrita de acuerdos, ofertas y documentación comercial.</p></div>
+<div class="card touch" onclick="seen(this)"><b>😠 Atención de quejas</b><p style="font-size:.78rem;color:#94a3b8">Inconformidades documentadas que disparan solución inmediata y prevención.</p></div>
+<div class="card touch" onclick="seen(this)"><b>🛎️ Servicio posventa</b><p style="font-size:.78rem;color:#94a3b8">Garantías, mantenimientos y llamadas de seguimiento tras la entrega.</p></div>
+</div>
+<div class="grid2" style="margin-top:1rem">
+<div class="card">
+<h3 class="heading-font">🔗 Del rastreo al costo de cambio</h3>
+<table class="cmp"><tr><th>Mecanismo comercial</th><th>Impacto estratégico</th></tr>
+<tr><td><b>Rastreo integral</b> de puntos de contacto</td><td>Seguimiento personalizado en posventa → <span class="ok">satisfacción y retención ↑</span></td></tr>
+<tr><td><b>TPS + tarjetas</b> de fidelización</td><td>Resuelve el misterio del anónimo → <span class="ok">datos de consumo a cambio de beneficios</span></td></tr>
+<tr><td><b>Embudo (pipeline)</b> automatizado + personalización</td><td>Crea <span class="warn">switching costs</span>: irse a la competencia = perder historial y servicio a la medida</td></tr></table>
+</div>
+<div class="card">
+<h3 class="heading-font">🎚️ Laboratorio: ¿qué tan amarrado está tu cliente?</h3>
+<p style="font-size:.8rem;color:#94a3b8">Mueve la personalización del servicio y mira la probabilidad de fuga.</p>
+<label class="lbl">Nivel de personalización: <span id="persVal" class="cy">50%</span></label>
+<input type="range" id="rngPers" min="0" max="100" value="50" oninput="persCalc()">
+<div class="bar" style="margin-top:.6rem"><div id="persFill" style="width:50%"></div></div>
+<p id="persVerdict" style="font-size:.83rem;margin-top:.5rem"></p>
+</div>
+</div>
+</section>
+
+<!-- EST 3 · SCM -->
+<section class="section" id="scm">
+<div class="mision">Estación 3 · SCM + fórmula N</div>
+<h2>🚚 SCM: la red de valor sin sobrecostos <small>§1.2 guía</small></h2>
+<p class="lead">El SCM integra <strong>proveedores → planta → distribuidores → cliente</strong> con flujo bidireccional de información y materiales. Tres mejores prácticas + la fórmula que lo explica todo.</p>
+<div class="grid3" style="margin-top:1rem">
+<div class="card"><b>🔄 1 · Datos en tiempo real</b><p style="font-size:.78rem;color:#94a3b8">Bases de proveedores conectadas al punto de venta: la producción sigue a la demanda real, no a corazonadas.</p></div>
+<div class="card"><b>👁️ 2 · Visibilidad total</b><p style="font-size:.78rem;color:#94a3b8">Rastrea insumos y producto terminado en cada etapa: ni desabastecimiento ni bodega llena de polvo.</p></div>
+<div class="card"><b>✖️ 3 · Complejidad multiplicativa</b><p style="font-size:.78rem;color:#94a3b8">Cada nodo nuevo <b>multiplica</b> los enlaces: N = Proveedores × Fabricantes × Distribuidores.</p></div>
+</div>
+<div class="grid2" style="margin-top:1rem">
+<div class="card">
+<h3 class="heading-font">🧪 Laboratorio N = P × F × D</h3>
+<div class="grid3">
+<div><label class="lbl">Proveedores (<span id="vP">2</span>)</label><input type="range" id="rP" min="1" max="8" value="2" oninput="calcN()"></div>
+<div><label class="lbl">Plantas (<span id="vF">1</span>)</label><input type="range" id="rF" min="1" max="4" value="1" oninput="calcN()"></div>
+<div><label class="lbl">Distribuidores (<span id="vD">2</span>)</label><input type="range" id="rD" min="1" max="8" value="2" oninput="calcN()"></div>
+</div>
+<div style="text-align:center;padding:.8rem"><div style="font-size:.7rem;color:#94a3b8">ENLACES OPERATIVOS</div><div id="nOut" style="font-size:2.6rem;font-weight:800" class="heading-font cy">4</div><div id="nFormula" style="font-size:.75rem;font-family:monospace;color:#94a3b8">N = 2 × 1 × 2 = 4</div><div id="nRisk" style="margin-top:.4rem"></div></div>
+<svg id="netSvg" viewBox="0 0 400 160" style="width:100%;height:150px;background:#020617;border:1px solid #1e293b;border-radius:.8rem"></svg>
+<div class="sectabs"><button class="sectab" onclick="setN(2,1,2)">Guía: 2×1×2 = 4</button><button class="sectab" onclick="setN(4,2,4)">Expandida: 4×2×4 = 32 ⚠️</button></div>
+</div>
+<div class="card">
+<h3 class="heading-font">📡 Demo EDI/B2B: cero redigitación</h3>
+<p style="font-size:.8rem;color:#94a3b8">El EDI envía la orden de compra y recibe la factura <b>sistema a sistema</b>, sin manos en el teclado. Pulsa transmitir:</p>
+<div class="sectabs"><button class="sectab on" onclick="ediDemo(this)">Transmitir OC-047 → Cementos Progreso</button></div>
+<div class="ledger" id="ediOut">_esperando orden… toca "Transmitir"_</div>
+<div class="card" style="margin-top:.8rem;border-color:#f59e0b">
+<h3 class="heading-font">🎓 Nota del catedrático (BPR)</h3>
+<p style="font-size:.82rem;color:#cbd5e1">"No automaticen un mal proceso". Antes del EDI o del SCM, <b>rediseñen radicalmente</b> el flujo logístico y eliminen pasos innecesarios. — <b>Ruldin Ayala</b></p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- EST 4 · GT -->
+<section class="section alt" id="gt">
+<div class="mision">Estación 4 · Guatemala real</div>
+<h2>⛰️ SCM en la geografía chapina <small>§2.1 guía</small></h2>
+<p class="lead">Topografía montañosa + CA-9 Sur + Atlántico con deslaves: el ruteo debe considerar ventanas de entrega o habrá incumplimiento. El modelo chapín: <strong>nodo central + puntos departamentales</strong>.</p>
+<table class="cmp"><tr><th>Criterio</th><th>🏭 Nodo Central (Bárcenas / Amatitlán)</th><th>🏪 Punto Departamental (Xela, Cobán, Zacapa)</th></tr>
+<tr><td><b>Rol</b></td><td>Almacenamiento masivo, consolidación de importados, despacho a gran escala</td><td>Venta minorista, atención directa y recepción de reabastecimientos</td></tr>
+<tr><td><b>Datos</b></td><td>ERP/SCM centralizado (servidor o nube)</td><td>TPS local que transmite variaciones de stock al centro</td></tr>
+<tr><td><b>Ante vías</b></td><td>Despachos <b>nocturnos o consolidados</b> contra el tráfico capitalino</td><td><b>Stock de seguridad</b> según días de bloqueo de la carretera</td></tr></table>
+<div class="grid2" style="margin-top:1rem">
+<div class="card">
+<h3 class="heading-font">🚛 Demo: Bárcenas → Zona 10</h3>
+<div class="sectabs"><button class="sectab" onclick="rutaDemo('diurno',this)">☀️ Diurno 10:00</button><button class="sectab on" onclick="rutaDemo('nocturno',this)">🌙 Nocturno 22:00</button></div>
+<svg viewBox="0 0 400 130" style="width:100%;height:120px;background:#020617;border:1px solid #1e293b;border-radius:.8rem">
+<line x1="20" y1="95" x2="380" y2="25" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+<line id="routeLine" x1="20" y1="95" x2="380" y2="25" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 6"/>
+<circle cx="20" cy="95" r="8" fill="#f59e0b"/><text x="6" y="116" fill="#94a3b8" font-size="9">BÁRCENAS</text>
+<circle cx="200" cy="60" r="7" fill="#ef4444"/><text x="172" y="80" fill="#fca5a5" font-size="9">⚠ Villalobos</text>
+<circle cx="380" cy="25" r="8" fill="#34d399"/><text x="348" y="46" fill="#94a3b8" font-size="9">ZONA 10</text></svg>
+<div class="ledger" id="rutaOut" style="margin-top:.6rem"></div>
+</div>
+<div class="card" style="border-color:#f59e0b">
+<h3 class="heading-font">🎓 Nota del catedrático</h3>
+<p style="font-size:.85rem;color:#cbd5e1;line-height:1.7">"Un bloqueo en la <b>cuesta de Villalobos</b> detiene tus camiones de Amatitlán. Si tu SCM no está sincronizado en tiempo real con los TPS de Xela para <b>redirigir rutas o reprogramar desde subsedes</b>, tendrás merma y desabastecimiento." — <b>Ruldin Ayala</b></p>
+<p style="font-size:.8rem;color:#94a3b8;margin-top:.5rem">Fórmula didáctica del stock de seguridad: <span style="font-family:monospace">SS = demanda diaria × días de interrupción vial (≈ 2)</span>.</p>
+</div>
+</div>
+</section>
+
+<!-- EST 5 · FLUJO Z10 -->
+<section class="section" id="flujo">
+<div class="mision">Estación 5 · Caso Zona 10</div>
+<h2>🏢 CRM inmobiliario: del prospecto a la escritura <small>§2.2 guía</small></h2>
+<p class="lead">En torres de Zona 10 y 14 cada ticket es millonario: el ciclo exige seguimiento riguroso + banca local + FHA. Toca los pasos <strong>en orden</strong> (+30 XP al completar).</p>
+<div class="o2c" id="flujoSteps">
+<div class="step" data-i="1" onclick="flujoClick(this)"><b>1️⃣ Captura</b><small>Prospecto + scoring</small></div>
+<div class="step" data-i="2" onclick="flujoClick(this)"><b>2️⃣ Cotización</b><small>Expediente digital</small></div>
+<div class="step" data-i="3" onclick="flujoClick(this)"><b>3️⃣ EDI Banco</b><small>BI / Banrural</small></div>
+<div class="step" data-i="4" onclick="flujoClick(this)"><b>4️⃣ FHA</b><small>Seguro + dictamen</small></div>
+<div class="step" data-i="5" onclick="flujoClick(this)"><b>5️⃣ Cierre</b><small>Escritura + posventa</small></div>
+</div>
+<div class="ledger" id="flujoLedger">_Esperando prospecto… toca el paso 1️⃣_</div>
+<p id="flujoFb" style="font-size:.83rem"></p>
+<div class="flowdots" id="flujoDots"><span class="fdot">Paso 1</span><span class="fdot">Paso 2</span><span class="fdot">Paso 3</span><span class="fdot">Paso 4</span><span class="fdot">Paso 5</span></div>
+</section>
+
+<!-- QUIZ -->
+<section class="section alt" id="quiz">
+<div class="mision">Estación 6 · Autoevaluación</div>
+<h2>🏆 Quiz gerencial <small>5 pts · +20 XP por acierto</small></h2>
+<div class="card" style="margin-top:.8rem">
+<p style="font-size:.85rem"><b>1.</b> Un cliente aparta en efectivo sin identificarse. ¿Qué ve el TPS y cómo lo resuelve el CRM?</p>
+<button class="quizopt" onclick="miniQuiz(this,false,'El TPS sí lo identifica automáticamente.')">a) El TPS lo identifica solo; no hace falta nada.</button>
+<button class="quizopt" onclick="miniQuiz(this,true,'Correcto: el TPS ve un misterio y la tarjeta de fidelización lo vincula a un perfil.')">b) El TPS ve un "misterio"; la tarjeta de fidelización lo vincula a un perfil.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'La queja es otro punto de contacto, no resuelve el anonimato.')">c) Se resuelve documentando una queja.</button>
+</div>
+<div class="card">
+<p style="font-size:.85rem"><b>2.</b> ¿Qué son los <i>switching costs</i> que genera el CRM?</p>
+<button class="quizopt" onclick="miniQuiz(this,false,'Esos son costos logísticos, no de cambio.')">a) Los fletes de la cadena de suministro.</button>
+<button class="quizopt" onclick="miniQuiz(this,true,'Exacto: perder historial, personalización y agilidad hace costoso migrar.')">b) El costo percibido de perder historial y servicio a la medida si migra a la competencia.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'El enganche es financiero del crédito, no switching cost.')">c) El enganche del apartamento.</button>
+</div>
+<div class="card">
+<p style="font-size:.85rem"><b>3.</b> Red con 4 proveedores, 2 plantas y 4 distribuidores. ¿N?</p>
+<button class="quizopt" onclick="miniQuiz(this,false,'10 es la suma (4+2+4). La complejidad es multiplicativa.')">a) 10 enlaces (se suman).</button>
+<button class="quizopt" onclick="miniQuiz(this,true,'Correcto: N = 4×2×4 = 32 enlaces.')">b) 32 enlaces: N = 4 × 2 × 4.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'16 no corresponde a ninguna combinación.')">c) 16 enlaces.</button>
+</div>
+<div class="card">
+<p style="font-size:.85rem"><b>4.</b> ¿Qué hace el EDI en la arquitectura SCM/ERP?</p>
+<button class="quizopt" onclick="miniQuiz(this,true,'Exacto: transacciones B2B sistema a sistema, sin intervención manual.')">a) Automatiza transacciones B2B (órdenes, facturación) sistema a sistema.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'Eso es ruteo físico, no EDI.')">b) Maneja los camiones a Zona 10.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'El seguro hipotecario lo emite el FHA, no el EDI.')">c) Emite el seguro hipotecario del FHA.</button>
+</div>
+<div class="card">
+<p style="font-size:.85rem"><b>5.</b> Bloqueo en Villalobos con camiones de Amatitlán a Xela. ¿Respuesta gerencial correcta?</p>
+<button class="quizopt" onclick="miniQuiz(this,false,'Sin sincronización en tiempo real no puedes redirigir nada.')">a) Esperar sin información porque el SCM es mensual.</button>
+<button class="quizopt" onclick="miniQuiz(this,true,'Correcto: SCM sincronizado con TPS permite redirigir o reprogramar desde subsedes.')">b) SCM sincronizado con TPS: redirigir rutas o reprogramar desde subsedes.</button>
+<button class="quizopt" onclick="miniQuiz(this,false,'BPR dice lo contrario: rediseñar antes de automatizar.')">c) Automatizar el mal proceso actual tal cual está.</button>
+</div>
+<div style="margin-top:.6rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+<span class="tagxp" id="quizScore">Sin calificar · toca las respuestas correctas</span>
+<span class="tagxp">XP total: <span id="quizXP">0</span></span>
+</div>
+</section>
+
+<!-- ACTIVIDAD EN PAREJAS -->
+<section class="section" id="actividad">
+<div class="mision">Actividad en clase · en parejas 👥</div>
+<h2>📝 Actividad: del primer "¿me llama?" al camión en obra <small>Desarrolladora Las Américas S.A. · Zona 10</small></h2>
+<p class="lead">Lean primero las 6 estaciones ☝️ y luego abran el <strong>simulador de actividad</strong> (página separada). Trabajen en pareja: <strong>Piloto</strong> opera el CRM (fases 1–2) y <strong>Copiloto</strong> opera el SCM (fases 3–4); el reporte (fase 5) lo redactan juntos. Tiempo sugerido: <strong>30 a 40 minutos</strong>.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin:.9rem 0">
+<a href="Semana14CRM_SCM.html" target="_blank" rel="noopener" class="btn primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir simulador de actividad</a>
+<a href="Semana14CRM_SCM.html" target="_blank" rel="noopener" class="btn ghost"><i class="fa-solid fa-flask"></i> Abrir simulador (misma ventana de parejas)</a>
+</div>
+<div class="sticky-act">
+<b class="heading-font" style="font-size:.85rem">👥 Identificación de la pareja (se guarda en este navegador)</b>
+<input id="pA" placeholder="Piloto: nombre + carnet" style="max-width:230px;font-size:.8rem" oninput="savePair()">
+<input id="pB" placeholder="Copiloto: nombre + carnet" style="max-width:230px;font-size:.8rem" oninput="savePair()">
+<input id="pS" placeholder="Sección" style="max-width:130px;font-size:.8rem" oninput="savePair()">
+</div>
+<div class="grid2" style="margin-top:1rem">
+<div class="card"><h3 class="heading-font">🧭 Fase A · Piloto CRM (0–15 min)</h3>
+<ol style="font-size:.83rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem"><li>En el simulador, registra un <strong>prospecto interesado en el Modelo Ejecutivo (Q1,350,000)</strong> llegado por <strong>visita a sala de ventas</strong>.</li><li>Guarda la <strong>cotización 20% enganche a 20 años</strong>, completa el <strong>expediente 4/4</strong>, transmite el <strong>EDI a Banco Industrial</strong> y gestiona el <strong>FHA</strong>.</li><li>Cierra la venta y verifica que la <strong>orden SCM se disparó sola</strong>.</li></ol></div>
+<div class="card"><h3 class="heading-font">🚚 Fase B · Copiloto SCM (15–28 min)</h3>
+<ol style="font-size:.83rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem"><li>Revisa la orden generada: compara el <strong>BOM del Ejecutivo vs el Penthouse</strong> y anota qué cambia.</li><li>Transmite el <strong>EDI a Cementos Progreso y Aceros de Guatemala</strong>.</li><li>Simula <strong>N = 4×2×4</strong> y confirma el <strong>despacho nocturno 22:00</strong> Bárcenas → Zona 10.</li></ol></div>
+</div>
+<div class="card" style="margin-top:1rem;border-color:#34d399">
+<h3 class="heading-font">📄 Fase C · Reporte conjunto (28–40 min)</h3>
+<ol style="font-size:.83rem;line-height:1.7;color:#cbd5e1;padding-left:1.1rem;margin:.4rem 0">
+<li>Respondan juntos las <strong>5 preguntas de análisis</strong> (incluye la investigación de CRMs comerciales vs open source).</li>
+<li>Generen la <strong>vista previa</strong> y verifiquen: datos de ambos, cotización, FHA, órdenes, EDI, ruta y <strong>bitácora TPS completa</strong>.</li>
+<li>Descarguen el PDF (<strong>Sección_Carnet_ActividadCRM_SCM.pdf</strong>) y súbanlo a la plataforma del curso.</li></ol>
+</div>
+</section>
+
+<!-- GLOSARIO -->
+<section class="section alt" id="glosario">
+<div class="mision">Referencia del capítulo · 9 términos</div>
+<h2>📘 Glosario rápido</h2>
+<div class="card"><div style="font-size:.85rem;line-height:1.9;color:#cbd5e1">
+<b>CRM:</b> gestión centralizada de relaciones con clientes (registrar, rastrear, analizar). · <b>SCM:</b> integración de la red proveedores→planta→distribuidores→cliente. · <b>TPS:</b> procesa transacciones diarias; ve "anónimos" en efectivo. · <b>Pipeline / embudo:</b> etapas del prospecto hasta el cierre. · <b>Switching costs:</b> costo percibido de cambiar de proveedor (fideliza). · <b>EDI / B2B:</b> intercambio electrónico sistema a sistema, sin redigitación. · <b>FHA:</b> seguro/garantía hipotecaria estatal en Guatemala. · <b>BPR:</b> rediseño radical del proceso antes de automatizar. · <b>Stock de seguridad:</b> colchón contra bloqueos viales (demanda × días de interrupción).
+</div></div>
+</section>
+
+<footer>Hecho con 💙 pedagógico por <b style="color:#e2e8f0">Ruldin Ayala</b> · Informática I · UMG · Semana 14 CRM & SCM · 2026 · Montos en Quetzales con fines didácticos.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+let XP=0,flujoNext=1;
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600);}
+function gainXP(n,el){if(el&&el._xp)return;if(el)el._xp=true;XP+=n;$('statXP').textContent=XP;$('quizXP').textContent=XP;$('termBody').innerHTML+='<br>> +'+n+' XP gerencial ⚡ (total '+XP+')';toast('+'+n+' XP gerencial ⚡ (total '+XP+')');}
+function heroWin(){$('termBody').innerHTML+='<br><span class="ok">> ¡flujo perfecto! pedido→FHA→cierre→SCM→EDI→ruta 🎉</span>';document.querySelectorAll('#heroDots .fdot').forEach(d=>d.classList.add('on'));}
+window.addEventListener('scroll',()=>{const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;$('progressBar').style.width=p+'%';});
+$('hamburger').onclick=()=>$('navLinks').classList.toggle('open');
+function flip(el,n){el.classList.toggle('on');gainXP(n,el);}
+function misterio(withCard,btn){const tabs=btn.parentElement.querySelectorAll('.sectab');tabs.forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+$('misterioOut').innerHTML=withCard
+?'registro TPS: { cliente: <span class="ok">"María F. López · Vecino 10 ****4521"</span>, historial: 3 visitas + 1 cotización, seguimiento: automático }<br><span class="ok">✔ Identidad vinculada. Nace el costo de cambio: si se va, pierde su tasa, su historial y su trato.</span>'
+:'registro TPS: { cliente: <span class="bad">"ANÓNIMO"</span>, historial: null, seguimiento: imposible }<br><span class="bad">✗ El marketing no sabe quién es. La posventa no existe. Cero costo de cambio.</span>';
+gainXP(15,btn);}
+function seen(el){if(el.classList.contains('seen'))return;el.classList.add('seen');gainXP(10,el);}
+function persCalc(){const v=+$('rngPers').value;$('persVal').textContent=v+'%';$('persFill').style.width=v+'%';
+let t;if(v<30)t='<span class="bad">🧊 Servicio genérico:</span> fuga probable (&gt;60%). El cliente no pierde nada al irse.';
+else if(v<70)t='<span class="warn">😐 Servicio estándar:</span> fuga media. Hay algo de historial, pero replicable.';
+else t='<span class="ok">🔒 Servicio a la medida:</span> fuga baja (&lt;15%). Migrar = perder historial, tasa y agilidad.';
+$('persVerdict').innerHTML=t;gainXP(2);}
+function calcN(){const P=+$('rP').value,F=+$('rF').value,D=+$('rD').value;$('vP').textContent=P;$('vF').textContent=F;$('vD').textContent=D;
+const N=P*F*D;$('nOut').textContent=N;$('nFormula').textContent='N = '+P+' × '+F+' × '+D+' = '+N;
+$('nRisk').innerHTML=N<=6?'<span class="pill" style="background:rgba(52,211,153,.15);color:#6ee7b7">Riesgo bajo · manual aún respira</span>':N<=16?'<span class="pill" style="background:rgba(251,191,36,.15);color:#fcd34d">Riesgo medio · exige SCM básico</span>':'<span class="pill" style="background:rgba(248,113,113,.15);color:#fca5a5">Riesgo alto · exige SCM + EDI</span>';
+let h='';const y1=i=>30+i*(100/Math.max(1,P-1||1)),y2=i=>30+i*(100/Math.max(1,D-1||1));
+for(let i=0;i<P;i++)h+='<circle cx="40" cy="'+y1(i)+'" r="9" fill="#6366f1"/><text x="28" y="'+(y1(i)+3)+'" font-size="8" fill="#fff">'+(i+1)+'</text>';
+for(let i=0;i<F;i++)h+='<rect x="185" y="'+(55+i*28)+'" width="30" height="18" rx="4" fill="#06b6d4"/>';
+for(let i=0;i<D;i++)h+='<circle cx="360" cy="'+y2(i)+'" r="9" fill="#34d399"/>';
+for(let i=0;i<P;i++)for(let j=0;j<F;j++)h+='<line x1="49" y1="'+y1(i)+'" x2="185" y2="'+(64+j*28)+'" stroke="#334155" stroke-width="1"/>';
+for(let j=0;j<F;j++)for(let k=0;k<D;k++)h+='<line x1="215" y1="'+(64+j*28)+'" x2="351" y2="'+y2(k)+'" stroke="#334155" stroke-width="1"/>';
+h+='<text x="20" y="152" font-size="9" fill="#94a3b8">Prov ('+P+')</text><text x="175" y="152" font-size="9" fill="#94a3b8">Plantas ('+F+')</text><text x="320" y="152" font-size="9" fill="#94a3b8">Distrib ('+D+')</text>';
+$('netSvg').innerHTML=h;}
+function setN(p,f,d){$('rP').value=p;$('rF').value=f;$('rD').value=d;calcN();gainXP(10);}
+function ediDemo(btn){const out=$('ediOut');const steps=['📤 OC-047 firmada en el ERP…','🔐 EDI traduce a estándar B2B y cifra…','📡 Cementos Progreso recibe sin redigitar…','✅ Confirmación + factura electrónica de vuelta · lead time 1 día'];
+out.innerHTML='_transmitiendo…_';let i=0;gainXP(15,btn);
+const h=setInterval(()=>{out.innerHTML=steps.slice(0,++i).join('<br>');if(i>=steps.length){clearInterval(h);out.innerHTML+='<br><span class="ok">✔ Cero errores de digitación · ciclo de reabastecimiento acelerado.</span>';}},700);}
+function rutaDemo(mode,btn){const tabs=btn.parentElement.querySelectorAll('.sectab');tabs.forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+const noct=mode==='nocturno';$('routeLine').setAttribute('stroke',noct?'#34d399':'#f59e0b');
+$('rutaOut').innerHTML=noct
+?'🌙 <span class="ok">Nocturno 22:00 consolidado:</span> 40 min · Q1,700 · Villalobos fluido · PMT sin restricción · incumplimiento &lt;10%'
+:'☀️ <span class="warn">Diurno 10:00:</span> 100 min · Q2,900 · Villalobos congestionado + PMT 16–20h · incumplimiento ~65%';
+gainXP(10,btn);}
+const FLUJO={1:'① CAPTURA · prospecto Zona 10 registrado + scoring (ingresos, enganche, urgencia)<br><span class="cy">→ el misterio se resuelve con la tarjeta Vecino 10</span>',2:'② COTIZACIÓN · Modelo Ejecutivo Q1,350,000 · 20% enganche · expediente digital 4/4<br><span class="warn">→ sin expediente completo no hay EDI</span>',3:'③ EDI BANCO · expediente → <span class="cy">Banco Industrial / Banrural</span> sistema a sistema<br><span class="ok">→ precalificación en horas, no semanas</span>',4:'④ FHA · póliza de seguro hipotecario + dictamen <span class="ok">APROBADO</span><br><span class="cy">→ el CRM ya puede marcar Cierre de Venta</span>',5:'⑤ CIERRE · escritura programada + posventa activada<br><span class="ok">→ la venta DISPARA sola la orden SCM (concreto, acero, acabados) 🎉</span>'};
+function flujoClick(el){const i=+el.dataset.i;
+if(i===flujoNext){el.classList.add('lit');$('flujoLedger').innerHTML=FLUJO[i];flujoNext++;
+document.querySelectorAll('#flujoDots .fdot').forEach((d,k)=>d.classList.toggle('on',k<flujoNext));
+if(flujoNext>5){$('flujoFb').innerHTML='✅ <b>¡Flujo perfecto!</b> Así lo vivirás en el simulador en parejas. +30 XP';gainXP(30,el);heroWin();}
+else{$('flujoFb').innerHTML='✅ Paso '+i+' correcto. Ahora toca el paso '+flujoNext+'…';gainXP(5,el);}
+}else{el.classList.add('badx');setTimeout(()=>el.classList.remove('badx'),600);$('flujoFb').innerHTML='❌ El sistema <b>bloquea</b> ese movimiento: primero va el paso '+flujoNext+' (como el banco bloquearía el FHA sin expediente).';}}
+function miniQuiz(btn,ok,msg){const opts=btn.parentElement.querySelectorAll('.quizopt');opts.forEach(b=>{b.classList.remove('good','badb')});btn.classList.add(ok?'good':'badb');if(ok){gainXP(20,btn);$('quizScore').textContent='✔ '+msg;}else{$('quizScore').textContent='✘ '+msg+' Intenta de nuevo.';}}
+function savePair(){localStorage.setItem('crm14-pareja',JSON.stringify({a:$('pA').value,b:$('pB').value,s:$('pS').value}));}
+(function(){try{const d=JSON.parse(localStorage.getItem('crm14-pareja')||'{}');if(d.a)$('pA').value=d.a;if(d.b)$('pB').value=d.b;if(d.s)$('pS').value=d.s;}catch(e){}})();
+persCalc();calcN();rutaDemo('nocturno',document.querySelector('#gt .sectab.on'));
+</script>
+</body>
+</html>
