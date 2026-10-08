@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Enunciados de Repaso para Cuaderno · Estadística I · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #060d17; color: #e2e8f0; line-height: 1.6; }
+        .heading-font { font-family: 'Space Grotesk', sans-serif; }
+        .glass-card { background: rgba(15,39,68,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08); border-radius: 1.25rem; }
+        .formula-box { background: linear-gradient(135deg,#091a30 0%,#0d2847 100%); border: 1px solid rgba(56,189,248,.25); border-radius: 1rem; padding: .9rem; text-align: center; }
+        .datos-box { background: #020617; border: 1px dashed rgba(56,189,248,.4); border-radius: .9rem; padding: .9rem 1rem; font-size: .8rem; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #09131f; }
+        ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 4px; }
+        @media print {
+            body { background: #fff !important; color: #111 !important; }
+            header, nav, .no-print { display: none !important; }
+            .glass-card, section { background: #fff !important; border: 1px solid #999 !important; color: #111 !important; box-shadow: none !important; }
+            .datos-box, .formula-box { background: #f3f4f6 !important; border: 1px solid #666 !important; color: #111 !important; }
+            h1,h2,h3,h4,p,span,li,strong,em { color: #111 !important; }
+            .ejercicio { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <a href="repaso-general-semestre.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition" title="Volver a la guía de repaso">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-white p-1 rounded-xl shadow-lg shrink-0">
+                        <img src="../../cosas/Umg.png" alt="Escudo UMG" class="h-9 w-auto object-contain" onerror="this.onerror=null;this.src='../../cosas/umg.png';">
+                    </div>
+                    <div>
+                        <div class="text-cyan-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">Universidad Mariano Gálvez • Estadística I</div>
+                        <h1 class="text-base sm:text-xl font-extrabold text-white heading-font">Semana 14: 10 Enunciados de Repaso <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold">Para cuaderno</span></h1>
+                        <p class="text-xs text-slate-400">Resuelve a mano en tu cuaderno y verifica con los simuladores del semestre</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 no-print">
+                    <a href="../index_estadistica.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-house text-cyan-400 text-xs"></i><span>Portal Central</span>
+                    </a>
+                    <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-cyan-600/30 border border-cyan-500/50 hover:bg-cyan-600/50 text-cyan-200 text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-print text-xs"></i><span>Imprimir / PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8 flex-grow w-full">
+
+        <!-- HERO / INSTRUCCIONES -->
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-[#0a1c33] to-[#071322] border border-amber-500/30 p-6 sm:p-8">
+            <h2 class="text-2xl sm:text-3xl font-black text-white heading-font">Hoja oficial de trabajo: 10 ejercicios del semestre <span class="bg-gradient-to-r from-amber-300 to-cyan-300 bg-clip-text text-transparent">para resolver en papel</span></h2>
+            <p class="text-sm text-slate-300 mt-2 max-w-3xl">
+                Estos 10 enunciados cubren <strong>únicamente los temas vistos en este sitio</strong> (Semanas 2 a 13 + guía
+                <a href="repaso-general-semestre.html" class="text-cyan-300 underline">Repaso General Caps. 1 y 3</a> y guía
+                <a href="PDF_RepasoGGeneral.pdf" class="text-cyan-300 underline">PDF_RepasoGGeneral.pdf</a>).
+                Trabájalos en tu cuaderno u hojas de papel con calculadora básica. Usa las herramientas del semestre <strong>solo para verificar</strong>, no para copiar.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 text-xs">
+                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
+                    <strong class="text-amber-300 block mb-1"><i class="fa-solid fa-pen mr-1"></i>En tu cuaderno entrega</strong>
+                    <span class="text-slate-300">Procedimiento paso a paso, fórmulas con sustitución, tablas, gráficos a mano y 2–3 líneas de <strong>interpretación administrativa</strong> (¿qué decisión toma el gerente?).</span>
+                </div>
+                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
+                    <strong class="text-cyan-300 block mb-1"><i class="fa-solid fa-laptop mr-1"></i>Verifica con el sitio</strong>
+                    <span class="text-slate-300">Cada ejercicio indica su página verificadora (Sem 2, 3, 4, 5, 7, 8, 9, 12, 13). Ingresa tus datos allí y compara resultados.</span>
+                </div>
+                <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
+                    <strong class="text-emerald-300 block mb-1"><i class="fa-solid fa-list-check mr-1"></i>Regla de la clase</strong>
+                    <span class="text-slate-300">Sin procedimiento no hay puntos. La interpretación vale tanto como el cálculo. Escribe unidades (Q, ml, h, pares) siempre.</span>
+                </div>
+            </div>
+            <!-- Mapa rápido -->
+            <div class="mt-4 overflow-x-auto no-print">
+                <table class="w-full text-[11px] text-slate-300 bg-slate-950/60 border border-slate-800 rounded-xl overflow-hidden">
+                    <thead class="text-slate-400 uppercase tracking-wider">
+                        <tr class="border-b border-slate-800">
+                            <th class="p-2 text-left">Ej.</th><th class="p-2 text-left">Tema del sitio</th><th class="p-2 text-left">Verifica en</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">1</td><td class="p-2">Clasificación de variables</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem2_clasifica_variables.html">Sem 2 · Clasifica</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">2</td><td class="p-2">Cadena Cap.1 + muestreo</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem2_estadistica_business_lab.html">Sem 2 · Business Lab</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">3</td><td class="p-2">Tabla de frecuencias + cuota %</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem3.html">Sem 3 · Tabulador</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">4</td><td class="p-2">Pareto 80/20</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem4_graficos_pareto.html">Sem 4 · Pareto</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">5</td><td class="p-2">Sturges + histograma/polígono/ojiva</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem5_regla_sturges.html">Sem 5 · Sturges</a> · <a class="text-cyan-300 underline" href="../sem7_frecuencia_pareto.html">Sem 7</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">6</td><td class="p-2">Media, mediana, moda + sesgo</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem8_medidas_tendencia_central.html">Sem 8 · Tendencia</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">7</td><td class="p-2">Datos agrupados + cuartiles/percentiles</td><td class="p-2"><a class="text-cyan-300 underline" href="../sem9_agrupados.html">Sem 9 · Agrupados</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">8</td><td class="p-2">Dispersión $R, S^2, S, CV$</td><td class="p-2"><a class="text-cyan-300 underline" href="../semana12/medidas-dispersion.html">Sem 12 · Dispersión</a></td></tr>
+                        <tr class="border-b border-slate-800/60"><td class="p-2 font-bold text-white">9</td><td class="p-2">Regla empírica vs. Chebyshev</td><td class="p-2"><a class="text-cyan-300 underline" href="../semana13/regla-empirica-chebyshev-boxplot.html">Sem 13</a></td></tr>
+                        <tr><td class="p-2 font-bold text-white">10</td><td class="p-2">Boxplot + atípicos</td><td class="p-2"><a class="text-cyan-300 underline" href="../semana13/regla-empirica-chebyshev-boxplot.html">Sem 13</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- EJERCICIO 1 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 1</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 2 · Cap. 1 · Clasificación de variables</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-mug-saucer mr-1"></i>Finca de café · Antigua Guatemala</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">1. Clasifica las variables de la finca cafetalera</h3>
+            <p class="text-sm text-slate-300">La finca “Cumbre del Volcán” (Antigua Guatemala) audita su cosecha. Para cada variable indica: <strong>(i)</strong> cualitativa o cuantitativa, <strong>(ii)</strong> si es cuantitativa: discreta o continua, <strong>(iii)</strong> escala de medición (nominal, ordinal, intervalo o razón) y <strong>(iv)</strong> una justificación de una línea.</p>
+            <div class="datos-box text-slate-200">
+                <strong class="text-cyan-300">Variables a clasificar:</strong>
+                <ol class="list-decimal ml-5 mt-1 space-y-0.5">
+                    <li>Variedad sembrada por lote (Bourbón, Caturra, Catuaí).</li>
+                    <li>Calidad de taza del lote (Excelente – Muy buena – Buena – Regular – Deficiente).</li>
+                    <li>Número de sacos de 69 kg exportados por semana.</li>
+                    <li>Humedad del grano al ingresar al beneficio (%, con un decimal).</li>
+                    <li>Temperatura de secado en patio (°C).</li>
+                    <li>Método de pago al cortador (Efectivo, Transferencia, Billetera móvil).</li>
+                </ol>
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) tabla de 6 filas con las 4 columnas; b) explica por qué la temperatura en °C <em>no</em> es de razón aunque sea continua; c) escribe tu conclusión gerencial: ¿cuáles 2 variables vigilarías a diario para proteger la calidad y por qué?</p>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem2_clasifica_variables.html">Sem 2 · Clasifica Variables</a> (método de 3 pasos: identifica → clasifica → escala).</p>
+        </section>
+
+        <!-- EJERCICIO 2 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 2</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 2 · Cap. 1 · Cadena de 6 eslabones + muestreo</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-pink-500/15 text-pink-300 border border-pink-500/30"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Flores · San Juan Sacatepéquez</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">2. Cadena conceptual y plan de muestreo de la exportadora de flores</h3>
+            <p class="text-sm text-slate-300">La exportadora “Flores del Valle” (San Juan Sacatepéquez) tiene una <strong>población de $N = 5{,}000$ ramos</strong> listos para exportar. Tomará una <strong>muestra de $n = 100$ ramos</strong> para medir la <strong>longitud del tallo (cm)</strong>. Un ramo medido marcó <strong>62.5 cm</strong>.</p>
+            <div class="datos-box text-slate-200">
+                <strong class="text-cyan-300">Datos del caso:</strong> $N=5{,}000$ ramos · $n=100$ · variable: longitud del tallo (cm) · observación ejemplo: 62.5 cm · unidad: un ramo.
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) identifica los 6 eslabones (Población, Muestra, Unidad experimental, Variable de respuesta, Observación, Datos) con los valores del caso; b) explica cuál eslabón es el “puente directo entre la variable y los datos”; c) propone cómo elegirías los 100 ramos con 2 procedimientos vistos en clase (sorteo físico y tabla de números aleatorios u hoja electrónica) en 3 pasos cada uno; d) una línea: ¿por qué un censo de 5,000 ramos sería un desperdicio gerencial?</p>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem2_estadistica_business_lab.html">Sem 2 · Business Lab (La Terminal)</a> y <a class="text-cyan-300 underline" href="repaso-general-semestre.html#estacion1">Repaso · Estación 1</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 3 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 3</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 3 · Tabla de frecuencias + cuota de mercado</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30"><i class="fa-solid fa-gift mr-1"></i>Chocolates · Quetzaltenango (Xela)</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">3. Tabula la preferencia de chocolates en Xela</h3>
+            <p class="text-sm text-slate-300">Se encuestó a <strong>$n = 120$ consumidores</strong> en Quetzaltenango sobre su marca favorita de chocolate artesanal.</p>
+            <div class="datos-box text-slate-200">
+                <strong class="text-cyan-300">Conteos observados ($f$):</strong>
+                Quetzal Altense: 48 · Doña María Xela: 32 · Cacao Verapaz: 24 · Otras marcas: 16. Total: 120.
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) tabla con columnas categoría, $f$, $fr = f/n$, $\%$ y $Fa$; b) dibuja las barras de cuota % a mano; c) calcula los 3 KPIs del sitio: categoría líder, nivel de concentración (¿$>50\%$ o fragmentado?) y brecha del líder sobre el 2.º lugar; d) diagnóstico ejecutivo de 3 líneas: ¿dónde invertirías Q5,000 de publicidad?</p>
+            <div class="formula-box text-cyan-200 text-xs">$fr = f/n \qquad \% = fr \times 100 \qquad Fa = \text{acumulada}$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem3.html">Sem 3 · Tabulador Universal (Caso Café Xela)</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 4 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 4</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 4 · Pareto 80/20</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30"><i class="fa-solid fa-shirt mr-1"></i>Güipiles · San Antonio Aguas Calientes</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">4. Pareto de defectos en el taller de güipiles</h3>
+            <p class="text-sm text-slate-300">El taller “Rupalaj K’at” revisó <strong>150 güipiles devueltos</strong> por defectos de tejido. Aplica la regla 80/20 para decidir dónde atacar primero.</p>
+            <div class="datos-box text-slate-200">
+                <strong class="text-cyan-300">Defectos ($f$, total 150):</strong>
+                Deshilado en bordado: 62 · Tinte disparejo: 38 · Medida incorrecta: 24 · Bordado incompleto: 16 · Empaque dañado: 10.
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) ordena de mayor a menor y calcula $\%$ y $\%$ acumulado; b) dibuja el Pareto a mano (barras + curva acumulada) y marca el corte del 80%; c) clasifica causas vitales vs. triviales; d) recomendación ejecutiva: si solo puedes corregir 2 causas este mes, ¿cuáles y qué % del problema eliminas?</p>
+            <div class="formula-box text-cyan-200 text-xs">$\% = f/n \times 100 \qquad \%_{acum} = \text{suma de \% hasta la categoría}$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem4_graficos_pareto.html">Sem 4 · Gráficos &amp; Pareto</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 5 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 5</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 5 + Sem 7 · Sturges, histograma, polígono y ojiva</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30"><i class="fa-solid fa-cow mr-1"></i>Lácteos · Teculután, Zacapa</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">5. Sturges con la leche diaria de El Oriental</h3>
+            <p class="text-sm text-slate-300">Lácteos “El Oriental” (Teculután) registró los litros diarios entregados por 30 fincas ($n = 30$, en litros):</p>
+            <div class="datos-box text-slate-200 font-mono leading-relaxed">
+                240, 242, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 270
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) calcula $k = 1 + 3.322\log_{10}(n)$, $R = X_{máx} - X_{mín}$ y $A = R/k$ (redondea $k$ a entero y $A$ hacia arriba a 1 decimal si hace falta); b) construye los intervalos $[L_i, L_s)$ y la tabla $f_i, fr, fp\%, Fa, Xi = (L_i+L_s)/2$; c) dibuja histograma y polígono en $Xi$ y la ojiva “menor que” ($Fa$); d) 2 líneas: ¿en qué intervalo se concentra la producción y qué implica para dimensionar el tanque cisterna?</p>
+            <div class="formula-box text-cyan-200 text-xs">$k = 1 + 3.322\log_{10}(n) \qquad R = X_{máx}-X_{mín} \qquad A = R/k \qquad Xi = (L_i+L_s)/2$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem5_regla_sturges.html">Sem 5 · Regla de Sturges</a> y <a class="text-cyan-300 underline" href="../sem7_frecuencia_pareto.html">Sem 7 · Polígonos y Ojivas</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 6 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 6</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 8 · Media, mediana, moda + sesgo</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-orange-500/15 text-orange-300 border border-orange-500/30"><i class="fa-solid fa-shoe-prints mr-1"></i>Calzado · Pastores, Sacatepéquez</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">6. El “elefante” en el taller de calzado</h3>
+            <p class="text-sm text-slate-300">El taller de calzado de Pastores produjo estos pares por día en 10 días (pares/día):</p>
+            <div class="datos-box text-slate-200 font-mono">44, 46, 45, 47, 46, 45, 44, 46, 45, 92 <span class="font-sans text-slate-400">(el día 10 se contó doble por error de planilla)</span></div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) calcula $\bar{x} = \sum x_i/n$, la mediana (ordena primero) y la moda; b) indica el tipo de sesgo ($\bar{x} > Me$ o $\bar{x} < Me$) y dibuja la flecha del “elefante”; c) dilema gerencial (como en el Duelo de Garnachas): ¿usas la <strong>media</strong> o la <strong>mediana</strong> para comprar cuero perecedero de mañana y cuál para pedir el crédito bancario? Justifica en 3 líneas.</p>
+            <div class="formula-box text-cyan-200 text-xs">$\bar{x} = \dfrac{\sum x_i}{n} \qquad Me = \text{valor central ordenado} \qquad Mo = \text{valor de mayor } f$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem8_medidas_tendencia_central.html">Sem 8 · Tendencia Central (Duelo Garnachas)</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 7 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 7</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 9 · Datos agrupados + posición</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30"><i class="fa-solid fa-hand-holding-dollar mr-1"></i>Microcréditos · Cooperativa Pinulteca</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">7. Microcréditos agrupados: media, mediana, moda y percentiles</h3>
+            <p class="text-sm text-slate-300">La Cooperativa Pinulteca entregó $n = 50$ microcréditos (Q). Ya están agrupados en 5 clases de amplitud $A = 1{,}000$:</p>
+            <div class="datos-box text-slate-200 overflow-x-auto">
+                <table class="w-full text-center text-xs">
+                    <thead class="text-cyan-300"><tr><th class="p-1">Clase (Q)</th><th class="p-1">$f_i$</th><th class="p-1">$Xi$</th></tr></thead>
+                    <tbody>
+                        <tr class="border-t border-slate-800"><td class="p-1">[3,000 – 4,000)</td><td class="p-1">6</td><td class="p-1">3,500</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[4,000 – 5,000)</td><td class="p-1">12</td><td class="p-1">4,500</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[5,000 – 6,000)</td><td class="p-1">16</td><td class="p-1">5,500</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[6,000 – 7,000)</td><td class="p-1">10</td><td class="p-1">6,500</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[7,000 – 8,000]</td><td class="p-1">6</td><td class="p-1">7,500</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) media ponderada $\bar{x} = \sum(f_i \cdot Xi)/n$; b) mediana con $Me = L_i + [(n/2 - F_{i-1})/f_i]\cdot A$ (ubica primero la clase mediana con $Fi$); c) moda con $Mo = L_i + [\Delta_1/(\Delta_1+\Delta_2)]\cdot A$; d) $Q_1$ (pos. $n/4$) y $P_{90}$ (pos. $90n/100$) con la fórmula universal $L_i + [(Pos - F_{i-1})/f_i]\cdot A$; e) 3 líneas: ¿a partir de qué monto exigirías fiador ($Q_3$) y desde qué monto firma gerencia ($P_{90}$)?</p>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../sem9_agrupados.html">Sem 9 · Datos Agrupados (7 pasos)</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 8 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 8</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 12 · Cap. 3 · $R, S^2, S, CV$</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30"><i class="fa-solid fa-bottle-water mr-1"></i>Bebidas · Escuintla</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">8. Duelo de variabilidad: ¿qué línea de gaseosas es estable?</h3>
+            <p class="text-sm text-slate-300">Dos líneas llenan 6 envases de 500 ml (ml). Ambas promedian 500 ml, pero una pierde dinero. Calcula y decide.</p>
+            <div class="datos-box text-slate-200 font-mono">
+                Línea A (estable): 499, 500, 501, 500, 499, 501<br>
+                Línea B (descalibrada): 492, 508, 495, 505, 490, 510
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) para cada línea: $R = máx - mín$, $S^2 = \sum(x_i-\bar{x})^2/(n-1)$, $S = \sqrt{S^2}$ y $CV = (S/\bar{x})\times 100\%$; b) compara los $CV$ y declara la ganadora en consistencia; c) 3 líneas: multa de DIACO por envase bajo + merma por derrame, ¿qué línea genera cada costo y por qué la media sola te habría engañado?</p>
+            <div class="formula-box text-cyan-200 text-xs">$R = máx - mín \quad S^2 = \dfrac{\sum(x_i-\bar{x})^2}{n-1} \quad S = \sqrt{S^2} \quad CV = \dfrac{S}{\bar{x}}\times 100\%$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../semana12/medidas-dispersion.html">Sem 12 · Taller de Dispersión</a> y <a class="text-cyan-300 underline" href="repaso-general-semestre.html#estacion2">Repaso · Estación 2</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 9 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 9</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 13 · Cap. 3 · Empírica vs. Chebyshev</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30"><i class="fa-solid fa-clock mr-1"></i>Güipiles + Cardamomo · Cobán</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">9. ¿Campana garantizada o garantía universal?</h3>
+            <p class="text-sm text-slate-300">Dos procesos, dos modelos. No los confundas: la empírica <strong>exige campana simétrica</strong>; Chebyshev <strong>aplica a cualquier forma</strong>.</p>
+            <div class="datos-box text-slate-200 space-y-1">
+                <div><strong class="text-cyan-300">Caso A — Tejedoras (campana simétrica):</strong> tiempo de tejido por güipil $\bar{x} = 48$ h, $S = 3$ h.</div>
+                <div><strong class="text-cyan-300">Caso B — Cardamomo en Cobán (asimétrico, sesgado):</strong> días de secado $\bar{x} = 20$ días, $S = 4$ días.</div>
+            </div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) Caso A con regla empírica: calcula $\bar{x}\pm 1S$ (68%), $\bar{x}\pm 2S$ (95%) y $\bar{x}\pm 3S$ (99.7%); b) Caso B con Chebyshev $k=2$: intervalo $\bar{x}\pm 2S$ y garantía mínima $1-1/k^2$ (¿qué %?). Repite para $k=3$; c) explica en 3 líneas: ¿por qué NO puedes aplicar la empírica al cardamomo y qué le dirías al gerente que quiere “garantía del 95%” en un proceso asimétrico?</p>
+            <div class="formula-box text-cyan-200 text-xs">Empírica (solo campana): $\bar{x}\pm 1S \approx 68\% \quad \bar{x}\pm 2S \approx 95\% \quad \bar{x}\pm 3S \approx 99.7\%$ · Chebyshev (universal): $P \ge 1 - 1/k^2$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../semana13/regla-empirica-chebyshev-boxplot.html">Sem 13 · Empírica · Chebyshev · Boxplot</a>.</p>
+        </section>
+
+        <!-- EJERCICIO 10 -->
+        <section class="glass-card ejercicio p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-cyan-500 text-slate-950">Ejercicio 10</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Sem 13 · Cap. 3 · Boxplot y atípicos</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-red-500/15 text-red-300 border border-red-500/30"><i class="fa-solid fa-truck-fast mr-1"></i>Transportes · CENMA – Villalobos</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">10. Boxplot de fletes: caza el atípico de la Cuesta de Villalobos</h3>
+            <p class="text-sm text-slate-300">11 fletes CENMA → Villalobos tardaron (horas, ya ordenados):</p>
+            <div class="datos-box text-slate-200 font-mono">3.2, 3.4, 3.5, 3.6, 3.7, 3.8, 4.0, 4.2, 4.4, 4.6, 8.5 <span class="font-sans text-slate-400">(último con bloqueo en la Cuesta)</span></div>
+            <p class="text-xs text-slate-300"><strong class="text-white">Se pide en el cuaderno:</strong> a) resumen de 5 números (mín, $C_1$, mediana/$C_2$, $C_3$, máx) por mitades de Tukey (como en Sem 13); b) $RIC = C_3 - C_1$, $L_1 = C_1 - 1.5(RIC)$, $L_2 = C_3 + 1.5(RIC)$; marca con * todo valor fuera de $[L_1, L_2]$; c) dibuja el boxplot horizontal a mano (caja, mediana, bigotes hasta el último NO atípico y * en 8.5); d) calcula la media con y sin el 8.5 y muestra cómo “arrastra” a la media mientras la mediana queda robusta; e) decisión de 3 líneas: ¿despachos nocturnos consolidados o mantener horario diurno con restricción PMT?</p>
+            <div class="formula-box text-cyan-200 text-xs">$RIC = C_3 - C_1 \qquad L_1 = C_1 - 1.5(RIC) \qquad L_2 = C_3 + 1.5(RIC) \qquad * \text{ si } x < L_1 \text{ o } x > L_2$</div>
+            <p class="text-[11px] text-slate-400 no-print"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Verifica con: <a class="text-cyan-300 underline" href="../semana13/regla-empirica-chebyshev-boxplot.html">Sem 13 · Boxplot</a> y <a class="text-cyan-300 underline" href="repaso-general-semestre.html#estacion5">Repaso · Estación 5</a>.</p>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             ACCESO AL SOLUCIONARIO — OCULTO PARA LOS ESTUDIANTES
+             Para habilitarlo cuando lo decidas: borra style="display:none;"
+             del <div id="acceso-solucionario"> de abajo y listo.
+             (El archivo destino es muse_solucionario.html, en esta misma carpeta.)
+             ══════════════════════════════════════════════════════════════ -->
+        <div id="acceso-solucionario" style="display:none;" class="glass-card p-5 sm:p-6 text-center space-y-2 border-amber-500/40">
+            <h4 class="text-base font-bold text-white heading-font"><i class="fa-solid fa-key text-amber-400 mr-2"></i>¿Ya terminaste tu cuaderno?</h4>
+            <p class="text-xs text-slate-300 max-w-3xl mx-auto">Compara tu procedimiento y tus resultados con el solucionario oficial paso a paso.</p>
+            <div class="pt-1">
+                <a href="muse_solucionario.html" class="inline-block px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 text-xs font-extrabold transition shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-circle-check mr-1"></i>Comparar mis respuestas (Solucionario)</a>
+            </div>
+        </div>
+
+        <!-- CIERRE -->
+        <section class="glass-card p-5 sm:p-6 text-center space-y-2">
+            <h4 class="text-base font-bold text-white heading-font"><i class="fa-solid fa-graduation-cap text-cyan-400 mr-2"></i>Lista de cotejo antes de entregar tu cuaderno</h4>
+            <p class="text-xs text-slate-300 max-w-3xl mx-auto">¿Cada ejercicio tiene procedimiento + sustitución en fórmula + unidades + gráfico/tabla a mano + interpretación administrativa de 2–3 líneas? ¿Verificaste con el simulador indicado y anotaste si coincidió? Si falló algo, escribe qué corregiste: eso también es evidencia de aprendizaje.</p>
+            <div class="flex flex-wrap justify-center gap-2 no-print pt-1">
+                <a href="repaso-general-semestre.html" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition"><i class="fa-solid fa-rotate-left mr-1"></i>Volver a la guía de repaso</a>
+                <a href="../index_estadistica.html" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-200 text-xs font-semibold transition">Portal de Estadística I</a>
+                <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition"><i class="fa-solid fa-print mr-1"></i>Imprimir hoja</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800/80 py-6 text-center">
+        <p class="text-xs text-slate-400">Universidad Mariano Gálvez de Guatemala • Facultad de Ciencias de la Administración</p>
+        <p class="text-xs text-slate-500 mt-1">Estadística I • Semana 14 — Hoja de enunciados para cuaderno • Catedrático <strong class="text-slate-300">Ruldin Ayala</strong></p>
+        <p class="text-[11px] text-slate-600 mt-1">Basado en la guía PDF_RepasoGGeneral.pdf (Caps. 1 y 3) y en las páginas de las Semanas 2–13 de este sitio.</p>
+    </footer>
+
+</body>
+</html>

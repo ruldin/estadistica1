@@ -147,7 +147,43 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
       - **Fase 4 (SCM):** Órdenes B2B vía EDI a proveedores nacionales líderes (Cementos Progreso, Aceros de Guatemala, Samboro) y simulador de ruteo vial en la Ciudad de Guatemala evaluando restricciones PMT y Cuesta de Villalobos (diurno vs nocturno consolidado).
       - **Fase 5 (TPS & Reporte):** Bitácora transaccional TPS en tiempo real, preguntas de análisis crítico gerencial y descarga del **"Expediente de Cierre de Venta y Orden de Suministro"** en PDF con membrete institucional UMG, datos del alumno y token de auditoría.
 
-21. 📦 **`vendor/` (Librerías locales):**
+21. 📏 **`Estadistica1/semana12/medidas-dispersion.html` (Semana 12: Medidas de Dispersión — Rango, RIC, Varianza, Desviación Estándar y CV%):**
+    - Guía conceptual, fórmulas completas con grados de libertad $n-1$, taller guiado Envasadora en Escuintla, calculadora libre con desglose paso a paso y examen de gerente con 5 preguntas interactivas.
+
+22. 🔔 **`Estadistica1/semana13/regla-empirica-chebyshev-boxplot.html` (Semana 13: Regla Empírica, Teorema de Chebyshev y Diagrama de Caja):**
+    - Contraste visual entre Campana Simétrica y Caos asimétrico, umbrales 68-95-99.7, garantía universal de Chebyshev ($\ge 75\%$), cuartiles método Tukey por mitades, límites $L_1$ y $L_2$, boxplot dinámico en SVG con detección de atípicos y laboratorio libre con exportación a PDF.
+
+23. 🎓 **`Estadistica1/Semana14/repaso-general-semestre.html` (Semana 14: Repaso General del Semestre — Capítulos 1 y 3):**
+    - Síntesis interactiva oficial basada en `PDF_RepasoGGeneral.pdf`:
+      - **Control de Calidad Gerencial (Cap. 1):** Estrategia directiva de monitoreo de variabilidad para anticipar desviaciones, reducir mermas y asegurar consistencia ante el mercado y la DIACO.
+      - **Cadena Conceptual de 6 Eslabones:** Simulador interactivo animado de la cadena operativa: Población $N$, Muestra $n$, Unidad Experimental, Variable de Respuesta, Observación (como puente directo) y Datos (materia prima), con selector de 3 casos reales (Embotelladora, Textil, Retail).
+      - **Duelo de Variabilidad (Cap. 3):** Simulación visual interactiva de Línea A vs. Línea B demostrando por qué la media no basta para evaluar la estabilidad de un proceso.
+      - **Medidas de Dispersión:** Rango $R$, Varianza $S^2$ ($n-1$), Desviación estándar $S$ y Coeficiente de Variación $CV\%$ como métrica gerencial reina, con calculadora en vivo y tabla de desvíos al cuadrado.
+      - **Modelos de Tolerancia:** Comparativa dinámica entre Regla Empírica (distribución en forma de campana) y Teorema de Chebyshev (universal para cualquier forma, garantía $\ge 75\%$).
+      - **Diagrama de Caja & Inyector de Atípicos:** Resumen de 5 números (con aclaración de notación Alfaomega $C_k = Q_k$), límites $RIC$, $L_1$ y $L_2$, y demostración en vivo en SVG de cómo el outlier arrastra a la media aritmética mientras la mediana se mantiene 100% robusta.
+      - **Autoevaluación Formativa:** Quiz de 6 preguntas con feedback instantáneo y lluvia de confeti.
+      - **Hub Semestral:** Directorio de enlaces a todas las semanas previas del curso para profundizar.
+
+24. 🇬🇹 **`Estadistica1/Semana14/muse_ejercicio.html` (Semana 14: 10 Enunciados de Repaso para cuaderno — reemplaza a la eliminada `ejercicios_generales.html`):**
+    - Hoja de trabajo para resolver a mano en cuaderno con calculadora básica; los simuladores del sitio se usan **solo para verificar**.
+    - **10 enunciados, uno por bloque del semestre (solo contenido del sitio):**
+      1. *Café (Antigua):* clasificación de 6 variables (cualitativa/cuantitativa, discreta/continua, escala).
+      2. *Flores (San Juan Sacatepéquez):* cadena de 6 eslabones + plan de muestreo ($N=5{,}000$, $n=100$).
+      3. *Chocolates (Xela):* tabla $f/fr/\%/Fa$ + KPIs de cuota de mercado ($n=120$).
+      4. *Güipiles (San Antonio Aguas Calientes):* Pareto 80/20 de defectos (150 devoluciones).
+      5. *Lácteos (Teculután):* Sturges con $n=30$ ($k=6$, $R=30$, $A=5$) + histograma/polígono/ojiva.
+      6. *Calzado (Pastores):* media/mediana/moda con outlier (media 50 vs mediana 45.5) + dilema insumos vs crédito.
+      7. *Microcréditos (Pinulteca):* datos agrupados ($n=50$, $\bar{x}=Q5{,}460$) + $Q_1$ y $P_{90}$.
+      8. *Bebidas (Escuintla):* duelo de dispersión $R/S^2/S/CV$ con misma media (500 ml).
+      9. *Güipiles + Cardamomo (Cobán):* empírica en campana vs Chebyshev universal ($k=2\to\ge75\%$).
+      10. *Transportes (CENMA–Villalobos):* boxplot Tukey + atípico 8.5 h (media 4.26 vs 3.84, mediana robusta 3.8).
+    - Enlace al solucionario **oculto** (`div#acceso-solucionario` con `display:none`): para habilitarlo a los estudiantes basta con quitar ese estilo.
+
+  24b. 🔑 **`Estadistica1/Semana14/muse_solucionario.html` (Semana 14: Solucionario docente — acceso oculto por ahora):**
+    - Respuestas paso a paso de los 10 enunciados (sustitución en fórmulas, tablas, KPIs e interpretación administrativa modelo).
+    - Enlazado de forma bidireccional con `muse_ejercicio.html`; no figura en ningún menú visible hasta que se habilite el botón oculto.
+
+25. 📦 **`vendor/` (Librerías locales):**
     - `chart.umd.min.js`
     - `chartjs-plugin-datalabels.min.js`
     - Se usan copias locales para reducir dependencia de CDN externo en módulos de gráficos.
@@ -158,7 +194,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 
 - **HTML5 & CSS3 / Tailwind CSS (vía CDN):** Diseño responsive, limpio y moderno con estética ejecutiva.
 - **JavaScript (Vanilla / ES6+):** Lógica de cálculo estadístico, simulación de datos e interacciones ejecutadas 100% en el navegador del cliente.
-- **Gráficos:** Chart.js + plugin datalabels (en `vendor/` para módulos que requieren disponibilidad local).
+- **Gráficos:** Chart.js + plugin datalabels (en `vendor/` para módulos que requieren disponibilidad local) y gráficos dinámicos en SVG interactivo.
 - **PDF:** jsPDF para exportar reportes de laboratorio.
 - **Iconos y Tipografía:** FontAwesome y Google Fonts (`Inter` & `Space Grotesk`).
 - **Arquitectura:** 100% Sitio Estático (Sin backend ni servidores activos).
@@ -180,7 +216,7 @@ Al ser un sitio web 100% estático, no requiere instalación de dependencias ni 
 ## 📌 Estado del Proyecto y Pruebas
 
 - **Repositorio oficial:** [https://github.com/ruldin/estadistica1](https://github.com/ruldin/estadistica1)
-- **Estado actual:** Módulos habilitados hasta **Semana 9**.
+- **Estado actual:** Módulos habilitados hasta **Semana 14 (Repaso General del Semestre)**.
 - **Cobertura funcional:** Simuladores interactivos, KPIs gerenciales, gráficos, laboratorio de IA y exportación PDF en módulos aplicados.
 - **Enfoque vigente:** Aprendizaje estadístico orientado a decisiones empresariales (no memorización aislada de fórmulas).
 

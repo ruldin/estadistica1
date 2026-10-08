@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solucionario Paso a Paso · 10 Enunciados · Estadística I · UMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #060d17; color: #e2e8f0; line-height: 1.6; }
+        .heading-font { font-family: 'Space Grotesk', sans-serif; }
+        .glass-card { background: rgba(15,39,68,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08); border-radius: 1.25rem; }
+        .formula-box { background: linear-gradient(135deg,#091a30 0%,#0d2847 100%); border: 1px solid rgba(56,189,248,.25); border-radius: 1rem; padding: .9rem; text-align: center; }
+        .datos-box { background: #020617; border: 1px dashed rgba(56,189,248,.4); border-radius: .9rem; padding: .9rem 1rem; font-size: .8rem; }
+        .paso { background: rgba(2,6,23,.6); border-left: 3px solid #22d3ee; border-radius: 0 .75rem .75rem 0; padding: .6rem .9rem; font-size: .8rem; }
+        .resultado { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.4); border-radius: .75rem; padding: .6rem .9rem; font-size: .8rem; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #09131f; }
+        ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 4px; }
+        @media print {
+            body { background: #fff !important; color: #111 !important; }
+            header, .no-print { display: none !important; }
+            .glass-card, section { background: #fff !important; border: 1px solid #999 !important; color: #111 !important; box-shadow: none !important; }
+            .datos-box, .formula-box, .paso, .resultado { background: #f3f4f6 !important; border-color: #666 !important; color: #111 !important; }
+            h1,h2,h3,h4,p,span,li,strong,em,td,th { color: #111 !important; }
+            .solucion { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <a href="muse_ejercicio.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-800 transition" title="Volver a los enunciados">
+                        <i class="fa-solid fa-arrow-left text-sm"></i>
+                    </a>
+                    <div class="bg-white p-1 rounded-xl shadow-lg shrink-0">
+                        <img src="../../cosas/Umg.png" alt="Escudo UMG" class="h-9 w-auto object-contain" onerror="this.onerror=null;this.src='../../cosas/umg.png';">
+                    </div>
+                    <div>
+                        <div class="text-emerald-400 text-[10px] sm:text-xs font-semibold tracking-wider uppercase heading-font">Universidad Mariano Gálvez • Estadística I • Uso docente</div>
+                        <h1 class="text-base sm:text-xl font-extrabold text-white heading-font">Solucionario paso a paso <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">10/10</span></h1>
+                        <p class="text-xs text-slate-400">Respuestas desarrolladas de <a href="muse_ejercicio.html" class="text-cyan-300 underline">muse_ejercicio.html</a> — compáralas contra tu cuaderno</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 no-print">
+                    <a href="muse_ejercicio.html" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen text-cyan-400 text-xs"></i><span>Ver enunciados</span>
+                    </a>
+                    <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600/50 text-emerald-200 text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-print text-xs"></i><span>Imprimir / PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8 flex-grow w-full">
+
+        <section class="rounded-3xl bg-gradient-to-br from-slate-900 via-[#072418] to-[#071322] border border-emerald-500/30 p-6 sm:p-8">
+            <h2 class="text-2xl sm:text-3xl font-black text-white heading-font">Cómo usar este solucionario</h2>
+            <p class="text-sm text-slate-300 mt-2 max-w-3xl">Primero resuelve cada ejercicio en tu cuaderno <strong>sin ver la respuesta</strong>. Después compara <strong>procedimiento, sustitución y resultado</strong> paso por paso. Si un número no coincide, revisa con el simulador de su semana antes de corregir. La interpretación administrativa modelo está al final de cada solución.</p>
+        </section>
+
+        <!-- SOLUCIÓN 1 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 1</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Café Antigua · Clasificación</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">1. Tabla de clasificación</h3>
+            <div class="datos-box text-slate-200 overflow-x-auto">
+                <table class="w-full text-xs text-left">
+                    <thead class="text-cyan-300"><tr><th class="p-1">Variable</th><th class="p-1">Tipo</th><th class="p-1">Subtipo / Escala</th><th class="p-1">Por qué</th></tr></thead>
+                    <tbody>
+                        <tr class="border-t border-slate-800"><td class="p-1">1. Variedad (Bourbón, Caturra, Catuaí)</td><td class="p-1">Cualitativa</td><td class="p-1">Nominal</td><td class="p-1 text-slate-400">Categorías sin orden ni jerarquía.</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">2. Calidad de taza</td><td class="p-1">Cualitativa</td><td class="p-1">Ordinal</td><td class="p-1 text-slate-400">Excelente &gt; Muy buena &gt; … hay rango, pero sin distancia numérica exacta.</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">3. N.º de sacos/semana</td><td class="p-1">Cuantitativa</td><td class="p-1">Discreta · Razón</td><td class="p-1 text-slate-400">Conteo en enteros; 0 sacos = ausencia total.</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">4. Humedad del grano (%)</td><td class="p-1">Cuantitativa</td><td class="p-1">Continua · Razón</td><td class="p-1 text-slate-400">Medición con decimales; 0 % = sin humedad, y 12 % es el doble de 6 %.</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">5. Temperatura de secado (°C)</td><td class="p-1">Cuantitativa</td><td class="p-1">Continua · Intervalo</td><td class="p-1 text-slate-400">El 0 °C es arbitrario (no es ausencia de calor); 20 °C <strong>no</strong> es el doble de calor que 10 °C.</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">6. Método de pago</td><td class="p-1">Cualitativa</td><td class="p-1">Nominal</td><td class="p-1 text-slate-400">Categorías de pago sin orden.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Interpretación modelo:</strong> vigilar a diario la <strong>humedad %</strong> (define precio y riesgo de moho en el beneficio) y la <strong>calidad de taza ordinal</strong> (es la voz del cliente y sostiene el sobreprecio del café de Antigua). Las nominales sirven para segmentar, no para promediar.</div>
+        </section>
+
+        <!-- SOLUCIÓN 2 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 2</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Flores · Cadena + muestreo</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">2. Los 6 eslabones del caso</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — Identificar:</strong> Población: los $N = 5{,}000$ ramos del lote exportable · Muestra: los $n = 100$ ramos elegidos · Unidad experimental: <strong>un ramo</strong> · Variable de respuesta: longitud del tallo en cm (cuantitativa continua de razón) · Observación: <strong>62.5 cm</strong> (el valor puntual medido) · Datos: el conjunto de las 100 mediciones.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — El puente directo:</strong> la <strong>observación</strong> (62.5 cm): es el valor que toma la variable en una unidad y, reunida con las demás, forma los datos.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 3 — Sorteo físico:</strong> (1) numera los 5,000 ramos del 0001 al 5000; (2) extrae 100 números en una tómbola; (3) mide esos 100 ramos. <strong>Tabla de números aleatorios:</strong> (1) elige punto de inicio al azar; (2) avanza con salto fijo (p. ej. 4–9 como en el Lab); (3) toma los primeros 100 números entre 0001–5000 sin repetir. <strong>Hoja electrónica:</strong> <span class="font-mono">=ALEATORIO.ENTRE(1;5000)</span> 100 veces sin duplicados.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Interpretación modelo:</strong> censar 5,000 ramos retrasa el embarque, marchita la flor y cuesta más que el error que evita; una muestra aleatoria de 100 basta para decidir si el lote cumple el largo exigido por Miami.</div>
+        </section>
+
+        <!-- SOLUCIÓN 3 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 3</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Chocolates Xela · $n=120$</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">3. Tabla y KPIs</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — $fr = f/n$, $\% = fr \times 100$:</strong> Quetzal Altense: $48/120 = 0.40 \to \mathbf{40.0\%}$ · Doña María Xela: $32/120 = 0.2667 \to \mathbf{26.7\%}$ · Cacao Verapaz: $24/120 = 0.20 \to \mathbf{20.0\%}$ · Otras: $16/120 = 0.1333 \to \mathbf{13.3\%}$. <strong>$Fa$:</strong> 48 → 80 → 104 → 120.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — KPIs:</strong> 🏆 Líder: <strong>Quetzal Altense (40.0 %)</strong> · 🎯 Concentración: <strong>moderada/fragmentada</strong> (el líder no supera el 50 %, hay 3 rivales vivos) · 📈 Brecha del líder: $40.0 - 26.7 = \mathbf{13.3}$ puntos sobre el 2.º lugar.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Interpretación modelo:</strong> con Q5,000 reforzaría al líder (degustaciones y punto de venta donde ya gana) y atacaría el 26.7 % del segundo con empaque de regalo; no fragmentaría el gasto en “otras marcas” (13.3 %).</div>
+        </section>
+
+        <!-- SOLUCIÓN 4 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 4</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Güipiles · Pareto $n=150$</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">4. Pareto ordenado y corte 80 %</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — Ordenar y $\% = f/150 \times 100$:</strong> Deshilado $62 \to \mathbf{41.33\%}$ · Tinte $38 \to \mathbf{25.33\%}$ · Medida $24 \to \mathbf{16.00\%}$ · Bordado incompleto $16 \to \mathbf{10.67\%}$ · Empaque $10 \to \mathbf{6.67\%}$.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — $\%$ acumulado:</strong> 41.33 → $41.33+25.33=\mathbf{66.67}$ → $+16.00=\mathbf{82.67}$ → $+10.67=\mathbf{93.33}$ → $\mathbf{100}$. El corte del 80 % se alcanza en la <strong>3.ª causa</strong> (82.67 %).</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Vitales vs. triviales y decisión:</strong> vitales = deshilado + tinte + medida ($124/150 = \mathbf{82.7\%}$ del problema); triviales = bordado incompleto + empaque (17.3 %). Corrigiendo solo 2 causas (deshilado + tinte) se elimina el <strong>66.7 %</strong> de devoluciones: ahí va el mes de capacitación y el control de teñido.</div>
+        </section>
+
+        <!-- SOLUCIÓN 5 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 5</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Lácteos Teculután · $n=30$</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">5. Sturges completo</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — $k$:</strong> $\log_{10}(30) = 1.4771$; $k = 1 + 3.322(1.4771) = 1 + 4.907 = 5.907 \to \mathbf{k = 6}$ clases.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — $R$ y $A$:</strong> $R = 270 - 240 = \mathbf{30}$ litros; $A = 30/6 = \mathbf{5}$ litros. Intervalos: [240–245), [245–250), [250–255), [255–260), [260–265), [265–270].</div>
+            <div class="datos-box text-slate-200 overflow-x-auto">
+                <table class="w-full text-xs text-center">
+                    <thead class="text-cyan-300"><tr><th class="p-1">Intervalo</th><th class="p-1">$f_i$</th><th class="p-1">$Xi$</th><th class="p-1">$fp\%$</th><th class="p-1">$Fa$</th></tr></thead>
+                    <tbody>
+                        <tr class="border-t border-slate-800"><td class="p-1">[240–245)</td><td class="p-1">3</td><td class="p-1">242.5</td><td class="p-1">10.00</td><td class="p-1">3</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[245–250)</td><td class="p-1">5</td><td class="p-1">247.5</td><td class="p-1">16.67</td><td class="p-1">8</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[250–255)</td><td class="p-1">5</td><td class="p-1">252.5</td><td class="p-1">16.67</td><td class="p-1">13</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[255–260)</td><td class="p-1">5</td><td class="p-1">257.5</td><td class="p-1">16.67</td><td class="p-1">18</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[260–265)</td><td class="p-1">5</td><td class="p-1">262.5</td><td class="p-1">16.67</td><td class="p-1">23</td></tr>
+                        <tr class="border-t border-slate-800"><td class="p-1">[265–270]</td><td class="p-1">7</td><td class="p-1">267.5</td><td class="p-1">23.33</td><td class="p-1">30</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 3 — Gráficos:</strong> histograma con las 6 barras ($f_i$); polígono uniendo los $Xi$ (242.5 … 267.5) anclado en cero; ojiva “menor que” con $Fa$ (3, 8, 13, 18, 23, 30).</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Interpretación modelo:</strong> la producción se carga a la derecha (el intervalo [265–270] concentra 7 fincas, 23.3 %); el tanque cisterna debe dimensionarse para picos de ~270 L por finca, no para el centro de 255 L.</div>
+        </section>
+
+        <!-- SOLUCIÓN 6 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 6</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Calzado Pastores · Sesgo +</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">6. El elefante de 92 pares</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — Media:</strong> $\sum = 44+46+45+47+46+45+44+46+45+92 = 500$; $\bar{x} = 500/10 = \mathbf{50.0}$ pares/día.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — Mediana y moda:</strong> ordenados: 44, 44, 45, 45, 45, 46, 46, 46, 47, 92. $Me = (5.º+6.º)/2 = (45+46)/2 = \mathbf{45.5}$. Moda <strong>bimodal: 45 y 46</strong> (3 veces cada uno).</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 3 — Sesgo:</strong> $\bar{x} (50.0) > Me (45.5)$ → <strong>sesgo positivo</strong>; el “elefante” 92 arrastra la media 4.5 pares hacia la derecha.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Dilema gerencial modelo:</strong> compra de cuero de mañana con la <strong>mediana (45.5)</strong> —el 92 fue error de planilla y el cuero sobrante se desperdicia—; solicitud de crédito con la <strong>media (50)</strong> —refleja el volumen total registrado que el banco verificará en planilla.</div>
+        </section>
+
+        <!-- SOLUCIÓN 7 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 7</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Pinulteca · $n=50$, $A=1{,}000$</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">7. Agrupados y posición</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — Media ponderada:</strong> $\sum f_iXi = 6(3500)+12(4500)+16(5500)+10(6500)+6(7500) = 21{,}000+54{,}000+88{,}000+65{,}000+45{,}000 = 273{,}000$; $\bar{x} = 273{,}000/50 = \mathbf{Q5{,}460}$.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — Mediana:</strong> $n/2 = 25$; $Fi$: 6, 18, <strong>34</strong>, 44, 50 → clase [5,000–6,000). $Me = 5000 + [(25-18)/16]\times1000 = 5000 + 437.5 = \mathbf{Q5{,}437.5}$.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 3 — Moda:</strong> clase modal [5,000–6,000); $\Delta_1 = 16-12 = 4$, $\Delta_2 = 16-10 = 6$; $Mo = 5000 + [4/(4+6)]\times1000 = \mathbf{Q5{,}400}$.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 4 — $Q_1$, $Q_3$ y $P_{90}$:</strong> $Pos(Q_1)=12.5$ → clase [4,000–5,000): $Q_1 = 4000+[(12.5-6)/12]\times1000 = \mathbf{Q4{,}541.67}$. $Pos(Q_3)=37.5$ → clase [6,000–7,000): $Q_3 = 6000+[(37.5-34)/10]\times1000 = \mathbf{Q6{,}350}$. $Pos(P_{90})=45$ → clase [7,000–8,000]: $P_{90} = 7000+[(45-44)/6]\times1000 = \mathbf{Q7{,}166.67}$.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Decisión modelo:</strong> exigir fiador desde $Q_3 \approx$ <strong>Q6,350</strong> (25 % superior de la cartera) y firma de gerencia desde $P_{90} \approx$ <strong>Q7,167</strong> (10 % de mayor riesgo).</div>
+        </section>
+
+        <!-- SOLUCIÓN 8 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 8</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Bebidas Escuintla · $\bar{x}=500$ ambas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">8. Duelo de dispersión resuelto</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Línea A:</strong> desvíos $-1,0,+1,0,-1,+1$ → cuadrados $1+0+1+0+1+1 = 4$; $S^2 = 4/5 = \mathbf{0.80}$; $S = \sqrt{0.80} \approx \mathbf{0.89}$ ml; $R = 501-499 = \mathbf{2}$ ml; $CV = (0.89/500)\times100 \approx \mathbf{0.18\%}$.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Línea B:</strong> desvíos $-8,+8,-5,+5,-10,+10$ → cuadrados $64+64+25+25+100+100 = 378$; $S^2 = 378/5 = \mathbf{75.6}$; $S = \sqrt{75.6} \approx \mathbf{8.69}$ ml; $R = 510-490 = \mathbf{20}$ ml; $CV = (8.69/500)\times100 \approx \mathbf{1.74\%}$.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Veredicto modelo:</strong> gana la <strong>Línea A</strong> ($CV$ 0.18 % vs 1.74 %, diez veces más consistente). La B genera multas DIACO (490, 492 ml bajo el neto) y merma por derrame (508, 510 ml); la media de 500 ml sola te habría hecho creer que ambas empatan.</div>
+        </section>
+
+        <!-- SOLUCIÓN 9 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 9</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Empírica vs. Chebyshev</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">9. Intervalos y garantías</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Caso A — Empírica (campana, $\bar{x}=48$, $S=3$):</strong> 68 %: $48 \pm 3 \to \mathbf{45\text{–}51}$ h · 95 %: $48 \pm 6 \to \mathbf{42\text{–}54}$ h · 99.7 %: $48 \pm 9 \to \mathbf{39\text{–}57}$ h.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Caso B — Chebyshev ($\bar{x}=20$, $S=4$, asimétrico):</strong> $k=2$: $20 \pm 8 \to \mathbf{12\text{–}28}$ días con garantía $\ge 1-1/4 = \mathbf{75\%}$ · $k=3$: $20 \pm 12 \to \mathbf{8\text{–}32}$ días con garantía $\ge 1-1/9 = \mathbf{88.89\%}$.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Explicación modelo:</strong> la empírica exige campana; aplicarla al cardamomo sesgado infla la promesa (el “95 %” sería falso). Al gerente: en proceso asimétrico solo puedes garantizar el <strong>mínimo Chebyshev (75 % en $k=2$)</strong>; si quiere 95 % real, primero debe estabilizar y simetrizar el secado.</div>
+        </section>
+
+        <!-- SOLUCIÓN 10 -->
+        <section class="glass-card solucion p-5 sm:p-6 space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-black px-2.5 py-1 rounded-full bg-emerald-500 text-slate-950">Solución 10</span>
+                <span class="text-[11px] px-2 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">CENMA–Villalobos · $n=11$</span>
+            </div>
+            <h3 class="text-lg font-bold text-white heading-font">10. Boxplot y arrastre de la media</h3>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 1 — 5 números (Tukey, mediana en posición 6):</strong> mín $\mathbf{3.2}$ · mitad baja (3.2, 3.4, 3.5, 3.6, 3.7) → $C_1 = \mathbf{3.5}$ · mediana $C_2 = \mathbf{3.8}$ · mitad alta (4.0, 4.2, 4.4, 4.6, 8.5) → $C_3 = \mathbf{4.4}$ · máx 8.5.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 2 — Barreras:</strong> $RIC = 4.4-3.5 = \mathbf{0.9}$; $L_1 = 3.5-1.5(0.9) = \mathbf{2.15}$; $L_2 = 4.4+1.5(0.9) = \mathbf{5.75}$. Solo <strong>8.5 h $>$ 5.75 → atípico (*)</strong>; abajo no hay (3.2 $>$ 2.15). Bigotes: inferior en 3.2, superior recortado en <strong>4.6</strong>, con * en 8.5.</div>
+            <div class="paso text-slate-200"><strong class="text-cyan-300">Paso 3 — Arrastre:</strong> con atípico $\bar{x} = 46.9/11 \approx \mathbf{4.26}$ h; sin atípico $\bar{x} = 38.4/10 = \mathbf{3.84}$ h (el bloqueo suma <strong>+0.42 h, ~11 %</strong> de centro falso). La mediana queda <strong>3.8 h en ambos casos: 100 % robusta</strong>.</div>
+            <div class="resultado text-slate-200"><strong class="text-emerald-300">Decisión modelo:</strong> el 8.5 h es falla puntual externa (bloqueo en la Cuesta), no desempeño habitual; se aísla del KPI y se evalúa la flota con la mediana (3.8 h). Para cumplir la ventana sin multas PMT, conviene consolidar <strong>despachos nocturnos</strong> y reservar el día solo para urgencias.</div>
+        </section>
+
+        <!-- CIERRE -->
+        <section class="glass-card p-5 sm:p-6 text-center space-y-2">
+            <h4 class="text-base font-bold text-white heading-font"><i class="fa-solid fa-flag-checkered text-emerald-400 mr-2"></i>¿Qué hacer con tus diferencias?</h4>
+            <p class="text-xs text-slate-300 max-w-3xl mx-auto">Marca con ✓ cada paso que coincidió y encierra en un círculo el primero que difirió: ahí está tu error (casi siempre es un $Fi$ mal acumulado, un intervalo mal cerrado o un $n-1$ olvidado). Rehaz solo desde ese paso y verifica en el simulador de su semana.</p>
+            <div class="flex flex-wrap justify-center gap-2 no-print pt-1">
+                <a href="muse_ejercicio.html" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition"><i class="fa-solid fa-pen mr-1"></i>Volver a los enunciados</a>
+                <a href="repaso-general-semestre.html" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-200 text-xs font-semibold transition">Guía de repaso</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800/80 py-6 text-center">
+        <p class="text-xs text-slate-400">Universidad Mariano Gálvez de Guatemala • Facultad de Ciencias de la Administración</p>
+        <p class="text-xs text-slate-500 mt-1">Estadística I • Semana 14 — Solucionario de los 10 enunciados • Catedrático <strong class="text-slate-300">Ruldin Ayala</strong></p>
+    </footer>
+
+</body>
+</html>
