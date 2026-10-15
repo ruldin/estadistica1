@@ -1,0 +1,5 @@
+# Excluye archivos internos del repo del despliegue a Cloudflare Workers.
+# Sin esto, wrangler intenta subir .git/objects (pack de 53 MB) como asset
+# y el build falla con "Asset too large" (límite 25 MiB por archivo).
+.git/
+.vscode/
