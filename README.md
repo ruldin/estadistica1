@@ -37,7 +37,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
 2. 📊 **`Estadistica1/index_estadistica.html` (Dashboard de Estadística I):**
    - Acceso rápido a simuladores por semana.
    - Barra de acceso directo con herramientas activas (Clasificador, Business Lab, Tabulador, Pareto, Sturges, Parcial 1 y Estadígrafos).
-   - **Centro de Configuración de API OpenRouter para el Alumno:** Panel interactivo y modal seguro para que cada estudiante gestione su propia API Key almacenada localmente en su navegador (`localStorage`), con el modelo por defecto `inclusionai/ling-3.0-flash-fin:free`, selector de modelos, prueba de conexión en vivo con telemetría de latencia (ms) y purga de seguridad para computadoras de laboratorios compartidos.
+   - **Centro de Configuración de API OpenRouter para el Alumno:** Panel interactivo y modal seguro para que cada estudiante gestione su propia API Key almacenada localmente en su navegador (`localStorage`), con el modelo por defecto `nvidia/nemotron-3.5-lightning:free`, selector de modelos, prueba de conexión en vivo con telemetría de latencia (ms) y purga de seguridad para computadoras de laboratorios compartidos.
 
 3. 📊 **`Estadistica1/sem2_clasifica_variables.html` (Clasificación de Variables):**
    - Entrenamiento interactivo para clasificar variables cualitativas, cuantitativas, nominales, ordinales, de intervalo y de razón.
@@ -102,7 +102,7 @@ A diferencia del enfoque tradicional basado en la memorización de fórmulas, es
         3. *Caso 3: Farmacia y Autoservicio Calzada Roosevelt* (Mixco, 50 despachos express, min, x̄, Q3 y P90).
         4. *Caso 4: Selección de Talento UMG* (Campus Central, 30 aspirantes evaluados, pts, x̄ bimodal, Q1 y P70).
       - **Navegación Guiada Paso a Paso:** Botones de navegación *Anterior* y *Siguiente* en cada una de las pestañas (Paso 0 a Paso 7) para guiar al estudiante de forma estructurada.
-      - **Tutor Formativo IA (Mentor Amigo):** Botón `Retroalimentación IA` en cada paso para evaluar las conclusiones de pensamiento crítico del alumno mediante OpenRouter API (`inclusionai/ling-3.0-flash-fin:free`), con tono empático, formativo y constructivo de "tú", sin saludos ceremoniales iniciales y con modal de configuración seguro en `localStorage`.
+      - **Tutor Formativo IA (Mentor Amigo):** Botón `Retroalimentación IA` en cada paso para evaluar las conclusiones de pensamiento crítico del alumno mediante OpenRouter API (`nvidia/nemotron-3.5-lightning:free`), con tono empático, formativo y constructivo de "tú", sin saludos ceremoniales iniciales y con modal de configuración seguro en `localStorage`.
       - **Cálculo de Estadígrafos Agrupados:** Media aritmética ponderada por frecuencias ($\bar{x} = \frac{\sum f_i \cdot x_i}{n}$), Mediana ($Me$) utilizando la columna de frecuencia acumulada $F_i$ como GPS ordinal e interpolación de clase, y Moda ($Mo$) a través del diferencial de frecuencias adyacentes ($\Delta_1$ y $\Delta_2$).
       - **Fórmula Madre de Medidas de Posición:** Interpolación unificada para Cuartiles ($Q_k$), Deciles ($D_k$) y Percentiles ($P_k$) con cálculo de posición ordinal y clase de trabajo.
       - **Soporte de Datasets:** Entrada por tabla agrupada manual/CSV o datos crudos que se agrupan automáticamente, selector de unidades de medida (Q, US$, pts, min, h, años, kg, cm, und) y carga rápida de casos.

@@ -181,12 +181,13 @@ Las respuestas <b>no están visibles</b>: usa el botón <b>Revisar</b> y el bot�
 <input type="password" id="cfg-api-key" placeholder="sk-or-v1-..." style="width:100%;text-align:left"><br><br>
 <label class="text-sm"><b>Modelo</b></label><br>
 <select id="cfg-model-select" style="width:100%;padding:10px;border:2px solid #cbd5e6;border-radius:10px" onchange="document.getElementById('cfg-api-model').value=this.value">
-<option value="inclusionai/ling-3.0-flash-fin:free">inclusionai/ling-3.0-flash-fin:free (por defecto)</option>
-<option value="google/gemini-2.0-flash-exp:free">google/gemini-2.0-flash-exp:free</option>
-<option value="meta-llama/llama-3.3-70b-instruct:free">meta-llama/llama-3.3-70b-instruct:free</option>
+<option value="nvidia/nemotron-3.5-lightning:free">nvidia/nemotron-3.5-lightning:free (Por Defecto)</option>
+<option value="nvidia/nemotron-3-super-120b-a12b:free">nvidia/nemotron-3-super-120b-a12b:free</option>
+<option value="google/gemma-4-31b-it:free">google/gemma-4-31b-it:free</option>
+<option value="nvidia/nemotron-3-ultra-550b-a55b:free">nvidia/nemotron-3-ultra-550b-a55b:free</option>
 <option value="custom">Otro (escríbelo abajo)</option>
 </select><br><br>
-<input type="text" id="cfg-api-model" value="inclusionai/ling-3.0-flash-fin:free" style="width:100%;text-align:left"><br><br>
+<input type="text" id="cfg-api-model" value="nvidia/nemotron-3.5-lightning:free" style="width:100%;text-align:left"><br><br>
 <input type="hidden" id="cfg-api-url" value="https://openrouter.ai/api/v1/chat/completions">
 <div id="cfg-test-feedback" class="feedback"></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -426,13 +427,15 @@ document.addEventListener('input', e=>{ if(e.target && e.target.classList && e.t
 /* ================= IA — Mentor Amigo (patrón OpenRouter del sitio) ================= */
 const API_KEY_BIAS='bias-lab-settings', API_KEY_GLOBAL='openrouter_settings';
 const DEFAULT_API_URL='https://openrouter.ai/api/v1/chat/completions';
-const DEFAULT_MODEL='inclusionai/ling-3.0-flash-fin:free';
+const DEFAULT_MODEL='nvidia/nemotron-3.5-lightning:free';
+// Modelos retirados de OpenRouter :free → migrar al nuevo por defecto
+const RETIRED_MODELS=['inclusionai/ling-3.0-flash-fin:free','meta-llama/llama-3.3-70b-instruct:free','deepseek/deepseek-r1:free','google/gemini-2.0-flash-exp:free','google/gemini-2.0-flash-lite-001'];
 let iaCurrentEx = 0;
 
 function getStoredApiSettings(){
   try{
     const raw = localStorage.getItem(API_KEY_BIAS)||localStorage.getItem(API_KEY_GLOBAL);
-    if(raw){const p=JSON.parse(raw);return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model:p.model||DEFAULT_MODEL};}
+    if(raw){const p=JSON.parse(raw);let model=p.model||DEFAULT_MODEL;if(RETIRED_MODELS.includes(model))model=DEFAULT_MODEL;return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model};}
   }catch(e){}
   return {apiKey:'',apiUrl:DEFAULT_API_URL,model:DEFAULT_MODEL};
 }
@@ -544,7 +547,7 @@ EVALÚA como mentor amigo en los 3 apartados (tú, cálido, sin saludos, sin <th
     if(ch.message){ raw = (typeof ch.message.content==='string'&&ch.message.content.trim()) ? ch.message.content.trim() : (ch.message.reasoning||''); }
     else if(typeof ch.text==='string') raw=ch.text.trim();
     let fb=sanitizeAiResponse(raw);
-    if(!fb){ if(ch.finish_reason==='length') throw new Error('El modelo agotó tokens. Prueba con "google/gemini-2.0-flash-exp:free" y Reevaluar.'); fb=String(raw).replace(/<\/?think>/gi,'').trim(); }
+    if(!fb){ if(ch.finish_reason==='length') throw new Error('El modelo agotó tokens. Prueba con "nvidia/nemotron-3-super-120b-a12b:free" y Reevaluar.'); fb=String(raw).replace(/<\/?think>/gi,'').trim(); }
     if(!fb) throw new Error('La IA no devolvió veredicto. Prueba otro modelo.');
     document.getElementById('modal-ia-response-text').textContent=fb;
     document.getElementById('ia-eval-loading').classList.add('hidden');

@@ -980,11 +980,10 @@
                 <div>
                     <label class="font-bold text-slate-300 block mb-1">Modelo de IA:</label>
                     <select id="api-model-select" onchange="onModelSelectChange()" class="w-full bg-slate-950 border border-slate-750 text-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:border-teal-400 focus:outline-none">
-                        <option value="inclusionai/ling-3.0-flash-fin:free" selected>Ling 3.0 Flash Fin: Free (Recomendado UMG)</option>
-                        <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B Instruct: Free</option>
-                        <option value="google/gemini-2.0-flash-lite-001">Gemini 2.0 Flash Lite</option>
-                        <option value="google/gemini-2.0-pro-exp-02-05:free">Gemini 2.0 Pro Experimental: Free</option>
-                        <option value="deepseek/deepseek-r1:free">DeepSeek R1: Free</option>
+                        <option value="nvidia/nemotron-3.5-lightning:free" selected>Nemotron 3.5 Lightning: Free (Por Defecto · Recomendado UMG)</option>
+                        <option value="nvidia/nemotron-3-super-120b-a12b:free">Nemotron 3 Super 120B: Free</option>
+                        <option value="google/gemma-4-31b-it:free">Gemma 4 31B IT: Free</option>
+                        <option value="nvidia/nemotron-3-ultra-550b-a55b:free">Nemotron 3 Ultra 550B: Free</option>
                         <option value="custom">Otro modelo (especificar)...</option>
                     </select>
                 </div>
@@ -1792,21 +1791,36 @@ function checkQuiz(){
 /* ===== CONFIGURACIÓN Y GESTIÓN DE OPENROUTER API ===== */
 const KEY_BIAS_SETTINGS = 'bias-lab-settings';
 const KEY_OPENROUTER = 'openrouter_settings';
-const DEFAULT_MODEL = 'inclusionai/ling-3.0-flash-fin:free';
+const DEFAULT_MODEL = 'nvidia/nemotron-3.5-lightning:free';
+// Modelos retirados de OpenRouter :free → migrar al nuevo por defecto
+const RETIRED_MODELS = [
+    'inclusionai/ling-3.0-flash-fin:free',
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'deepseek/deepseek-r1:free',
+    'google/gemini-2.0-flash-exp:free',
+    'google/gemini-2.0-flash-lite-001',
+    'google/gemini-2.0-pro-exp-02-05:free'
+];
 
 function getStoredApiSettings(){
     try {
         const raw1 = localStorage.getItem(KEY_BIAS_SETTINGS);
         if(raw1){
             const parsed = JSON.parse(raw1);
-            if(parsed && parsed.apiKey) return parsed;
+            if(parsed && parsed.apiKey){
+                if(parsed.model && RETIRED_MODELS.includes(parsed.model)) parsed.model = DEFAULT_MODEL;
+                return parsed;
+            }
         }
     } catch(e){}
     try {
         const raw2 = localStorage.getItem(KEY_OPENROUTER);
         if(raw2){
             const parsed = JSON.parse(raw2);
-            if(parsed && parsed.apiKey) return parsed;
+            if(parsed && parsed.apiKey){
+                if(parsed.model && RETIRED_MODELS.includes(parsed.model)) parsed.model = DEFAULT_MODEL;
+                return parsed;
+            }
         }
     } catch(e){}
     const rawKey = localStorage.getItem('openrouter_api_key');
@@ -2182,7 +2196,7 @@ Proporciona tu retroalimentación formativa como Mentor Amigo directamente al es
         // Si quedó vacío porque el modelo consumió tokens en razonamiento interno
         if(!cleanFeedback){
             if(choice && choice.finish_reason === 'length'){
-                throw new Error(`El modelo "${activeModel}" agotó sus tokens de respuesta durante el razonamiento. Te sugerimos cambiar en el modal al modelo "google/gemini-2.0-flash-lite-001" o "meta-llama/llama-3.3-70b-instruct:free" y pulsar "Reevaluar".`);
+                throw new Error(`El modelo "${activeModel}" agotó sus tokens de respuesta durante el razonamiento. Te sugerimos cambiar en el modal al modelo "nvidia/nemotron-3-super-120b-a12b:free" o "nvidia/nemotron-3-ultra-550b-a55b:free" y pulsar "Reevaluar".`);
             }
             if(rawFeedback && rawFeedback.length > 0){
                 cleanFeedback = rawFeedback.replace(/<\/?think>/gi, '').trim();

@@ -165,7 +165,7 @@
                     </div>
                     <div class="min-w-0">
                         <span class="text-[10px] text-slate-500 block uppercase font-bold tracking-wider">Modelo por Defecto</span>
-                        <span id="summary-model-display" class="font-semibold text-slate-200 truncate block font-mono text-[11px]">inclusionai/ling-3.0-flash-fin:free</span>
+                        <span id="summary-model-display" class="font-semibold text-slate-200 truncate block font-mono text-[11px]">nvidia/nemotron-3.5-lightning:free</span>
                     </div>
                 </div>
                 <div class="bg-slate-950/80 border border-slate-850 p-3.5 rounded-2xl flex items-center space-x-3">
@@ -988,21 +988,19 @@
                     <div class="relative">
                         <select id="cfg-model-select" onchange="onModelPresetChange(this.value)"
                             class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition cursor-pointer">
-                            <option value="inclusionai/ling-3.0-flash-fin:free">⭐ inclusionai/ling-3.0-flash-fin:free (Por Defecto · Gratuito & Especializado en Finanzas)</option>
-                            <option value="google/gemini-2.0-flash-exp:free">⚡ google/gemini-2.0-flash-exp:free (Google Gemini 2.0 Flash · Gratuito y Rápido)</option>
-                            <option value="meta-llama/llama-3.3-70b-instruct:free">🦙 meta-llama/llama-3.3-70b-instruct:free (Llama 3.3 70B · Gratuito)</option>
-                            <option value="deepseek/deepseek-r1:free">🧠 deepseek/deepseek-r1:free (DeepSeek R1 Razonamiento · Gratuito)</option>
-                            <option value="qwen/qwen-2.5-72b-instruct">🌐 qwen/qwen-2.5-72b-instruct (Qwen 2.5 72B · Gran rendimiento numérico)</option>
-                            <option value="openai/gpt-4o-mini">🟢 openai/gpt-4o-mini (GPT-4o Mini · Económico y Confiable)</option>
+                            <option value="nvidia/nemotron-3.5-lightning:free">⭐ nvidia/nemotron-3.5-lightning:free (Por Defecto · Gratuito · Rápido y preciso)</option>
+                            <option value="nvidia/nemotron-3-super-120b-a12b:free">⚖️ nvidia/nemotron-3-super-120b-a12b:free (Equilibrado · Gratuito · Uso general)</option>
+                            <option value="google/gemma-4-31b-it:free">🌎 google/gemma-4-31b-it:free (Multilingüe · Gratuito · Bueno en español)</option>
+                            <option value="nvidia/nemotron-3-ultra-550b-a55b:free">🧠 nvidia/nemotron-3-ultra-550b-a55b:free (Razonamiento profundo · Gratuito · 1M contexto)</option>
                             <option value="custom">✏️ Personalizado (Escribir manualmente abajo)</option>
                         </select>
                     </div>
 
-                    <input type="text" id="cfg-api-model" value="inclusionai/ling-3.0-flash-fin:free" placeholder="Nombre o ID del modelo en OpenRouter"
+                    <input type="text" id="cfg-api-model" value="nvidia/nemotron-3.5-lightning:free" placeholder="Nombre o ID del modelo en OpenRouter"
                         class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 font-mono transition">
                     
                     <div class="text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>Por defecto: <code class="text-purple-300 font-mono">inclusionai/ling-3.0-flash-fin:free</code> (barato en tokens para el aula).</span>
+                        <span>Por defecto: <code class="text-purple-300 font-mono">nvidia/nemotron-3.5-lightning:free</code> (gratuito y rápido para el aula).</span>
                         <button type="button" onclick="resetDefaultModel()" class="text-purple-400 hover:text-purple-300 underline font-semibold text-[11px] cursor-pointer">Restablecer</button>
                     </div>
                 </div>
@@ -1074,17 +1072,28 @@
         const API_STORAGE_KEY_BIAS = 'bias-lab-settings';
         const API_STORAGE_KEY_GLOBAL = 'openrouter_settings';
         const DEFAULT_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-        const DEFAULT_MODEL = 'inclusionai/ling-3.0-flash-fin:free';
+        const DEFAULT_MODEL = 'nvidia/nemotron-3.5-lightning:free';
+        // Modelos retirados de OpenRouter :free (oct-2026) → migrar al nuevo por defecto
+        const RETIRED_MODELS = [
+            'inclusionai/ling-3.0-flash-fin:free',
+            'google/gemini-2.0-flash-exp:free',
+            'meta-llama/llama-3.3-70b-instruct:free',
+            'deepseek/deepseek-r1:free',
+            'qwen/qwen-2.5-72b-instruct',
+            'openai/gpt-4o-mini'
+        ];
 
         function getStoredApiSettings() {
             try {
                 const raw = localStorage.getItem(API_STORAGE_KEY_BIAS) || localStorage.getItem(API_STORAGE_KEY_GLOBAL);
                 if (raw) {
                     const parsed = JSON.parse(raw);
+                    let model = parsed.model || DEFAULT_MODEL;
+                    if (RETIRED_MODELS.includes(model)) model = DEFAULT_MODEL;
                     return {
                         apiKey: parsed.apiKey || '',
                         apiUrl: parsed.apiUrl || DEFAULT_API_URL,
-                        model: parsed.model || DEFAULT_MODEL
+                        model
                     };
                 }
             } catch (e) {

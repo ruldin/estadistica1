@@ -298,11 +298,13 @@ function validarCierre(){
 const API_STORAGE_KEY_BIAS='bias-lab-settings';
 const API_STORAGE_KEY_GLOBAL='openrouter_settings';
 const DEFAULT_API_URL='https://openrouter.ai/api/v1/chat/completions';
-const DEFAULT_MODEL='inclusionai/ling-3.0-flash-fin:free';
+const DEFAULT_MODEL='nvidia/nemotron-3.5-lightning:free';
+// Modelos retirados de OpenRouter :free (oct-2026) → migrar al nuevo por defecto
+const RETIRED_MODELS=['inclusionai/ling-3.0-flash-fin:free','google/gemini-2.0-flash-exp:free','meta-llama/llama-3.3-70b-instruct:free','deepseek/deepseek-r1:free','qwen/qwen-2.5-72b-instruct','openai/gpt-4o-mini'];
 function getStoredApiSettings(){
   try{
     const raw=localStorage.getItem(API_STORAGE_KEY_BIAS)||localStorage.getItem(API_STORAGE_KEY_GLOBAL);
-    if(raw){const p=JSON.parse(raw);return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model:p.model||DEFAULT_MODEL};}
+    if(raw){const p=JSON.parse(raw);let m=p.model||DEFAULT_MODEL;if(RETIRED_MODELS.includes(m))m=DEFAULT_MODEL;return{apiKey:p.apiKey||'',apiUrl:p.apiUrl||DEFAULT_API_URL,model:m};}
   }catch(e){}
   return{apiKey:'',apiUrl:DEFAULT_API_URL,model:DEFAULT_MODEL};
 }
@@ -434,8 +436,8 @@ async function consultarMentorIA(auto){
     }
     let fb=sanitizeAi(raw);
     if(!fb){
-      if(data.choices[0]&&data.choices[0].finish_reason==='length')throw new Error('El modelo agotó sus tokens. Prueba con google/gemini-2.0-flash-exp:free en Configurar API Key.');
-      throw new Error('El modelo devolvió su análisis interno en lugar de la retroalimentación final. Pulsa "Reintentar" y si se repite, cambia de modelo en "Configurar API Key" (p. ej. google/gemini-2.0-flash-exp:free).');
+      if(data.choices[0]&&data.choices[0].finish_reason==='length')throw new Error('El modelo agotó sus tokens. Prueba con nvidia/nemotron-3-super-120b-a12b:free en Configurar API Key.');
+      throw new Error('El modelo devolvió su análisis interno en lugar de la retroalimentación final. Pulsa "Reintentar" y si se repite, cambia de modelo en "Configurar API Key" (p. ej. nvidia/nemotron-3-super-120b-a12b:free).');
     }
     // Guardar en el caso (estará en el PDF)
     respuestas[casoActual].ia={feedback:fb,model:s.model,timestamp:new Date().toISOString(),status:'ok'};
