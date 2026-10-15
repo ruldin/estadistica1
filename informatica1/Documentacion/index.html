@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital · Presentaciones y Libro de Texto | Informática I · UMG</title>
+    <meta name="description" content="Índice de presentaciones de clase en PDF y libro de texto de libre distribución para Informática I, Administración de Empresas, UMG.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        .heading-font { font-family: 'Space Grotesk', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        details summary::-webkit-details-marker { display: none; }
+        details[open] .chev { transform: rotate(180deg); }
+        .chev { transition: transform .25s ease; }
+        .card-hide { display: none !important; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scrollbar antialiased">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950/90 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-3">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <img src="../../cosas/Umg.png" alt="Escudo Universidad Mariano Gálvez de Guatemala" class="w-11 h-11 rounded-xl object-contain bg-white p-1 shadow-lg shadow-cyan-500/10 shrink-0">
+                    <div class="min-w-0">
+                        <span class="text-[10px] font-bold tracking-widest text-cyan-400 uppercase block heading-font">Facultad de Administración • UMG</span>
+                        <h1 class="text-base sm:text-lg font-extrabold text-white leading-tight heading-font truncate">Informática I <span class="text-xs text-slate-400 font-normal">| Biblioteca Digital</span></h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+                    <a href="../index_informatica.html" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-xl transition flex items-center heading-font">
+                        <i class="fa-solid fa-house mr-1.5"></i><span class="hidden sm:inline">Página principal de Informática I</span><span class="sm:hidden">Informática I</span>
+                    </a>
+                    <a href="../../index.html" class="hidden md:flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-full text-xs transition">
+                        <i class="fa-solid fa-building-columns text-cyan-400"></i><span>Portal General</span>
+                    </a>
+                    <div class="hidden lg:flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full text-xs text-slate-300">
+                        <i class="fa-solid fa-user-tie text-cyan-400"></i><span><strong class="text-white">Ruldin Ayala</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-10">
+
+        <!-- HERO -->
+        <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/40 p-6 sm:p-10 border border-slate-800/80 shadow-2xl">
+            <div class="relative z-10 max-w-3xl space-y-5">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-3 py-1 text-xs font-bold bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20 uppercase tracking-widest heading-font">
+                        <i class="fa-solid fa-book-open mr-1"></i> Biblioteca digital del curso
+                    </span>
+                    <span class="px-3 py-1 text-xs font-semibold bg-slate-800 text-slate-300 rounded-full border border-slate-700">
+                        <i class="fa-solid fa-file-pdf mr-1 text-red-400"></i> 17 presentaciones + libro completo
+                    </span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight heading-font">
+                    Presentaciones de clase<br>
+                    <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">y libro de texto</span>
+                </h2>
+                <p class="text-slate-300 text-xs sm:text-base leading-relaxed">
+                    Material de apoyo de <strong>Informática I</strong>, Administración de Empresas, UMG. Cada tarjeta indica el
+                    número de diapositivas, el contexto temático y el desglose del contenido <strong>diapositiva por diapositiva</strong>
+                    para que ubiques el tema antes de ver o descargar el PDF. Todo el material se abre en una pestaña nueva y también puede descargarse.
+                </p>
+                <div class="grid grid-cols-3 gap-3 max-w-xl">
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 text-center">
+                        <p class="text-xl sm:text-2xl font-black text-cyan-400 heading-font">17</p>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider font-bold">Presentaciones PDF</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 text-center">
+                        <p class="text-xl sm:text-2xl font-black text-emerald-400 heading-font">377</p>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider font-bold">Páginas del libro</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3 text-center">
+                        <p class="text-xl sm:text-2xl font-black text-amber-400 heading-font">100%</p>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider font-bold">Lectura gratuita</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                    <a href="#libro" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center shadow-lg shadow-emerald-500/20 heading-font">
+                        <i class="fa-solid fa-book mr-2"></i> Ir al libro de texto
+                    </a>
+                    <a href="#presentaciones" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center shadow-lg shadow-cyan-500/20 heading-font">
+                        <i class="fa-solid fa-layer-group mr-2"></i> Ver presentaciones
+                    </a>
+                    <a href="../index_informatica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-4 py-3 rounded-xl transition text-xs sm:text-sm flex items-center">
+                        <i class="fa-solid fa-arrow-left mr-2 text-cyan-400"></i> Volver a Informática I
+                    </a>
+                </div>
+            </div>
+            <div class="absolute right-8 bottom-0 top-0 w-1/3 opacity-15 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-400 via-slate-900 to-transparent hidden lg:block pointer-events-none"></div>
+        </section>
+
+        <!-- BUSCADOR -->
+        <section class="rounded-3xl bg-slate-900/60 border border-slate-800 p-5 sm:p-6 space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center gap-3">
+                <div class="relative flex-grow">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                    <input id="buscador" type="text" placeholder="Buscar por tema, semana o archivo… (ej. ERP, redes, n8n, seguridad)"
+                        class="w-full bg-slate-950 border border-slate-700 focus:border-cyan-400 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition">
+                </div>
+                <div class="flex flex-wrap gap-2" id="filtros">
+                    <button data-f="todas" class="fbtn bg-cyan-500 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl transition heading-font">Todas</button>
+                    <button data-f="fundamentos" class="fbtn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition">Semanas 1–4</button>
+                    <button data-f="ia" class="fbtn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition">IA</button>
+                    <button data-f="redes" class="fbtn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition">Redes y seguridad</button>
+                    <button data-f="erp" class="fbtn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition">ERP · CRM · Procesos</button>
+                    <button data-f="auto" class="fbtn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition">Automatización</button>
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-500"><i class="fa-solid fa-circle-info mr-1 text-cyan-400"></i><span id="contador">17 presentaciones</span> · Los enlaces “Ver” abren el PDF en pestaña nueva; “Descargar” lo guarda en tu dispositivo.</p>
+        </section>
+
+        <!-- LIBRO DE TEXTO -->
+        <section id="libro" class="rounded-3xl bg-gradient-to-br from-emerald-950/50 via-slate-900 to-slate-950 border border-emerald-500/30 p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <div class="flex-grow space-y-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-3 py-1 bg-emerald-500/15 text-emerald-300 text-xs font-bold rounded-lg uppercase tracking-wider border border-emerald-500/30 heading-font">
+                            <i class="fa-solid fa-book-open mr-1"></i> Libro de texto · Libre distribución
+                        </span>
+                        <span class="text-xs text-slate-400 font-semibold"><i class="fa-solid fa-file-lines mr-1 text-emerald-400"></i>377 páginas · PDF 7.4 MB · Español</span>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white heading-font">Sistemas de información para la empresa y más allá</h3>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        Traducción al español de <em>Information Systems for Business and Beyond</em>, Canadian Edition
+                        (Fanshawe College Pressbooks, London, Ontario). Cubre los 13 capítulos del curso: sistemas de información,
+                        estrategia digital, hardware, software, datos y Big Data, redes, desarrollo de sistemas, seguridad,
+                        ética y propiedad intelectual, e-business, procesos y ERP, apoyo a decisiones e inteligencia artificial emergente.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5">
+                            <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Autores originales</p>
+                            <p class="text-slate-200 font-semibold">Shauna Roch · James Fowler · Barbara Smith · David Bourgeois</p>
+                            <p class="text-slate-500 mt-1">Con Joseph Mortati, Shouhong Wang y James Smith. Obra original iniciada en 2014 por el Dr. David Bourgeois (Saylor Foundation, Open Textbook Challenge) y actualizada en 2019.</p>
+                        </div>
+                        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5">
+                            <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Traducción al español</p>
+                            <p class="text-slate-200 font-semibold">Ruldin Ayala · 2026</p>
+                            <p class="text-slate-500 mt-1">Traducida con programa propio en Python y el modelo Qwen 3.5 ejecutado en local. La traducción respeta íntegramente la licencia original: se comparte gratis, sin uso comercial y bajo la misma licencia.</p>
+                        </div>
+                    </div>
+                    <!-- Derechos -->
+                    <div class="bg-slate-950/80 border border-amber-500/30 rounded-2xl p-4 sm:p-5 space-y-2">
+                        <h4 class="text-sm font-bold text-amber-300 heading-font"><i class="fa-brands fa-creative-commons mr-1.5"></i>Derechos y licencia del libro (textual de la página de créditos)</h4>
+                        <blockquote class="text-[11px] sm:text-xs text-slate-300 leading-relaxed border-l-4 border-amber-500/60 pl-3 italic">
+                            «Information Systems for Business and Beyond Copyright © 2022 by Shauna Roch; James Fowler; Barbara Smith; and David Bourgeois is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License, except where otherwise noted.»
+                        </blockquote>
+                        <ul class="text-[11px] sm:text-xs text-slate-400 leading-relaxed space-y-1 pt-1">
+                            <li><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i><strong class="text-slate-200">Atribución (BY):</strong> cita siempre a los autores originales y a Fanshawe College Pressbooks / eCampusOntario.</li>
+                            <li><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i><strong class="text-slate-200">No comercial (NC):</strong> prohibida su venta o uso con fines comerciales.</li>
+                            <li><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i><strong class="text-slate-200">Compartir igual (SA):</strong> si lo adaptas, distribúyelo bajo la misma licencia CC BY-NC-SA 4.0.</li>
+                            <li><i class="fa-solid fa-building-columns text-cyan-400 mr-1.5"></i>Proyecto posible gracias al Gobierno de Ontario y la Estrategia de Aprendizaje Virtual, administrada vía eCampusOntario.</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="LibroDeTexto/Sistemas%20de%20informaci%C3%B3n%20para%20la%20empresa%20y%20m%C3%A1s%20all%C3%A1.pdf" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center shadow-lg shadow-emerald-500/20 heading-font">
+                            <i class="fa-solid fa-eye mr-2"></i> Ver libro en el navegador
+                        </a>
+                        <a href="LibroDeTexto/Sistemas%20de%20informaci%C3%B3n%20para%20la%20empresa%20y%20m%C3%A1s%20all%C3%A1.pdf" download class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-5 py-3 rounded-xl transition text-xs sm:text-sm flex items-center">
+                            <i class="fa-solid fa-download mr-2 text-emerald-400"></i> Descargar PDF
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-80 shrink-0 space-y-3">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 text-center space-y-2">
+                        <i class="fa-solid fa-book-bookmark text-4xl text-emerald-400"></i>
+                        <p class="text-xs font-bold text-white heading-font leading-snug">Sistemas de información<br>para la empresa y más allá</p>
+                        <p class="text-[11px] text-slate-500">Canadian Edition · Fanshawe College Pressbooks</p>
+                        <div class="flex items-center justify-center gap-1.5 text-amber-300 text-xs font-bold pt-1">
+                            <i class="fa-brands fa-creative-commons"></i><i class="fa-brands fa-creative-commons-by"></i><i class="fa-brands fa-creative-commons-nc"></i><i class="fa-brands fa-creative-commons-sa"></i>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-semibold">CC BY-NC-SA 4.0 Internacional</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4">
+                        <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2"><i class="fa-solid fa-list mr-1 text-emerald-400"></i>Contenido por capítulos</p>
+                        <ol class="text-[11px] text-slate-400 leading-relaxed space-y-1 list-decimal list-inside">
+                            <li>Sistemas de información</li>
+                            <li>Estrategia habilitada por tecnología</li>
+                            <li>Hardware</li>
+                            <li>Software</li>
+                            <li>Datos y Big Data <span class="text-emerald-400 font-semibold">· base Semana 4</span></li>
+                            <li>Redes <span class="text-emerald-400 font-semibold">· base Semana 9</span></li>
+                            <li>Desarrollo de sistemas</li>
+                            <li>Seguridad <span class="text-emerald-400 font-semibold">· base Semanas 10–11</span></li>
+                            <li>Impactos: ética y privacidad</li>
+                            <li>E-business</li>
+                            <li>Procesos y ERP <span class="text-emerald-400 font-semibold">· base Semana 13</span></li>
+                            <li>Apoyo a decisiones</li>
+                            <li>Tecnología emergente e IA <span class="text-emerald-400 font-semibold">· base Semana 7</span></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRESENTACIONES -->
+        <section id="presentaciones" class="space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h3 class="text-xl sm:text-2xl font-black text-white heading-font flex items-center">
+                    <span class="w-2.5 h-7 bg-cyan-500 rounded-full mr-3 inline-block"></span>
+                    Presentaciones de clase (PDF)
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">Despliega “Contenido diapositiva por diapositiva” en cada tarjeta para ver el detalle antes de abrir el archivo.</p>
+            </div>
+
+            <div id="grid" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+                <!-- 1 -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 1 sistemas de informacion componentes rol organizacion caso sears si tps mis dss">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-cyan-500/30 heading-font">Semana 1 · Fundamentos</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>13 diapositivas · 1.4 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">01 · Sistemas de Información</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Apertura del curso: qué es un sistema de información, sus componentes (personas, procesos, datos y tecnología), su rol en la organización y el caso Sears como ejemplo de transformación. Presentación de apoyo visual.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-cyan-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diaps. 1–12: desarrollo gráfico del tema (láminas de apoyo visual sin texto extraíble).</li>
+                            <li>Diap. 13 (cierre): <strong class="text-slate-200">Caso Sears</strong> — caso de estudio para comentar en clase.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana_1_01%20Sistemas%20de%20Informacion.pdf" target="_blank" rel="noopener" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana_1_01%20Sistemas%20de%20Informacion.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-cyan-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 2 -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 1 ecosistemas digitales negocio digital business ecosystems plataforma">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-cyan-500/30 heading-font">Semana 1 · Fundamentos</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>15 diapositivas · 2.3 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">02 · Ecosistemas de Negocios Digitales</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Cómo las empresas compiten hoy dentro de ecosistemas digitales: plataformas, actores interconectados y efectos de red. Enfoque gerencial: pensar el negocio como ecosistema, no como empresa aislada.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-cyan-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <p class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed">Diaps. 1–15: secuencia gráfica sobre ecosistemas digitales de negocio (láminas de apoyo visual sin texto extraíble). Úsala junto al Capítulo 2 del libro (estrategia habilitada por tecnología).</p>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana1_02%20Digital_Business_Ecosystems.pdf" target="_blank" rel="noopener" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana1_02%20Digital_Business_Ecosystems.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-cyan-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 3 -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 2 innovacion diferenciacion intro ventaja competitiva estrategia">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-cyan-500/30 heading-font">Semana 2 · Fundamentos</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>16 diapositivas · 2.5 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">03 · Introducción: Innovación y Diferenciación</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">La tecnología como fuente de ventaja competitiva: innovar para diferenciarse en vez de competir solo por precio. Puerta de entrada a los casos Blockbuster vs. Netflix y al motor físico del mundo digital.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-cyan-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <p class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed">Diaps. 1–16: recorrido gráfico sobre innovación y diferenciación competitiva (láminas de apoyo visual sin texto extraíble). Ver en conjunto con las dos presentaciones siguientes de la Semana 2.</p>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana_2_00%20Intro_Innovacion_diferenciacion.pdf" target="_blank" rel="noopener" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana_2_00%20Intro_Innovacion_diferenciacion.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-cyan-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 4 Blockbuster -->
+                <article class="pres bg-slate-900/70 border border-amber-500/30 hover:border-amber-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 2 blockbuster netflix datos ux diseño experiencia caso historia dvd streaming recomendacion">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-amber-500/15 text-amber-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-amber-500/30 heading-font"><i class="fa-solid fa-star mr-1"></i>Semana 2 · Caso emblema</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>19 diapositivas · 0.7 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Blockbuster vs. Netflix: la magia está detrás del código</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">El caso que explica todo el curso: Blockbuster dominaba con 9,000 tiendas y despreció a Netflix (rechazó comprarlo por ~US$50 millones). Netflix ganó con datos, sistemas inteligentes y diseño centrado en el usuario. Moraleja: no basta una web bonita; importa la lógica del sistema.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-amber-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada “Blockbuster vrs Netflix”.</li>
+                            <li>Diaps. 2–8: contexto gráfico de la era del videoclub.</li>
+                            <li>Diap. 9: la historia — Blockbuster con 9,000 tiendas; Netflix enviaba DVD por correo; Blockbuster rechazó comprarlo por 50 millones de dólares.</li>
+                            <li>Diap. 10: Netflix crecía en silencio con algo que Blockbuster no entendía: <strong class="text-slate-200">los datos</strong>.</li>
+                            <li>Diap. 11: qué observaba Netflix — búsquedas, clics, pausas, cancelaciones y géneros favoritos.</li>
+                            <li>Diap. 12: esos datos alimentaban el sistema, mejoraban la experiencia y la recomendación.</li>
+                            <li>Diap. 13: Blockbuster reaccionó imitando la web, contratando desarrolladores e incluso espiando el servicio.</li>
+                            <li>Diaps. 14–15: el problema — “si el sitio es igual, ¿por qué no tiene el mismo impacto?”.</li>
+                            <li>Diap. 16: la respuesta — la magia estaba en los sistemas inteligentes, el diseño centrado en el usuario y el uso de datos.</li>
+                            <li>Diap. 17: en pocos años Netflix se volvió un imperio; Blockbuster desapareció.</li>
+                            <li>Diaps. 18–19 (moraleja y cierre): no basta una página bonita; en esta clase aprenderemos lo que hay detrás: <strong class="text-slate-200">diseño, datos, rendimiento y visión</strong>.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana2_BlockBusterNetFlix.pdf" target="_blank" rel="noopener" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana2_BlockBusterNetFlix.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-amber-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 5 Motor físico -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 2 motor fisico mundo digital hardware cpu gpu ram dispositivos">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-cyan-500/30 heading-font">Semana 2 · Hardware</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>16 diapositivas · 2.9 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">El Motor Físico del Mundo Digital</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">La capa física que sostiene el negocio digital: dispositivos, procesadores, GPU y memoria. La base de hardware que el administrador debe entender para decidir compras, presupuestos y capacidad (complementa el Capítulo 3 del libro).</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-cyan-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <p class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed">Diaps. 1–16: exposición gráfica del hardware como motor del mundo digital (láminas de apoyo visual sin texto extraíble). Estúdiala con el Capítulo 3 del libro (dispositivos digitales, procesamiento, almacenamiento y velocidad).</p>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana2_El_Motor_F%C3%ADsico_del_Mundo_Digital.pdf" target="_blank" rel="noopener" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana2_El_Motor_F%C3%ADsico_del_Mundo_Digital.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-cyan-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 6 Semana 3 -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-cyan-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 3 motor invisible negocio software engine capitulo 5 examen corto">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/15 text-cyan-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-cyan-500/30 heading-font">Semana 3 · Software</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>15 diapositivas · 2.3 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">The Invisible Business Engine (el software)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">El motor invisible del negocio: el software que opera sin verse (sistemas operativos, aplicaciones y software empresarial). Cierra con tarea: leer el Capítulo 5 del libro — habrá examen corto.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-cyan-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diaps. 1–14: desarrollo gráfico del software como motor invisible del negocio (láminas de apoyo visual).</li>
+                            <li>Diap. 15 (tarea): <strong class="text-slate-200">leer el Capítulo 5 del libro de texto — habrá examen corto</strong>.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana3_The_Invisible_Business_Engine.pdf" target="_blank" rel="noopener" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana3_The_Invisible_Business_Engine.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-cyan-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 7 Semana 4 Big Data -->
+                <article class="pres bg-slate-900/70 border border-indigo-500/30 hover:border-indigo-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="fundamentos" data-search="semana 4 big data bases datos sql modelo relacional nosql normalizacion qbe panajachel artesanias agentes gpu ram llm agi">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-500/15 text-indigo-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-indigo-500/30 heading-font">Semana 4 · Datos</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>25 diapositivas · 2.4 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Big Data y Bases de Datos</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Del repaso de IA (agentes, GPU, RAM, LLM, AGI) al corazón de los datos: Big Data, SGBD, modelo relacional vs. NoSQL, jerarquía, normalización, SQL/QBE y cierre con taller en parejas: diseñar el modelo entidad-relación de una tienda de artesanías en Panajachel.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-indigo-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1 (repaso): el juego de la imaginación — agentes, GPU y RAM cara, autoaprendizaje, LLM, AGI y riesgos de la IA.</li>
+                            <li>Diap. 2: portada — fundamentos, modelos relacionales y gestión estratégica de la información.</li>
+                            <li>Diap. 3: bloque 01 — Big Data e información, universo digital y su impacto organizacional.</li>
+                            <li>Diap. 5: el fenómeno Big Data — 463 exabytes diarios a 2026; volumen, velocidad y variedad.</li>
+                            <li>Diap. 6: qué es una base de datos y el SGBD/DBMS (de Access a Oracle, SQL Server, DB2 y MySQL).</li>
+                            <li>Diap. 7: bloque 02 — modelos y jerarquía, de bits a esquemas.</li>
+                            <li>Diap. 8: modelos — relacional (tablas), plana (una dimensión) y NoSQL distribuidas (DynamoDB, App Engine).</li>
+                            <li>Diap. 12: jerarquía — base de datos, registro/tupla, campo/atributo, byte/bit; tipos (texto, número/moneda en quetzales, booleano).</li>
+                            <li>Diap. 13: bloque 03 — diseño y administración.</li>
+                            <li>Diap. 15: modelado ER, clave primaria y normalización (menos redundancia, integridad referencial).</li>
+                            <li>Diap. 19: integridad y control — un solo lugar por dato, validación, roles y recuperación.</li>
+                            <li>Diap. 20: SQL (SELECT/FROM/WHERE), QBE gráfico e integración con Excel y BI.</li>
+                            <li>Diap. 24: bloque 04 — enfoque práctico UMG.</li>
+                            <li>Diap. 25 (taller): en parejas, diseñar en papel el modelo ER (mínimo Clientes, Productos, Ventas con sus campos) para la tienda de Panajachel que deja los cuadernos.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Semana4_Big%20Data%20y%20Bases%20de%20Datos.pdf" target="_blank" rel="noopener" class="bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Semana4_Big%20Data%20y%20Bases%20de%20Datos.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-indigo-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 8 IA para administradores -->
+                <article class="pres bg-slate-900/70 border border-purple-500/30 hover:border-purple-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="ia" data-search="semana 7 ia inteligencia artificial administradores tokens embeddings roi moe qwen deepseek kimi agentes react shadow ai temperatura llm vlm">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-purple-500/15 text-purple-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-purple-500/30 heading-font">Semana 7 · IA central</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>15 diapositivas · 0.5 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">IA para Administradores: guía estratégica y financiera 2026</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">La IA como infraestructura operativa central: ROI medible (55% en 12 meses, −30% costos), tokens y embeddings, temperatura, MoE, cerrados vs. pesos abiertos, liderazgo asiático (DeepSeek, Qwen, Kimi), economía de tokens, agentes ReAct y prevención del Shadow AI. Base de la <a href="../Guia_IA_Administradores.html" class="text-purple-300 underline">Guía interactiva Semana 7</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-purple-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada — guía estratégica y financiera 2026.</li>
+                            <li>Diap. 2: más allá del chatbot — la IA como infraestructura donde se calculan presupuestos y se automatiza con agentes.</li>
+                            <li>Diap. 3: ROI tangible — 55% en menos de 12 meses y hasta 30% menos costos operativos.</li>
+                            <li>Diap. 4: tokens (moneda corporativa, ~0.75 palabras), embeddings (buscadores y RAG) y ventana de contexto.</li>
+                            <li>Diap. 5: temperatura (0.1 finanzas/contratos, 0.8 marketing) y LLM vs. VLM con visión nativa.</li>
+                            <li>Diap. 6: MoE — activar solo 5–8% de expertos en vez del 100% denso: menos energía y tarifas menores.</li>
+                            <li>Diap. 7: impacto en VRAM/memoria de infraestructura.</li>
+                            <li>Diap. 8: propietarios cerrados (GPT-4o, Claude 3.5, pago por API) vs. pesos abiertos (Llama 3, DeepSeek, Qwen, on-premises); decisión CapEx vs. OpEx.</li>
+                            <li>Diap. 9: mercado 2026 — laboratorios asiáticos igualan la frontera hasta 10× más barato, con fortaleza multilingüe y VLM.</li>
+                            <li>Diap. 10: economía de tokens (tarificación y control del gasto).</li>
+                            <li>Diap. 11: agentes autónomos — objetivo, pensamiento, acción (SQL/ERP/PDF) y observación/respuesta.</li>
+                            <li>Diap. 12: gobernanza — prohibir no funciona (66% filtra datos); entornos on-premises zero-data y human-in-the-loop.</li>
+                            <li>Diap. 13: mensaje de cierre — te contratarán por <strong class="text-slate-200">orquestar soluciones de IA y automatización</strong>, no por usar ChatGPT.</li>
+                            <li>Diap. 14: preguntas — liderar rentabilidad y seguridad tecnológica.</li>
+                            <li>Diap. 15: fuentes de imágenes.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/IA%20para%20Administradores.pdf" target="_blank" rel="noopener" class="bg-purple-500 hover:bg-purple-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/IA%20para%20Administradores.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-purple-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 9 Business Physics -->
+                <article class="pres bg-slate-900/70 border border-purple-500/30 hover:border-purple-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="ia" data-search="business physics ia fisica modelos entrenamiento inferencia agentes gpu">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-purple-500/15 text-purple-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-purple-500/30 heading-font">IA · Complemento</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>15 diapositivas · 2.1 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">The Business Physics of AI (la física del negocio de la IA)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Complemento físico-económico de la guía de IA: por qué entrenar e inferir modelos cuesta lo que cuesta (cómputo, memoria y energía) y cómo esa “física” define precios, márgenes y decisiones del administrador. Presentación de apoyo visual.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-purple-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <p class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed">Diaps. 1–15: secuencia gráfica sobre la física económica de la IA (láminas de apoyo visual sin texto extraíble). Ver después de “IA para Administradores” y antes del taller de Big Data/Agentes.</p>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/The_Business_Physics_of_AI.pdf" target="_blank" rel="noopener" class="bg-purple-500 hover:bg-purple-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/The_Business_Physics_of_AI.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-purple-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 10 Redes -->
+                <article class="pres bg-slate-900/70 border border-sky-500/30 hover:border-sky-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="redes" data-search="semana 9 redes telecomunicaciones lan wan fibra microondas 4g 5g starlink router switch nebaj quiche fel sat iot vpn ups">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-sky-500/15 text-sky-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-sky-500/30 heading-font">Semana 9 · Redes</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>13 diapositivas · 0.4 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Redes y Telecomunicaciones (enfoque GT)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">LAN vs. WAN, medios (fibra, microondas, 4G/5G, satelital LEO), componentes (módem/router, switch, AP), panorama Tigo/Claro/Starlink, métricas (100 Mbps, latencia, SLA), comparativa de tecnologías, retos (cortes, lluvia, VPN, FEL) y caso Farmacia Rural en Nebaj, Quiché. Base del <a href="../Semana9/Semana9Informatica.html" class="text-sky-300 underline">módulo Semana 9</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-sky-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 2: portada — Semana 7/9, curso Informática I.</li>
+                            <li>Diap. 3: encuadre — Módulo II: infraestructura y redes para decidir en Guatemala.</li>
+                            <li>Diap. 4: LAN (edificio, 1–10 Gbps, POS y servidores) vs. WAN (sucursales entre ciudades, según ISP).</li>
+                            <li>Diap. 5: medios — fibra (luz, sedes urbanas), microondas punto a punto, móvil 4G/5G y satelital LEO/Starlink rural.</li>
+                            <li>Diap. 6: componentes — módem/router, switch y punto de acceso Wi-Fi.</li>
+                            <li>Diap. 7: telecom en Guatemala — Tigo y Claro dominan; brecha rural por montaña; Starlink para agro.</li>
+                            <li>Diap. 8: métricas — 100 Mbps mínimos por sucursal; ancho de banda, latencia (ms) y disponibilidad SLA 99.5%.</li>
+                            <li>Diap. 9: comparativa — fibra 50–500 Mbps, 4G 10–50, satelital 50–200, microondas 20–100, con latencia y costo relativo.</li>
+                            <li>Diap. 10: retos — cortes de energía (UPS obligatorio), lluvias, VPN para finanzas y canal continuo para FEL-SAT.</li>
+                            <li>Diap. 11: casos por sector — café en Huehuetenango con satelital, flotas con 4G/5G y GPS/POS, retail con enlace + respaldo FEL.</li>
+                            <li>Diap. 12 (entregable): caso Farmacia Rural en Nebaj — elegir conexión principal y respaldo, hardware (módem, switch, AP, UPS) y presupuesto.</li>
+                            <li>Diap. 13: puente a IoT y seguridad en redes.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Redes%20y%20Telecomunicaciones%20-%20Semana%209.pdf" target="_blank" rel="noopener" class="bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Redes%20y%20Telecomunicaciones%20-%20Semana%209.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-sky-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 11 semana10 -->
+                <article class="pres bg-slate-900/70 border border-red-500/30 hover:border-red-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="redes" data-search="semana 10 seguridad ciberseguridad cia malware virus gusano ransomware ddos phishing skimming sat whatsapp administrador pua">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-500/15 text-red-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-red-500/30 heading-font">Semana 10 · Amenazas</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>10 diapositivas · 0.7 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Ciberseguridad e Integridad (Parte 1: Amenazas)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Tríada CIA, malware (virus, gusano, spyware, ransomware en 4 pasos, DDoS), ingeniería social y phishing, casos GT (WhatsApp, skimming Zona 9–11, falsos SAT/banca) y el rol del administrador (PUA, capacitación, respaldos: 5 días parados Q22,500 vs. Q4,700/año de prevención). Base del <a href="../Semana10/Semana10Ciberseguridad.html" class="text-red-300 underline">módulo Semana 10</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-red-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada UMG — Semana 10, catedrático Ruldin Ayala, Guatemala 2026.</li>
+                            <li>Diap. 2: resultados de aprendizaje — CIA, malware vs. ingeniería social, casos GT y estrategias.</li>
+                            <li>Diap. 3: tríada CIA — confidencialidad (need to know), integridad (DTE/inventarios) y disponibilidad (POS/FEL/tienda).</li>
+                            <li>Diap. 4: malware — virus (requiere clic, ej. factura.xlsm), gusano (solo red), spyware, ransomware y DoS/DDoS.</li>
+                            <li>Diap. 5: ransomware en 4 pasos (clic → cifrado → Q30,000/48 h → no pagar y restaurar) y DDoS en quincena (6 h ≈ Q18,000); antídoto: backup externo + doble enlace + firewall.</li>
+                            <li>Diap. 6: ingeniería social — phishing, spoofing y robo de identidad; regla de oro: verificar por otro canal; jamás entregar el código de 6 dígitos de WhatsApp.</li>
+                            <li>Diap. 7: casos GT 1/2 — WhatsApp (clonación, encomiendas, empleos por likes) y skimming (ranura + microcámara; jalar ranura, tapar PIN).</li>
+                            <li>Diap. 8: casos GT 2/2 — falsa SAT (omisos, .zip con ransomware) y falsa banca (login spoofing); señales: urgencia, dominio raro, adjunto inesperado.</li>
+                            <li>Diap. 9: rol del administrador — costo de inacción, PUA + simulacros trimestrales, cultura de respaldo cifrado externo.</li>
+                            <li>Diap. 10: cierre — repasar en CiberChapín, ejercicio en parejas con PDF a Canvas y aviso de parcial con criterio gerencial; créditos Wikimedia Commons.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/semana10seguridad.pdf" target="_blank" rel="noopener" class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/semana10seguridad.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-red-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 12 semana11 -->
+                <article class="pres bg-slate-900/70 border border-red-500/30 hover:border-red-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="redes" data-search="semana 11 herramientas seguridad privacidad mfa acl rbac cifrado firewall vpn backup ids pii dpi cooperativa retail distribuidora clinica">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-500/15 text-red-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-red-500/30 heading-font">Semana 11 · Herramientas</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>16 diapositivas · 1.9 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Herramientas de Seguridad y Privacidad (Caps. 8–9)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Guía estricta Caps. 8–9: autenticación de 3 factores, MFA, ACL vs. RBAC, cifrado simétrico/asimétrico, firewall/VPN/antivirus, backups y UPS/SAN, IDS y seguridad física, PUA, PII/DPI y principios justos; 4 casos GT (cooperativa Q18,500; retail Q9,800; distribuidora Q22,000; clínica Q24,000) y ruta a la página Semana 11. Base del <a href="../Semana11/Semana11CiberSeguridad2.html" class="text-red-300 underline">módulo Semana 11</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-red-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada UMG — de la contraseña al DPI; Ruldin Ayala 2026; ruta: conceptos 30 min → casos 15 min → página + parejas 40 min.</li>
+                            <li>Diap. 2: flujo de la clase en 3 bloques (conceptos, casos GT, página S11 con misiones, parejas y tarea).</li>
+                            <li>Diap. 3: ecosistema — autenticación, prevención y detección (CIA).</li>
+                            <li>Diap. 4: 3 factores — lo que se sabe, se posee y se es (Cap. 8.4).</li>
+                            <li>Diap. 5: MFA — 2+ factores de distintas categorías (PIN + token).</li>
+                            <li>Diap. 6: ACL (permiso por persona; caso retail: 200 reglas y ex-empleado activo) vs. RBAC (roles; 40 empleados: 320 reglas ACL vs. ~48 RBAC).</li>
+                            <li>Diap. 7: cifrado simétrico (una clave) vs. asimétrico (pública + privada); misión 5 con cifrador en vivo.</li>
+                            <li>Diap. 8: firewall, VPN (túnel cifrado) y antivirus; caso C: WiFi de café exige VPN + cifrado.</li>
+                            <li>Diap. 9: resiliencia — copias periódicas, offsite, pruebas de restauración, UPS + sitios calientes + SAN.</li>
+                            <li>Diap. 10: IDS en tiempo real + seguridad física (puertas, sensores, temperatura, perímetro).</li>
+                            <li>Diap. 11: políticas — PUA y equilibrio (el control que estorba se elude).</li>
+                            <li>Diap. 12: PII — DPI/CUI, biometría, expedientes médicos/laborales/financieros.</li>
+                            <li>Diap. 13: principios justos — consentimiento, mínimo necesario, plan de incidentes, 2FA y escepticismo.</li>
+                            <li>Diap. 14: 4 casos — A cooperativa sin MFA, B retail con ACL caótica, C distribuidora sin VPN, D clínica con Excel + backup falso.</li>
+                            <li>Diap. 15: a trabajar — misiones 1–10, parejas 40 min con PDF y tarea Silla del Gerente S11.</li>
+                            <li>Diap. 16: checklist del gerente — MFA, RBAC con bajas inmediatas, VPN + cifrado, 3-2-1 probado + UPS, PUA firmada, PII con consentimiento.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/semana11.pdf" target="_blank" rel="noopener" class="bg-red-500 hover:bg-red-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/semana11.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-red-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 13 Estrategia seguridad digital -->
+                <article class="pres bg-slate-900/70 border border-slate-800 hover:border-red-500/40 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="redes" data-search="estrategia seguridad digital blueprint figuras fuente caps 8 9 escaneado">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-slate-700/40 text-slate-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-slate-600 heading-font">Fuente Caps. 8–9</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>15 páginas · 2.4 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Estrategia de Seguridad Digital (documento fuente)</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Documento escaneado de 15 páginas cuyas figuras blueprint ilustran la Semana 11 (estrategia, autenticación, controles, cifrado, perímetro, respaldo, IDS, políticas y privacidad). Úsalo como lectura de respaldo de los Caps. 8–9 del libro.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-slate-300 heading-font">Contenido página por página <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <p class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed">Págs. 1–15: documento gráfico escaneado (sin texto extraíble) con las 15 ilustraciones blueprint citadas como figuras en la Semana 11. Recomendado: hojearlo después de ver “semana11.pdf”.</p>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Estrategia_de_Seguridad_Digital.pdf" target="_blank" rel="noopener" class="bg-slate-100 hover:bg-white text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Estrategia_de_Seguridad_Digital.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 14 Arquitectura procesos -->
+                <article class="pres bg-slate-900/70 border border-emerald-500/30 hover:border-emerald-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="erp" data-search="arquitectura procesos digitales tps caballo batalla lotes linea empoderamiento informes bpm bpr">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-emerald-500/15 text-emerald-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-emerald-500/30 heading-font">Procesos · TPS/BPM</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>18 diapositivas · 2.8 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Arquitectura de Procesos Digitales</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Del TPS (“caballo de batalla”: cajeros, POS; por lotes vs. en línea) al empoderamiento con procesos claros, informes en tiempo real y buenas prácticas globales. Puente entre la operación diaria y los ERP/CRM de las Semanas 13–14.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-emerald-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diaps. 1–10: arquitectura gráfica de los procesos digitales (láminas de apoyo visual).</li>
+                            <li>Diap. 11: empoderamiento e informes — decisiones con datos sin microgestión; análisis de ventas e indicadores en tiempo real; consistencia y estándares globales.</li>
+                            <li>Diap. 12: el TPS — recopila, modifica y recupera el día a día; registro exacto (cajero/POS); por lotes (cheques al cierre) vs. en línea (reservas, tarjetas).</li>
+                            <li>Diaps. 13–18: cierre gráfico e implicaciones gerenciales.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Arquitectura_de_Procesos_Digitales.pdf" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Arquitectura_de_Procesos_Digitales.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-emerald-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 15 ERP -->
+                <article class="pres bg-slate-900/70 border border-emerald-500/30 hover:border-emerald-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="erp" data-search="semana 13 erp planificacion recursos base datos unica modulos cloud saas tier odoo sap pyme 15 empleados capex opex bpr">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-emerald-500/15 text-emerald-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-emerald-500/30 heading-font">Semana 13 · ERP</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>11 diapositivas · 0.3 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">ERP: de los silos a la base de datos única</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Qué es un ERP, su valor (estandariza, KPIs en tiempo real, cero duplicidad, auditoría), 6 módulos, despliegue (local/cloud/híbrido), tiers (SAP/Oracle, Dynamics/NetSuite, Odoo/Zoho), advertencia gerencial (personas, BPR, datos) y caso PYME de 15 empleados con Cloud Tier 3. Base de la <a href="../Semana13/Semana13ERP.html" class="text-emerald-300 underline">guía Semana 13 + simulador Andriux</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-emerald-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada UMG — base de datos única, 6 módulos, cloud vs. local; caso PYME, Odoo y KPIs.</li>
+                            <li>Diap. 2: ruta de 45 min — qué es, para qué sirve, módulos y tipos, decidir e implementar, caso + autoevaluación.</li>
+                            <li>Diap. 3: qué es — una venta descuenta inventario, factura y actualiza el KPI sin reescribir; adiós silos.</li>
+                            <li>Diap. 4: para qué sirve — estandariza, tiempo real + KPIs (caja, margen, CxC), cero duplicidad, decisiones con datos y cumplimiento.</li>
+                            <li>Diap. 5: módulos — finanzas, inventarios/logística, ventas/CRM, compras, manufactura (MRP) y RR. HH.</li>
+                            <li>Diap. 6: despliegue — on-premise (CAPEX, control), cloud/SaaS (OPEX, escalable) e híbrido.</li>
+                            <li>Diap. 7: tiers — Tier 1 (SAP S/4HANA, Oracle), Tier 2 (Dynamics 365, NetSuite), Tier 3 PYME (Odoo, Zoho, Business One); horizontal vs. vertical.</li>
+                            <li>Diap. 8: comparativa — costo inicial y mantenimiento por modelo; no hay mejor ERP absoluto.</li>
+                            <li>Diap. 9: advertencia — personas (resistencia #1), procesos (BPR: no digitalizar el desorden) y datos (garbage in, garbage out).</li>
+                            <li>Diap. 10: caso — comercializadora de 15 empleados por fases (ventas+inventario → compras+contabilidad → RRHH+KPI) con Cloud Tier 3.</li>
+                            <li>Diap. 11: cierre — 4 preguntas, glosario (CAPEX, OPEX, SaaS, silo, BPR) y mensaje: ordenar la casa antes de pintarla.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/ERP_Clase_UMG.pdf" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/ERP_Clase_UMG.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-emerald-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 16 CRM SCM -->
+                <article class="pres bg-slate-900/70 border border-indigo-500/30 hover:border-indigo-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="erp" data-search="semana 14 crm scm gestion estrategica tps mis edi fha banco industrial banrural apartamento zona 10 quetzaltenango coban zacapa barcenas">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-500/15 text-indigo-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-indigo-500/30 heading-font">Semana 14 · CRM & SCM</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>11 diapositivas · 0.2 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">CRM y SCM en la gestión estratégica guatemalteca</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Del dato operativo a la ventaja sostenible: niveles (TPS/MIS/ERP), CRM (6 puntos de contacto, cliente anónimo del efectivo, switching costs), SCM (N = Prov × Fab × Dist, EDI + BPR), geografía GT (Bárcenas, Xela, Cobán, Zacapa) y venta de apartamentos Zonas 10/14 con banca local y FHA. Base del <a href="../Semana14/Semana14GuiaCRM_SCM.html" class="text-indigo-300 underline">simulador Semana 14</a>.</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-indigo-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 2: portada — Semana 14, del dato a la ventaja competitiva; ejes TPS-MIS-ERP-BPM-BPR-EDI-FHA.</li>
+                            <li>Diap. 3: objetivo y ruta — niveles gerenciales, CRM, SCM; idea clave: integrar procesos, datos y estrategia.</li>
+                            <li>Diap. 4: niveles — operativo (ventas/pagos), táctico (inventarios/costos) y estratégico (fidelización/escenarios).</li>
+                            <li>Diap. 5: CRM — centralizar interacciones; misterio del efectivo (pago anónimo) resuelto con fidelización.</li>
+                            <li>Diap. 6: CRM en acción — llamadas, cotizaciones, visitas, e-mails, quejas y posventa; switching costs que retienen.</li>
+                            <li>Diap. 7: SCM — red de valor bidireccional; dato real, visibilidad y control de complejidad.</li>
+                            <li>Diap. 8: complejidad — red básica 2×1×2=4 vs. ampliada 4×2×4=32 enlaces; EDI sin captura manual; BPR antes de automatizar.</li>
+                            <li>Diap. 9: SCM en Guatemala — CA-9 Sur, Ruta al Atlántico, nodo Bárcenas/Amatitlán, despachos nocturnos y stock por bloqueos.</li>
+                            <li>Diap. 10: CRM en Guatemala — apartamentos en 5 pasos (captura, cotización, envío B2B a Industrial/Banrural, FHA, cierre y posventa).</li>
+                            <li>Diap. 11: cierre — diseñar el proceso antes de automatizar, capturar identidad y sincronizar inventario con demanda.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/CRM_SCM_Presentacion.pdf" target="_blank" rel="noopener" class="bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/CRM_SCM_Presentacion.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-indigo-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+                <!-- 17 n8n -->
+                <article class="pres bg-slate-900/70 border border-orange-500/30 hover:border-orange-400/60 rounded-3xl p-5 sm:p-6 space-y-3 transition" data-cat="auto" data-search="n8n automatizacion administradores workflow trigger nodos whatsapp sheets zapier make agentes ia guatemala instagram">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-orange-500/15 text-orange-300 text-[11px] font-bold rounded-lg uppercase tracking-wider border border-orange-500/30 heading-font">Automatización · n8n</span>
+                        <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-clone mr-1"></i>13 diapositivas · 0.4 MB</span>
+                    </div>
+                    <h4 class="text-lg font-extrabold text-white heading-font">Automatización con n8n para Administradores</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">El puente que conecta WhatsApp, Gmail, Excel y CRMs sin programar: triggers, nodos y workflows; escala sin contratar, cero errores de tipeo; caso tienda con 50 mensajes diarios; comparativa Zapier/Make/n8n; reglas (n8n) vs. razonamiento (agentes IA) y plan de 4 pasos (cuello de botella → trigger → acción → test).</p>
+                    <details class="bg-slate-950/70 border border-slate-800 rounded-2xl">
+                        <summary class="cursor-pointer list-none flex items-center justify-between px-4 py-3 text-xs font-bold text-orange-300 heading-font">Contenido diapositiva por diapositiva <i class="fa-solid fa-chevron-down chev text-[10px]"></i></summary>
+                        <ol class="px-4 pb-4 text-[11px] text-slate-400 leading-relaxed space-y-1.5 list-decimal list-inside">
+                            <li>Diap. 1: portada — revolución con n8n para futuros administradores y emprendedores en Guatemala.</li>
+                            <li>Diap. 2: qué es n8n — conecta herramientas sin programar.</li>
+                            <li>Diap. 3: el problema — decenas de apps aisladas; n8n como cerebro que mueve datos 24/7.</li>
+                            <li>Diap. 4: piezas — trigger (disparador), nodos (pasos) y workflow (mapa completo).</li>
+                            <li>Diap. 5: premisa — el tiempo del emprendedor es escaso; lo repetitivo frena la escala.</li>
+                            <li>Diap. 6: beneficios — escala sin contratar de inmediato, menos errores de tipeo y foco en estrategia.</li>
+                            <li>Diap. 7: caso — tienda con 50 WhatsApp diarios: trigger → consulta inventario → respuesta → Sheets.</li>
+                            <li>Diap. 8: ecosistema y futuro frente a la IA.</li>
+                            <li>Diap. 9: comparativa — Zapier (fácil, caro), Make (intermedio) y n8n (flexible, económico, con JavaScript).</li>
+                            <li>Diap. 10: automatización (reglas estrictas, sistema nervioso) vs. agentes IA (razonan y redactan); n8n ya integra nodos de IA.</li>
+                            <li>Diap. 11: plan en 4 pasos — cuello de botella, trigger, acción y test.</li>
+                            <li>Diap. 12: cierre — el futuro premia a quien optimiza recursos.</li>
+                            <li>Diap. 13: fuentes de imágenes.</li>
+                        </ol>
+                    </details>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <a href="Presentaciones/Automatizaci%C3%B3n%20con%20n8n%20para%20Administradores.pdf" target="_blank" rel="noopener" class="bg-orange-500 hover:bg-orange-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center heading-font"><i class="fa-solid fa-eye mr-1.5"></i>Ver</a>
+                        <a href="Presentaciones/Automatizaci%C3%B3n%20con%20n8n%20para%20Administradores.pdf" download class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center"><i class="fa-solid fa-download mr-1.5 text-orange-400"></i>Descargar</a>
+                    </div>
+                </article>
+
+            </div>
+            <p id="sin-resultados" class="hidden text-center text-sm text-slate-500 py-6"><i class="fa-solid fa-magnifying-glass mr-2"></i>Sin coincidencias. Prueba con “ERP”, “redes”, “IA” o “seguridad”.</p>
+        </section>
+
+        <!-- CÓMO USAR -->
+        <section class="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-7 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div class="flex items-start space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-arrow-pointer"></i></div>
+                <div><p class="font-bold text-white heading-font mb-1">1 · Ubica el tema</p><p class="text-slate-400 leading-relaxed">Filtra por bloque o busca por palabra clave; abre el desglose para confirmar que es la presentación que necesitas.</p></div>
+            </div>
+            <div class="flex items-start space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-book-open-reader"></i></div>
+                <div><p class="font-bold text-white heading-font mb-1">2 · Estudia con el libro</p><p class="text-slate-400 leading-relaxed">Cada tarjeta indica el capítulo del libro que la respalda (datos, redes, seguridad, ERP, IA). Lee ambos en paralelo.</p></div>
+            </div>
+            <div class="flex items-start space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div><p class="font-bold text-white heading-font mb-1">3 · Respeta la licencia</p><p class="text-slate-400 leading-relaxed">Las presentaciones son material de clase; el libro es CC BY-NC-SA 4.0: cita la fuente, no lo vendas y comparte bajo la misma licencia.</p></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/80 mt-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-5">
+            <div class="flex items-center space-x-3">
+                <img src="../../cosas/Umg.png" alt="Escudo UMG" class="w-10 h-10 rounded-lg object-contain bg-white p-1">
+                <div>
+                    <p class="text-sm font-bold text-white heading-font">Universidad Mariano Gálvez de Guatemala</p>
+                    <p class="text-[11px] text-slate-500">Facultad de Administración · Informática I · Catedrático <strong class="text-slate-300">Ruldin Ayala</strong></p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+                <a href="../index_informatica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition flex items-center"><i class="fa-solid fa-house mr-1.5 text-cyan-400"></i>Página principal de Informática I</a>
+                <a href="../../index.html" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition flex items-center"><i class="fa-solid fa-building-columns mr-1.5 text-cyan-400"></i>Portal General</a>
+                <a href="../../Estadistica1/index_estadistica.html" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 px-4 py-2 rounded-xl transition flex items-center"><i class="fa-solid fa-chart-pie mr-1.5 text-emerald-400"></i>Estadística I</a>
+            </div>
+        </div>
+        <div class="border-t border-slate-800/60">
+            <p class="max-w-7xl mx-auto px-4 py-4 text-[10px] sm:text-[11px] text-slate-600 leading-relaxed text-center">
+                Libro: <em>Information Systems for Business and Beyond</em> © 2022 Shauna Roch, James Fowler, Barbara Smith y David Bourgeois · Fanshawe College Pressbooks · Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0) · Traducción al español: Ruldin Ayala (2026) con programa en Python y Qwen 3.5 en local, bajo la misma licencia.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Buscador + filtros por categoría (100% cliente, sin servidor)
+        const input = document.getElementById('buscador');
+        const cards = Array.from(document.querySelectorAll('.pres'));
+        const btns = Array.from(document.querySelectorAll('.fbtn'));
+        const cont = document.getElementById('contador');
+        const empty = document.getElementById('sin-resultados');
+        let cat = 'todas';
+        function normaliza(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+        function aplicar(){
+            const q = normaliza(input.value.trim());
+            let n = 0;
+            cards.forEach(c=>{
+                const okCat = (cat==='todas' || c.dataset.cat===cat);
+                const okQ = (!q || normaliza(c.dataset.search+' '+c.textContent).includes(q));
+                const show = okCat && okQ;
+                c.classList.toggle('card-hide', !show);
+                if(show) n++;
+            });
+            cont.textContent = n + (n===1 ? ' presentación' : ' presentaciones');
+            empty.classList.toggle('hidden', n!==0);
+        }
+        input.addEventListener('input', aplicar);
+        btns.forEach(b=>b.addEventListener('click', ()=>{
+            cat = b.dataset.f;
+            btns.forEach(x=>{
+                const on = x===b;
+                x.className = 'fbtn text-xs px-3.5 py-2 rounded-xl transition ' + (on
+                    ? 'bg-cyan-500 text-slate-950 font-bold heading-font'
+                    : 'bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold');
+            });
+            aplicar();
+        }));
+        aplicar();
+    </script>
+</body>
+</html>
